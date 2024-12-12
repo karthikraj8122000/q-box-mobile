@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
-import 'package:testing_app/Core/Constants/constants.dart';
 import 'package:testing_app/Features/Screens/Home/home.dart';
 import 'package:testing_app/Widgets/Common/app_text.dart';
 
@@ -72,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                      });
                     },),
                     filled: true,
-                    border: UnderlineInputBorder(borderSide: BorderSide.none),
+                    border: const UnderlineInputBorder(borderSide: BorderSide.none),
                     hintText: 'Enter your password',
                     floatingLabelBehavior: FloatingLabelBehavior.never),
                 validator: FormBuilderValidators.compose([
