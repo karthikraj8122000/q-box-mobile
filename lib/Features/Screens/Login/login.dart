@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:go_router/go_router.dart';
-import 'package:testing_app/Features/Screens/Home/home.dart';
-import 'package:testing_app/Widgets/Common/app_text.dart';
+import 'package:provider/provider.dart';
+import 'package:qbox_app/Provider/login_provider.dart';
+import 'package:qbox_app/Widgets/Common/app_button.dart';
+import 'package:qbox_app/Widgets/Common/app_colors.dart';
+import 'package:qbox_app/Widgets/Common/app_text.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routeName = '/login';
@@ -17,9 +19,9 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool _obsecureText = true;
 
-
   @override
   Widget build(BuildContext context) {
+    final loginProvider = Provider.of<LoginProvider>(context);
     return Scaffold(
       body: FormBuilder(
         key: _formKey,
@@ -38,8 +40,8 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 10),
               FormBuilderTextField(
                 name: 'userId',
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 keyboardType: TextInputType.text,
+                onChanged: (value)=>loginProvider.setEmail(value!),
                 decoration: const InputDecoration(
                     suffixIcon: Icon(Icons.email_outlined),
                     filled: true,
@@ -62,16 +64,22 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 10),
               FormBuilderTextField(
                 name: 'password',
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 keyboardType: TextInputType.text,
+                onChanged: (value)=>loginProvider.setPassword(value!),
                 decoration: InputDecoration(
-                    suffixIcon: IconButton(icon: Icon(_obsecureText ? Icons.remove_red_eye_outlined:Icons.visibility_off_outlined), onPressed: () {
-                     setState(() {
-                       _obsecureText = !_obsecureText;
-                     });
-                    },),
+                    suffixIcon: IconButton(
+                      icon: Icon(_obsecureText
+                          ? Icons.remove_red_eye_outlined
+                          : Icons.visibility_off_outlined),
+                      onPressed: () {
+                        setState(() {
+                          _obsecureText = !_obsecureText;
+                        });
+                      },
+                    ),
                     filled: true,
-                    border: const UnderlineInputBorder(borderSide: BorderSide.none),
+                    border:
+                        const UnderlineInputBorder(borderSide: BorderSide.none),
                     hintText: 'Enter your password',
                     floatingLabelBehavior: FloatingLabelBehavior.never),
                 validator: FormBuilderValidators.compose([
@@ -81,30 +89,18 @@ class _LoginPageState extends State<LoginPage> {
                       errorText: 'Password should be 8 digits', minLength: 8)
                 ]),
                 obscureText: _obsecureText,
-
               ),
               const SizedBox(
                 height: 20,
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      alignment: Alignment.center,
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.saveAndValidate()) {
-                        GoRouter.of(context).push(HomePage.routeName);
-                      } else {
-                        print("invalid");
-                      }
-                    },
-                    child: const AppText(
-                      text: "Login",
-                      fontSize: 14,
-                    )),
-              )
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child:CustomButton(
+                      elevation: 0,
+                      label: "Login",
+                      color: AppColors.buttonBgColor,
+                      onPressed: () => loginProvider.login(context)))
             ],
           ),
         ),

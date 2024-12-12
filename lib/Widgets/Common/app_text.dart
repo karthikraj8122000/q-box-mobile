@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:qbox_app/Theme/app_theme.dart';
 
 class AppText extends StatelessWidget {
   final String text;
   final double fontSize;
   final FontWeight fontWeight;
-  final Color color;
+  final Color? color;
   final TextAlign? textAlign;
   final TextStyle? fontStyle;
  final TextStyle? style;
@@ -14,7 +15,7 @@ class AppText extends StatelessWidget {
     required this.text,
     required this.fontSize,
     this.fontWeight = FontWeight.normal,
-    this.color = Colors.black,
+    this.color,
     this.textAlign,
     this.fontStyle,
     this.style
@@ -22,12 +23,10 @@ class AppText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-     TextStyle textStyle = style ?? Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: fontSize);
     return Text(
       text,
       textAlign: textAlign,
-      style: textStyle,
+      style: TextStyle(fontSize: fontSize,color: color),
     );
   }
 }

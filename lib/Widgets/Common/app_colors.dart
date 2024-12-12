@@ -11,4 +11,6 @@ class AppColors{
   static const lightPrimaryContainer = Color(0xFFEEF0F3);
   static const darkSecondaryColor = Colors.white;
   static const darkOnPrimaryColor = Colors.white;
+  static const buttonBgColor = Colors.pink;
+  static const loadingProgressColor = Colors.white;
 }

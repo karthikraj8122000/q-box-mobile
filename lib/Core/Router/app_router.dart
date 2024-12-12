@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:testing_app/Features/Screens/Home/home.dart';
-import 'package:testing_app/Features/Screens/Login/login.dart';
+import 'package:qbox_app/Features/Screens/Home/home.dart';
+import 'package:qbox_app/Features/Screens/Login/login.dart';
 
 class AppRouter {
   static final GlobalKey<NavigatorState> _routerKey =
