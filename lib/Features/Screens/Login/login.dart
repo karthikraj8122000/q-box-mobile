@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qbox_app/Provider/login_provider.dart';
-import 'package:qbox_app/Utils/validator.dart';
-import 'package:qbox_app/Widgets/Common/app_button.dart';
-import 'package:qbox_app/Widgets/Common/app_colors.dart';
-import 'package:qbox_app/Widgets/Common/app_text.dart';
-import 'package:qbox_app/Widgets/Custom/custom_text_field.dart';
+import 'package:qbox/Provider/login_provider.dart';
+import 'package:qbox/Utils/validator.dart';
+import 'package:qbox/Widgets/Common/app_button.dart';
+import 'package:qbox/Widgets/Common/app_colors.dart';
+import 'package:qbox/Widgets/Common/app_text.dart';
+import 'package:qbox/Widgets/Custom/custom_text_field.dart';
 
 class LoginPage extends StatefulWidget {
   static const String routeName = '/login';
@@ -101,7 +101,6 @@ class _LoginPageState extends State<LoginPage> {
                     color: AppColors.buttonBgColor,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        print(loginProvider.email);
                         loginProvider.login(context);
                       }
                     },

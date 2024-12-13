@@ -1,4 +1,4 @@
-package com.example.qbox_app
+package com.example.qbox
 
 import io.flutter.embedding.android.FlutterActivity
 

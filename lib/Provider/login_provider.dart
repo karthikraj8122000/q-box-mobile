@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:qbox_app/Features/Controllers/login_controller.dart';
-import 'package:qbox_app/Features/Screens/Scanner_Page/scanner_page.dart';
-import 'package:qbox_app/Model/Data_Models/user_model/user_model.dart';
-import 'package:qbox_app/Widgets/Common/app_text.dart';
+import 'package:qbox/Features/Controllers/login_controller.dart';
+import 'package:qbox/Features/Screens/Scanner_Page/scanner_page.dart';
+import 'package:qbox/Model/Data_Models/user_model/user_model.dart';
+import 'package:qbox/Widgets/Common/app_text.dart';
 
 class LoginProvider extends ChangeNotifier {
   final LoginController loginController = LoginController();

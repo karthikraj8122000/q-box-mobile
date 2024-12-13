@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:qbox_app/Features/Screens/Login/login.dart';
+import 'package:qbox/Features/Screens/Login/login.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String routeName = '/splash';
