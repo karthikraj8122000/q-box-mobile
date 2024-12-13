@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         body: Column(
           children: [
-            AppText(text: "Home", fontSize: 18),
+            const AppText(text: "Home", fontSize: 18),
             Text("${user?.id}"),
             Text("${user?.email}"),
           ],

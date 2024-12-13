@@ -66,6 +66,7 @@ class CustomButton extends StatelessWidget {
             text: label,
             fontSize: fontSize,
             fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
           if (trailingIcon != null) ...[
             SizedBox(width: 8), // Space between label and trailing icon

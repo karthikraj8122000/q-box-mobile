@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qbox_app/Features/Controllers/login_controller.dart';
-import 'package:qbox_app/Features/Screens/Home/home.dart';
+import 'package:qbox_app/Features/Screens/Scanner_Page/scanner_page.dart';
 import 'package:qbox_app/Model/Data_Models/user_model/user_model.dart';
 import 'package:qbox_app/Widgets/Common/app_text.dart';
 
@@ -10,12 +10,14 @@ class LoginProvider extends ChangeNotifier {
   String _email = '';
   String _password = '';
   bool _isLoading = false;
+  bool _obsecureText = true;
 
   User? _user;
 
   String get email => _email;
   String get password => _password;
   bool get isLoading => _isLoading;
+  bool get obsecureText => _obsecureText;
   User? get user => _user;
 
   void setEmail(String value) {
@@ -28,13 +30,13 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(BuildContext context) async {
-    if (_email.isEmpty || _password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: AppText(
-              text: "Email and password both are empty!", fontSize: 14)));
-      return;
-    }
+  void toggleObsecureText(){
+    _obsecureText = !_obsecureText;
+    notifyListeners();
+  }
+
+
+  Future<dynamic> login(BuildContext context) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -42,7 +44,7 @@ class LoginProvider extends ChangeNotifier {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: AppText(text: "Login successfully!", fontSize: 14)),
       );
-      GoRouter.of(context).push(HomePage.routeName);
+      GoRouter.of(context).push(ScannerPage.routeName);
     } catch (e) {
       throw Exception(ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: AppText(text: "$e", fontSize: 14))));
