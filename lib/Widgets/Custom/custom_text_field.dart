@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qbox_app/Utils/validator.dart';
+import 'package:qbox/Utils/validator.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;

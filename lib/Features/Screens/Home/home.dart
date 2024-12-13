@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qbox_app/Provider/login_provider.dart';
-import 'package:qbox_app/Widgets/Common/app_text.dart';
+import 'package:qbox/Provider/login_provider.dart';
+import 'package:qbox/Widgets/Common/app_text.dart';
 
 class HomePage extends StatefulWidget {
 

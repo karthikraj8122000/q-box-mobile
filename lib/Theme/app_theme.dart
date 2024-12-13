@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qbox_app/Theme/app_text_theme.dart';
-import 'package:qbox_app/Widgets/Common/app_colors.dart';
+import 'package:qbox/Theme/app_text_theme.dart';
+import 'package:qbox/Widgets/Common/app_colors.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(

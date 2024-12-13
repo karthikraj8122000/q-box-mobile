@@ -1,6 +1,6 @@
 {
-    "name": "qbox_app",
-    "short_name": "qbox_app",
+    "name": "qbox",
+    "short_name": "qbox",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

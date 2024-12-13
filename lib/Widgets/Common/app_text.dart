@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qbox_app/Theme/app_theme.dart';
+import 'package:qbox/Theme/app_theme.dart';
 
 class AppText extends StatelessWidget {
   final String text;

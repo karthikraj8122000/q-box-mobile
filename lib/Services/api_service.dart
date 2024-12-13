@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:qbox_app/Core/Configurations/config.dart';
+import 'package:qbox/Core/Configurations/config.dart';
 
 class ApiService {
   final Dio _dio = Dio();
