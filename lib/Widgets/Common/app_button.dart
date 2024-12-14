@@ -17,7 +17,6 @@ class CustomButton extends StatelessWidget {
   final String? tooltip; // Optional tooltip text
   final Color tooltipTextColor;
   final EdgeInsetsGeometry? padding;
-  final Gradient? gradient; // Optional gradient
 
   CustomButton({
     required this.label,
@@ -31,8 +30,7 @@ class CustomButton extends StatelessWidget {
     this.isLoading = false,
     this.tooltip,
     this.tooltipTextColor = Colors.white,
-    this.padding,
-    this.gradient,
+    this.padding
   });
 
   @override
@@ -40,14 +38,9 @@ class CustomButton extends StatelessWidget {
     final loginProvider = Provider.of<LoginProvider>(context);
 
     return Ink(
-      decoration: BoxDecoration(
-        gradient: gradient, // Apply gradient
-        color: gradient == null ? color : null, // Fallback to solid color
-        borderRadius: borderRadius ?? BorderRadius.circular(8.0),
-      ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent, // Transparent to show gradient
+          backgroundColor: color, // Transparent to show gradient
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(8.0),
           ),

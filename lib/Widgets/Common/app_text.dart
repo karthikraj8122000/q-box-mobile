@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qbox/Theme/app_theme.dart';
 
 class AppText extends StatelessWidget {
   final String text;
@@ -7,8 +6,7 @@ class AppText extends StatelessWidget {
   final FontWeight fontWeight;
   final Color? color;
   final TextAlign? textAlign;
-  final TextStyle? fontStyle;
- final TextStyle? style;
+  final FontStyle? fontStyle;
 
   const AppText({
     super.key,
@@ -18,7 +16,6 @@ class AppText extends StatelessWidget {
     this.color,
     this.textAlign,
     this.fontStyle,
-    this.style
   });
 
   @override
@@ -26,7 +23,12 @@ class AppText extends StatelessWidget {
     return Text(
       text,
       textAlign: textAlign,
-      style: TextStyle(fontSize: fontSize,color: color),
+      style:TextStyle(
+        color: color,
+        fontSize: fontSize,
+        fontStyle: fontStyle,
+        fontWeight: fontWeight
+      )
     );
   }
 }
