@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CommonService extends ChangeNotifier{
 
-  presentToast(message,{ gravity }){
+  presentToast(message,{ToastGravity? gravity }){
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
-      gravity: gravity != null ? gravity : ToastGravity.BOTTOM,
+      gravity: gravity ?? ToastGravity.CENTER,
       timeInSecForIosWeb: 1,
-      // fontSize: 16.0
     );
   }
   emptyCheck(data){

@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.example.qr_page.app-mergeDebugResources-46:/values-v16/values-v16.xml",
+            "map": [
+                {
+                    "source": "/home/swomb/.gradle/caches/transforms-3/fbbd3d4a9e7c71014ba83db3d244e66c/transformed/appcompat-1.2.0/res/values-v16/values-v16.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "5",
+                        "endColumns": "12",
+                        "endOffsets": "223"
+                    }
+                }
+            ]
+        }
+    ]
+}

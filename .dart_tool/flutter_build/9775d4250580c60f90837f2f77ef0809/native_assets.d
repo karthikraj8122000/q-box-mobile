@@ -1,0 +1,1 @@
+ /home/swomb/Downloads/qr_code_page/qr_page/.dart_tool/flutter_build/9775d4250580c60f90837f2f77ef0809/native_assets.yaml: 

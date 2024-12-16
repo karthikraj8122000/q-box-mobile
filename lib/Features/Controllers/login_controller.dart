@@ -1,4 +1,6 @@
-import 'package:qbox/Model/Data_Models/user_model/user_model.dart';
+
+
+import '../../Model/Data_Models/user_model/user_model.dart';
 
 class LoginController {
   Future<User> login({required String email, required String password}) async {

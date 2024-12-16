@@ -1,15 +1,15 @@
-// lib/scanner_page.dart
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:provider/provider.dart';
-import 'package:qbox/Widgets/Common/app_button.dart';
-import 'package:qbox/Widgets/Common/app_text.dart';
 
+import '../../../../../Widgets/Common/app_text.dart';
 import '../../../Model/Data_Models/tab_model/tab_items_model.dart';
 import '../../../Provider/scanner_provider.dart';
+import '../../../Services/barcode_scanner_service.dart';
+import '../../../Utils/utils.dart';
+import '../../../Widgets/Custom/custom_gradient_button.dart';
 import '../../../Widgets/Custom/custom_tabbar.dart';
+
+
 
 class ScannerPage extends StatefulWidget {
   static const String routeName = '/scanner';
@@ -39,68 +39,68 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     final scannerProvider = Provider.of<ScannerProvider>(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Align(
-          alignment: Alignment.topLeft,
-          child: AppText(
-            text: 'Remote Location Admin',
-            fontSize: 20,
+    return WillPopScope(
+      onWillPop: handleWillPop(context),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Align(
+            alignment: Alignment.topLeft,
+            child: AppText(
+              text: 'Remote Location Admin',
+              fontSize: 20,
+            ),
+          ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(48.0),
+            child: CustomTabBar(
+              tabController: _tabController,
+              onTabSelected: (index) {
+                  _tabController.index = index;
+              }, tabItems: tabItems,
+            ),
           ),
         ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(48.0),
-          child: CustomTabBar(
-            tabController: _tabController,
-            onTabSelected: (index) {
-                _tabController.index = index;
-            }, tabItems: tabItems,
-          ),
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          Center(
-            child: SingleChildScrollView(
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildScanAndDisplayUI(
+                        'Qbox', 'Tap to scan qbox', 'QBox ID : ',
+                        scannerProvider.scannerModel.qBoxBarcode),
+                    _buildScanAndDisplayUI(
+                        'food', 'Scan Your Food here', 'Food ID : ',
+                        scannerProvider.scannerModel.foodBarcode),
+                  ],
+                ),
+              ),
+            ),
+            Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildScanAndDisplayUI(
-                      'Qbox', 'Scan Your QBox here', 'QBox ID : ',
-                      scannerProvider.scannerModel.qBoxBarcode),
-                  _buildScanAndDisplayUI(
-                      'food', 'Scan Your Food here', 'Food ID : ',
-                      scannerProvider.scannerModel.foodBarcode),
+                      'QboxOut', 'Scan Your Food here', 'Food ID : ',
+                      scannerProvider.scannerModel.qBoxOutBarcode),
+                  const SizedBox(height: 20),
+                  Text(
+                    scannerProvider.scannerModel.qBoxOutStatus,
+                    style: const TextStyle(fontSize: 20, color: Colors.green),
+                  ),
                 ],
               ),
             ),
-          ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildScanAndDisplayUI(
-                    'QboxOut', 'Scan Your Food here', 'Food ID : ',
-                    scannerProvider.scannerModel.qBoxOutBarcode),
-                const SizedBox(height: 20),
-                Text(
-                  scannerProvider.scannerModel.qBoxOutStatus,
-                  style: const TextStyle(fontSize: 20, color: Colors.green),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: buildButton(
-        _tabController.index == 0 ? 'LOAD' : 'UNLOAD',
-        _tabController.index == 0
-            ? (scannerProvider.scannerModel.qBoxBarcode.isNotEmpty &&
-            scannerProvider.scannerModel.foodBarcode.isNotEmpty)
-            : (scannerProvider.scannerModel.qBoxOutBarcode.isNotEmpty),
-        _tabController.index == 0 ? () => scannerProvider.loadToQBox() : () =>
-            scannerProvider.unloadFromQBox(),
+          ],
+        ),
+        bottomNavigationBar: buildGradientButton(
+          _tabController.index == 0 ? 'LOAD' : 'UNLOAD',
+          _tabController.index == 0
+              ? () => scannerProvider.loadToQBox()
+              : () => scannerProvider.unloadFromQBox(),
+        ),
       ),
     );
   }
@@ -111,7 +111,7 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
       children: [
         const SizedBox(height: 20),
         GestureDetector(
-          onTap: () => scanBarcode(name),
+          onTap: () => _scanBarcode(name),
           child: Container(
             width: MediaQuery.of(context).size.width * 0.5, // Set width to 80% of screen width
             height: MediaQuery.of(context).size.width * 0.5, // Set height to 80% of screen width (to maintain aspect ratio)
@@ -143,39 +143,17 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
     );
   }
 
-  Widget buildButton(String name, bool condition,
-      VoidCallback onPressedCallback) {
-    return CustomButton(
-      label: name,
-      onPressed: onPressedCallback,
-      elevation: 0,
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      borderRadius: const BorderRadius.only(topLeft: Radius.circular(40),topRight: Radius.circular(40)),
-      gradient: const LinearGradient(
-        colors: [Colors.pink, Colors.purple],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-    );
-  }
+  Future<void> _scanBarcode(String name) async {
+    final scannerProvider = Provider.of<ScannerProvider>(context, listen: false);
+    final barcodeScanRes = await BarcodeScannerService.scanBarcode();
 
-  Future<void> scanBarcode(String name) async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-      final scannerProvider = Provider.of<ScannerProvider>(
-          context, listen: false);
-      if (name == 'Qbox') {
-        scannerProvider.updateQBoxBarcode(barcodeScanRes);
-      } else if (name == 'food') {
-        scannerProvider.updateFoodBarcode(barcodeScanRes);
-      } else if (name == 'QboxOut') {
-        scannerProvider.updateQBoxOutBarcode(barcodeScanRes);
-      }
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
+    if (name == 'Qbox') {
+      scannerProvider.updateQBoxBarcode(barcodeScanRes);
+    } else if (name == 'food') {
+      scannerProvider.updateFoodBarcode(barcodeScanRes);
+    } else if (name == 'QboxOut') {
+      scannerProvider.updateQBoxOutBarcode(barcodeScanRes);
     }
+    print(barcodeScanRes);
   }
 }

@@ -1,16 +1,16 @@
 import 'package:dio/dio.dart';
-import 'package:qbox/Core/Configurations/config.dart';
+import '../Core/Configurations/config.dart';
 
 class ApiService {
   final Dio _dio = Dio();
   final bool isLive;
   ApiService({this.isLive = true});
 
-  Uri _makeUri(String port, String endpoint,
+  Uri _makeUri(String port,String service,String endpoint,
       [Map<String, dynamic>? queryParams]) {
     final effectivePort = isLive ? '8000' : port;
     var uri = Uri.parse(
-        '${AppConfig.url}${AppConfig.host}:$effectivePort${AppConfig.apiPrefix}/$endpoint');
+        '${AppConfig.url}${AppConfig.host}:$effectivePort${AppConfig.apiPrefix}$service/$endpoint');
     if (queryParams != null) {
       uri = uri.replace(queryParameters: queryParams);
     }
@@ -26,10 +26,10 @@ class ApiService {
     }
   }
 
-  Future<dynamic> get(String port, String endpoint,
+  Future<dynamic> get(String port,String service, String endpoint,
       {Map<String, dynamic>? params}) async {
     try {
-      final uri = _makeUri(port, endpoint,params);
+      final uri = _makeUri(port,service, endpoint,params);
       final response = await _dio.getUri(uri);
       return _handleResponse(response);
     } catch (error) {
@@ -38,9 +38,9 @@ class ApiService {
   }
 
   Future<dynamic> post(
-      String port, String endpoint, Map<String, dynamic> body) async {
+      String port,String service, String endpoint, Map<String, dynamic> body) async {
     try {
-      final uri = _makeUri(port, endpoint);
+      final uri = _makeUri(port,service, endpoint);
       final response = await _dio.postUri(uri,data: body);
       return _handleResponse(response);
     } catch (error) {
@@ -48,9 +48,9 @@ class ApiService {
     }
   }
 
-  Future<dynamic> put(String port, String endpoint, Map<String, dynamic> body) async {
+  Future<dynamic> put(String port,String service, String endpoint, Map<String, dynamic> body) async {
     try {
-      final uri = _makeUri(port, endpoint);
+      final uri = _makeUri(port,service, endpoint);
       final response = await _dio.putUri(uri,data: body);
       return _handleResponse(response);
     } catch (error) {
@@ -58,10 +58,10 @@ class ApiService {
     }
   }
 
-  Future<dynamic> delete(String port, String endpoint,
+  Future<dynamic> delete(String port,String service, String endpoint,
       {Map<String, dynamic>? params}) async {
     try {
-      final uri = _makeUri(port, endpoint,params);
+      final uri = _makeUri(port,service, endpoint,params);
       final response = await _dio.deleteUri(uri);
       return _handleResponse(response);
     } catch (error) {
