@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../../Widgets/Common/app_text.dart';
 import '../../../Model/Data_Models/tab_model/tab_items_model.dart';
 import '../../../Provider/scanner_provider.dart';
 import '../../../Services/barcode_scanner_service.dart';
 import '../../../Utils/utils.dart';
-import '../../../Widgets/Custom/custom_gradient_button.dart';
+import '../../../Widgets/Custom/custom_outlined_button.dart';
 import '../../../Widgets/Custom/custom_tabbar.dart';
-
 
 
 class ScannerPage extends StatefulWidget {
@@ -43,6 +41,7 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
       onWillPop: handleWillPop(context),
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.white30,
           title: const Align(
             alignment: Alignment.topLeft,
             child: AppText(
@@ -51,7 +50,7 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
             ),
           ),
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(48.0),
+            preferredSize: const Size.fromHeight(50.0),
             child: CustomTabBar(
               tabController: _tabController,
               onTabSelected: (index) {
@@ -69,10 +68,10 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _buildScanAndDisplayUI(
-                        'Qbox', 'Tap to scan qbox', 'QBox ID : ',
+                        'Qbox', '[ Tap to scan qbox ]', 'Scanned QBox ID : ',
                         scannerProvider.scannerModel.qBoxBarcode),
                     _buildScanAndDisplayUI(
-                        'food', 'Scan Your Food here', 'Food ID : ',
+                        'Food In', '[ Tap to scan food ]', 'Scanned Food ID : ',
                         scannerProvider.scannerModel.foodBarcode),
                   ],
                 ),
@@ -83,20 +82,22 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildScanAndDisplayUI(
-                      'QboxOut', 'Scan Your Food here', 'Food ID : ',
+                      'Food Out', '[ Tap to scan food ]', 'Food ID : ',
                       scannerProvider.scannerModel.qBoxOutBarcode),
                   const SizedBox(height: 20),
-                  Text(
-                    scannerProvider.scannerModel.qBoxOutStatus,
-                    style: const TextStyle(fontSize: 20, color: Colors.green),
+                  AppText(
+                    text:scannerProvider.scannerModel.qBoxOutStatus,
+                    fontSize: 20,
+                    color: Colors.green
                   ),
                 ],
               ),
             ),
           ],
         ),
-        bottomNavigationBar: buildGradientButton(
-          _tabController.index == 0 ? 'LOAD' : 'UNLOAD',
+        bottomNavigationBar: buildOutlinedButton(
+          _tabController.index == 0 ? 'LOAD TO QBOX' : 'UNLOAD FROM QBOX',
+            _tabController.index == 0 ? Icons.input:Icons.output,
           _tabController.index == 0
               ? () => scannerProvider.loadToQBox()
               : () => scannerProvider.unloadFromQBox(),
@@ -110,34 +111,32 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(height: 20),
+        AppText(text: name,color: Colors.black,fontSize: 18,fontWeight: FontWeight.w700,),
         GestureDetector(
           onTap: () => _scanBarcode(name),
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.5, // Set width to 80% of screen width
-            height: MediaQuery.of(context).size.width * 0.5, // Set height to 80% of screen width (to maintain aspect ratio)
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.6, // Set width to 80% of screen width
+            height: MediaQuery.of(context).size.width * 0.4, // Set height to 80% of screen width (to maintain aspect ratio)
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10), // Match the border radius
               child: Image(
                 image: name == 'Qbox'
-                    ? const AssetImage('assets/qr_box.png')
-                    : const AssetImage('assets/qr_food.png'),
+                    ? const AssetImage('assets/qr4-removebg-preview.png')
+                    :name == 'Food In'? const AssetImage('assets/qr3-removebg-preview.png'):const AssetImage('assets/qrscan.png'),
                 fit: BoxFit.cover, // Fit the image to the container
               ),
             ),
           ),
         ),
+        // const SizedBox(height: 10),
+        AppText(text: labelText,color: Colors.black,fontSize: 14,),
         const SizedBox(height: 10),
-        Text(labelText, style: const TextStyle(color: Colors.deepPurple)),
-        const SizedBox(height: 10),
-        Padding(
-          padding: const EdgeInsets.only(left: 80.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(labelText2, style: const TextStyle(color: Colors.deepPurple, fontSize: 18, fontWeight: FontWeight.bold)),
-              Text(barcodeValue, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AppText(text: labelText2,fontSize: 18,color: Colors.deepPurple,fontWeight: FontWeight.bold),
+            AppText(text: barcodeValue,fontSize: 18,color: Colors.deepPurple,fontWeight: FontWeight.bold),
+          ],
         ),
       ],
     );

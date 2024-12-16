@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../Widgets/Common/app_text.dart';
 
-
-Widget buildGradientButton(String name, VoidCallback onPressedCallback) {
+Widget buildGradientButton(String name,IconData icon, VoidCallback onPressedCallback) {
   return Container(
     decoration: const BoxDecoration(
       gradient: LinearGradient(
@@ -18,22 +16,13 @@ Widget buildGradientButton(String name, VoidCallback onPressedCallback) {
         backgroundColor: Colors.transparent
       ),
         onPressed: ()=>onPressedCallback,
-        child: AppText(text: name, fontSize: 16)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AppText(text: name, fontSize: 16,color: Colors.white,),
+            SizedBox(width: 5,),
+            Icon(icon,size: 24,color: Colors.white,)
+          ],
+        )),
   );
 }
-
-// gradient: const LinearGradient(
-// colors: [Colors.pink, Colors.purple],
-// begin: Alignment.topLeft,
-// end: Alignment.bottomRight,
-// ),
-//
-// CustomButton(
-// label: name,
-// onPressed: onPressedCallback,
-// elevation: 0,
-// padding: const EdgeInsets.symmetric(vertical: 20),
-// borderRadius: const BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-// color: AppColors.buttonBgColor,
-//
-// );

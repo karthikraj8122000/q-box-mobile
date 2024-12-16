@@ -18,7 +18,7 @@ class CustomTabBar extends StatelessWidget {
     return TabBar(
       controller: tabController,
       onTap: onTabSelected,
-      indicatorColor: Colors.pinkAccent,
+      indicatorColor: Colors.black,
       tabs: tabItems.map((tabItem) {
         return Tab(
           icon: Row(
