@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qbox/Provider/login_provider.dart';
-import 'package:qbox/Widgets/Common/app_text.dart';
+
+import '../../../../../Widgets/Common/app_text.dart';
+import '../../Provider/login_provider.dart';
 import 'app_colors.dart';
 
 class CustomButton extends StatelessWidget {

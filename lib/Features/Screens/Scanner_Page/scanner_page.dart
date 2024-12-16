@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:qbox/Utils/utils.dart';
-import 'package:qbox/Widgets/Common/app_text.dart';
+
+import '../../../../../Widgets/Common/app_text.dart';
 import '../../../Model/Data_Models/tab_model/tab_items_model.dart';
 import '../../../Provider/scanner_provider.dart';
+import '../../../Services/barcode_scanner_service.dart';
+import '../../../Utils/utils.dart';
 import '../../../Widgets/Custom/custom_gradient_button.dart';
 import '../../../Widgets/Custom/custom_tabbar.dart';
+
+
 
 class ScannerPage extends StatefulWidget {
   static const String routeName = '/scanner';
@@ -66,7 +69,7 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _buildScanAndDisplayUI(
-                        'Qbox', 'Scan Your QBox here', 'QBox ID : ',
+                        'Qbox', 'Tap to scan qbox', 'QBox ID : ',
                         scannerProvider.scannerModel.qBoxBarcode),
                     _buildScanAndDisplayUI(
                         'food', 'Scan Your Food here', 'Food ID : ',
@@ -108,7 +111,7 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
       children: [
         const SizedBox(height: 20),
         GestureDetector(
-          // onTap: () => scanBarcode(name),
+          onTap: () => _scanBarcode(name),
           child: Container(
             width: MediaQuery.of(context).size.width * 0.5, // Set width to 80% of screen width
             height: MediaQuery.of(context).size.width * 0.5, // Set height to 80% of screen width (to maintain aspect ratio)
@@ -139,17 +142,18 @@ class _ScannerPageState extends State<ScannerPage> with SingleTickerProviderStat
       ],
     );
   }
-  // Future<void> _scanBarcode(String name) async {
-  //   final scannerProvider = Provider.of<ScannerProvider>(context, listen: false);
-  //   final barcodeScanRes = await BarcodeScannerService.scanBarcode();
-  //
-  //   if (name == 'Qbox') {
-  //     scannerProvider.updateQBoxBarcode(barcodeScanRes);
-  //   } else if (name == 'food') {
-  //     scannerProvider.updateFoodBarcode(barcodeScanRes);
-  //   } else if (name == 'QboxOut') {
-  //     scannerProvider.updateQBoxOutBarcode(barcodeScanRes);
-  //   }
-  //   print(barcodeScanRes);
-  // }
+
+  Future<void> _scanBarcode(String name) async {
+    final scannerProvider = Provider.of<ScannerProvider>(context, listen: false);
+    final barcodeScanRes = await BarcodeScannerService.scanBarcode();
+
+    if (name == 'Qbox') {
+      scannerProvider.updateQBoxBarcode(barcodeScanRes);
+    } else if (name == 'food') {
+      scannerProvider.updateFoodBarcode(barcodeScanRes);
+    } else if (name == 'QboxOut') {
+      scannerProvider.updateQBoxOutBarcode(barcodeScanRes);
+    }
+    print(barcodeScanRes);
+  }
 }

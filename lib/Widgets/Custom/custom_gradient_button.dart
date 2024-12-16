@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:qbox/Widgets/Common/app_button.dart';
-import 'package:qbox/Widgets/Common/app_colors.dart';
-import 'package:qbox/Widgets/Common/app_text.dart';
+
+import '../../../../../Widgets/Common/app_text.dart';
+
 
 Widget buildGradientButton(String name, VoidCallback onPressedCallback) {
   return Container(

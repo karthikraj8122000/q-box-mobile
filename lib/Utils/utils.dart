@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:qbox/Provider/scanner_provider.dart';
-import 'package:qbox/Widgets/Common/app_text.dart';
+
+import '../../../../Widgets/Common/app_text.dart';
+
 
 
 // Dialog
