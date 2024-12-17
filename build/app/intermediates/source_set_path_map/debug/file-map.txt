@@ -1,54 +1,62 @@
 com.example.qr_page.app-recyclerview-1.1.0-0 /home/swomb/.gradle/caches/transforms-3/07e20ba7e798e1db1da55c20b3dd82b2/transformed/recyclerview-1.1.0/res
-com.example.qr_page.app-constraintlayout-2.0.1-1 /home/swomb/.gradle/caches/transforms-3/146c7740b6900c42283b3451b0dec7f9/transformed/constraintlayout-2.0.1/res
-com.example.qr_page.app-coordinatorlayout-1.1.0-2 /home/swomb/.gradle/caches/transforms-3/1843af4a9e82b371af002a2fdacff370/transformed/coordinatorlayout-1.1.0/res
-com.example.qr_page.app-jetified-appcompat-resources-1.2.0-3 /home/swomb/.gradle/caches/transforms-3/1d8f57036c8a079dfcf06d49e69d31c9/transformed/jetified-appcompat-resources-1.2.0/res
-com.example.qr_page.app-jetified-activity-1.8.1-4 /home/swomb/.gradle/caches/transforms-3/2c2c3685f0b196fda182ad14cb22ea84/transformed/jetified-activity-1.8.1/res
-com.example.qr_page.app-jetified-savedstate-ktx-1.2.1-5 /home/swomb/.gradle/caches/transforms-3/301b2ad3d3c7aaf2fc6ced087c6abaf1/transformed/jetified-savedstate-ktx-1.2.1/res
-com.example.qr_page.app-jetified-core-1.0.0-6 /home/swomb/.gradle/caches/transforms-3/320650fa8a842ae8e386be45cdf30967/transformed/jetified-core-1.0.0/res
-com.example.qr_page.app-material-1.3.0-7 /home/swomb/.gradle/caches/transforms-3/336115a95420fd1ecf3d13be9638caed/transformed/material-1.3.0/res
-com.example.qr_page.app-jetified-lifecycle-runtime-ktx-2.7.0-8 /home/swomb/.gradle/caches/transforms-3/34fea7409d8d80351528e7c40add3c11/transformed/jetified-lifecycle-runtime-ktx-2.7.0/res
-com.example.qr_page.app-jetified-fragment-ktx-1.7.1-9 /home/swomb/.gradle/caches/transforms-3/375b55f86a07134d3df85938a11ecd23/transformed/jetified-fragment-ktx-1.7.1/res
-com.example.qr_page.app-jetified-window-1.2.0-10 /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/res
-com.example.qr_page.app-jetified-startup-runtime-1.1.1-11 /home/swomb/.gradle/caches/transforms-3/5075b6f7f72b7873f858b241a85001b8/transformed/jetified-startup-runtime-1.1.1/res
-com.example.qr_page.app-jetified-annotation-experimental-1.4.0-12 /home/swomb/.gradle/caches/transforms-3/5b0d049e6914a8abcf2946ec43a1eaa1/transformed/jetified-annotation-experimental-1.4.0/res
-com.example.qr_page.app-jetified-play-services-base-17.4.0-13 /home/swomb/.gradle/caches/transforms-3/5b37e6615e15141ac30ee9230fd043c7/transformed/jetified-play-services-base-17.4.0/res
-com.example.qr_page.app-jetified-tracing-1.2.0-14 /home/swomb/.gradle/caches/transforms-3/65493d4a21cc18c8f0cd00497129cfd2/transformed/jetified-tracing-1.2.0/res
-com.example.qr_page.app-jetified-activity-ktx-1.8.1-15 /home/swomb/.gradle/caches/transforms-3/67d6a27bf594fb37fd926ab8b0476aa4/transformed/jetified-activity-ktx-1.8.1/res
-com.example.qr_page.app-preference-1.2.1-16 /home/swomb/.gradle/caches/transforms-3/6a30de138cdfb89bc1ef42a02f38770d/transformed/preference-1.2.1/res
-com.example.qr_page.app-jetified-datastore-1.0.0-17 /home/swomb/.gradle/caches/transforms-3/6b2571db486df7b7bc1f5498b24a13e8/transformed/jetified-datastore-1.0.0/res
-com.example.qr_page.app-transition-1.4.1-18 /home/swomb/.gradle/caches/transforms-3/74b0e5b01cad374dc8b39abe5d163052/transformed/transition-1.4.1/res
-com.example.qr_page.app-jetified-lifecycle-viewmodel-savedstate-2.7.0-19 /home/swomb/.gradle/caches/transforms-3/777bb9ce6c9cd65ae088a60be63bdbd3/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/res
-com.example.qr_page.app-jetified-viewpager2-1.0.0-20 /home/swomb/.gradle/caches/transforms-3/7d14002fcdee3ea951b981c81127cf50/transformed/jetified-viewpager2-1.0.0/res
-com.example.qr_page.app-jetified-lifecycle-process-2.7.0-21 /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/res
-com.example.qr_page.app-core-runtime-2.2.0-22 /home/swomb/.gradle/caches/transforms-3/8561d00ec0cbdc75b923244cd447b40e/transformed/core-runtime-2.2.0/res
-com.example.qr_page.app-fragment-1.7.1-23 /home/swomb/.gradle/caches/transforms-3/941f550dc677f6a10876e341f4fc45cf/transformed/fragment-1.7.1/res
-com.example.qr_page.app-lifecycle-viewmodel-2.7.0-24 /home/swomb/.gradle/caches/transforms-3/9f231c4b0e56cb003827239782a5ee05/transformed/lifecycle-viewmodel-2.7.0/res
-com.example.qr_page.app-jetified-savedstate-1.2.1-25 /home/swomb/.gradle/caches/transforms-3/a38072ca345125caf28abdccc90ab587/transformed/jetified-savedstate-1.2.1/res
-com.example.qr_page.app-jetified-lifecycle-viewmodel-ktx-2.7.0-26 /home/swomb/.gradle/caches/transforms-3/a40ceacba8ee302a4cfb3eb351a7f559/transformed/jetified-lifecycle-viewmodel-ktx-2.7.0/res
-com.example.qr_page.app-jetified-play-services-basement-17.4.0-27 /home/swomb/.gradle/caches/transforms-3/a529f459040a74c9c2670488a136a9b7/transformed/jetified-play-services-basement-17.4.0/res
-com.example.qr_page.app-jetified-window-java-1.2.0-28 /home/swomb/.gradle/caches/transforms-3/af89c254f4ba1d9ccd1cebbf4b8450bd/transformed/jetified-window-java-1.2.0/res
-com.example.qr_page.app-cardview-1.0.0-29 /home/swomb/.gradle/caches/transforms-3/b0cd12e93e5d26cca6d4e878e6ca5087/transformed/cardview-1.0.0/res
-com.example.qr_page.app-lifecycle-livedata-core-2.7.0-30 /home/swomb/.gradle/caches/transforms-3/c134ce715b400c7c6ad3451e1dabc777/transformed/lifecycle-livedata-core-2.7.0/res
-com.example.qr_page.app-lifecycle-livedata-2.7.0-31 /home/swomb/.gradle/caches/transforms-3/d2aa94056d7d0e72d9cf5b1a6ee347ca/transformed/lifecycle-livedata-2.7.0/res
-com.example.qr_page.app-jetified-core-ktx-1.13.1-32 /home/swomb/.gradle/caches/transforms-3/d30f52357c5f9dd8b4d1c16286f8e94f/transformed/jetified-core-ktx-1.13.1/res
-com.example.qr_page.app-media-1.0.0-33 /home/swomb/.gradle/caches/transforms-3/d33a00fcbfb98b10445fe3efb72da296/transformed/media-1.0.0/res
-com.example.qr_page.app-jetified-lifecycle-livedata-core-ktx-2.7.0-34 /home/swomb/.gradle/caches/transforms-3/d7d7eedabdcffd1050ecfc4ca9d8c6a4/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/res
-com.example.qr_page.app-slidingpanelayout-1.2.0-35 /home/swomb/.gradle/caches/transforms-3/df5044d3cc4a61194c0700ec5db931a9/transformed/slidingpanelayout-1.2.0/res
-com.example.qr_page.app-jetified-datastore-preferences-1.0.0-36 /home/swomb/.gradle/caches/transforms-3/e4c4b2c5404ce59d09e4e5fb2a118869/transformed/jetified-datastore-preferences-1.0.0/res
-com.example.qr_page.app-lifecycle-runtime-2.7.0-37 /home/swomb/.gradle/caches/transforms-3/ebb0dc7c45bea9fee08387d67d12cdf7/transformed/lifecycle-runtime-2.7.0/res
-com.example.qr_page.app-jetified-profileinstaller-1.3.1-38 /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/res
-com.example.qr_page.app-core-1.13.1-39 /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/res
-com.example.qr_page.app-appcompat-1.2.0-40 /home/swomb/.gradle/caches/transforms-3/fbbd3d4a9e7c71014ba83db3d244e66c/transformed/appcompat-1.2.0/res
-com.example.qr_page.app-debug-41 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/debug/res
-com.example.qr_page.app-main-42 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/res
-com.example.qr_page.app-pngs-43 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/generated/res/pngs/debug
-com.example.qr_page.app-resValues-44 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/generated/res/resValues/debug
-com.example.qr_page.app-rs-45 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/generated/res/rs/debug
-com.example.qr_page.app-mergeDebugResources-46 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/intermediates/incremental/debug/mergeDebugResources/merged.dir
-com.example.qr_page.app-mergeDebugResources-47 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/intermediates/incremental/debug/mergeDebugResources/stripped.dir
-com.example.qr_page.app-merged_res-48 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/intermediates/merged_res/debug
-com.example.qr_page.app-packaged_res-49 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/packaged_res/debug
-com.example.qr_page.app-packaged_res-50 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_plugin_android_lifecycle/intermediates/packaged_res/debug
-com.example.qr_page.app-packaged_res-51 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/fluttertoast/intermediates/packaged_res/debug
-com.example.qr_page.app-packaged_res-52 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/path_provider_android/intermediates/packaged_res/debug
-com.example.qr_page.app-packaged_res-53 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/shared_preferences_android/intermediates/packaged_res/debug
+com.example.qr_page.app-jetified-play-services-basement-18.1.0-1 /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/res
+com.example.qr_page.app-jetified-appcompat-resources-1.4.2-2 /home/swomb/.gradle/caches/transforms-3/11138de04ede76e5ce5d587ffd01924b/transformed/jetified-appcompat-resources-1.4.2/res
+com.example.qr_page.app-constraintlayout-2.0.1-3 /home/swomb/.gradle/caches/transforms-3/146c7740b6900c42283b3451b0dec7f9/transformed/constraintlayout-2.0.1/res
+com.example.qr_page.app-coordinatorlayout-1.1.0-4 /home/swomb/.gradle/caches/transforms-3/1843af4a9e82b371af002a2fdacff370/transformed/coordinatorlayout-1.1.0/res
+com.example.qr_page.app-jetified-camera-core-1.3.1-5 /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/res
+com.example.qr_page.app-jetified-emoji2-views-helper-1.0.0-6 /home/swomb/.gradle/caches/transforms-3/2b862211ffa9c393a3ff3bc016dcf999/transformed/jetified-emoji2-views-helper-1.0.0/res
+com.example.qr_page.app-jetified-activity-1.8.1-7 /home/swomb/.gradle/caches/transforms-3/2c2c3685f0b196fda182ad14cb22ea84/transformed/jetified-activity-1.8.1/res
+com.example.qr_page.app-jetified-savedstate-ktx-1.2.1-8 /home/swomb/.gradle/caches/transforms-3/301b2ad3d3c7aaf2fc6ced087c6abaf1/transformed/jetified-savedstate-ktx-1.2.1/res
+com.example.qr_page.app-jetified-core-1.0.0-9 /home/swomb/.gradle/caches/transforms-3/320650fa8a842ae8e386be45cdf30967/transformed/jetified-core-1.0.0/res
+com.example.qr_page.app-material-1.3.0-10 /home/swomb/.gradle/caches/transforms-3/336115a95420fd1ecf3d13be9638caed/transformed/material-1.3.0/res
+com.example.qr_page.app-jetified-lifecycle-runtime-ktx-2.7.0-11 /home/swomb/.gradle/caches/transforms-3/34fea7409d8d80351528e7c40add3c11/transformed/jetified-lifecycle-runtime-ktx-2.7.0/res
+com.example.qr_page.app-jetified-fragment-ktx-1.7.1-12 /home/swomb/.gradle/caches/transforms-3/375b55f86a07134d3df85938a11ecd23/transformed/jetified-fragment-ktx-1.7.1/res
+com.example.qr_page.app-jetified-window-1.2.0-13 /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/res
+com.example.qr_page.app-jetified-camera-lifecycle-1.3.1-14 /home/swomb/.gradle/caches/transforms-3/47cda69f5f1121fe30e760766dd83941/transformed/jetified-camera-lifecycle-1.3.1/res
+com.example.qr_page.app-appcompat-1.4.2-15 /home/swomb/.gradle/caches/transforms-3/4b6526175f05ef41dd8ad0648117671c/transformed/appcompat-1.4.2/res
+com.example.qr_page.app-jetified-startup-runtime-1.1.1-16 /home/swomb/.gradle/caches/transforms-3/5075b6f7f72b7873f858b241a85001b8/transformed/jetified-startup-runtime-1.1.1/res
+com.example.qr_page.app-jetified-annotation-experimental-1.4.0-17 /home/swomb/.gradle/caches/transforms-3/5b0d049e6914a8abcf2946ec43a1eaa1/transformed/jetified-annotation-experimental-1.4.0/res
+com.example.qr_page.app-jetified-tracing-1.2.0-18 /home/swomb/.gradle/caches/transforms-3/65493d4a21cc18c8f0cd00497129cfd2/transformed/jetified-tracing-1.2.0/res
+com.example.qr_page.app-jetified-activity-ktx-1.8.1-19 /home/swomb/.gradle/caches/transforms-3/67d6a27bf594fb37fd926ab8b0476aa4/transformed/jetified-activity-ktx-1.8.1/res
+com.example.qr_page.app-preference-1.2.1-20 /home/swomb/.gradle/caches/transforms-3/6a30de138cdfb89bc1ef42a02f38770d/transformed/preference-1.2.1/res
+com.example.qr_page.app-jetified-datastore-1.0.0-21 /home/swomb/.gradle/caches/transforms-3/6b2571db486df7b7bc1f5498b24a13e8/transformed/jetified-datastore-1.0.0/res
+com.example.qr_page.app-transition-1.4.1-22 /home/swomb/.gradle/caches/transforms-3/74b0e5b01cad374dc8b39abe5d163052/transformed/transition-1.4.1/res
+com.example.qr_page.app-jetified-emoji2-1.0.0-23 /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/res
+com.example.qr_page.app-jetified-lifecycle-viewmodel-savedstate-2.7.0-24 /home/swomb/.gradle/caches/transforms-3/777bb9ce6c9cd65ae088a60be63bdbd3/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/res
+com.example.qr_page.app-jetified-zxing-android-embedded-4.3.0-25 /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/res
+com.example.qr_page.app-jetified-viewpager2-1.0.0-26 /home/swomb/.gradle/caches/transforms-3/7d14002fcdee3ea951b981c81127cf50/transformed/jetified-viewpager2-1.0.0/res
+com.example.qr_page.app-jetified-lifecycle-process-2.7.0-27 /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/res
+com.example.qr_page.app-core-runtime-2.2.0-28 /home/swomb/.gradle/caches/transforms-3/8561d00ec0cbdc75b923244cd447b40e/transformed/core-runtime-2.2.0/res
+com.example.qr_page.app-fragment-1.7.1-29 /home/swomb/.gradle/caches/transforms-3/941f550dc677f6a10876e341f4fc45cf/transformed/fragment-1.7.1/res
+com.example.qr_page.app-jetified-play-services-base-18.1.0-30 /home/swomb/.gradle/caches/transforms-3/9a3b9caa53e8885d030aab39282fb142/transformed/jetified-play-services-base-18.1.0/res
+com.example.qr_page.app-lifecycle-viewmodel-2.7.0-31 /home/swomb/.gradle/caches/transforms-3/9f231c4b0e56cb003827239782a5ee05/transformed/lifecycle-viewmodel-2.7.0/res
+com.example.qr_page.app-jetified-savedstate-1.2.1-32 /home/swomb/.gradle/caches/transforms-3/a38072ca345125caf28abdccc90ab587/transformed/jetified-savedstate-1.2.1/res
+com.example.qr_page.app-jetified-lifecycle-viewmodel-ktx-2.7.0-33 /home/swomb/.gradle/caches/transforms-3/a40ceacba8ee302a4cfb3eb351a7f559/transformed/jetified-lifecycle-viewmodel-ktx-2.7.0/res
+com.example.qr_page.app-jetified-window-java-1.2.0-34 /home/swomb/.gradle/caches/transforms-3/af89c254f4ba1d9ccd1cebbf4b8450bd/transformed/jetified-window-java-1.2.0/res
+com.example.qr_page.app-cardview-1.0.0-35 /home/swomb/.gradle/caches/transforms-3/b0cd12e93e5d26cca6d4e878e6ca5087/transformed/cardview-1.0.0/res
+com.example.qr_page.app-lifecycle-livedata-core-2.7.0-36 /home/swomb/.gradle/caches/transforms-3/c134ce715b400c7c6ad3451e1dabc777/transformed/lifecycle-livedata-core-2.7.0/res
+com.example.qr_page.app-lifecycle-livedata-2.7.0-37 /home/swomb/.gradle/caches/transforms-3/d2aa94056d7d0e72d9cf5b1a6ee347ca/transformed/lifecycle-livedata-2.7.0/res
+com.example.qr_page.app-jetified-core-ktx-1.13.1-38 /home/swomb/.gradle/caches/transforms-3/d30f52357c5f9dd8b4d1c16286f8e94f/transformed/jetified-core-ktx-1.13.1/res
+com.example.qr_page.app-media-1.0.0-39 /home/swomb/.gradle/caches/transforms-3/d33a00fcbfb98b10445fe3efb72da296/transformed/media-1.0.0/res
+com.example.qr_page.app-jetified-lifecycle-livedata-core-ktx-2.7.0-40 /home/swomb/.gradle/caches/transforms-3/d7d7eedabdcffd1050ecfc4ca9d8c6a4/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/res
+com.example.qr_page.app-slidingpanelayout-1.2.0-41 /home/swomb/.gradle/caches/transforms-3/df5044d3cc4a61194c0700ec5db931a9/transformed/slidingpanelayout-1.2.0/res
+com.example.qr_page.app-jetified-datastore-preferences-1.0.0-42 /home/swomb/.gradle/caches/transforms-3/e4c4b2c5404ce59d09e4e5fb2a118869/transformed/jetified-datastore-preferences-1.0.0/res
+com.example.qr_page.app-lifecycle-runtime-2.7.0-43 /home/swomb/.gradle/caches/transforms-3/ebb0dc7c45bea9fee08387d67d12cdf7/transformed/lifecycle-runtime-2.7.0/res
+com.example.qr_page.app-jetified-profileinstaller-1.3.1-44 /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/res
+com.example.qr_page.app-jetified-camera-camera2-1.3.1-45 /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/res
+com.example.qr_page.app-core-1.13.1-46 /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/res
+com.example.qr_page.app-debug-47 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/debug/res
+com.example.qr_page.app-main-48 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/res
+com.example.qr_page.app-pngs-49 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/generated/res/pngs/debug
+com.example.qr_page.app-resValues-50 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/generated/res/resValues/debug
+com.example.qr_page.app-rs-51 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/generated/res/rs/debug
+com.example.qr_page.app-mergeDebugResources-52 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/intermediates/incremental/debug/mergeDebugResources/merged.dir
+com.example.qr_page.app-mergeDebugResources-53 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/intermediates/incremental/debug/mergeDebugResources/stripped.dir
+com.example.qr_page.app-merged_res-54 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/intermediates/merged_res/debug
+com.example.qr_page.app-packaged_res-55 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/packaged_res/debug
+com.example.qr_page.app-packaged_res-56 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_plugin_android_lifecycle/intermediates/packaged_res/debug
+com.example.qr_page.app-packaged_res-57 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/fluttertoast/intermediates/packaged_res/debug
+com.example.qr_page.app-packaged_res-58 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/mobile_scanner/intermediates/packaged_res/debug
+com.example.qr_page.app-packaged_res-59 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/path_provider_android/intermediates/packaged_res/debug
+com.example.qr_page.app-packaged_res-60 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/qr_code_scanner/intermediates/packaged_res/debug
+com.example.qr_page.app-packaged_res-61 /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/shared_preferences_android/intermediates/packaged_res/debug

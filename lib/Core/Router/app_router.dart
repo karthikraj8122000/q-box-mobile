@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:qr_page/Features/Screens/Home/home.dart';
 import 'package:qr_page/Features/Screens/Login/login.dart';
+import 'package:qr_page/Features/Screens/MainPage/main_page.dart';
 import 'package:qr_page/Features/Screens/Splash/splash_screen.dart';
 
-import '../../Features/Screens/Scanner_Page/scanner_page.dart';
 
 class AppRouter {
   static final GlobalKey<NavigatorState> _routerKey =
@@ -15,7 +14,7 @@ class AppRouter {
   static final GoRouter _router = GoRouter(
     navigatorKey: _routerKey,
     debugLogDiagnostics: true,
-    initialLocation: ScannerPage.routeName, // Default splash screen
+    initialLocation: MainNavigationScreen.routeName, // Default splash screen
     routes: <RouteBase>[
       // Splash Screen Route
       GoRoute(
@@ -31,15 +30,11 @@ class AppRouter {
       ),
       // Home Page Route
       GoRoute(
-        path: HomePage.routeName,
-        name: HomePage.routeName,
-        builder: (_, __) => const HomePage(),
+        path: MainNavigationScreen.routeName,
+        name: MainNavigationScreen.routeName,
+        builder: (_, __) => const MainNavigationScreen(),
       ),
-
-      GoRoute(
-          path: ScannerPage.routeName,
-          name: ScannerPage.routeName,
-          builder: (_, __) =>  ScannerPage())
+    
     ],
   );
 

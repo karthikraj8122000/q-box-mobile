@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qr_page/Features/Screens/MainPage/main_page.dart';
 
 
 import '../Features/Controllers/login_controller.dart';
-import '../Features/Screens/Scanner_Page/scanner_page.dart';
 import '../Model/Data_Models/user_model/user_model.dart';
 import '../Services/toast_service.dart';
 
@@ -52,7 +52,7 @@ class LoginProvider extends ChangeNotifier {
       notifyListeners();
       _user = await loginController.login(email: _email, password: _password);
       commonService.presentToast("Login successfully!");
-      GoRouter.of(context).push(ScannerPage.routeName);
+      GoRouter.of(context).push(MainNavigationScreen.routeName);
     } catch (e) {
       commonService.presentToast("$e",gravity: ToastGravity.BOTTOM);
       throw Exception("Login failed: $e");

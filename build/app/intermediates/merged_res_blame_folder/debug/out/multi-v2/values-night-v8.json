@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.qr_page.app-mergeDebugResources-46:/values-night-v8/values-night-v8.xml",
+            "outputFile": "com.example.qr_page.app-mergeDebugResources-52:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
                     "source": "/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/res/values-night/styles.xml",
@@ -40,7 +40,7 @@
                     }
                 },
                 {
-                    "source": "/home/swomb/.gradle/caches/transforms-3/fbbd3d4a9e7c71014ba83db3d244e66c/transformed/appcompat-1.2.0/res/values-night-v8/values-night-v8.xml",
+                    "source": "/home/swomb/.gradle/caches/transforms-3/4b6526175f05ef41dd8ad0648117671c/transformed/appcompat-1.4.2/res/values-night-v8/values-night-v8.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",

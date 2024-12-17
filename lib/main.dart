@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Core/Router/app_router.dart';
+import 'package:qr_page/Provider/food_retention_provider.dart';
 import 'package:qr_page/Provider/login_provider.dart';
-import 'package:qr_page/Provider/scanner_provider.dart';
-
 
 
 void main() {
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LoginProvider()),
-        ChangeNotifierProvider(create: (_) => ScannerProvider()),
+        ChangeNotifierProvider(create: (_) => FoodRetentionProvider()),
       ],
       child: Consumer<LoginProvider>(
         builder: (context, loginProvider, _) {

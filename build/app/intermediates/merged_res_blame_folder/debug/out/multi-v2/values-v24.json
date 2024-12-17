@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.qr_page.app-mergeDebugResources-46:/values-v24/values-v24.xml",
+            "outputFile": "com.example.qr_page.app-mergeDebugResources-52:/values-v24/values-v24.xml",
             "map": [
                 {
                     "source": "/home/swomb/.gradle/caches/transforms-3/d33a00fcbfb98b10445fe3efb72da296/transformed/media-1.0.0/res/values-v24/values-v24.xml",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "/home/swomb/.gradle/caches/transforms-3/fbbd3d4a9e7c71014ba83db3d244e66c/transformed/appcompat-1.2.0/res/values-v24/values-v24.xml",
+                    "source": "/home/swomb/.gradle/caches/transforms-3/4b6526175f05ef41dd8ad0648117671c/transformed/appcompat-1.4.2/res/values-v24/values-v24.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",
