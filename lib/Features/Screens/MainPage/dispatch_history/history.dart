@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-import '../../../Model/Food_item/qbox_sku_inventory_item.dart';
-import '../../../Provider/food_retention_provider.dart';
+import '../../../../Model/Food_item/qbox_sku_inventory_item.dart';
+import '../../../../Provider/food_retention_provider.dart';
 
 class DispatchHistoryScreen extends StatefulWidget {
   const DispatchHistoryScreen({super.key});
@@ -45,11 +45,8 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
     }
   }
 
-  // Sort Dispatched Items
   List<FoodItem> _getSortedDispatchedItems(List<FoodItem> items) {
-    // Create a copy to avoid modifying the original list
     var sortedItems = List<FoodItem>.from(items);
-
     switch (_sortBy) {
       case 'Date':
         sortedItems.sort((a, b) => a.storageDate.compareTo(b.storageDate));
@@ -61,8 +58,6 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
         sortedItems.sort((a, b) => a.containerId.compareTo(b.containerId));
         break;
     }
-
-    // Reverse if descending
     return _isAscending ? sortedItems : sortedItems.reversed.toList();
   }
 
@@ -82,6 +77,7 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
       appBar: AppBar(
         title: Text('Dispatch History',style: TextStyle(color: Colors.white)),
         backgroundColor: Theme.of(context).primaryColor,
+        iconTheme: IconThemeData(color: Colors.white),
         actions: [
           IconButton(
             icon: Icon(Icons.filter_list,color: Colors.white,),

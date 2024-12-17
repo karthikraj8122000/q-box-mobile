@@ -35,7 +35,8 @@ class CustomTextFormField extends StatelessWidget {
         border: const UnderlineInputBorder(borderSide: BorderSide.none),
         hintText: hintText,
         floatingLabelBehavior: FloatingLabelBehavior.never,
-        errorBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.red))
+        errorBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        errorStyle: TextStyle(color: Colors.black),
       ),
       validator: (value) => Validator.validate(value, validationRules),
     );

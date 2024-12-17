@@ -54,7 +54,7 @@ class LoginProvider extends ChangeNotifier {
       commonService.presentToast("Login successfully!");
       GoRouter.of(context).push(MainNavigationScreen.routeName);
     } catch (e) {
-      commonService.presentToast("$e",gravity: ToastGravity.BOTTOM);
+      commonService.presentToast("$e");
       throw Exception("Login failed: $e");
     } finally {
       _isLoading = false;

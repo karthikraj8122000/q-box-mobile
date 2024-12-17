@@ -11,7 +11,7 @@ class AppRouter {
   static final GoRouter _router = GoRouter(
     navigatorKey: _routerKey,
     debugLogDiagnostics: true,
-    initialLocation: MainNavigationScreen.routeName, // Default splash screen
+    initialLocation: SplashScreen.routeName, // Default splash screen
     routes: <RouteBase>[
       GoRoute(
         name: SplashScreen.routeName,

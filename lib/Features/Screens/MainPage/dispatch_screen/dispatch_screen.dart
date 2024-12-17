@@ -77,6 +77,7 @@ class _DispatchScreenState extends State<DispatchScreen> {
       appBar: AppBar(
           title: Text('Food Dispatch',style: TextStyle(color: Colors.white),),
         backgroundColor: Theme.of(context).primaryColor,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:qr_page/Features/Screens/MainPage/dispatch_screen/dispatch_screen.dart';
-import 'package:qr_page/Features/Screens/MainPage/history.dart';
+import 'package:qr_page/Features/Screens/MainPage/dispatch_history/history.dart';
 import 'package:qr_page/Features/Screens/MainPage/storage_screen/storage_screen.dart';
+
+import '../../../Utils/utils.dart';
 
 
 class MainNavigationScreen extends StatefulWidget {
@@ -29,26 +31,29 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _screens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.storage),
-            label: 'Storage',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.departure_board),
-            label: 'Dispatch',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'History',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).primaryColor,
-        onTap: _onItemTapped,
+    return WillPopScope(
+      onWillPop: handleWillPop(context),
+      child: Scaffold(
+        body: _screens[_selectedIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.storage),
+              label: 'Storage',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.departure_board),
+              label: 'Dispatch',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.history),
+              label: 'History',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Theme.of(context).primaryColor,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }

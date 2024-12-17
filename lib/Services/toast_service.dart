@@ -8,7 +8,7 @@ class CommonService extends ChangeNotifier{
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
-      gravity: gravity ?? ToastGravity.CENTER,
+      gravity: gravity ?? ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
     );
   }

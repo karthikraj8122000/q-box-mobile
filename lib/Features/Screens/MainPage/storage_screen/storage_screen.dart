@@ -197,6 +197,7 @@ class _StorageScreenState extends State<StorageScreen> {
       appBar: AppBar(
         title: Text('Food Storage',style: TextStyle(color: Colors.white)),
         backgroundColor: Theme.of(context).primaryColor,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -233,19 +234,7 @@ class _StorageScreenState extends State<StorageScreen> {
 
             // Store Button
             ElevatedButton(
-              onPressed:(){
-                if(_containerController.text.isNotEmpty && _foodItemController.text.isNotEmpty){
-                  _storeFoodItem();
-                  setState(() {
-                    _containerController.clear();
-                    _foodItemController.clear();
-                  });
-
-                }else{
-                  print("Value is empty");
-                  return;
-                }
-              },
+              onPressed: _containerController.text.isNotEmpty && _foodItemController.text.isNotEmpty ? () => _storeFoodItem():null,
               style: ElevatedButton.styleFrom(
                 backgroundColor:_containerController.text.isNotEmpty && _foodItemController.text.isNotEmpty? Theme.of(context).primaryColor : null,
                 padding: EdgeInsets.symmetric(vertical: 15),

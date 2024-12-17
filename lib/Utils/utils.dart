@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../Widgets/Common/app_text.dart';
-
-
-
-// Dialog
 
 Future<bool> showExitPopup(BuildContext context) async {
   return await showDialog(
