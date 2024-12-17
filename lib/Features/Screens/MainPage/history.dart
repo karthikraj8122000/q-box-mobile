@@ -6,6 +6,8 @@ import '../../../Model/Food_item/qbox_sku_inventory_item.dart';
 import '../../../Provider/food_retention_provider.dart';
 
 class DispatchHistoryScreen extends StatefulWidget {
+  const DispatchHistoryScreen({super.key});
+
   @override
   _DispatchHistoryScreenState createState() => _DispatchHistoryScreenState();
 }
@@ -78,12 +80,11 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dispatch History'),
+        title: Text('Dispatch History',style: TextStyle(color: Colors.white)),
         backgroundColor: Theme.of(context).primaryColor,
         actions: [
-          // Filter and Sort Options
           IconButton(
-            icon: Icon(Icons.filter_list),
+            icon: Icon(Icons.filter_list,color: Colors.white,),
             onPressed: () => _showFilterBottomSheet(),
           ),
         ],
@@ -297,11 +298,9 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
                     ],
                   ),
                   SizedBox(height: 16),
-
-                  // Date Range Picker
                   ElevatedButton.icon(
                     onPressed: () => _selectDateRange(context),
-                    icon: Icon(Icons.calendar_today),
+                    icon: Icon(Icons.calendar_today,color: Colors.white,),
                     label: Text(
                       _startDate == null || _endDate == null
                           ? 'Select Date Range'
@@ -309,10 +308,10 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,
+                      foregroundColor: Colors.white
                     ),
                   ),
                   SizedBox(height: 16),
-
                   // Reset Filters Button
                   ElevatedButton(
                     onPressed: () {
@@ -324,11 +323,11 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
                       });
                       Navigator.pop(context);
                     },
-                    child: Text('Reset Filters'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.grey[300],
                       foregroundColor: Colors.black,
                     ),
+                    child: Text('Reset Filters'),
                   ),
                 ],
               ),

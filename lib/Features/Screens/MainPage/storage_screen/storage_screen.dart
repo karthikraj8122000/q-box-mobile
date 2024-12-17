@@ -179,7 +179,6 @@ class _StorageScreenState extends State<StorageScreen> {
           storageDate: DateTime.now()
       ));
 
-      // Show success snackbar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Food item stored successfully!'),
@@ -187,7 +186,6 @@ class _StorageScreenState extends State<StorageScreen> {
         ),
       );
 
-      // Reset controllers
       _containerController.clear();
       _foodItemController.clear();
     }
@@ -197,7 +195,7 @@ class _StorageScreenState extends State<StorageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Food Storage'),
+        title: Text('Food Storage',style: TextStyle(color: Colors.white)),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Padding(
@@ -235,12 +233,25 @@ class _StorageScreenState extends State<StorageScreen> {
 
             // Store Button
             ElevatedButton(
-              onPressed: _storeFoodItem,
-              child: Text('Store Food Item'),
+              onPressed:(){
+                if(_containerController.text.isNotEmpty && _foodItemController.text.isNotEmpty){
+                  _storeFoodItem();
+                  setState(() {
+                    _containerController.clear();
+                    _foodItemController.clear();
+                  });
+
+                }else{
+                  print("Value is empty");
+                  return;
+                }
+              },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor,
+                backgroundColor:_containerController.text.isNotEmpty && _foodItemController.text.isNotEmpty? Theme.of(context).primaryColor : null,
                 padding: EdgeInsets.symmetric(vertical: 15),
+                foregroundColor:_containerController.text.isNotEmpty && _foodItemController.text.isNotEmpty? Colors.white:Colors.grey[500]
               ),
+              child: Text('Store Food Item'),
             ),
 
             // Stored Items List
