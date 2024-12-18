@@ -1,0 +1,4 @@
+#Wed Dec 18 10:49:51 IST 2024
+base.0=/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

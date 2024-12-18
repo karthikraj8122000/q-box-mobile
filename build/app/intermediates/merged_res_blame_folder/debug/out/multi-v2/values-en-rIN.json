@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.qr_page.app-mergeDebugResources-52:/values-en-rIN/values-en-rIN.xml",
+            "outputFile": "com.example.qr_page.app-mergeDebugResources-47:/values-en-rIN/values-en-rIN.xml",
             "map": [
                 {
                     "source": "/home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/res/values-en-rIN/values-en-rIN.xml",

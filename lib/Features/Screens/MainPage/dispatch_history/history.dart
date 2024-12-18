@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../Model/Food_item/qbox_sku_inventory_item.dart';
+import '../../../../Model/Data_Models/Food_item/qbox_sku_inventory_item.dart';
 import '../../../../Provider/food_retention_provider.dart';
 
 class DispatchHistoryScreen extends StatefulWidget {

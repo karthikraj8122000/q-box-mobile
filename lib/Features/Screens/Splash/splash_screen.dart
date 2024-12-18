@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen>
                 fit: BoxFit.fill,
               ),
               Text(
-                'Food Retention Tracker',
+                'QBox',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,

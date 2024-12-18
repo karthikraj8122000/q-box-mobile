@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import '../../../../Model/Food_item/qbox_sku_inventory_item.dart';
+import '../../../../Model/Data_Models/Food_item/qbox_sku_inventory_item.dart';
 import '../../../../Provider/food_retention_provider.dart';
 
 class QRScannerDialog extends StatefulWidget {
@@ -169,7 +169,6 @@ class _StorageScreenState extends State<StorageScreen> {
     }
   }
 
-  // Store Food Item Method
   void _storeFoodItem() {
     if (_containerController.text.isNotEmpty && _foodItemController.text.isNotEmpty) {
       final provider = Provider.of<FoodRetentionProvider>(context, listen: false);
@@ -185,11 +184,14 @@ class _StorageScreenState extends State<StorageScreen> {
           backgroundColor: Theme.of(context).primaryColor,
         ),
       );
+      setState(() {
+        _containerController.clear();
+        _foodItemController.clear();
+      });
 
-      _containerController.clear();
-      _foodItemController.clear();
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -204,11 +206,11 @@ class _StorageScreenState extends State<StorageScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Container ID Input with QR Scan
+            // QBox ID Input with QR Scan
             TextField(
               controller: _containerController,
               decoration: InputDecoration(
-                labelText: 'Container ID',
+                labelText: 'QBox ID',
                 border: OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: Icon(Icons.qr_code_scanner),
@@ -217,7 +219,6 @@ class _StorageScreenState extends State<StorageScreen> {
               ),
             ),
             SizedBox(height: 16),
-
             // Food Item Input with QR Scan
             TextField(
               controller: _foodItemController,
@@ -247,7 +248,7 @@ class _StorageScreenState extends State<StorageScreen> {
             Expanded(
               child: Consumer<FoodRetentionProvider>(
                 builder: (context, provider, child) {
-                  return ListView.builder(
+                  return provider.storedItems.length > 0 || provider.storedItems.isNotEmpty ? ListView.builder(
                     itemCount: provider.storedItems.length,
                     itemBuilder: (context, index) {
                       final item = provider.storedItems[index];
@@ -260,7 +261,7 @@ class _StorageScreenState extends State<StorageScreen> {
                         ),
                       );
                     },
-                  );
+                  ):Center(child: Text("No food items found",style: TextStyle(color: Colors.grey),));
                 },
               ),
             ),
