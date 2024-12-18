@@ -7,7 +7,6 @@ import '../../../../Model/Data_Models/Food_item/qbox_sku_inventory_item.dart';
 import '../../../../Provider/food_retention_provider.dart';
 import '../../../../Services/api_service.dart';
 import '../../../../Services/toast_service.dart';
-import '../../../../Utils/animations.dart';
 
 class DispatchScreen extends StatefulWidget {
   const DispatchScreen({super.key});
