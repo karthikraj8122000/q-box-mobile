@@ -1,71 +1,69 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
+
 import '../Core/Configurations/config.dart';
 
 class ApiService {
-  final Dio _dio = Dio();
-  final bool isLive;
-  ApiService({this.isLive = true});
 
-  Uri _makeUri(String port,String service,String endpoint,
-      [Map<String, dynamic>? queryParams]) {
-    final effectivePort = isLive ? '8000' : port;
-    var uri = Uri.parse(
-        '${AppConfig.url}${AppConfig.host}:$effectivePort${AppConfig.apiPrefix}$service/$endpoint');
-    if (queryParams != null) {
-      uri = uri.replace(queryParameters: queryParams);
-    }
-    return uri;
+  Dio _dio = Dio();
+
+  Uri _buildUri(String port,String service,String endpoint) {
+    print('HOST${AppConfig.HOST}');
+    print(Uri.parse('${AppConfig.URL}${AppConfig.HOST}:$port${AppConfig.API_PREFIX}/$service/$endpoint'));
+    return Uri.parse('${AppConfig.URL}${AppConfig.HOST}:$port${AppConfig.API_PREFIX}/$service/$endpoint');
   }
 
-  Future<dynamic> _handleResponse(Response response) async {
+  Future<dynamic> get(String port,String service,String endpoint) async {
+    final response = await _dio.getUri(_buildUri(port,service,endpoint));
+
     if (response.statusCode == 200) {
-      return Future.value(response.data);
+      return json.decode(response.data);
     } else {
-      throw Exception(
-          'Request failed with status code : ${response.statusCode}');
+      throw Exception('Failed to perform GET request');
     }
   }
 
-  Future<dynamic> get(String port,String service, String endpoint,
-      {Map<String, dynamic>? params}) async {
+  Future<dynamic> post(String port, String service, String endpoint, Map<String, dynamic> body) async {
     try {
-      final uri = _makeUri(port,service, endpoint,params);
-      final response = await _dio.getUri(uri);
-      return _handleResponse(response);
+      final response = await _dio.postUri(
+        _buildUri(port, service, endpoint),
+        data: body, // No need to encode data, Dio handles it automatically
+        options: Options(contentType: Headers.jsonContentType),
+      );
+      print(response);
+      if (response.statusCode == 200) {
+        return response.data; // Response data is already decoded
+      } else {
+        throw Exception('Failed to perform POST request');
+      }
     } catch (error) {
-      throw Exception("GET request failed:$error");
+      throw Exception('Failed to perform POST request: $error');
     }
   }
 
-  Future<dynamic> post(
-      String port,String service, String endpoint, Map<String, dynamic> body) async {
-    try {
-      final uri = _makeUri(port,service, endpoint);
-      final response = await _dio.postUri(uri,data: body);
-      return _handleResponse(response);
-    } catch (error) {
-      throw Exception("POST request failed: $error");
+
+  Future<dynamic> put(String port,String service,String endpoint, dynamic body) async {
+    final response = await _dio.putUri(
+      _buildUri(port,service,endpoint),
+      data: body,
+      options: Options(contentType: Headers.jsonContentType),
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.data);
+    } else {
+      throw Exception('Failed to perform PUT request');
     }
   }
 
-  Future<dynamic> put(String port,String service, String endpoint, Map<String, dynamic> body) async {
-    try {
-      final uri = _makeUri(port,service, endpoint);
-      final response = await _dio.putUri(uri,data: body);
-      return _handleResponse(response);
-    } catch (error) {
-      throw Exception("Put request failed: $error");
+  Future<dynamic> delete(String port,String service,String endpoint) async {
+    final response = await _dio.deleteUri(_buildUri(port,service,endpoint));
+
+    if (response.statusCode == 200) {
+      return json.decode(response.data);
+    } else {
+      throw Exception('Failed to perform DELETE request');
     }
   }
 
-  Future<dynamic> delete(String port,String service, String endpoint,
-      {Map<String, dynamic>? params}) async {
-    try {
-      final uri = _makeUri(port,service, endpoint,params);
-      final response = await _dio.deleteUri(uri);
-      return _handleResponse(response);
-    } catch (error) {
-      throw Exception("Delete request failed: $error");
-    }
-  }
 }

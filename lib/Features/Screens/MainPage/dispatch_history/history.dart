@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_page/Theme/app_theme.dart';
 
 import '../../../../Model/Data_Models/Food_item/qbox_sku_inventory_item.dart';
 import '../../../../Provider/food_retention_provider.dart';
@@ -52,10 +54,10 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
         sortedItems.sort((a, b) => a.storageDate.compareTo(b.storageDate));
         break;
       case 'Food Item Name':
-        sortedItems.sort((a, b) => a.name.compareTo(b.name));
+        sortedItems.sort((a, b) => a.boxCellSno.compareTo(b.boxCellSno));
         break;
       case 'Container ID':
-        sortedItems.sort((a, b) => a.containerId.compareTo(b.containerId));
+        sortedItems.sort((a, b) => a.uniqueCode.compareTo(b.uniqueCode));
         break;
     }
     return _isAscending ? sortedItems : sortedItems.reversed.toList();
@@ -76,7 +78,7 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dispatch History',style: TextStyle(color: Colors.white)),
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: AppTheme.appTheme,
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
           IconButton(
@@ -125,7 +127,9 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
             ),
           ),
         ],
-      ),
+      ).animate(onPlay: (controller) => controller.repeat(reverse: true))
+          .shimmer(duration: 1500.ms)
+          .then(),
     );
   }
 
@@ -140,20 +144,23 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
           elevation: 4,
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColor.withOpacity(0.2),
+              backgroundColor: AppTheme.appTheme.withOpacity(0.2),
               child: Icon(
                 Icons.local_shipping,
-                color: Theme.of(context).primaryColor,
+                color: AppTheme.appTheme,
               ),
             ),
-            title: Text(
-              item.name,
-              style: TextStyle(fontWeight: FontWeight.bold),
+            title: FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Text(
+                item.uniqueCode,
+                style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),
+              ),
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Container: ${item.containerId}'),
+                Text('Container: ${item.boxCellSno}'),
                 Text(
                   'Dispatched: ${DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate)}',
                   style: TextStyle(color: Colors.grey[600]),
@@ -162,7 +169,7 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
             ),
             trailing: Icon(
               Icons.chevron_right,
-              color: Theme.of(context).primaryColor,
+              color: AppTheme.appTheme,
             ),
             onTap: () => _showItemDetails(item),
           ),
@@ -187,14 +194,14 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
+                  color: AppTheme.appTheme,
                 ),
               ),
               SizedBox(height: 16),
-              _buildDetailRow('Food Item', item.name),
-              _buildDetailRow('Container ID', item.containerId),
+              _buildDetailRow('Food Item', item.uniqueCode),
+              _buildDetailRow('Container ID', item.boxCellSno),
               _buildDetailRow('Dispatched Date',
-                  DateFormat('MMMM dd, yyyy at HH:mm:ss').format(item.storageDate)
+                  DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate)
               ),
             ],
           ),
@@ -245,7 +252,7 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
+                      color: AppTheme.appTheme,
                     ),
                   ),
                   SizedBox(height: 16),
@@ -289,7 +296,7 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
                             _isAscending = value;
                           });
                         },
-                        activeColor: Theme.of(context).primaryColor,
+                        activeColor: AppTheme.appTheme,
                       ),
                     ],
                   ),
@@ -303,7 +310,7 @@ class _DispatchHistoryScreenState extends State<DispatchHistoryScreen> {
                           : '${DateFormat('MMM dd, yyyy').format(_startDate!)} - ${DateFormat('MMM dd, yyyy').format(_endDate!)}',
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
+                      backgroundColor: AppTheme.appTheme,
                       foregroundColor: Colors.white
                     ),
                   ),

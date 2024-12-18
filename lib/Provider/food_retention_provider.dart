@@ -8,11 +8,8 @@ import '../Services/api_service.dart';
 class FoodRetentionProvider extends ChangeNotifier {
   List<FoodItem> storedItems = [];
   List<FoodItem> dispatchedItems = [];
-  final CommonService commonService = CommonService();
-  final ScannerModel _scannerModel = ScannerModel();
   final ApiService apiService = ApiService();
-
-  ScannerModel get scannerModel => _scannerModel;
+  final CommonService commonService = CommonService();
 
   void addStoredItem(FoodItem item) {
     storedItems.add(item);
@@ -21,28 +18,6 @@ class FoodRetentionProvider extends ChangeNotifier {
 
   void addDispatchedItem(FoodItem item) {
     dispatchedItems.add(item);
-    notifyListeners();
-  }
-
-  Future<void> loadToQBox() async {
-    Map<String, dynamic> body = {
-      "uniqueCode": _scannerModel.foodBarcode,
-      "wfStageCd": 11,
-      "boxCellSno": _scannerModel.qBoxBarcode,
-      "qboxEntitySno": 3
-    };
-    try {
-      print(body);
-      // var result =
-      //     await apiService.post("8912", "masters", "load_sku_in_qbox", body);
-      // if (result != null && result['data'] != null) {
-      //   _scannerModel.qBoxBarcode = '';
-      //   _scannerModel.foodBarcode = '';
-      //   commonService.presentToast('Food Loaded inside the qbox');
-      // }
-    } catch (e) {
-      print('Error: $e');
-    }
     notifyListeners();
   }
 }

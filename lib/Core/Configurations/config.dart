@@ -1,6 +1,6 @@
 class AppConfig {
-  static const String url = 'http://';
-  static const String host = '192.168.1.106';
-  static const String apiPrefix = '/api/v1';
+  static const String URL = 'http://';
+  static const String HOST = '192.168.43.74';
+  static const String API_PREFIX = '/api/v1';
 }
 
