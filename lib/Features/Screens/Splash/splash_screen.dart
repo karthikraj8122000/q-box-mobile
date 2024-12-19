@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:qr_page/Features/Screens/Login/login.dart';
+import 'package:qr_page/Theme/app_theme.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -57,11 +58,11 @@ class _SplashScreenState extends State<SplashScreen>
                 fit: BoxFit.fill,
               ),
               Text(
-                'QBox',
+                'QB',
                 style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
+                  fontSize: 36,
+                  fontWeight: FontWeight.w800,
+                  color: AppTheme.appTheme,
                 ),
               )
             ],

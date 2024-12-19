@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_page/Features/Screens/MainPage/dispatch_screen/dispatch_screen.dart';
 import 'package:qr_page/Features/Screens/MainPage/dispatch_history/history.dart';
 import 'package:qr_page/Features/Screens/MainPage/storage_screen/storage_screen.dart';
+import 'package:qr_page/Theme/app_theme.dart';
 
 import '../../../Utils/utils.dart';
 
@@ -18,7 +19,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    StorageScreen(),
+    FoodStorageScreen(),
     DispatchScreen(),
     DispatchHistoryScreen(),
   ];
@@ -51,7 +52,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: Theme.of(context).primaryColor,
+          selectedItemColor: AppTheme.appTheme,
           onTap: _onItemTapped,
         ),
       ),

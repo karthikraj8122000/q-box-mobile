@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_page/Theme/app_theme.dart';
 
 import '../../../Provider/login_provider.dart';
 import '../../../Utils/validator.dart';
@@ -56,7 +57,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     final loginProvider = Provider.of<LoginProvider>(context);
     var obsecureText = loginProvider.obsecureText;
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: AppTheme.appTheme,
       body: FadeTransition(
         opacity: _animation!,
         child: Center(

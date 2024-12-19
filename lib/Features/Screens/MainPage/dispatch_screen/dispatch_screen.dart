@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
-
+import 'package:qr_page/Theme/app_theme.dart';
 import '../../../../Provider/food_retention_provider.dart';
+import '../../../../Services/api_service.dart';
+import '../../../../Services/toast_service.dart';
 
 class DispatchScreen extends StatefulWidget {
   const DispatchScreen({super.key});
@@ -15,6 +17,8 @@ class _DispatchScreenState extends State<DispatchScreen> {
   final dispatchController = MobileScannerController();
   String? scannedDispatchItem;
   bool isProcessingScan = false;
+  final ApiService apiService = ApiService();
+  final CommonService commonService = CommonService();
 
   void _handleDispatchQRScan(Barcode barcode) async {
     if (isProcessingScan) return; // Prevent multiple triggers
@@ -26,18 +30,24 @@ class _DispatchScreenState extends State<DispatchScreen> {
     print("Karthik");
     print(scannedValue);
     final provider = Provider.of<FoodRetentionProvider>(context, listen: false);
-    final isMatched = provider.storedItems.any((item) => item.containerId == scannedValue);
+    final isMatched =
+        provider.storedItems.any((item) => item.uniqueCode == scannedValue);
     if (isMatched) {
       setState(() {
         scannedDispatchItem = scannedValue;
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Container found: $scannedValue'), backgroundColor: Theme.of(context).primaryColor,),
+        SnackBar(
+          content: Text('Container found: $scannedValue'),
+          backgroundColor: AppTheme.appTheme,
+        ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No Container found!'),backgroundColor:Colors.redAccent),
+        SnackBar(
+            content: Text('No Container found!'),
+            backgroundColor: Colors.redAccent),
       );
       setState(() {
         scannedDispatchItem = null;
@@ -50,24 +60,54 @@ class _DispatchScreenState extends State<DispatchScreen> {
     });
   }
 
-
-  void _dispatchFoodItem(BuildContext context) {
+  void _dispatchFoodItem(BuildContext context) async {
     if (scannedDispatchItem != null) {
-      final provider = Provider.of<FoodRetentionProvider>(context, listen: false);
-      var itemToDispatch = provider.storedItems.firstWhere(
-              (item) => item.containerId == scannedDispatchItem,
-          orElse: () => throw Exception('Item not found')
-      );
-      provider.dispatchedItems.add(itemToDispatch);
-      provider.storedItems.remove(itemToDispatch);
+      final provider =
+          Provider.of<FoodRetentionProvider>(context, listen: false);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Food item dispatched successfully!'),backgroundColor: Theme.of(context).primaryColor)
-      );
+      try {
+        var itemToDispatch = provider.storedItems.firstWhere(
+          (item) => item.uniqueCode == scannedDispatchItem,
+          orElse: () => throw Exception('Item not found'),
+        );
 
-      setState(() {
-        scannedDispatchItem = null;
-      });
+        // Prepare API body using the `FoodItem` data
+        Map<String, dynamic> body = {
+          "uniqueCode": itemToDispatch.uniqueCode,
+          "wfStageCd": 12,
+          "qboxEntitySno": 2,
+        };
+
+        // Call the API endpoint to unload the item
+        var result = await apiService.post(
+            "8912", "masters", "unload_sku_from_qbox_to_hotbox", body);
+
+        if (result != null && result['data'] != null) {
+          provider.dispatchedItems.add(itemToDispatch);
+          provider.storedItems.remove(itemToDispatch);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Food item dispatched successfully!'),
+              backgroundColor: AppTheme.appTheme,
+            ),
+          );
+          // Clear the scannedDispatchItem after successful API call
+          setState(() {
+            scannedDispatchItem = null;
+          });
+        } else {
+          commonService.presentToast(
+              'Failed to dispatch the food item. Please try again.');
+        }
+      } catch (e) {
+        print('Error: $e');
+        commonService
+            .presentToast('An error occurred while dispatching the food item.');
+      }
+    } else {
+      // Show validation message if scannedDispatchItem is null
+      commonService.presentToast('No scanned food item to dispatch.');
     }
   }
 
@@ -75,8 +115,11 @@ class _DispatchScreenState extends State<DispatchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('Food Dispatch',style: TextStyle(color: Colors.white),),
-        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(
+          'Food Dispatch',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: AppTheme.appTheme,
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Padding(
@@ -88,10 +131,16 @@ class _DispatchScreenState extends State<DispatchScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    SizedBox(height: 10,),
-                    Text('Scan Food Item to Dispatch',
-                        style: Theme.of(context).textTheme.titleLarge,),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Scan Food Item to Dispatch',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     SizedBox(
                       height: 200,
                       child: MobileScanner(
@@ -102,7 +151,9 @@ class _DispatchScreenState extends State<DispatchScreen> {
                         },
                       ),
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Text(scannedDispatchItem ?? 'No item scanned')
                   ],
                 ),
@@ -114,9 +165,11 @@ class _DispatchScreenState extends State<DispatchScreen> {
                   ? () => _dispatchFoodItem(context)
                   : null,
               style: ElevatedButton.styleFrom(
-                  backgroundColor:scannedDispatchItem != null ? Theme.of(context).primaryColor : null,
-                  foregroundColor: scannedDispatchItem != null  ? Colors.white:Colors.grey[500]
-              ),
+                  backgroundColor:
+                      scannedDispatchItem != null ? AppTheme.appTheme : null,
+                  foregroundColor: scannedDispatchItem != null
+                      ? Colors.white
+                      : Colors.grey[500]),
               child: Text('Dispatch Food Item'),
             ),
 
@@ -128,15 +181,39 @@ class _DispatchScreenState extends State<DispatchScreen> {
                     itemCount: provider.storedItems.length,
                     itemBuilder: (context, index) {
                       final item = provider.storedItems[index];
-                      final isHighlighted = item.containerId == scannedDispatchItem;
-
-                      return ListTile(
-                        title: Text(item.name, style: TextStyle(
-                          color: isHighlighted ? Colors.green : Colors.black,
-                          fontWeight: isHighlighted ? FontWeight.bold : FontWeight.normal,
-                        ),),
-                        subtitle: Text('Container: ${item.containerId}',style: TextStyle(color: isHighlighted ? Colors.green :Colors.black),),
-                        trailing: Text('Stored: ${item.storageDate.toString().substring(0, 16)}',style: TextStyle(color: isHighlighted ? Colors.green :Colors.black),),
+                      final isHighlighted = item.uniqueCode == scannedDispatchItem;
+                      return Card(
+                        color: isHighlighted ? AppTheme.selectedCardTheme:null,
+                        margin: EdgeInsets.symmetric(vertical: 5),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor:
+                            AppTheme.appTheme.withOpacity(0.2),
+                            child: Icon(isHighlighted ? Icons.check:
+                              Icons.fastfood,
+                              color:isHighlighted? Colors.green:AppTheme.appTheme,
+                            ),
+                          ),
+                          title: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text(
+                              item.uniqueCode,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14),
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Container: ${item.boxCellSno}'),
+                              Text(
+                                'Stored: ${item.storageDate.toString().substring(0, 16)}',
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                            ],
+                          ),
+                        ),
                       );
                     },
                   ),
