@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_page/Theme/app_theme.dart';
 import 'package:qr_page/Widgets/Common/app_text.dart';
-import '../../../../Model/Data_Models/Food_item/qbox_sku_inventory_item.dart';
+import '../../../../Model/Data_Models/Food_item/foot_item_model.dart';
 import '../../../../Provider/food_retention_provider.dart';
 import '../../../../Services/api_service.dart';
 import '../../../../Services/toast_service.dart';

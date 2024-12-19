@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Theme/app_theme.dart';
-
-import '../../../../Model/Data_Models/Food_item/qbox_sku_inventory_item.dart';
 import '../../../../Provider/food_retention_provider.dart';
 import '../../../../Services/api_service.dart';
 import '../../../../Services/toast_service.dart';
@@ -222,21 +220,9 @@ class _DispatchScreenState extends State<DispatchScreen> {
                 );
               },
             )
-
           ],
         ),
       ),
     );
   }
-
-
 }
-//
-// ListTile(
-// title: Text(item.uniqueCode, style: TextStyle(
-// color: isHighlighted ? Colors.green : Colors.black,
-// fontWeight: isHighlighted ? FontWeight.bold : FontWeight.normal,
-// ),),
-// subtitle: Text('Container: ${item.boxCellSno}',style: TextStyle(color: isHighlighted ? Colors.green :Colors.black),),
-// trailing: Text('Stored: ${item.storageDate.toString().substring(0, 16)}',style: TextStyle(color: isHighlighted ? Colors.green :Colors.black),),
-// );

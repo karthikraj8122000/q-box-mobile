@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_page/Theme/app_theme.dart';
 
-import '../../../../Model/Data_Models/Food_item/qbox_sku_inventory_item.dart';
+import '../../../../Model/Data_Models/Food_item/foot_item_model.dart';
 import '../../../../Provider/food_retention_provider.dart';
 
 class DispatchHistoryScreen extends StatefulWidget {
