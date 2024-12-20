@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:qr_page/Features/Screens/Login/login.dart';
+import 'package:qr_page/Features/Screens/Login/new_login.dart';
 import 'package:qr_page/Features/Screens/MainPage/main_page.dart';
-import 'package:qr_page/Features/Screens/Splash/splash_screen.dart';
+import 'package:qr_page/Features/Screens/Splash/animated_splash.dart';
 
 class AppRouter {
   static final GlobalKey<NavigatorState> _routerKey =
@@ -11,24 +11,22 @@ class AppRouter {
   static final GoRouter _router = GoRouter(
     navigatorKey: _routerKey,
     debugLogDiagnostics: true,
-    initialLocation: SplashScreen.routeName, // Default splash screen
+    initialLocation: MainNavigationScreen.routeName, // Default splash screen
     routes: <RouteBase>[
       GoRoute(
-        name: SplashScreen.routeName,
-        path: SplashScreen.routeName,
-        builder: (_, __) => const SplashScreen(),
+        name: AnimeSplashScreen.routeName,
+        path: AnimeSplashScreen.routeName,
+        builder: (_, __) => const AnimeSplashScreen(),
       ),
-      // Login Page Route
       GoRoute(
-        name: LoginPage.routeName,
-        path: LoginPage.routeName,
-        builder: (_, __) => const LoginPage(),
+        name: LoginScreen.routeName,
+        path: LoginScreen.routeName,
+        builder: (_, __) => LoginScreen(),
       ),
-      // Home Page Route
       GoRoute(
         path: MainNavigationScreen.routeName,
         name: MainNavigationScreen.routeName,
-        builder: (_, __) => const MainNavigationScreen(),
+        builder: (_, __) =>  MainNavigationScreen(),
       ),
     ],
   );

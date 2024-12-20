@@ -1,4 +1,11 @@
 # This is a generated file; do not edit or check into version control.
+flutter_barcode_scanner=/home/swomb/.pub-cache/hosted/pub.dev/flutter_barcode_scanner-2.0.0/
+flutter_plugin_android_lifecycle=/home/swomb/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.24/
 fluttertoast=/home/swomb/.pub-cache/hosted/pub.dev/fluttertoast-8.2.10/
 mobile_scanner=/home/swomb/.pub-cache/hosted/pub.dev/mobile_scanner-3.5.7/
+path_provider=/home/swomb/.pub-cache/hosted/pub.dev/path_provider-2.1.5/
+path_provider_android=/home/swomb/.pub-cache/hosted/pub.dev/path_provider_android-2.2.15/
+path_provider_foundation=/home/swomb/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.1/
+path_provider_linux=/home/swomb/.pub-cache/hosted/pub.dev/path_provider_linux-2.2.1/
+path_provider_windows=/home/swomb/.pub-cache/hosted/pub.dev/path_provider_windows-2.3.0/
 qr_code_scanner=/home/swomb/.pub-cache/hosted/pub.dev/qr_code_scanner-1.0.1/

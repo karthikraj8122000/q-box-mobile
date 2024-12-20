@@ -14,4 +14,24 @@ class AppColors{
   static const darkOnPrimaryColor = Colors.white;
   static const buttonBgColor = Colors.pink;
   static const loadingProgressColor = Colors.white;
+
+
+  // Main colors
+  static const Color background = Colors.white;
+  static const Color primaryText = Color(0xFF000000);
+  static const Color secondaryText = Color(0xFF757575);
+
+  // Card colors
+  static const Color mintGreen = Color(0xFF8fbc8f);    // Light green cards
+  static const Color paleYellow = Color(0xFFf2db8e);   // Yellow card
+  static const Color softPink = Color(0xFFFCE4EC);     // Pink course card
+  static const Color lightGray = Color(0xFFF5F5F5);    // Gray course card
+
+  // Navigation colors
+  static const Color navActive = Color(0xFF000000);
+  static const Color navInactive = Color(0xFF9E9E9E);
+
+  // Progress bar colors
+  static const Color progressBackground = Color(0xFFEEEEEE);
+  static const Color progressFill = Color(0xFF000000);
 }

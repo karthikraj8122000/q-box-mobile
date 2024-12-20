@@ -16,7 +16,7 @@
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" />
+        android:required="true" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -34,6 +34,8 @@
             <data android:mimeType="text/plain" />
         </intent>
     </queries>
+
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
 
     <permission
         android:name="com.example.qr_page.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -65,7 +67,9 @@
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Qbox" >
+        android:label="Qbox"
+        android:largeHeap="true"
+        android:theme="@style/Theme.AppCompat.NoActionBar" >
         <activity
             android:name="com.example.qr_page.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -98,6 +102,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <activity android:name="com.amolg.flutterbarcodescanner.BarcodeCaptureActivity" />
         <!--
         Service for holding metadata. Cannot be instantiated.
         Metadata will be merged from other manifests.

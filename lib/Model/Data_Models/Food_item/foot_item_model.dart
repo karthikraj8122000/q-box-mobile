@@ -13,7 +13,6 @@ class FoodItem {
     required this.storageDate,
   });
 
-  // Convert FoodItem to Map for API requests
   Map<String, dynamic> toMap() {
     return {
       'boxCellSno': boxCellSno,
@@ -24,7 +23,6 @@ class FoodItem {
     };
   }
 
-  // Create FoodItem from Map (useful when receiving API response)
   factory FoodItem.fromMap(Map<String, dynamic> map) {
     return FoodItem(
       boxCellSno: map['boxCellSno'],

@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Core/Router/app_router.dart';
 import 'package:qr_page/Provider/food_retention_provider.dart';
+import 'package:qr_page/Provider/food_store_provider.dart';
 import 'package:qr_page/Provider/login_provider.dart';
 
 
@@ -17,8 +21,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LoginProvider()),
-        ChangeNotifierProvider(create: (_) => FoodRetentionProvider()),
+        // ChangeNotifierProvider(create: (_) => FoodRetentionProvider()),
+        ChangeNotifierProvider(create: (_) => FoodStoreProvider()),
       ],
+
       child: Consumer<LoginProvider>(
         builder: (context, loginProvider, _) {
           return MaterialApp.router(
@@ -26,9 +32,9 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'QBox',
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              useMaterial3: true,
+              useMaterial3: false,
             ),
+
           );
         },
       ),
