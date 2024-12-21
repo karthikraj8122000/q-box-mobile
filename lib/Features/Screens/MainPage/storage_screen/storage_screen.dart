@@ -7,8 +7,6 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../../../Provider/food_store_provider.dart';
-import '../../../../Theme/app_theme.dart';
-import '../../../../Widgets/Common/app_button.dart';
 import '../../../../Widgets/Common/app_text.dart';
 
 class FoodStorageScreen extends StatelessWidget {
@@ -27,8 +25,6 @@ class FoodStorageScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _buildHeader(context),
-                const SizedBox(height: 24),
-                _buildStatCards(provider),
                 const SizedBox(height: 24),
                 _buildScanButtons(provider, context),
                 const SizedBox(height: 24),
@@ -66,7 +62,6 @@ class FoodStorageScreen extends StatelessWidget {
                 SizedBox(height: 4),
                 Text(
                   'Have a nice day!',
-                  // 'Food Storage',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -81,90 +76,11 @@ class FoodStorageScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCards(FoodStoreProvider provider) {
-    return Row(
-      children: [
-        Expanded(
-          child: _buildStatCard(
-              color: Colors.blue.shade50,
-              icon: Icons.inventory_2_outlined,
-              title: 'Total Items',
-              value: '${provider.storedItems.length}',
-              titleColor: Colors.black,
-              iconColor: Colors.black,
-              valueColor: Colors.black
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _buildStatCard(
-              color: Colors.green.shade50,
-              icon: Icons.grid_view,
-              title: 'Available Qbox',
-              value: '${100 - provider.storedItems.length}',
-              titleColor: Colors.black,
-              iconColor: Colors.black,
-              valueColor: Colors.black
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatCard({
-    required Color color,
-    required IconData icon,
-    required String title,
-    required String value,
-    required Color titleColor,
-    required Color iconColor,
-    required Color valueColor,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow:[
-                  BoxShadow(color:Colors.black,blurRadius: 1,spreadRadius: 0)
-                ]
-            ),
-            child: Icon(icon, color: iconColor),
-          ),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(fontSize: 12, color: titleColor),
-              ),
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: valueColor,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildScanButtons(FoodStoreProvider provider, BuildContext context) {
     return Column(
       children: [
+
         _buildScanButton(
             'Scan QBox ID',
             provider.qboxId,
@@ -268,7 +184,6 @@ class FoodStorageScreen extends StatelessWidget {
   }
 
   Widget _buildStoreButton(FoodStoreProvider provider, BuildContext context) {
-    final isEnabled = provider.qboxId != null && provider.foodItem != null;
     return  ElevatedButton(
       onPressed: (provider.qboxId != null && provider.foodItem != null)
           ? () => provider.storeFoodItem(context)
@@ -471,7 +386,6 @@ class _QRScannerDialogState extends State<QRScannerDialog> with WidgetsBindingOb
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // Clean up before popping
         await controller?.pauseCamera();
         return true;
       },

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Core/Router/app_router.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/order_qr_scanning_provider.dart';
 import 'package:qr_page/Provider/food_retention_provider.dart';
 import 'package:qr_page/Provider/food_store_provider.dart';
 import 'package:qr_page/Provider/login_provider.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginProvider()),
         // ChangeNotifierProvider(create: (_) => FoodRetentionProvider()),
         ChangeNotifierProvider(create: (_) => FoodStoreProvider()),
+        ChangeNotifierProvider(create: (_) => OrderScanningProvider()),
       ],
 
       child: Consumer<LoginProvider>(

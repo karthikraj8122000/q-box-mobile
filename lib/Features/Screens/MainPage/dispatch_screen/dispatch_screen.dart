@@ -51,6 +51,12 @@ class _DispatchScreenState extends State<DispatchScreen> with SingleTickerProvid
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey[100],
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          title: Text('Dispatch For Delivery', style: TextStyle(color: Colors.black),),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -83,15 +89,6 @@ class _DispatchScreenState extends State<DispatchScreen> with SingleTickerProvid
               : Colors.grey[500]),
       child: Text('Dispatch Food Item'),
     );
-    //
-    //   CustomButton(
-    //   elevation: 0,
-    //   label: "Dispatch Food Item",
-    //   color:isEnabled ?Colors.green[800]!:Colors.grey[300]!,
-    //   onPressed:(){
-    //     isEnabled ? () => provider.dispatchFoodItem(context) : null;
-    //   },
-    // );
   }
 
 
@@ -181,13 +178,7 @@ class _DispatchScreenState extends State<DispatchScreen> with SingleTickerProvid
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.black.withOpacity(0.1),
-        //     blurRadius: 10,
-        //     offset: Offset(0, 4),
-        //   ),
-        // ],
+
       ),
       child: Column(
         children: [

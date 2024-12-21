@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/order_qr_scanner.dart';
 import 'package:qr_page/Features/Screens/MainPage/dispatch_screen/dispatch_screen.dart';
 import 'package:qr_page/Features/Screens/MainPage/dispatch_history/history.dart';
 import 'package:qr_page/Features/Screens/MainPage/storage_screen/storage_screen.dart';
@@ -25,17 +26,17 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
     FoodStorageScreen(),
     DispatchScreen(),
     DispatchHistoryScreen(),
-    DispatchHistoryScreen(),
+    Scanning(),
   ];
 
   final List<IconData> _icons = [
     Icons.home_outlined,
     Icons.local_shipping_outlined,
     Icons.history_outlined,
-    Icons.person_outline,
+    Icons.shopping_cart,
   ];
 
-  final List<String> _labels = ['Home', 'Dispatch', 'History', 'Profile'];
+  final List<String> _labels = ['Home', 'Dispatch', 'History', 'Order'];
 
   @override
   void initState() {

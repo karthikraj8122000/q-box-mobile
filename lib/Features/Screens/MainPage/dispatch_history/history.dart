@@ -20,7 +20,7 @@ class DispatchHistoryScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: AppText(text: 'Dispatch History',fontSize: 18,color: Colors.black,fontWeight: FontWeight.bold,),
+        title: Text('Dispatch History', style: TextStyle(color: Colors.black),),
         actions: [
           IconButton(
             icon: Icon(Icons.filter_list, color: Colors.black),
