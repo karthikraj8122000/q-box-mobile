@@ -6,7 +6,6 @@
   import 'package:qr_page/Widgets/Common/app_colors.dart';
 
   import '../../../Provider/auth_provider.dart';
-import '../../../Provider/login_provider.dart';
   import '../../../Widgets/Common/app_button.dart';
   import '../ForgetPassword/forget_password.dart';
   import '../Signup/signup.dart';
@@ -64,58 +63,35 @@ import '../../../Provider/login_provider.dart';
       return FadeTransition(
         opacity: _animation!,
         child: Scaffold(
-          body: SingleChildScrollView(
-            child:Stack(
-              children: [
-                Container(
+          body: Stack(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage('https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),  // Adjust blur intensity here
+                child: Container(
                   height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage('https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  color: Colors.black.withOpacity(0.2),  // Adds slight dimming effect
                 ),
-                BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),  // Adjust blur intensity here
-                  child: Container(
-                    height: MediaQuery.of(context).size.height,
-                    color: Colors.black.withOpacity(0.2),  // Adds slight dimming effect
-                  ),
-                ),
-                Form(
-                  key: _formKey,
-                  child: SafeArea(
+              ),
+              Center(
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 40),
-                          // Rest of your existing content...
                           Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.9),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Icon(
-                              Icons.restaurant_menu,
-                              size: 40,
-                              color: Color(0xFFFF6B6B),
-                            ),
-                          ),
-                          // Text(
-                          //   'Your Food,\n Your Way– Welcome Back',
-                          //   style: TextStyle(
-                          //     fontSize: 28,
-                          //     fontWeight: FontWeight.bold,
-                          //     color: Colors.white,
-                          //     height: 1.2,
-                          //   ),
-                          // ),
-                          SizedBox(height:24),
-                          Container(
+                            width: MediaQuery.of(context).size.width*0.6,
                             padding: const EdgeInsets.all(24),
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -130,6 +106,7 @@ import '../../../Provider/login_provider.dart';
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   'Welcome back',
@@ -314,8 +291,8 @@ import '../../../Provider/login_provider.dart';
                     ),
                   ),
                 ),
-              ],
-            )
+              ),
+            ],
           ),
         ),
       );

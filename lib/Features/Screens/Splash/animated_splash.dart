@@ -81,14 +81,7 @@ class _SplashScreenState extends State<AnimeSplashScreen> with SingleTickerProvi
       backgroundColor: Colors.white,
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-             AppColors.buttonBgColor,
-              Colors.white,
-            ],
-          ),
+          gradient: AppColors.scaffoldGradient,
         ),
         child: Center(
           child: Column(

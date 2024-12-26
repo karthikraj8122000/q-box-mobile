@@ -33,6 +33,9 @@ class FoodStoreProvider with ChangeNotifier {
   // Dispatch Screen Variables
   String? _scannedDispatchItem;
 
+  List<dynamic> _qboxList = [];
+  bool _isLoading = false;
+
   // Getters
   List<FoodItem> get storedItems => _storedItems;
   List<FoodItem> get dispatchedItems => _dispatchedItems;
@@ -47,6 +50,8 @@ class FoodStoreProvider with ChangeNotifier {
   bool get buttonLoading => _buttonLoading;
   List<dynamic> get foodItems => _foodTemsList;
 
+  bool get isLoading => _isLoading;
+  List<dynamic> get qboxList => _qboxList;
   // Storage Screen Methods
 
   void setQboxId(String? id) {
@@ -67,6 +72,38 @@ class FoodStoreProvider with ChangeNotifier {
     _qboxId = null;
     _foodItem = null;
     notifyListeners();
+  }
+
+  Future<dynamic> getQboxes() async {
+    print("Qbox counts");
+    _isLoading = true;
+    notifyListeners();
+    Map<String,dynamic> params = {};
+    try {
+      var result = await apiService.post(
+          "8912",
+          "masters",
+          "search_box_cell_food",
+          params
+      );
+      print("result");
+      print(result);
+      if (result != null && result['data'] != null) {
+        _qboxList = result['data'];
+        print("foods");
+        print(_qboxList);
+        notifyListeners();
+      } else {
+        commonService.presentToast('Failed at retrieving the food item.');
+      }
+    } catch (e) {
+      debugPrint('$e');
+      commonService
+          .presentToast('An error occurred while retrieving the food item.');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<String?> scanQRCode(
@@ -184,31 +221,31 @@ class FoodStoreProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
-  Future<dynamic> getFoodItems() async {
-    print("Happy bday");
-    try {
-      var result = await apiService.get(
-        "8912",
-        "masters",
-        "search_box_cell_food",
-      );
-      print("result");
-      print(result);
-      if (result != null && result['data'] != null) {
-        _foodTemsList = result['data'];
-        print("foods");
-        print(_foodTemsList);
-        notifyListeners();
-      } else {
-        commonService.presentToast('Failed at retrieving the food item.');
-      }
-    } catch (e) {
-      debugPrint('$e');
-      commonService
-          .presentToast('An error occurred while retrieving the food item.');
-    }
-  }
+  //
+  // Future<dynamic> getFoodItems() async {
+  //   print("Happy bday");
+  //   try {
+  //     var result = await apiService.get(
+  //       "8912",
+  //       "masters",
+  //       "search_box_cell_food",
+  //     );
+  //     print("result");
+  //     print(result);
+  //     if (result != null && result['data'] != null) {
+  //       _foodTemsList = result['data'];
+  //       print("foods");
+  //       print(_foodTemsList);
+  //       notifyListeners();
+  //     } else {
+  //       commonService.presentToast('Failed at retrieving the food item.');
+  //     }
+  //   } catch (e) {
+  //     debugPrint('$e');
+  //     commonService
+  //         .presentToast('An error occurred while retrieving the food item.');
+  //   }
+  // }
 
   Future<void> storeFoodItem(BuildContext context) async {
     debugPrint("storeFoodItem called");

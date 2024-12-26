@@ -61,4 +61,14 @@ class AppColors{
   static const Color textSecondary = Color(0xFF546E7A);
   static const Color success = Color(0xFF2E7D32);
   static const Color divider = Color(0xFFEEEEEE);
+
+  static const LinearGradient scaffoldGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      AppColors.buttonBgColor,
+      Colors.white,
+    ],
+  );
+
 }

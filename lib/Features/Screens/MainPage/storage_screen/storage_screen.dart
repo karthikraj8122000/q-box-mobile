@@ -9,6 +9,7 @@ import 'package:qr_page/Features/Screens/MainPage/storage_screen/see_all_qbox_fo
 import 'package:qr_page/Provider/auth_provider.dart';
 import 'package:qr_page/Services/token_service.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
+import 'package:qr_page/Widgets/Custom/custom_box_cell.dart';
 import '../../../../Provider/food_store_provider.dart';
 
 class FoodStorageScreen extends StatefulWidget {
@@ -41,7 +42,7 @@ class _FoodStorageScreenState extends State<FoodStorageScreen>
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<FoodStoreProvider>(context, listen: false);
+    final provider = Provider.of<FoodStoreProvider>(context);
     final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey[50],
@@ -78,7 +79,7 @@ class _FoodStorageScreenState extends State<FoodStorageScreen>
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -86,12 +87,13 @@ class _FoodStorageScreenState extends State<FoodStorageScreen>
                       const SizedBox(height: 30),
                       _buildScanningSection(provider, context),
                       const SizedBox(height: 30),
-                      if (provider.storedItems.isNotEmpty) ...[
-                        _buildStoredItemsHeader(context, provider),
-                        _buildStoredItemsGrid(provider),
-                        const SizedBox(height: 30),
-                      ] else
-                        _buildEnhancedEmptyState(),
+                      QboxCells()
+                      // if (provider.storedItems.isNotEmpty) ...[
+                      //   _buildStoredItemsHeader(context, provider),
+                      //   _buildStoredItemsGrid(provider),
+                      //   const SizedBox(height: 30),
+                      // ] else
+                      //   _buildEnhancedEmptyState(),
                     ],
                   ),
                 ),
@@ -181,7 +183,7 @@ class _FoodStorageScreenState extends State<FoodStorageScreen>
                   children: [
                     _buildStat('Total Items', '${provider.storedItems.length}'),
                     _buildVerticalDivider(),
-                    _buildStat('Available Boxes', '24'),
+                    _buildStat('Available Boxes', '${provider.qboxList.length}'),
                     _buildVerticalDivider(),
                     _buildStat('In Transit', '3'),
                   ],

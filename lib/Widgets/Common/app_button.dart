@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:qr_page/Provider/auth_provider.dart';
 import '../../../../../Widgets/Common/app_text.dart';
-import '../../Provider/login_provider.dart';
 import 'app_colors.dart';
 
 class CustomButton extends StatelessWidget {
@@ -36,7 +35,7 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loginProvider = Provider.of<LoginProvider>(context);
+    final loginProvider = Provider.of<AuthProvider>(context);
 
     return Ink(
       child: ElevatedButton(

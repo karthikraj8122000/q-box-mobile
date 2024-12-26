@@ -3,10 +3,8 @@ application
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:11:5-42:19
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:15:5-19:19
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:15:5-19:19
-MERGED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:23:5-34:19
-MERGED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:23:5-34:19
-MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:23:5-34:19
-MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:23:5-34:19
+MERGED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-34:19
+MERGED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-34:19
 MERGED from [com.google.android.material:material:1.3.0] /home/swomb/.gradle/caches/transforms-3/336115a95420fd1ecf3d13be9638caed/transformed/material-1.3.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.3.0] /home/swomb/.gradle/caches/transforms-3/336115a95420fd1ecf3d13be9638caed/transformed/material-1.3.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/swomb/.gradle/caches/transforms-3/146c7740b6900c42283b3451b0dec7f9/transformed/constraintlayout-2.0.1/AndroidManifest.xml:9:5-20
@@ -31,14 +29,18 @@ MERGED from [com.google.android.gms:play-services-tasks:18.0.2] /home/swomb/.gra
 MERGED from [com.google.android.gms:play-services-tasks:18.0.2] /home/swomb/.gradle/caches/transforms-3/640c4a9e250aec194eb5661ab046a315/transformed/jetified-play-services-tasks-18.0.2/AndroidManifest.xml:5:5-20
 MERGED from [com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:20:5-24:19
 MERGED from [com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:20:5-24:19
+MERGED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:23:5-34:19
+MERGED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:23:5-34:19
+MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:23:5-34:19
+MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:23:5-34:19
 MERGED from [androidx.window:window:1.2.0] /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/AndroidManifest.xml:22:5-29:19
 MERGED from [androidx.window:window:1.2.0] /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/AndroidManifest.xml:22:5-29:19
 MERGED from [androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:25:5-35:19
 MERGED from [androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:25:5-35:19
-MERGED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:28:5-89
-MERGED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:28:5-89
 MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
 MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:28:5-89
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:23:5-53:19
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:23:5-53:19
 MERGED from [androidx.startup:startup-runtime:1.1.1] /home/swomb/.gradle/caches/transforms-3/5075b6f7f72b7873f858b241a85001b8/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
@@ -68,18 +70,19 @@ INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/andr
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:1:1-54:12
 MERGED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:1:1-54:12
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-21:12
+MERGED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-36:12
 MERGED from [:flutter_plugin_android_lifecycle] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_plugin_android_lifecycle/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [:flutter_secure_storage] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:fluttertoast] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/fluttertoast/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:mobile_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/mobile_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-15:12
 MERGED from [:path_provider_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/path_provider_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:qr_code_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/qr_code_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
-MERGED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:17:1-36:12
-MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:17:1-36:12
-MERGED from [androidx.camera:camera-lifecycle:1.3.1] /home/swomb/.gradle/caches/transforms-3/47cda69f5f1121fe30e760766dd83941/transformed/jetified-camera-lifecycle-1.3.1/AndroidManifest.xml:2:1-7:12
+MERGED from [:shared_preferences_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/shared_preferences_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /home/swomb/.gradle/caches/transforms-3/54f2bc33fb1cdda6c1be0ff3e10f1c2d/transformed/legacy-support-v4-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.android.material:material:1.3.0] /home/swomb/.gradle/caches/transforms-3/336115a95420fd1ecf3d13be9638caed/transformed/material-1.3.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.preference:preference:1.2.1] /home/swomb/.gradle/caches/transforms-3/6a30de138cdfb89bc1ef42a02f38770d/transformed/preference-1.2.1/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/swomb/.gradle/caches/transforms-3/146c7740b6900c42283b3451b0dec7f9/transformed/constraintlayout-2.0.1/AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat:1.4.2] /home/swomb/.gradle/caches/transforms-3/4b6526175f05ef41dd8ad0648117671c/transformed/appcompat-1.4.2/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /home/swomb/.gradle/caches/transforms-3/54f2bc33fb1cdda6c1be0ff3e10f1c2d/transformed/legacy-support-v4-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/swomb/.gradle/caches/transforms-3/7d14002fcdee3ea951b981c81127cf50/transformed/jetified-viewpager2-1.0.0/AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.gms:play-services-vision:20.1.3] /home/swomb/.gradle/caches/transforms-3/e71f126f2761123ccafb0a96cb550b98/transformed/jetified-play-services-vision-20.1.3/AndroidManifest.xml:2:1-9:12
 MERGED from [com.google.mlkit:barcode-scanning:17.2.0] /home/swomb/.gradle/caches/transforms-3/12b337a8aa1b70b563f5067c214f2210/transformed/jetified-barcode-scanning-17.2.0/AndroidManifest.xml:2:1-7:12
@@ -95,47 +98,59 @@ MERGED from [com.google.android.gms:play-services-base:18.1.0] /home/swomb/.grad
 MERGED from [com.google.mlkit:vision-interfaces:16.2.0] /home/swomb/.gradle/caches/transforms-3/d9306fb8d0350f7fedb2e7a69b2f6612/transformed/jetified-vision-interfaces-16.2.0/AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.gms:play-services-tasks:18.0.2] /home/swomb/.gradle/caches/transforms-3/640c4a9e250aec194eb5661ab046a315/transformed/jetified-play-services-tasks-18.0.2/AndroidManifest.xml:2:1-6:12
 MERGED from [com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:16:1-26:12
+MERGED from [androidx.fragment:fragment-ktx:1.7.1] /home/swomb/.gradle/caches/transforms-3/375b55f86a07134d3df85938a11ecd23/transformed/jetified-fragment-ktx-1.7.1/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.fragment:fragment:1.7.1] /home/swomb/.gradle/caches/transforms-3/941f550dc677f6a10876e341f4fc45cf/transformed/fragment-1.7.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity-ktx:1.9.3] /home/swomb/.gradle/caches/transforms-3/bebadb340d2252e473a0dd984f70bd93/transformed/jetified-activity-ktx-1.9.3/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.activity:activity:1.9.3] /home/swomb/.gradle/caches/transforms-3/751c7d8809b755ed4d4375fbaa4202d1/transformed/jetified-activity-1.9.3/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:17:1-36:12
+MERGED from [androidx.camera:camera-lifecycle:1.3.1] /home/swomb/.gradle/caches/transforms-3/47cda69f5f1121fe30e760766dd83941/transformed/jetified-camera-lifecycle-1.3.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:17:1-36:12
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /home/swomb/.gradle/caches/transforms-3/742ea293a3684c0e86e0d96737c877da/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] /home/swomb/.gradle/caches/transforms-3/df5044d3cc4a61194c0700ec5db931a9/transformed/slidingpanelayout-1.2.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.window:window:1.2.0] /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/AndroidManifest.xml:17:1-31:12
 MERGED from [androidx.window:window-java:1.2.0] /home/swomb/.gradle/caches/transforms-3/af89c254f4ba1d9ccd1cebbf4b8450bd/transformed/jetified-window-java-1.2.0/AndroidManifest.xml:17:1-21:12
 MERGED from [androidx.media:media:1.0.0] /home/swomb/.gradle/caches/transforms-3/d33a00fcbfb98b10445fe3efb72da296/transformed/media-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /home/swomb/.gradle/caches/transforms-3/742ea293a3684c0e86e0d96737c877da/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/swomb/.gradle/caches/transforms-3/633f6096f26117baca11be42b0a4ee37/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/swomb/.gradle/caches/transforms-3/33d8872cac2a5cc8f499216a384d5969/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/swomb/.gradle/caches/transforms-3/1843af4a9e82b371af002a2fdacff370/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.transition:transition:1.2.0] /home/swomb/.gradle/caches/transforms-3/c9ce6db200b9df83a5da433eb7882930/transformed/transition-1.2.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.appcompat:appcompat-resources:1.4.2] /home/swomb/.gradle/caches/transforms-3/11138de04ede76e5ce5d587ffd01924b/transformed/jetified-appcompat-resources-1.4.2/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/swomb/.gradle/caches/transforms-3/1d82a1038f2e530497cfcd219ba8ad16/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/swomb/.gradle/caches/transforms-3/82d3f23f97b67914b6e90be478ae5896/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/swomb/.gradle/caches/transforms-3/a4d338aab4cd274070fddc8bffe5d6eb/transformed/drawerlayout-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.emoji2:emoji2-views-helper:1.0.0] /home/swomb/.gradle/caches/transforms-3/2b862211ffa9c393a3ff3bc016dcf999/transformed/jetified-emoji2-views-helper-1.0.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:17:1-37:12
-MERGED from [androidx.activity:activity:1.8.1] /home/swomb/.gradle/caches/transforms-3/2c2c3685f0b196fda182ad14cb22ea84/transformed/jetified-activity-1.8.1/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.loader:loader:1.0.0] /home/swomb/.gradle/caches/transforms-3/fc0e8b9a2a30855fe44fe4f9ec442aa1/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.viewpager:viewpager:1.0.0] /home/swomb/.gradle/caches/transforms-3/95df4d0398e15aeb29a4475f68eada28/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /home/swomb/.gradle/caches/transforms-3/f1232e200cffa3e71e1a4ae75567964b/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /home/swomb/.gradle/caches/transforms-3/9223a72589bd2937e7c285529d6a1919/transformed/asynclayoutinflater-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/swomb/.gradle/caches/transforms-3/07e20ba7e798e1db1da55c20b3dd82b2/transformed/recyclerview-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/swomb/.gradle/caches/transforms-3/34fea7409d8d80351528e7c40add3c11/transformed/jetified-lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/swomb/.gradle/caches/transforms-3/a40ceacba8ee302a4cfb3eb351a7f559/transformed/jetified-lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/swomb/.gradle/caches/transforms-3/d7d7eedabdcffd1050ecfc4ca9d8c6a4/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/swomb/.gradle/caches/transforms-3/d2aa94056d7d0e72d9cf5b1a6ee347ca/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/swomb/.gradle/caches/transforms-3/c134ce715b400c7c6ad3451e1dabc777/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/swomb/.gradle/caches/transforms-3/9f231c4b0e56cb003827239782a5ee05/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/swomb/.gradle/caches/transforms-3/777bb9ce6c9cd65ae088a60be63bdbd3/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.core:core-ktx:1.13.1] /home/swomb/.gradle/caches/transforms-3/d30f52357c5f9dd8b4d1c16286f8e94f/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /home/swomb/.gradle/caches/transforms-3/cc9fb93f3aec7a5e254431d084e733bb/transformed/slidingpanelayout-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/swomb/.gradle/caches/transforms-3/07e20ba7e798e1db1da55c20b3dd82b2/transformed/recyclerview-1.1.0/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.customview:customview:1.0.0] /home/swomb/.gradle/caches/transforms-3/6f32f05097419efbb2d98f5879e49cd5/transformed/customview-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /home/swomb/.gradle/caches/transforms-3/f1232e200cffa3e71e1a4ae75567964b/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /home/swomb/.gradle/caches/transforms-3/9223a72589bd2937e7c285529d6a1919/transformed/asynclayoutinflater-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:17:1-30:12
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/swomb/.gradle/caches/transforms-3/ebb0dc7c45bea9fee08387d67d12cdf7/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/swomb/.gradle/caches/transforms-3/301b2ad3d3c7aaf2fc6ced087c6abaf1/transformed/jetified-savedstate-ktx-1.2.1/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.savedstate:savedstate:1.2.1] /home/swomb/.gradle/caches/transforms-3/a38072ca345125caf28abdccc90ab587/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/swomb/.gradle/caches/transforms-3/777bb9ce6c9cd65ae088a60be63bdbd3/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.13.1] /home/swomb/.gradle/caches/transforms-3/d30f52357c5f9dd8b4d1c16286f8e94f/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.customview:customview:1.1.0] /home/swomb/.gradle/caches/transforms-3/65cc49b0b7f9d18dc4cc907e9755d218/transformed/customview-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.transition:transition:1.4.1] /home/swomb/.gradle/caches/transforms-3/74b0e5b01cad374dc8b39abe5d163052/transformed/transition-1.4.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.datastore:datastore-preferences:1.0.0] /home/swomb/.gradle/caches/transforms-3/e4c4b2c5404ce59d09e4e5fb2a118869/transformed/jetified-datastore-preferences-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.datastore:datastore:1.0.0] /home/swomb/.gradle/caches/transforms-3/6b2571db486df7b7bc1f5498b24a13e8/transformed/jetified-datastore-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /home/swomb/.gradle/caches/transforms-3/dddb6350ec4fe7707a7ee10d36848a82/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] /home/swomb/.gradle/caches/transforms-3/ec8215a682cf9dc988013315decd72ae/transformed/exifinterface-1.3.7/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:17:1-55:12
 MERGED from [androidx.startup:startup-runtime:1.1.1] /home/swomb/.gradle/caches/transforms-3/5075b6f7f72b7873f858b241a85001b8/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
 MERGED from [androidx.tracing:tracing:1.2.0] /home/swomb/.gradle/caches/transforms-3/65493d4a21cc18c8f0cd00497129cfd2/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.cardview:cardview:1.0.0] /home/swomb/.gradle/caches/transforms-3/b0cd12e93e5d26cca6d4e878e6ca5087/transformed/cardview-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/swomb/.gradle/caches/transforms-3/7baf84b736d04b83f9937cfb626478ef/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/swomb/.gradle/caches/transforms-3/8561d00ec0cbdc75b923244cd447b40e/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/swomb/.gradle/caches/transforms-3/120a50f58de2d4da6a638cfc3465d6bf/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] /home/swomb/.gradle/caches/transforms-3/90c23151b49f2bf88cee622994c09445/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/swomb/.gradle/caches/transforms-3/7baf84b736d04b83f9937cfb626478ef/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/swomb/.gradle/caches/transforms-3/8561d00ec0cbdc75b923244cd447b40e/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.documentfile:documentfile:1.0.0] /home/swomb/.gradle/caches/transforms-3/1aa49e615dde8c60ab8bced7bda893f9/transformed/documentfile-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/swomb/.gradle/caches/transforms-3/4a8ef2a2d18b0aebdd909fa3cf46ef56/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] /home/swomb/.gradle/caches/transforms-3/90adf7ec44bedfde3b374c9facb89f52/transformed/print-1.0.0/AndroidManifest.xml:17:1-22:12
@@ -144,7 +159,6 @@ MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] /home/swo
 MERGED from [com.google.android.datatransport:transport-api:2.2.1] /home/swomb/.gradle/caches/transforms-3/dba3ba9bf65218375b520a99f72bb9c7/transformed/jetified-transport-api-2.2.1/AndroidManifest.xml:15:1-22:12
 MERGED from [com.google.firebase:firebase-components:16.1.0] /home/swomb/.gradle/caches/transforms-3/a29690e69c69a9cdd957cd06ad4df778/transformed/jetified-firebase-components-16.1.0/AndroidManifest.xml:15:1-23:12
 MERGED from [com.google.firebase:firebase-encoders-json:17.1.0] /home/swomb/.gradle/caches/transforms-3/f7b71735ca785709a95ca95bd469d36e/transformed/jetified-firebase-encoders-json-17.1.0/AndroidManifest.xml:15:1-23:12
-MERGED from [androidx.exifinterface:exifinterface:1.3.2] /home/swomb/.gradle/caches/transforms-3/d8b5ed0adaca8e67e62f17cd83ce28fe/transformed/exifinterface-1.3.2/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.window.extensions.core:core:1.0.0] /home/swomb/.gradle/caches/transforms-3/320650fa8a842ae8e386be45cdf30967/transformed/jetified-core-1.0.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] /home/swomb/.gradle/caches/transforms-3/5b0d049e6914a8abcf2946ec43a1eaa1/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:2:1-7:12
 MERGED from [com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:17:1-56:12
@@ -216,8 +230,12 @@ INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/andr
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:6:5-8:41
+MERGED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:6:5-8:41
 MERGED from [:flutter_plugin_android_lifecycle] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_plugin_android_lifecycle/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_plugin_android_lifecycle] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_plugin_android_lifecycle/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:flutter_secure_storage] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:6:5-9:53
+MERGED from [:flutter_secure_storage] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:6:5-9:53
 MERGED from [:fluttertoast] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/fluttertoast/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:fluttertoast] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/fluttertoast/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:mobile_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/mobile_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
@@ -226,20 +244,18 @@ MERGED from [:path_provider_android] /home/swomb/Documents/Projects/git projects
 MERGED from [:path_provider_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/path_provider_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:qr_code_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/qr_code_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:6:5-9:67
 MERGED from [:qr_code_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/qr_code_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:6:5-9:67
-MERGED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:21:5-44
-MERGED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:21:5-44
-MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:21:5-44
-MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:21:5-44
-MERGED from [androidx.camera:camera-lifecycle:1.3.1] /home/swomb/.gradle/caches/transforms-3/47cda69f5f1121fe30e760766dd83941/transformed/jetified-camera-lifecycle-1.3.1/AndroidManifest.xml:5:5-44
-MERGED from [androidx.camera:camera-lifecycle:1.3.1] /home/swomb/.gradle/caches/transforms-3/47cda69f5f1121fe30e760766dd83941/transformed/jetified-camera-lifecycle-1.3.1/AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/shared_preferences_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:shared_preferences_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/shared_preferences_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /home/swomb/.gradle/caches/transforms-3/54f2bc33fb1cdda6c1be0ff3e10f1c2d/transformed/legacy-support-v4-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /home/swomb/.gradle/caches/transforms-3/54f2bc33fb1cdda6c1be0ff3e10f1c2d/transformed/legacy-support-v4-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.material:material:1.3.0] /home/swomb/.gradle/caches/transforms-3/336115a95420fd1ecf3d13be9638caed/transformed/material-1.3.0/AndroidManifest.xml:20:5-44
 MERGED from [com.google.android.material:material:1.3.0] /home/swomb/.gradle/caches/transforms-3/336115a95420fd1ecf3d13be9638caed/transformed/material-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.preference:preference:1.2.1] /home/swomb/.gradle/caches/transforms-3/6a30de138cdfb89bc1ef42a02f38770d/transformed/preference-1.2.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.preference:preference:1.2.1] /home/swomb/.gradle/caches/transforms-3/6a30de138cdfb89bc1ef42a02f38770d/transformed/preference-1.2.1/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/swomb/.gradle/caches/transforms-3/146c7740b6900c42283b3451b0dec7f9/transformed/constraintlayout-2.0.1/AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/swomb/.gradle/caches/transforms-3/146c7740b6900c42283b3451b0dec7f9/transformed/constraintlayout-2.0.1/AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.appcompat:appcompat:1.4.2] /home/swomb/.gradle/caches/transforms-3/4b6526175f05ef41dd8ad0648117671c/transformed/appcompat-1.4.2/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.appcompat:appcompat:1.4.2] /home/swomb/.gradle/caches/transforms-3/4b6526175f05ef41dd8ad0648117671c/transformed/appcompat-1.4.2/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /home/swomb/.gradle/caches/transforms-3/54f2bc33fb1cdda6c1be0ff3e10f1c2d/transformed/legacy-support-v4-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /home/swomb/.gradle/caches/transforms-3/54f2bc33fb1cdda6c1be0ff3e10f1c2d/transformed/legacy-support-v4-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/swomb/.gradle/caches/transforms-3/7d14002fcdee3ea951b981c81127cf50/transformed/jetified-viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/swomb/.gradle/caches/transforms-3/7d14002fcdee3ea951b981c81127cf50/transformed/jetified-viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.android.gms:play-services-vision:20.1.3] /home/swomb/.gradle/caches/transforms-3/e71f126f2761123ccafb0a96cb550b98/transformed/jetified-play-services-vision-20.1.3/AndroidManifest.xml:5:5-44
@@ -270,24 +286,36 @@ MERGED from [com.google.android.gms:play-services-tasks:18.0.2] /home/swomb/.gra
 MERGED from [com.google.android.gms:play-services-tasks:18.0.2] /home/swomb/.gradle/caches/transforms-3/640c4a9e250aec194eb5661ab046a315/transformed/jetified-play-services-tasks-18.0.2/AndroidManifest.xml:4:5-43
 MERGED from [com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:18:5-43
 MERGED from [com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:18:5-43
+MERGED from [androidx.fragment:fragment-ktx:1.7.1] /home/swomb/.gradle/caches/transforms-3/375b55f86a07134d3df85938a11ecd23/transformed/jetified-fragment-ktx-1.7.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.fragment:fragment-ktx:1.7.1] /home/swomb/.gradle/caches/transforms-3/375b55f86a07134d3df85938a11ecd23/transformed/jetified-fragment-ktx-1.7.1/AndroidManifest.xml:5:5-44
 MERGED from [androidx.fragment:fragment:1.7.1] /home/swomb/.gradle/caches/transforms-3/941f550dc677f6a10876e341f4fc45cf/transformed/fragment-1.7.1/AndroidManifest.xml:5:5-44
 MERGED from [androidx.fragment:fragment:1.7.1] /home/swomb/.gradle/caches/transforms-3/941f550dc677f6a10876e341f4fc45cf/transformed/fragment-1.7.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.9.3] /home/swomb/.gradle/caches/transforms-3/bebadb340d2252e473a0dd984f70bd93/transformed/jetified-activity-ktx-1.9.3/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity-ktx:1.9.3] /home/swomb/.gradle/caches/transforms-3/bebadb340d2252e473a0dd984f70bd93/transformed/jetified-activity-ktx-1.9.3/AndroidManifest.xml:5:5-44
+MERGED from [androidx.activity:activity:1.9.3] /home/swomb/.gradle/caches/transforms-3/751c7d8809b755ed4d4375fbaa4202d1/transformed/jetified-activity-1.9.3/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.9.3] /home/swomb/.gradle/caches/transforms-3/751c7d8809b755ed4d4375fbaa4202d1/transformed/jetified-activity-1.9.3/AndroidManifest.xml:20:5-44
+MERGED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.camera:camera-lifecycle:1.3.1] /home/swomb/.gradle/caches/transforms-3/47cda69f5f1121fe30e760766dd83941/transformed/jetified-camera-lifecycle-1.3.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.camera:camera-lifecycle:1.3.1] /home/swomb/.gradle/caches/transforms-3/47cda69f5f1121fe30e760766dd83941/transformed/jetified-camera-lifecycle-1.3.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /home/swomb/.gradle/caches/transforms-3/742ea293a3684c0e86e0d96737c877da/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /home/swomb/.gradle/caches/transforms-3/742ea293a3684c0e86e0d96737c877da/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] /home/swomb/.gradle/caches/transforms-3/df5044d3cc4a61194c0700ec5db931a9/transformed/slidingpanelayout-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.2.0] /home/swomb/.gradle/caches/transforms-3/df5044d3cc4a61194c0700ec5db931a9/transformed/slidingpanelayout-1.2.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.window:window:1.2.0] /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.window:window:1.2.0] /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.window:window-java:1.2.0] /home/swomb/.gradle/caches/transforms-3/af89c254f4ba1d9ccd1cebbf4b8450bd/transformed/jetified-window-java-1.2.0/AndroidManifest.xml:19:5-44
 MERGED from [androidx.window:window-java:1.2.0] /home/swomb/.gradle/caches/transforms-3/af89c254f4ba1d9ccd1cebbf4b8450bd/transformed/jetified-window-java-1.2.0/AndroidManifest.xml:19:5-44
 MERGED from [androidx.media:media:1.0.0] /home/swomb/.gradle/caches/transforms-3/d33a00fcbfb98b10445fe3efb72da296/transformed/media-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.media:media:1.0.0] /home/swomb/.gradle/caches/transforms-3/d33a00fcbfb98b10445fe3efb72da296/transformed/media-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /home/swomb/.gradle/caches/transforms-3/742ea293a3684c0e86e0d96737c877da/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /home/swomb/.gradle/caches/transforms-3/742ea293a3684c0e86e0d96737c877da/transformed/legacy-support-core-ui-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/swomb/.gradle/caches/transforms-3/633f6096f26117baca11be42b0a4ee37/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/swomb/.gradle/caches/transforms-3/633f6096f26117baca11be42b0a4ee37/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/swomb/.gradle/caches/transforms-3/33d8872cac2a5cc8f499216a384d5969/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/swomb/.gradle/caches/transforms-3/33d8872cac2a5cc8f499216a384d5969/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/swomb/.gradle/caches/transforms-3/1843af4a9e82b371af002a2fdacff370/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/swomb/.gradle/caches/transforms-3/1843af4a9e82b371af002a2fdacff370/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.transition:transition:1.2.0] /home/swomb/.gradle/caches/transforms-3/c9ce6db200b9df83a5da433eb7882930/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.transition:transition:1.2.0] /home/swomb/.gradle/caches/transforms-3/c9ce6db200b9df83a5da433eb7882930/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.appcompat:appcompat-resources:1.4.2] /home/swomb/.gradle/caches/transforms-3/11138de04ede76e5ce5d587ffd01924b/transformed/jetified-appcompat-resources-1.4.2/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.appcompat:appcompat-resources:1.4.2] /home/swomb/.gradle/caches/transforms-3/11138de04ede76e5ce5d587ffd01924b/transformed/jetified-appcompat-resources-1.4.2/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/swomb/.gradle/caches/transforms-3/1d82a1038f2e530497cfcd219ba8ad16/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
@@ -300,12 +328,20 @@ MERGED from [androidx.emoji2:emoji2-views-helper:1.0.0] /home/swomb/.gradle/cach
 MERGED from [androidx.emoji2:emoji2-views-helper:1.0.0] /home/swomb/.gradle/caches/transforms-3/2b862211ffa9c393a3ff3bc016dcf999/transformed/jetified-emoji2-views-helper-1.0.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:21:5-23:41
-MERGED from [androidx.activity:activity:1.8.1] /home/swomb/.gradle/caches/transforms-3/2c2c3685f0b196fda182ad14cb22ea84/transformed/jetified-activity-1.8.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.activity:activity:1.8.1] /home/swomb/.gradle/caches/transforms-3/2c2c3685f0b196fda182ad14cb22ea84/transformed/jetified-activity-1.8.1/AndroidManifest.xml:20:5-44
 MERGED from [androidx.loader:loader:1.0.0] /home/swomb/.gradle/caches/transforms-3/fc0e8b9a2a30855fe44fe4f9ec442aa1/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.loader:loader:1.0.0] /home/swomb/.gradle/caches/transforms-3/fc0e8b9a2a30855fe44fe4f9ec442aa1/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.viewpager:viewpager:1.0.0] /home/swomb/.gradle/caches/transforms-3/95df4d0398e15aeb29a4475f68eada28/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.viewpager:viewpager:1.0.0] /home/swomb/.gradle/caches/transforms-3/95df4d0398e15aeb29a4475f68eada28/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /home/swomb/.gradle/caches/transforms-3/f1232e200cffa3e71e1a4ae75567964b/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /home/swomb/.gradle/caches/transforms-3/f1232e200cffa3e71e1a4ae75567964b/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /home/swomb/.gradle/caches/transforms-3/9223a72589bd2937e7c285529d6a1919/transformed/asynclayoutinflater-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /home/swomb/.gradle/caches/transforms-3/9223a72589bd2937e7c285529d6a1919/transformed/asynclayoutinflater-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/swomb/.gradle/caches/transforms-3/07e20ba7e798e1db1da55c20b3dd82b2/transformed/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/swomb/.gradle/caches/transforms-3/07e20ba7e798e1db1da55c20b3dd82b2/transformed/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/swomb/.gradle/caches/transforms-3/34fea7409d8d80351528e7c40add3c11/transformed/jetified-lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.7.0] /home/swomb/.gradle/caches/transforms-3/34fea7409d8d80351528e7c40add3c11/transformed/jetified-lifecycle-runtime-ktx-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/swomb/.gradle/caches/transforms-3/a40ceacba8ee302a4cfb3eb351a7f559/transformed/jetified-lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0] /home/swomb/.gradle/caches/transforms-3/a40ceacba8ee302a4cfb3eb351a7f559/transformed/jetified-lifecycle-viewmodel-ktx-2.7.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/swomb/.gradle/caches/transforms-3/d7d7eedabdcffd1050ecfc4ca9d8c6a4/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/swomb/.gradle/caches/transforms-3/d7d7eedabdcffd1050ecfc4ca9d8c6a4/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/swomb/.gradle/caches/transforms-3/d2aa94056d7d0e72d9cf5b1a6ee347ca/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
@@ -314,28 +350,32 @@ MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/swomb/.grad
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/swomb/.gradle/caches/transforms-3/c134ce715b400c7c6ad3451e1dabc777/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/swomb/.gradle/caches/transforms-3/9f231c4b0e56cb003827239782a5ee05/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/swomb/.gradle/caches/transforms-3/9f231c4b0e56cb003827239782a5ee05/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/swomb/.gradle/caches/transforms-3/777bb9ce6c9cd65ae088a60be63bdbd3/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/swomb/.gradle/caches/transforms-3/777bb9ce6c9cd65ae088a60be63bdbd3/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core-ktx:1.13.1] /home/swomb/.gradle/caches/transforms-3/d30f52357c5f9dd8b4d1c16286f8e94f/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:5:5-44
-MERGED from [androidx.core:core-ktx:1.13.1] /home/swomb/.gradle/caches/transforms-3/d30f52357c5f9dd8b4d1c16286f8e94f/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:5:5-44
-MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /home/swomb/.gradle/caches/transforms-3/cc9fb93f3aec7a5e254431d084e733bb/transformed/slidingpanelayout-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /home/swomb/.gradle/caches/transforms-3/cc9fb93f3aec7a5e254431d084e733bb/transformed/slidingpanelayout-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/swomb/.gradle/caches/transforms-3/07e20ba7e798e1db1da55c20b3dd82b2/transformed/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.recyclerview:recyclerview:1.1.0] /home/swomb/.gradle/caches/transforms-3/07e20ba7e798e1db1da55c20b3dd82b2/transformed/recyclerview-1.1.0/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.customview:customview:1.0.0] /home/swomb/.gradle/caches/transforms-3/6f32f05097419efbb2d98f5879e49cd5/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.customview:customview:1.0.0] /home/swomb/.gradle/caches/transforms-3/6f32f05097419efbb2d98f5879e49cd5/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /home/swomb/.gradle/caches/transforms-3/f1232e200cffa3e71e1a4ae75567964b/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /home/swomb/.gradle/caches/transforms-3/f1232e200cffa3e71e1a4ae75567964b/transformed/swiperefreshlayout-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /home/swomb/.gradle/caches/transforms-3/9223a72589bd2937e7c285529d6a1919/transformed/asynclayoutinflater-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /home/swomb/.gradle/caches/transforms-3/9223a72589bd2937e7c285529d6a1919/transformed/asynclayoutinflater-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/swomb/.gradle/caches/transforms-3/ebb0dc7c45bea9fee08387d67d12cdf7/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/swomb/.gradle/caches/transforms-3/ebb0dc7c45bea9fee08387d67d12cdf7/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
 MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/swomb/.gradle/caches/transforms-3/301b2ad3d3c7aaf2fc6ced087c6abaf1/transformed/jetified-savedstate-ktx-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/swomb/.gradle/caches/transforms-3/301b2ad3d3c7aaf2fc6ced087c6abaf1/transformed/jetified-savedstate-ktx-1.2.1/AndroidManifest.xml:20:5-44
 MERGED from [androidx.savedstate:savedstate:1.2.1] /home/swomb/.gradle/caches/transforms-3/a38072ca345125caf28abdccc90ab587/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
 MERGED from [androidx.savedstate:savedstate:1.2.1] /home/swomb/.gradle/caches/transforms-3/a38072ca345125caf28abdccc90ab587/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/swomb/.gradle/caches/transforms-3/777bb9ce6c9cd65ae088a60be63bdbd3/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/swomb/.gradle/caches/transforms-3/777bb9ce6c9cd65ae088a60be63bdbd3/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.13.1] /home/swomb/.gradle/caches/transforms-3/d30f52357c5f9dd8b4d1c16286f8e94f/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.13.1] /home/swomb/.gradle/caches/transforms-3/d30f52357c5f9dd8b4d1c16286f8e94f/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.customview:customview:1.1.0] /home/swomb/.gradle/caches/transforms-3/65cc49b0b7f9d18dc4cc907e9755d218/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] /home/swomb/.gradle/caches/transforms-3/65cc49b0b7f9d18dc4cc907e9755d218/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.4.1] /home/swomb/.gradle/caches/transforms-3/74b0e5b01cad374dc8b39abe5d163052/transformed/transition-1.4.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.4.1] /home/swomb/.gradle/caches/transforms-3/74b0e5b01cad374dc8b39abe5d163052/transformed/transition-1.4.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.datastore:datastore-preferences:1.0.0] /home/swomb/.gradle/caches/transforms-3/e4c4b2c5404ce59d09e4e5fb2a118869/transformed/jetified-datastore-preferences-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore-preferences:1.0.0] /home/swomb/.gradle/caches/transforms-3/e4c4b2c5404ce59d09e4e5fb2a118869/transformed/jetified-datastore-preferences-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore:1.0.0] /home/swomb/.gradle/caches/transforms-3/6b2571db486df7b7bc1f5498b24a13e8/transformed/jetified-datastore-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.datastore:datastore:1.0.0] /home/swomb/.gradle/caches/transforms-3/6b2571db486df7b7bc1f5498b24a13e8/transformed/jetified-datastore-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /home/swomb/.gradle/caches/transforms-3/dddb6350ec4fe7707a7ee10d36848a82/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /home/swomb/.gradle/caches/transforms-3/dddb6350ec4fe7707a7ee10d36848a82/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:20:5-44
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] /home/swomb/.gradle/caches/transforms-3/ec8215a682cf9dc988013315decd72ae/transformed/exifinterface-1.3.7/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] /home/swomb/.gradle/caches/transforms-3/ec8215a682cf9dc988013315decd72ae/transformed/exifinterface-1.3.7/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
 MERGED from [androidx.startup:startup-runtime:1.1.1] /home/swomb/.gradle/caches/transforms-3/5075b6f7f72b7873f858b241a85001b8/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
@@ -344,14 +384,14 @@ MERGED from [androidx.tracing:tracing:1.2.0] /home/swomb/.gradle/caches/transfor
 MERGED from [androidx.tracing:tracing:1.2.0] /home/swomb/.gradle/caches/transforms-3/65493d4a21cc18c8f0cd00497129cfd2/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.cardview:cardview:1.0.0] /home/swomb/.gradle/caches/transforms-3/b0cd12e93e5d26cca6d4e878e6ca5087/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.cardview:cardview:1.0.0] /home/swomb/.gradle/caches/transforms-3/b0cd12e93e5d26cca6d4e878e6ca5087/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/swomb/.gradle/caches/transforms-3/7baf84b736d04b83f9937cfb626478ef/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/swomb/.gradle/caches/transforms-3/7baf84b736d04b83f9937cfb626478ef/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/swomb/.gradle/caches/transforms-3/8561d00ec0cbdc75b923244cd447b40e/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/swomb/.gradle/caches/transforms-3/8561d00ec0cbdc75b923244cd447b40e/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/swomb/.gradle/caches/transforms-3/120a50f58de2d4da6a638cfc3465d6bf/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/swomb/.gradle/caches/transforms-3/120a50f58de2d4da6a638cfc3465d6bf/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.interpolator:interpolator:1.0.0] /home/swomb/.gradle/caches/transforms-3/90c23151b49f2bf88cee622994c09445/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.interpolator:interpolator:1.0.0] /home/swomb/.gradle/caches/transforms-3/90c23151b49f2bf88cee622994c09445/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/swomb/.gradle/caches/transforms-3/7baf84b736d04b83f9937cfb626478ef/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/swomb/.gradle/caches/transforms-3/7baf84b736d04b83f9937cfb626478ef/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/swomb/.gradle/caches/transforms-3/8561d00ec0cbdc75b923244cd447b40e/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/swomb/.gradle/caches/transforms-3/8561d00ec0cbdc75b923244cd447b40e/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.documentfile:documentfile:1.0.0] /home/swomb/.gradle/caches/transforms-3/1aa49e615dde8c60ab8bced7bda893f9/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.documentfile:documentfile:1.0.0] /home/swomb/.gradle/caches/transforms-3/1aa49e615dde8c60ab8bced7bda893f9/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/swomb/.gradle/caches/transforms-3/4a8ef2a2d18b0aebdd909fa3cf46ef56/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
@@ -368,8 +408,6 @@ MERGED from [com.google.firebase:firebase-components:16.1.0] /home/swomb/.gradle
 MERGED from [com.google.firebase:firebase-components:16.1.0] /home/swomb/.gradle/caches/transforms-3/a29690e69c69a9cdd957cd06ad4df778/transformed/jetified-firebase-components-16.1.0/AndroidManifest.xml:19:5-21:41
 MERGED from [com.google.firebase:firebase-encoders-json:17.1.0] /home/swomb/.gradle/caches/transforms-3/f7b71735ca785709a95ca95bd469d36e/transformed/jetified-firebase-encoders-json-17.1.0/AndroidManifest.xml:19:5-21:41
 MERGED from [com.google.firebase:firebase-encoders-json:17.1.0] /home/swomb/.gradle/caches/transforms-3/f7b71735ca785709a95ca95bd469d36e/transformed/jetified-firebase-encoders-json-17.1.0/AndroidManifest.xml:19:5-21:41
-MERGED from [androidx.exifinterface:exifinterface:1.3.2] /home/swomb/.gradle/caches/transforms-3/d8b5ed0adaca8e67e62f17cd83ce28fe/transformed/exifinterface-1.3.2/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.exifinterface:exifinterface:1.3.2] /home/swomb/.gradle/caches/transforms-3/d8b5ed0adaca8e67e62f17cd83ce28fe/transformed/exifinterface-1.3.2/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.window.extensions.core:core:1.0.0] /home/swomb/.gradle/caches/transforms-3/320650fa8a842ae8e386be45cdf30967/transformed/jetified-core-1.0.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.window.extensions.core:core:1.0.0] /home/swomb/.gradle/caches/transforms-3/320650fa8a842ae8e386be45cdf30967/transformed/jetified-core-1.0.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] /home/swomb/.gradle/caches/transforms-3/5b0d049e6914a8abcf2946ec43a1eaa1/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:5:5-44
@@ -383,7 +421,7 @@ MERGED from [com.google.android.odml:image:1.0.0-beta1] /home/swomb/.gradle/cach
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/debug/AndroidManifest.xml
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/debug/AndroidManifest.xml
 	tools:overrideLibrary
-		ADDED from [:qr_code_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/qr_code_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:9:9-64
+		ADDED from [:flutter_secure_storage] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:9:9-50
 	android:targetSdkVersion
 		INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml
 		INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/debug/AndroidManifest.xml
@@ -404,26 +442,44 @@ activity#com.amolg.flutterbarcodescanner.BarcodeCaptureActivity
 ADDED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:18:9-91
 	android:name
 		ADDED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:18:19-88
-service#androidx.camera.core.impl.MetadataHolderService
-ADDED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:29:9-33:78
-MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:24:9-33:19
-MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:24:9-33:19
-	tools:node
-		ADDED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:29:13-31
-	android:enabled
-		ADDED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:31:13-36
+provider#io.flutter.plugins.imagepicker.ImagePickerFileProvider
+ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:9-19:20
+	android:grantUriPermissions
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-47
+	android:authorities
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-74
 	android:exported
-		ADDED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:32:13-37
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-37
+	android:name
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-82
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-18:75
+	android:resource
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:18:17-72
+	android:name
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-67
+service#com.google.android.gms.metadata.ModuleDependencies
+ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:21:9-33:19
+	android:enabled
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:23:13-36
+	android:exported
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:24:13-37
 	tools:ignore
-		ADDED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:33:13-75
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:25:13-40
 	android:name
-		ADDED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:30:13-75
-meta-data#androidx.camera.core.impl.MetadataHolderService.DEFAULT_CONFIG_PROVIDER
-ADDED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:30:13-32:89
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:22:13-78
+intent-filter#action:name:com.google.android.gms.metadata.MODULE_DEPENDENCIES
+ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:26:13-28:29
+action#com.google.android.gms.metadata.MODULE_DEPENDENCIES
+ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:27:17-94
+	android:name
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:27:25-91
+meta-data#photopicker_activity:0:required
+ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:30:13-32:36
 	android:value
-		ADDED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:32:17-86
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:32:17-33
 	android:name
-		ADDED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:31:17-103
+		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:31:17-63
 service#com.google.mlkit.common.internal.MlKitComponentDiscoveryService
 ADDED from [com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0] /home/swomb/.gradle/caches/transforms-3/2f4fa5be52eed92602b8860318897af4/transformed/jetified-play-services-mlkit-barcode-scanning-18.3.0/AndroidManifest.xml:9:9-15:19
 MERGED from [com.google.mlkit:vision-common:17.3.0] /home/swomb/.gradle/caches/transforms-3/bf4755d3479dbc2a1736a6c6c26babf2/transformed/jetified-vision-common-17.3.0/AndroidManifest.xml:9:9-15:19
@@ -480,6 +536,26 @@ ADDED from [com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.g
 		ADDED from [com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
 	android:name
 		ADDED from [com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
+service#androidx.camera.core.impl.MetadataHolderService
+ADDED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:29:9-33:78
+MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:24:9-33:19
+MERGED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:24:9-33:19
+	tools:node
+		ADDED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:29:13-31
+	android:enabled
+		ADDED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:31:13-36
+	android:exported
+		ADDED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:32:13-37
+	tools:ignore
+		ADDED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:33:13-75
+	android:name
+		ADDED from [androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:30:13-75
+meta-data#androidx.camera.core.impl.MetadataHolderService.DEFAULT_CONFIG_PROVIDER
+ADDED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:30:13-32:89
+	android:value
+		ADDED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:32:17-86
+	android:name
+		ADDED from [androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:31:17-103
 uses-library#androidx.window.extensions
 ADDED from [androidx.window:window:1.2.0] /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/AndroidManifest.xml:23:9-25:40
 	android:required
@@ -514,6 +590,12 @@ ADDED from [androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-
 		ADDED from [androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:33:17-49
 	android:name
 		ADDED from [androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:32:17-75
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
 permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
 	android:protectionLevel
@@ -534,12 +616,6 @@ uses-permission#com.example.qr_page.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
 	android:name
 		ADDED from [androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
-meta-data#androidx.lifecycle.ProcessLifecycleInitializer
-ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
-	android:value
-		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
-	android:name
-		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
 meta-data#androidx.profileinstaller.ProfileInstallerInitializer
 ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
 	android:value
