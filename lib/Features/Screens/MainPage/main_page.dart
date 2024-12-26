@@ -24,19 +24,19 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
 
   final List<Widget> _screens = [
     FoodStorageScreen(),
+    InwardOrder(),
     DispatchScreen(),
     DispatchHistoryScreen(),
-    Scanning(),
   ];
 
   final List<IconData> _icons = [
-    Icons.home_outlined,
+    Icons.bolt_outlined,
+    Icons.shopping_cart,
     Icons.local_shipping_outlined,
     Icons.history_outlined,
-    Icons.shopping_cart,
   ];
 
-  final List<String> _labels = ['Home', 'Dispatch', 'History', 'Order'];
+  final List<String> _labels = ['Home', 'Order', 'Delivery', 'History'];
 
   @override
   void initState() {
@@ -45,12 +45,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-
     _scaleController = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-
     _bubbleAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -58,7 +56,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
       parent: _animationController,
       curve: Curves.elasticOut,
     ));
-
     _scaleAnimation = Tween<double>(
       begin: 1.0,
       end: 0.8,
@@ -66,6 +63,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
       parent: _scaleController,
       curve: Curves.easeInOut,
     ));
+
   }
 
   @override
@@ -110,20 +108,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
           ),
           child: Stack(
             children: [
-              AnimatedBuilder(
-                animation: _bubbleAnimation,
-                builder: (context, child) {
-                  return CustomPaint(
-                    size: Size(MediaQuery.of(context).size.width, 80),
-                    painter: BubblePainter(
-                      bubbleContext: _bubbleAnimation.value,
-                      color: AppColors.buttonBgColor.withOpacity(0.15),
-                      selectedIndex: _selectedIndex,
-                      itemCount: _icons.length,
-                    ),
-                  );
-                },
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(
@@ -164,7 +148,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
                               child: Container(
                                 padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: AppColors.buttonBgColor,
+                                  color: AppColors.black,
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
@@ -246,7 +230,6 @@ class BubblePainter extends CustomPainter {
 
     path.lineTo(size.width, size.height);
     path.close();
-
     // Draw the bubbles
     final bubbleRadius = 4.0;
     final bubbleCount = 3;

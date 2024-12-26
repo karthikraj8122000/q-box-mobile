@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:qr_page/Widgets/Common/app_colors.dart';
+
+import '../../../Provider/auth_provider.dart';
+import '../../../Services/auth_service.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const String routeName = '/signup';
@@ -10,13 +15,19 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderStateMixin{
   final _formKey = GlobalKey<FormState>();
+  final _authService = AuthService();
   AnimationController? _animationController;
   Animation<double>? _animation;
-
+  late TextEditingController _nameController;
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
 
   @override
   void initState() {
     super.initState();
+    _nameController = TextEditingController();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 3),
@@ -28,12 +39,42 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
 
   @override
   void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     _animationController?.dispose();
     super.dispose();
   }
 
+  Future<void> _handleSignUp() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      try {
+        await _authService.saveUser(
+          email: _emailController.text,
+          password: _passwordController.text,
+          fullName: _nameController.text,
+        );
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Account created successfully!')),
+          );
+          Navigator.pop(context); // Go back to login screen
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: ${e.toString()}')),
+          );
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -64,7 +105,7 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Start your cooking journey today',
+                    'Start your management journey today',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -73,6 +114,8 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
                   const SizedBox(height: 40),
                   // Name Field
                   TextFormField(
+                    controller: _nameController,
+                    onChanged: (value) => authProvider.setSignupData(name: value),
                     decoration: InputDecoration(
                       labelText: 'Full Name',
                       hintText: 'Enter your full name',
@@ -94,6 +137,8 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
                   const SizedBox(height: 16),
                   // Email Field
                   TextFormField(
+                    controller: _emailController,
+                    onChanged: (value) => authProvider.setSignupData(email: value),
                     decoration: InputDecoration(
                       labelText: 'Email',
                       hintText: 'Enter your email',
@@ -115,11 +160,19 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
                   const SizedBox(height: 16),
                   // Password Field
                   TextFormField(
-                    obscureText: true,
+                    controller: _passwordController,
+                    onChanged: (value) => authProvider.setSignupData(password: value),
+                    obscureText: authProvider.signupObscureText,
                     decoration: InputDecoration(
                       labelText: 'Password',
                       hintText: 'Create a password',
                       prefixIcon: Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        onPressed: () => authProvider.toggleSignupObscureText(),
+                        icon: Icon(authProvider.signupObscureText
+                            ? Icons.visibility_off
+                            : Icons.visibility),
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -140,13 +193,18 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
                     width: double.infinity,
                     height: 55,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: authProvider.isLoading
+                          ? null
+                          : () async {
                         if (_formKey.currentState?.validate() ?? false) {
-                          // Handle sign up
+                          final success = await authProvider.signup(context);
+                          if (success && context.mounted) {
+                            Navigator.pop(context);
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green[800],
+                        backgroundColor: AppColors.buttonBgColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -177,7 +235,7 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
                           child: Text(
                             'Login',
                             style: TextStyle(
-                              color: Colors.green[800],
+                              color: AppColors.buttonBgColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

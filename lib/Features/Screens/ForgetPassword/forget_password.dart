@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_page/Services/toast_service.dart';
+import 'package:qr_page/Widgets/Common/app_colors.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   static const String routeName = '/new-login';
@@ -105,7 +106,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Single
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green[800],
+                        backgroundColor: AppColors.buttonBgColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

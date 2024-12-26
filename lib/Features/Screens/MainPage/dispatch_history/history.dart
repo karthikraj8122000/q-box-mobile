@@ -80,7 +80,7 @@ class DispatchHistoryScreen extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
           elevation: 4,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(12.0),
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: AppTheme.appTheme.withOpacity(0.2),
@@ -89,12 +89,9 @@ class DispatchHistoryScreen extends StatelessWidget {
                   color: AppTheme.appTheme,
                 ),
               ),
-              title: FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Text(
-                  item.uniqueCode,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                ),
+              title: Text(
+                item.uniqueCode,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

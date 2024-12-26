@@ -1,554 +1,696 @@
-import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_page/Features/Screens/Login/second_login.dart';
+import 'package:qr_page/Features/Screens/MainPage/storage_screen/see_all_qbox_foods.dart';
+import 'package:qr_page/Provider/auth_provider.dart';
+import 'package:qr_page/Services/token_service.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
-import 'package:rxdart/rxdart.dart';
 import '../../../../Provider/food_store_provider.dart';
-import '../../../../Widgets/Common/app_text.dart';
 
-class FoodStorageScreen extends StatelessWidget {
+class FoodStorageScreen extends StatefulWidget {
   const FoodStorageScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<FoodStoreProvider>(context);
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildHeader(context),
-                const SizedBox(height: 24),
-                _buildScanButtons(provider, context),
-                const SizedBox(height: 24),
-                _buildStoreButton(provider, context),
-                const SizedBox(height: 24),
-                _buildStoredItemsList(provider),
-                const SizedBox(height: 80), // Space for bottom navigation
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 24,
-              backgroundColor: Colors.grey[300],
-              child: Icon(Icons.person, color: Colors.grey[600], size: 30),
-            ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'Hello, Karthik',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'Have a nice day!',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ],
-        ),
-        IconButton(
-          icon: Icon(Icons.delivery_dining, color: Colors.grey[400], size: 28),
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
-
-
-  Widget _buildScanButtons(FoodStoreProvider provider, BuildContext context) {
-    return Column(
-      children: [
-
-        _buildScanButton(
-            'Scan QBox ID',
-            provider.qboxId,
-                () async {
-              final result = await showDialog(
-                context: context,
-                builder: (context) => QRScannerDialog(isContainerScanner: true),
-              );
-              if (result != null) {
-                provider.scanContainer(context);
-              }
-            },
-
-            AppColors.mintGreen,
-            context
-        ).animate(
-            onPlay: (controller) =>
-                controller.repeat(reverse: true))
-            .shimmer(duration: 1500.ms),
-        const SizedBox(height: 10),
-        _buildScanButton(
-            'Scan Food Item ID',
-            provider.foodItem,
-            provider.qboxId != null
-                ? () => provider.scanFoodItem(context)
-                : null,
-            AppColors.paleYellow,
-            context
-        ).animate(
-            onPlay: (controller) => controller.repeat(reverse: true)).shimmer(duration: 1800.ms),
-      ],
-    );
-  }
-
-  Widget _buildScanButton( String label,
-      String? item,
-      VoidCallback? onPressed,
-      Color color,BuildContext context) {
-    final provider = Provider.of<FoodStoreProvider>(context);
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: InkWell(
-          onTap: () {
-            if (onPressed == null) {
-              if (label.contains('Scan Food Item ID')) {
-                provider.scanFoodItem(context); // This will show the toast
-              }
-            } else {
-              onPressed();
-            }
-          },
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(Icons.qr_code_scanner, color:label == "Scan QBox ID"? Colors.green:Colors.yellow[800]),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      label,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    if (item != null) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        item,
-                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(color: Colors.black,borderRadius: BorderRadius.all(Radius.circular(50))),
-                child: Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.white,
-                  size: 18,
-                ),
-              ),
-            ],
-          )
-      ),
-    );
-  }
-
-  Widget _buildStoreButton(FoodStoreProvider provider, BuildContext context) {
-    return  ElevatedButton(
-      onPressed: (provider.qboxId != null && provider.foodItem != null)
-          ? () => provider.storeFoodItem(context)
-          : null,
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-          backgroundColor: AppColors.softPink,
-          textStyle: TextStyle(fontSize: 18),
-          foregroundColor: Colors.white),
-      child: AppText(
-        text: 'Store Food Item',
-        fontSize: 14,
-      ),
-    );
-  }
-
-  Widget _buildStoredItemsList(FoodStoreProvider provider) {
-    if (provider.storedItems.isEmpty) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'No food items found',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Scan QBox ID and Food Item to store',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.blue.shade50,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.inventory_2_outlined,
-              size: 48,
-              color: Colors.blue.shade300,
-            ),
-          ),
-        ],
-      );
-    }
-
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: provider.storedItems.length,
-      itemBuilder: (context, index) {
-        final item = provider.storedItems[index];
-        return Card(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))
-          ),
-          elevation: 4,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Flexible(
-                  flex: 2,
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.transparent, // Optional: Set a background color
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/food.jpeg',
-                        fit: BoxFit.cover, // Ensures the image covers the entire circle
-                        width: 50, // Match the diameter of the CircleAvatar
-                        height: 50,
-                      ),
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 7,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.uniqueCode,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Container: ${item.boxCellSno}',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                      Text(
-                        'Stored: ${item.storageDate.toString().substring(0, 16)}',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
-                ),
-
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  State<FoodStorageScreen> createState() => _FoodStorageScreenState();
 }
 
-
-class QRScannerDialog extends StatefulWidget {
-  final bool isContainerScanner;
-
-  const QRScannerDialog({Key? key, required this.isContainerScanner})
-      : super(key: key);
-
-  @override
-  _QRScannerDialogState createState() => _QRScannerDialogState();
-}
-
-class _QRScannerDialogState extends State<QRScannerDialog> with WidgetsBindingObserver {
-  Barcode? result;
-  QRViewController? controller;
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  bool _flashOn = false;
-  bool _isProcessing = false;
-  StreamSubscription? _scanSubscription;
+class _FoodStorageScreenState extends State<FoodStorageScreen>
+    with SingleTickerProviderStateMixin {
+  final TokenService tokenService = TokenService();
+  var userData;
+  String? fullName;
 
   @override
   void initState() {
+    getUser();
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
   }
 
-  @override
-  void dispose() {
-    _scanSubscription?.cancel();
-    controller?.dispose();
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (controller == null) return;
-
-    // App state lifecycle management
-    if (state == AppLifecycleState.resumed) {
-      controller?.resumeCamera();
-    } else if (state == AppLifecycleState.inactive) {
-      controller?.pauseCamera();
-    } else if (state == AppLifecycleState.paused) {
-      controller?.pauseCamera();
-    }
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-
-    // Ensure we cancel any existing subscription
-    _scanSubscription?.cancel();
-
-    // Add debounce to prevent multiple rapid scans
-    _scanSubscription = controller.scannedDataStream
-        .distinct() // Only emit if the new value is different from the previous
-        .debounceTime(const Duration(milliseconds: 500)) // Add debounce
-        .listen((scanData) {
-      if (!_isProcessing && mounted && result == null) {
-        setState(() {
-          _isProcessing = true;
-          result = scanData;
-        });
-
-        // Pause camera after successful scan
-        controller.pauseCamera();
-      }
-    });
-  }
-
-  void _resetScanner() {
-    if (mounted) {
-      setState(() {
-        result = null;
-        _isProcessing = false;
-      });
-      controller?.resumeCamera();
-    }
+  Future<void> getUser() async {
+    var user = await tokenService.getUser();
+    userData = json.decode(user);
+    fullName = userData['fullName'];
+    setState(() {});
+    print("usersssssss");
+    print(fullName);
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        await controller?.pauseCamera();
-        return true;
-      },
-      child: Scaffold(
-        body: Stack(
-          children: [
-            QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-              overlay: QrScannerOverlayShape(
-                borderColor: Theme.of(context).primaryColor,
-                borderRadius: 20,
-                borderLength: 40,
-                borderWidth: 12,
-                cutOutSize: MediaQuery.of(context).size.width * 0.7,
+    final provider = Provider.of<FoodStoreProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthProvider>(context);
+    return Scaffold(
+      backgroundColor: Colors.grey[50],
+      body: Stack(
+        children: [
+          _buildBackground(),
+          CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                pinned: true,
+                automaticallyImplyLeading: false,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Text('QBox Store',
+                        style: TextStyle(color: Colors.black)),
+                  ),
+                  background: Container(color: Colors.grey[100]),
+                ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.logout,
+                          color: AppColors.mintGreen,
+                        ),
+                        onPressed: () {
+                          authProvider.logout();
+                          GoRouter.of(context).push(LoginScreen.routeName);
+                        }),
+                  )
+                ],
               ),
-            ),
-            // Blur overlay
-            if (result != null)
-              BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Container(
-                  color: Colors.black.withOpacity(0.2),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildDashboardCard(context, provider),
+                      const SizedBox(height: 30),
+                      _buildScanningSection(provider, context),
+                      const SizedBox(height: 30),
+                      if (provider.storedItems.isNotEmpty) ...[
+                        _buildStoredItemsHeader(context, provider),
+                        _buildStoredItemsGrid(provider),
+                        const SizedBox(height: 30),
+                      ] else
+                        _buildEnhancedEmptyState(),
+                    ],
+                  ),
                 ),
               ),
-            // Header
-            Positioned(
-              top: MediaQuery.of(context).padding.top + 10,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBackground() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.white,
+            Colors.grey[50]!,
+            Colors.grey[100]!,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDashboardCard(BuildContext context, FoodStoreProvider provider) {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(32), color: AppColors.mintGreen),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(32),
+        child: Container(
+          padding: EdgeInsets.all(32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Icon(
+                      Icons.inventory_2_rounded,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Welcome Back',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.9),
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(
+                          fullName ?? '--',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 24),
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildControlButton(
-                      Icons.arrow_back,
-                          () async {
-                        await controller?.pauseCamera();
-                        Navigator.pop(context);
-                      },
-                      Colors.white,
-                    ),
-                    Text(
-                      widget.isContainerScanner ? 'Scan QBox' : 'Scan Food Item',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    _buildControlButton(
-                      _flashOn ? Icons.flash_on : Icons.flash_off,
-                          () async {
-                        try {
-                          await controller?.toggleFlash();
-                          setState(() {
-                            _flashOn = !_flashOn;
-                          });
-                        } catch (e) {
-                          // Handle flash error silently
-                        }
-                      },
-                      Colors.white,
-                    ),
+                    _buildStat('Total Items', '${provider.storedItems.length}'),
+                    _buildVerticalDivider(),
+                    _buildStat('Available Boxes', '24'),
+                    _buildVerticalDivider(),
+                    _buildStat('In Transit', '3'),
                   ],
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+    ).animate().fadeIn(duration: 800.ms).slideY(begin: -0.2, end: 0);
+  }
+
+  Widget _buildVerticalDivider() {
+    return Container(
+      height: 40,
+      width: 1,
+      color: Colors.white.withOpacity(0.2),
+    );
+  }
+
+  Widget _buildStat(String label, String value) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.8),
+            fontSize: 12,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildScanningSection(
+      FoodStoreProvider provider, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Quick Actions',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.2, end: 0),
+        SizedBox(height: 20),
+        Row(
+          children: [
+            Expanded(
+              child: _buildEnhancedScanCard(
+                'Scan QBox',
+                'Select storage container',
+                AppColors.mintGreen,
+                Icons.qr_code_scanner_rounded,
+                provider.qboxId,
+                () => provider.scanContainer(context),
+              ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.2, end: 0),
             ),
-            // Success overlay
-            if (result != null)
-              Center(
-                child: Container(
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.check_circle,
-                        color: Color(0xFF8fbc8f),
-                        size: 64,
+            SizedBox(width: 16),
+            Expanded(
+              child: _buildEnhancedScanCard(
+                'Scan Food Item',
+                'Add item to selected container',
+                AppColors.darkPaleYellow,
+                Icons.fastfood_rounded,
+                provider.foodItem,
+                provider.qboxId != null
+                    ? () => provider.scanFoodItem(context)
+                    : null,
+              ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0),
+            ),
+            SizedBox(height: 24),
+          ],
+        ),
+        SizedBox(height: 16),
+        _buildEnhancedStoreButton(provider, context),
+      ],
+    );
+  }
+
+  Widget _buildEnhancedScanCard(
+    String title,
+    String subtitle,
+    Color color,
+    IconData icon,
+    String? scannedValue,
+    VoidCallback? onTap,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.1),
+            blurRadius: 20,
+            offset: Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(24),
+          child: Padding(
+            padding: EdgeInsets.all(24),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: color.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Scan Successful!',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        "ID: ${result?.code ?? ''}",
-                        style: TextStyle(
-                          color: Colors.grey[800],
-                          fontSize: 16,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      child: Icon(icon, color: color, size: 28),
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.pop(context, result?.code);
-                            },
-                            icon: const Icon(Icons.check, color: Colors.white),
-                            label: const Text('Continue'),
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                              backgroundColor: const Color(0xFF8fbc8f),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              elevation: 5,
+                          Text(
+                            title,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
                             ),
                           ),
-                          ElevatedButton.icon(
-                            onPressed: _resetScanner,
-                            icon: const Icon(Icons.refresh, color: Colors.black87),
-                            label: const Text(
-                              'Try Again',
-                              style: TextStyle(color: Colors.black87),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                              backgroundColor: const Color(0xFFf2db8e),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              elevation: 5,
+                          SizedBox(height: 4),
+                          Text(
+                            subtitle,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: color.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.arrow_forward_rounded,
+                        color: color,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-          ],
+                if (scannedValue != null) ...[
+                  SizedBox(height: 20),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: color.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.check_circle_rounded,
+                          color: color,
+                          size: 20,
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            scannedValue,
+                            style: TextStyle(
+                              color: color,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildControlButton(IconData icon, VoidCallback onPressed, Color color) {
+  Widget _buildEnhancedStoreButton(
+      FoodStoreProvider provider, BuildContext context) {
+    final isEnabled = provider.qboxId != null && provider.foodItem != null;
+    return Container(
+      width: double.infinity,
+      height: 60,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          colors: isEnabled
+              ? [
+                  AppColors.darkMintGreen,
+                  AppColors.mintGreen.withOpacity(0.8),
+                ]
+              : [
+                  Colors.grey[300]!,
+                  Colors.grey[400]!,
+                ],
+        ),
+        boxShadow: isEnabled
+            ? [
+                BoxShadow(
+                  color: AppColors.mintGreen.withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: Offset(0, 10),
+                ),
+              ]
+            : [],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: isEnabled ? () => provider.storeFoodItem(context) : null,
+          borderRadius: BorderRadius.circular(20),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.add_box_rounded,
+                  color: Colors.white,
+                  size: 24,
+                ),
+                SizedBox(width: 12),
+                Text(
+                  'Store Food Item',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ).animate().fadeIn(duration: 700.ms).slideY(begin: 0.2, end: 0);
+  }
+
+  Widget _buildStoredItemsHeader(
+      BuildContext context, FoodStoreProvider provider) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Stored Items',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        if (provider.storedItems.length > 4)
+          TextButton.icon(
+            onPressed: () =>
+                GoRouter.of(context).push(SeeAllQboxFoods.routeName),
+            icon: Icon(Icons.grid_view_rounded, size: 20),
+            label: Text('View All'),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.mintGreen,
+              textStyle: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+          ),
+      ],
+    ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.2, end: 0);
+  }
+
+  Widget _buildStoredItemsGrid(FoodStoreProvider provider) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 0.8,
+      ),
+      itemCount: provider.storedItems.length,
+      itemBuilder: (context, index) {
+        final item = provider.storedItems[index];
+        return _buildEnhancedItemCard(item, index);
+      },
+    );
+  }
+
+  // Widget _buildStoredItemsGrid(FoodStoreProvider provider) {
+  //   return SingleChildScrollView(
+  //     scrollDirection: Axis.horizontal,
+  //     child: Container(
+  //       width: provider.storedItems.length * 200.0, // Adjust width based on your needs
+  //       child: GridView.builder(
+  //         shrinkWrap: true,
+  //         physics: AlwaysScrollableScrollPhysics(),
+  //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //           crossAxisCount: 2,
+  //           crossAxisSpacing: 16,
+  //           mainAxisSpacing: 16,
+  //           childAspectRatio: 0.8,
+  //         ),
+  //         itemCount: provider.storedItems.length,
+  //         itemBuilder: (context, index) {
+  //           final item = provider.storedItems[index];
+  //           return _buildEnhancedItemCard(item, index);
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
+  //
+  Widget _buildEnhancedItemCard(dynamic item, int index) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: Offset(0, 10),
+          ),
+        ],
       ),
-      child: IconButton(
-        icon: Icon(icon),
-        color: color,
-        onPressed: onPressed,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/food.jpeg'),
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    padding: EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.uniqueCode,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'QBox ID: ${item.boxCellSno}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        Text(
+                          'Stored at: ${_formatDate(item.storageDate)}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[500],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 12,
+              right: 12,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.7),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.timer,
+                      color: Colors.white,
+                      size: 14,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      _getTimeAgo(item.storageDate),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
+    )
+        .animate()
+        .fadeIn(duration: (900 + index * 100).ms)
+        .slideY(begin: 0.2, end: 0);
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year}';
+  }
+
+  String _getTimeAgo(DateTime date) {
+    final difference = DateTime.now().difference(date);
+    if (difference.inDays > 0) {
+      return '${difference.inDays}d';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h';
+    } else {
+      return '${difference.inMinutes}m';
+    }
+  }
+
+  Widget _buildEnhancedEmptyState() {
+    return Center(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 40),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: AppColors.mintGreen.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.inventory_2_rounded,
+                size: 64,
+                color: AppColors.mintGreen,
+              ),
+            )
+                .animate(onPlay: (controller) => controller.repeat())
+                .shimmer(duration: 2000.ms)
+                .then()
+                .shake(hz: 2, curve: Curves.easeInOutCubic),
+            SizedBox(height: 32),
+            Text(
+              'Qbox Storage is Empty',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            SizedBox(height: 12),
+            Text(
+              'Start by scanning a QBox and adding food items',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+                height: 1.5,
+              ),
+            ),
+            SizedBox(height: 32),
+            // _buildEmptyStateSteps(),
+          ],
+        ),
+      )
+          .animate()
+          .fadeIn(duration: 800.ms)
+          .scale(begin: Offset(0.8, 0.8), end: Offset(1, 1)),
     );
   }
 }

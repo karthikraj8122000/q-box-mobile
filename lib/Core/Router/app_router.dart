@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import 'package:qr_page/Features/Screens/Login/new_login.dart';
+import 'package:provider/provider.dart';
+import 'package:qr_page/Features/Screens/DeliveryPartner/home.dart';
+import 'package:qr_page/Features/Screens/Login/second_login.dart';
 import 'package:qr_page/Features/Screens/MainPage/main_page.dart';
+import 'package:qr_page/Features/Screens/MainPage/storage_screen/see_all_qbox_foods.dart';
 import 'package:qr_page/Features/Screens/Splash/animated_splash.dart';
+import 'package:qr_page/Provider/auth_provider.dart';
+import '../../Utils/go_router_observer.dart';
 
 class AppRouter {
   static final GlobalKey<NavigatorState> _routerKey =
@@ -11,12 +16,22 @@ class AppRouter {
   static final GoRouter _router = GoRouter(
     navigatorKey: _routerKey,
     debugLogDiagnostics: true,
-    initialLocation: MainNavigationScreen.routeName, // Default splash screen
+    initialLocation: AnimeSplashScreen.routeName, // Default splash screen
     routes: <RouteBase>[
       GoRoute(
         name: AnimeSplashScreen.routeName,
         path: AnimeSplashScreen.routeName,
         builder: (_, __) => const AnimeSplashScreen(),
+      ),
+      GoRoute(
+        name: HomePage.routeName,
+        path: HomePage.routeName,
+        builder: (_, __) => const HomePage(),
+      ),
+      GoRoute(
+        name: SeeAllQboxFoods.routeName,
+        path: SeeAllQboxFoods.routeName,
+        builder: (_, __) => const SeeAllQboxFoods(),
       ),
       GoRoute(
         name: LoginScreen.routeName,
@@ -28,7 +43,19 @@ class AppRouter {
         name: MainNavigationScreen.routeName,
         builder: (_, __) =>  MainNavigationScreen(),
       ),
+      GoRoute(
+        path: '/',
+        builder: (context, state) {
+          final authProvider = Provider.of<AuthProvider>(context, listen: true);
+          if (authProvider.isLoggedIn) {
+            return const MainNavigationScreen();  // Navigate to the Scanner if logged in
+          } else {
+            return const LoginScreen();  // Otherwise, show the login page
+          }
+        },
+      ),
     ],
+    observers: [GoRouterObserver()],
   );
 
   static GoRouter get router => _router;

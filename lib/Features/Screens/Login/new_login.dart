@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Provider/login_provider.dart';
+import 'package:qr_page/Widgets/Common/app_colors.dart';
 
 import '../../../Widgets/Common/app_button.dart';
 import '../ForgetPassword/forget_password.dart';
@@ -161,6 +162,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -184,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                       child: CustomButton(
                         elevation: 0,
                         label: "Sign In",
-                        color:Colors.green[800]!,
+                        color:AppColors.darkMintGreen,
                         onPressed: () {
                           if (_formKey.currentState!.validate() ?? false) {
                             loginProvider.login(context);

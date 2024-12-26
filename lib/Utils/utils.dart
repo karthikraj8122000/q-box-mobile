@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qr_page/Widgets/Common/app_colors.dart';
 
 import '../../../../Widgets/Common/app_text.dart';
 
@@ -12,14 +13,14 @@ Future<bool> showExitPopup(BuildContext context) async {
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: AppText(text: 'No',fontSize: 14,),
+          child: AppText(text: 'No',fontSize: 14,color: AppColors.black,),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop(true);
             SystemNavigator.pop();
           },
-          child: AppText(text: 'Yes',fontSize: 14),
+          child: AppText(text: 'Yes',fontSize: 14,color: AppColors.buttonBgColor,),
         ),
       ],
     ),

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qr_page/Features/Screens/Login/second_login.dart';
+import 'package:qr_page/Features/Screens/MainPage/main_page.dart';
+import 'package:qr_page/Widgets/Common/app_colors.dart';
 import 'dart:async';
 
-import '../Login/new_login.dart';
+import '../../../Services/token_service.dart';
+
 
 class AnimeSplashScreen extends StatefulWidget {
   static const String routeName = '/anime-splash';
@@ -16,11 +20,11 @@ class _SplashScreenState extends State<AnimeSplashScreen> with SingleTickerProvi
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _rotateAnimation;
+  TokenService tokenService = TokenService();
 
   @override
   void initState() {
     super.initState();
-
     _animationController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -39,20 +43,36 @@ class _SplashScreenState extends State<AnimeSplashScreen> with SingleTickerProvi
         curve: Curves.easeOut,
       ),
     );
-
     _animationController.forward();
-
-    // Navigate to login screen after 3 seconds
-    Timer(
-      Duration(seconds: 3),
-          () => GoRouter.of(context).push(LoginScreen.routeName),
-    );
+    Timer(const Duration(seconds: 5), goToPage);
+    // Timer(
+    //   Duration(seconds: 3),
+    //       () => GoRouter.of(context).push(LoginScreen.routeName),
+    // );
   }
 
   @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  goToPage() async {
+    var user = await tokenService.getUser();
+    print('users$user');
+    if (user != null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainNavigationScreen(),
+          ));
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginScreen(),
+          ));
+    }
   }
 
   @override
@@ -65,7 +85,7 @@ class _SplashScreenState extends State<AnimeSplashScreen> with SingleTickerProvi
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.green[50]!,
+             AppColors.buttonBgColor,
               Colors.white,
             ],
           ),
@@ -86,11 +106,11 @@ class _SplashScreenState extends State<AnimeSplashScreen> with SingleTickerProvi
                         width: 120,
                         height: 120,
                         decoration: BoxDecoration(
-                          color: Colors.green[100],
+                          color: AppColors.buttonBgColor.withOpacity(0.2),
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.green.withOpacity(0.2),
+                              color: AppColors.buttonBgColor.withOpacity(0.2),
                               blurRadius: 20,
                               offset: Offset(0, 10),
                             ),
@@ -99,7 +119,7 @@ class _SplashScreenState extends State<AnimeSplashScreen> with SingleTickerProvi
                         child: Icon(
                           Icons.restaurant_menu,
                           size: 60,
-                          color: Colors.green[800],
+                          color: AppColors.white,
                         ),
                       ),
                     ),
@@ -118,11 +138,11 @@ class _SplashScreenState extends State<AnimeSplashScreen> with SingleTickerProvi
                       child: Column(
                         children: [
                           Text(
-                            'QBox',
+                            'Que Box',
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
-                              color: Colors.green[800],
+                              color: AppColors.wine,
                             ),
                           ),
                           SizedBox(height: 8),
@@ -130,7 +150,7 @@ class _SplashScreenState extends State<AnimeSplashScreen> with SingleTickerProvi
                             'SavorEase – Your Food, Your Way!',
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.grey[600],
+                              color: AppColors.black,
                             ),
                           ),
                         ],
@@ -144,9 +164,9 @@ class _SplashScreenState extends State<AnimeSplashScreen> with SingleTickerProvi
               SizedBox(
                 width: 160,
                 child: LinearProgressIndicator(
-                  backgroundColor: Colors.green[100],
+                  backgroundColor: AppColors.buttonBgColor,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    Colors.green[800]!,
+                    AppColors.wine,
                   ),
                 ),
               ),

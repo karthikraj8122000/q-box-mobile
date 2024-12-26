@@ -1,13 +1,11 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Theme/app_theme.dart';
 import '../../../../Provider/food_store_provider.dart';
-import '../../../../Widgets/Common/app_button.dart';
 import '../../../../Widgets/Common/app_colors.dart';
-import '../../../../Widgets/Common/app_text.dart';
 
 class DispatchScreen extends StatefulWidget {
   const DispatchScreen({super.key});
@@ -16,8 +14,8 @@ class DispatchScreen extends StatefulWidget {
   State<DispatchScreen> createState() => _DispatchScreenState();
 }
 
-class _DispatchScreenState extends State<DispatchScreen> with SingleTickerProviderStateMixin {
-
+class _DispatchScreenState extends State<DispatchScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
 
@@ -46,162 +44,341 @@ class _DispatchScreenState extends State<DispatchScreen> with SingleTickerProvid
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<FoodStoreProvider>(context);
-
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey[100],
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: Text('Dispatch For Delivery', style: TextStyle(color: Colors.black),),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              _buildScannerCard(context, provider),
-              const SizedBox(height: 20),
-              _buildDispatchButton(provider, context),
-              const SizedBox(height: 20),
-              Expanded(
-                child: _buildItemsList(provider),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDispatchButton(FoodStoreProvider provider, BuildContext context) {
-    final isEnabled = provider.scannedDispatchItem != null;
-    return  ElevatedButton(
-      onPressed: provider.scannedDispatchItem != null
-          ? () => provider.dispatchFoodItem(context)
-          : null,
-      style: ElevatedButton.styleFrom(
-          backgroundColor:
-          provider.scannedDispatchItem != null ? AppTheme.appTheme : null,
-          foregroundColor: provider.scannedDispatchItem != null
-              ? Colors.white
-              : Colors.grey[500]),
-      child: Text('Dispatch Food Item'),
-    );
-  }
-
-
-  Widget _buildItemsList(FoodStoreProvider provider) {
-    return ListView.builder(
-      itemCount: provider.storedItems.length,
-      itemBuilder: (context, index) {
-        final item = provider.storedItems[index];
-        final isHighlighted = item.uniqueCode == provider.scannedDispatchItem;
-
-        return Container(
-          margin: EdgeInsets.only(bottom: 12),
-          decoration: BoxDecoration(
-            color: isHighlighted
-                ? AppTheme.appTheme.withOpacity(0.1)
-                : Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: isHighlighted
-                ? Border.all(color: AppTheme.appTheme.withOpacity(0.3))
-                : null,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: ListTile(
-            contentPadding: EdgeInsets.all(12),
-            leading: Container(
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: isHighlighted
-                    ? Colors.green.withOpacity(0.2)
-                    : AppTheme.appTheme.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                isHighlighted ? Icons.check : Icons.fastfood,
-                color: isHighlighted ? Colors.green : AppTheme.appTheme,
-                size: 24,
-              ),
-            ),
-            title: Text(
-              item.uniqueCode,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Icon(Icons.rectangle_outlined, size: 16, color: Colors.grey),
-                    const SizedBox(width: 4),
-                    Text(
-                      'Container: ${item.boxCellSno}',
-                      style: TextStyle(color: Colors.grey[600]),
+    return Consumer<FoodStoreProvider>(
+      builder: (context, provider, child) => Scaffold(
+        backgroundColor: Colors.grey[50],
+        body: Stack(
+          children: [
+            _buildBackground(),
+            CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  pinned: true,
+                  automaticallyImplyLeading: false,
+                  // expandedHeight: 200.0,
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Text('Unload from Qbox',
+                          style: TextStyle(color: Colors.black)),
                     ),
-                  ],
+                    background: Container(color: Colors.grey[100]),
+                  ),
                 ),
-                const SizedBox(height: 2),
-                Row(
-                  children: [
-                    Icon(Icons.access_time, size: 16, color: Colors.grey),
-                    const SizedBox(width: 4),
-                    Text(
-                      'Stored: ${item.storageDate.toString().substring(0, 16)}',
-                      style: TextStyle(color: Colors.grey[600]),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 20),
+                        _buildDispatchStats(provider),
+                        const SizedBox(height: 30),
+                        _buildScanSection(context, provider),
+                        const SizedBox(height: 30),
+                        if (provider.storedItems.isNotEmpty)
+                          _buildAvailableItems(provider)
+                        else
+                          _buildEnhancedEmptyState(),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _buildScannerCard(BuildContext context, FoodStoreProvider provider) {
+  Widget _buildBackground() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.white,
+            Colors.grey[50]!,
+            Colors.grey[100]!,
+          ],
+        ),
+      ),
+    );
+  }
 
+  Widget _buildDispatchStats(FoodStoreProvider provider) {
+    return Container(
+      padding: EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.mintGreen,
+        borderRadius: BorderRadius.circular(32),
       ),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Icon(
+                  Icons.local_shipping_rounded,
+                  color: Colors.white,
+                  size: 32,
+                ),
+              ),
+              SizedBox(width: 20),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Ready for Dispatch',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      provider.storedItems.length > 1
+                          ? '${provider.storedItems.length} Items'
+                          : '${provider.storedItems.length} Item',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 24),
+          Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(16),
+            ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+                _buildDispatchStat('Pending', '12'),
+                _buildVerticalDivider(),
+                _buildDispatchStat('In Transit', '5'),
+                _buildVerticalDivider(),
+                _buildDispatchStat('Delivered', '28'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ).animate().fadeIn(duration: 800.ms).slideY(begin: -0.2, end: 0);
+  }
+
+  Widget _buildVerticalDivider() {
+    return Container(
+      height: 40,
+      width: 1,
+      color: Colors.white.withOpacity(0.2),
+    );
+  }
+
+  Widget _buildDispatchStat(String label, String value) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.8),
+            fontSize: 12,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildScanSection(BuildContext context, FoodStoreProvider provider) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(32),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(32),
+        child: InkWell(
+          onTap: () async {
+            String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+              "#ff6666",
+              "Cancel",
+              true,
+              ScanMode.QR,
+            );
+            if (barcodeScanRes != '-1') {
+              provider.handleDispatchQRScan(context, barcodeScanRes);
+            }
+          },
+          borderRadius: BorderRadius.circular(32),
+          child: Padding(
+            padding: EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.darkPaleYellow.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Icon(
+                        Icons.qr_code_scanner_rounded,
+                        color: AppColors.darkPaleYellow,
+                        size: 32,
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Tap to Scan',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          Text(
+                            'Scan food item QR code',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 24),
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  width: double.infinity,
+                  padding: EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color:  AppColors.paleYellow.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
+                    color: provider.scannedDispatchItem != null
+                        ? AppColors.mintGreen.withOpacity(0.1)
+                        : Colors.grey[100],
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: provider.scannedDispatchItem != null
+                          ? AppColors.mintGreen.withOpacity(0.3)
+                          : Colors.grey[300]!,
+                    ),
                   ),
-                  child: Icon(
-                    Icons.qr_code_scanner,
-                    color: AppColors.paleYellow.withOpacity(1.0),
-                    size: 24,
+                  child: Row(
+                    children: [
+                      Icon(
+                        provider.scannedDispatchItem != null
+                            ? Icons.check_circle_rounded
+                            : Icons.qr_code_2_rounded,
+                        color: provider.scannedDispatchItem != null
+                            ? AppColors.mintGreen
+                            : Colors.grey[400],
+                        size: 24,
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: Text(
+                          provider.scannedDispatchItem ?? 'No item scanned yet',
+                          style: TextStyle(
+                            color: provider.scannedDispatchItem != null
+                                ? AppColors.mintGreen
+                                : Colors.grey[600],
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(width: 12),
+                if (provider.scannedDispatchItem != null) ...[
+                  SizedBox(height: 24),
+                  _buildDispatchButton(provider, context),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0);
+  }
+
+  Widget _buildDispatchButton(
+      FoodStoreProvider provider, BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 56,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          colors: [
+            AppColors.darkPaleYellow,
+            AppColors.darkPaleYellow.withOpacity(0.8),
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.darkPaleYellow.withOpacity(0.3),
+            blurRadius: 20,
+            offset: Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => provider.dispatchFoodItem(context),
+          borderRadius: BorderRadius.circular(16),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.outbox,
+                  color: Colors.white,
+                  size: 24,
+                ),
+                SizedBox(width: 12),
                 Text(
-                  'Scan Food Item to Dispatch',
+                  'Unload Food Item',
                   style: TextStyle(
+                    color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -209,200 +386,181 @@ class _DispatchScreenState extends State<DispatchScreen> with SingleTickerProvid
               ],
             ),
           ),
-          Container(
-            height: 200,
-            width: double.infinity,
-            margin: EdgeInsets.symmetric(horizontal: 16),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                backgroundColor:AppColors.paleYellow,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAvailableItems(FoodStoreProvider provider) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Available Items',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.2, end: 0),
+        SizedBox(height: 20),
+        ...provider.storedItems
+            .map((item) => _buildEnhancedItemCard(item, provider))
+            .toList(),
+      ],
+    );
+  }
+
+  Widget _buildEnhancedItemCard(dynamic item, FoodStoreProvider provider) {
+    final isHighlighted = item.uniqueCode == provider.scannedDispatchItem;
+    return Container(
+      margin: EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: isHighlighted ? AppColors.mintGreen:Colors.transparent),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(20),
+        child: Row(
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                image: DecorationImage(
+                  image: AssetImage('assets/food.jpeg'),
+                  fit: BoxFit.cover,
                 ),
               ),
-              onPressed: () async {
-                String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-                  "#ff6666",
-                  "Cancel",
-                  true,
-                  ScanMode.QR,
-                );
-                if (barcodeScanRes != '-1') {
-                  provider.handleDispatchQRScan(context, barcodeScanRes);
-                }
-              },
+            ),
+            SizedBox(width: 20),
+            Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.qr_code_scanner, size: 50, color: Colors.black),
-                  SizedBox(height: 10),
                   Text(
-                    'Tap to Scan QR Code',
-                    style: TextStyle(fontSize: 16, color: Colors.black),
+                    item.uniqueCode,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  _buildItemDetail(
+                    'QBox ID',
+                    item.boxCellSno,
+                    isHighlighted,
+                  ),
+                  _buildItemDetail(
+                    'Added',
+                    _formatDate(item.storageDate),
+                    isHighlighted,
                   ),
                 ],
               ),
             ),
-          ).animate(
-    onPlay: (controller) => controller.repeat(reverse: true)).shimmer(duration: 1800.ms),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              decoration: BoxDecoration(
-                color: provider.scannedDispatchItem != null
-                    ? AppTheme.appTheme.withOpacity(0.1)
-                    : Colors.grey[100],
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: provider.scannedDispatchItem != null
-                      ? AppTheme.appTheme.withOpacity(0.3)
-                      : Colors.grey.withOpacity(0.3),
+            if (isHighlighted)
+              Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.mintGreen.withOpacity(0.3),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.check_rounded,
+                  color: AppColors.white,
+                  size: 24,
                 ),
               ),
-              child: Text(
-                provider.scannedDispatchItem ?? 'No item scanned',
-                style: TextStyle(
-                  color: provider.scannedDispatchItem != null
-                      ? AppTheme.appTheme
-                      : Colors.grey[600],
-                  fontWeight: FontWeight.w500,
-                ),
+          ],
+        ),
+      ),
+    ).animate().fadeIn(duration: 900.ms).slideX(begin: 0.2, end: 0);
+  }
+
+  Widget _buildItemDetail(String label, String value, bool isHighlighted) {
+    return Row(
+      children: [
+        Text(
+          '$label: ',
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey[600],
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year}';
+  }
+
+  Widget _buildEnhancedEmptyState() {
+    return Center(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 40),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: AppColors.darkPaleYellow.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.inventory_2_rounded,
+                size: 64,
+                color: AppColors.darkPaleYellow,
+              ),
+            )
+                .animate(onPlay: (controller) => controller.repeat())
+                .shimmer(duration: 2000.ms)
+                .then()
+                .shake(hz: 2, curve: Curves.easeInOutCubic),
+            SizedBox(height: 32),
+            Text(
+              'No Items to Dispatch',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ScannerOverlayPainter extends CustomPainter {
-  final Color overlayColor;
-  final Color scannerColor;
-  final Animation<double> animation;
-
-  ScannerOverlayPainter({
-    required this.overlayColor,
-    required this.scannerColor,
-    required this.animation,
-  }) : super(repaint: animation);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final scanWindowSize = size.width * 0.8;
-    final scanWindowOffset = (size.width - scanWindowSize) / 2;
-    final scanWindowTop = (size.height - scanWindowSize) / 2;
-
-    // Draw dark overlay
-    final backgroundPath = Path()
-      ..addRect(Rect.fromLTWH(0, 0, size.width, size.height));
-
-    final windowPath = Path()
-      ..addRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromLTWH(
-            scanWindowOffset,
-            scanWindowTop,
-            scanWindowSize,
-            scanWindowSize,
-          ),
-          const Radius.circular(12),
+            SizedBox(height: 12),
+            Text(
+              'Store some items first before dispatching',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+                height: 1.5,
+              ),
+            ),
+          ],
         ),
-      );
-
-    final path = Path.combine(
-      PathOperation.difference,
-      backgroundPath,
-      windowPath,
-    );
-
-    canvas.drawPath(path, Paint()..color = overlayColor);
-
-    // Draw corner markers
-    final markerLength = scanWindowSize * 0.1;
-    final markerPaint = Paint()
-      ..color = scannerColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4;
-
-    // Top left corner
-    canvas.drawLine(
-      Offset(scanWindowOffset, scanWindowTop + markerLength),
-      Offset(scanWindowOffset, scanWindowTop),
-      markerPaint,
-    );
-    canvas.drawLine(
-      Offset(scanWindowOffset, scanWindowTop),
-      Offset(scanWindowOffset + markerLength, scanWindowTop),
-      markerPaint,
-    );
-
-    // Top right corner
-    canvas.drawLine(
-      Offset(scanWindowOffset + scanWindowSize - markerLength, scanWindowTop),
-      Offset(scanWindowOffset + scanWindowSize, scanWindowTop),
-      markerPaint,
-    );
-    canvas.drawLine(
-      Offset(scanWindowOffset + scanWindowSize, scanWindowTop),
-      Offset(scanWindowOffset + scanWindowSize, scanWindowTop + markerLength),
-      markerPaint,
-    );
-
-    // Bottom left corner
-    canvas.drawLine(
-      Offset(scanWindowOffset, scanWindowTop + scanWindowSize - markerLength),
-      Offset(scanWindowOffset, scanWindowTop + scanWindowSize),
-      markerPaint,
-    );
-    canvas.drawLine(
-      Offset(scanWindowOffset, scanWindowTop + scanWindowSize),
-      Offset(scanWindowOffset + markerLength, scanWindowTop + scanWindowSize),
-      markerPaint,
-    );
-
-    // Bottom right corner
-    canvas.drawLine(
-      Offset(scanWindowOffset + scanWindowSize - markerLength, scanWindowTop + scanWindowSize),
-      Offset(scanWindowOffset + scanWindowSize, scanWindowTop + scanWindowSize),
-      markerPaint,
-    );
-    canvas.drawLine(
-      Offset(scanWindowOffset + scanWindowSize, scanWindowTop + scanWindowSize),
-      Offset(scanWindowOffset + scanWindowSize, scanWindowTop + scanWindowSize - markerLength),
-      markerPaint,
-    );
-
-    // Draw scanning laser line
-    final laserY = scanWindowTop + (scanWindowSize * animation.value);
-
-    final laserGradient = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [
-        scannerColor.withOpacity(0.0),
-        scannerColor,
-        scannerColor.withOpacity(0.0),
-      ],
-      stops: const [0.0, 0.5, 1.0],
-    );
-
-    final laserRect = Rect.fromLTWH(
-      scanWindowOffset,
-      laserY - 1,
-      scanWindowSize,
-      2,
-    );
-
-    canvas.drawRect(
-      laserRect,
-      Paint()..shader = laserGradient.createShader(laserRect),
+      )
+          .animate()
+          .fadeIn(duration: 800.ms)
+          .scale(begin: Offset(0.8, 0.8), end: Offset(1, 1)),
     );
   }
-
-  @override
-  bool shouldRepaint(ScannerOverlayPainter oldDelegate) => true;
 }
-

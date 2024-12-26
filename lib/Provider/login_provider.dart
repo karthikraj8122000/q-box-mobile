@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
-import 'package:qr_page/Features/Screens/MainPage/main_page.dart';
-
-
-import '../Features/Controllers/login_controller.dart';
+import 'package:qr_page/Features/Screens/DeliveryPartner/home.dart';
 import '../Model/Data_Models/user_model/user_model.dart';
+import '../Services/auth_service.dart';
 import '../Services/toast_service.dart';
 
 
 class LoginProvider extends ChangeNotifier {
-  final LoginController loginController = LoginController();
   CommonService commonService = CommonService();
+  final AuthService _authService = AuthService();
+
   String _email = '';
   String _password = '';
   bool _isLoading = false;
@@ -41,24 +39,40 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleRememberMe(bool value) {
-    _rememberMe = value;
-    notifyListeners();
-  }
-
-  Future<dynamic> login(BuildContext context) async {
+  Future<bool> login(BuildContext context) async {
     try {
-      _isLoading = true;
-      notifyListeners();
-      _user = await loginController.login(email: _email, password: _password);
-      commonService.presentToast("Login successfully!");
-      GoRouter.of(context).push(MainNavigationScreen.routeName);
+      final success = await _authService.login(email, password);
+
+      if (success) {
+        GoRouter.of(context).push(HomePage.routeName);
+        return true;
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid email or password')),
+        );
+        return false;
+      }
     } catch (e) {
-      commonService.presentToast("$e");
-      throw Exception("Login failed: $e");
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+      return false;
     }
   }
+  // Future<dynamic> login(BuildContext context) async {
+  //   try {
+  //     _isLoading = true;
+  //     notifyListeners();
+  //     _user = await loginController.login(email: _email, password: _password);
+  //     commonService.presentToast("Login successfully!");
+  //     GoRouter.of(context).push(HomePage.routeName);
+  //     // GoRouter.of(context).push(MainNavigationScreen.routeName);
+  //   } catch (e) {
+  //     commonService.presentToast("$e");
+  //     throw Exception("Login failed: $e");
+  //   } finally {
+  //     _isLoading = false;
+  //     notifyListeners();
+  //   }
+  // }
 }
