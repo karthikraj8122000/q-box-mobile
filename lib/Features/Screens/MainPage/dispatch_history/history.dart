@@ -20,7 +20,7 @@ class DispatchHistoryScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text('Dispatch History', style: TextStyle(color: Colors.black),),
+        title: Text('Order History', style: TextStyle(color: Colors.black),),
         actions: [
           IconButton(
             icon: Icon(Icons.filter_list, color: Colors.black),
@@ -35,83 +35,163 @@ class DispatchHistoryScreen extends StatelessWidget {
   Widget _buildBody(BuildContext context, FoodStoreProvider provider) {
     final sortedItems = provider.getSortedDispatchedItems();
     return sortedItems.isEmpty
-        ? _buildEmptyState()
-        : _buildDispatchedItemsList(context, sortedItems);
+        ? _buildEmptyState(context)
+        : _buildDispatchedItemsGrid(context, sortedItems);
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.local_shipping_outlined,
-            size: 100,
-            color: Colors.grey[300],
+            Icons.history,
+            size: 64,
+            color: Colors.grey,
           ),
           SizedBox(height: 16),
           Text(
-            'No Dispatched Items',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey[600],
-            ),
-          ),
-          Text(
-            'Dispatched items will appear here',
-            style: TextStyle(
-              color: Colors.grey[500],
+            'No order history',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: Colors.grey,
             ),
           ),
         ],
-      ).animate(onPlay: (controller) => controller.repeat(reverse: true))
-          .shimmer(duration: 1500.ms)
-          .then(),
+      ),
     );
   }
 
-  Widget _buildDispatchedItemsList(BuildContext context, List<FoodItem> items) {
-    return ListView.builder(
+  // Widget _buildDispatchedItemsList(BuildContext context, List<FoodItem> items) {
+  //   return ListView.builder(
+  //     itemCount: items.length,
+  //     itemBuilder: (context, index) {
+  //       final item = items[index];
+  //       return Card(
+  //         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+  //         elevation: 4,
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(12.0),
+  //           child: ListTile(
+  //             leading: CircleAvatar(
+  //               backgroundColor: AppTheme.appTheme.withOpacity(0.2),
+  //               child: Icon(
+  //                 Icons.local_shipping,
+  //                 color: AppTheme.appTheme,
+  //               ),
+  //             ),
+  //             title: Text(
+  //               item.uniqueCode,
+  //               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+  //             ),
+  //             subtitle: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text('Container: ${item.boxCellSno}'),
+  //                 Text(
+  //                   'Dispatched: ${DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate)}',
+  //                   style: TextStyle(color: Colors.grey[600]),
+  //                 ),
+  //               ],
+  //             ),
+  //             trailing: Container(
+  //               padding: EdgeInsets.all(2),
+  //               decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(50)),color: Colors.black),
+  //               child: Icon(
+  //                 Icons.chevron_right,
+  //                 color:Colors.white,
+  //               ),
+  //             ),
+  //             onTap: () => _showItemDetails(context, item),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+  Widget _buildDispatchedItemsGrid(BuildContext context, List<FoodItem> items) {
+    return GridView.builder(
+      padding: EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,  // Number of columns
+        childAspectRatio: 0.8,  // Adjust this value to control card height
+        crossAxisSpacing: 16,  // Horizontal spacing between cards
+        mainAxisSpacing: 16,   // Vertical spacing between cards
+      ),
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
         return Card(
-          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16))
+          ),
           elevation: 4,
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: AppTheme.appTheme.withOpacity(0.2),
-                child: Icon(
-                  Icons.local_shipping,
-                  color: AppTheme.appTheme,
-                ),
-              ),
-              title: Text(
-                item.uniqueCode,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-              ),
-              subtitle: Column(
+          child: InkWell(
+            onTap: () => _showItemDetails(context, item),
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Container: ${item.boxCellSno}'),
+                  // Header with Icon and Arrow
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: AppTheme.appTheme.withOpacity(0.2),
+                        child: Icon(
+                          Icons.local_shipping,
+                          color: AppTheme.appTheme,
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            color: Colors.black
+                        ),
+                        child: Icon(
+                          Icons.chevron_right,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+
+                  // Unique Code
                   Text(
-                    'Dispatched: ${DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate)}',
-                    style: TextStyle(color: Colors.grey[600]),
+                    item.uniqueCode,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 8),
+
+                  // Container Number
+                  Text(
+                    'Container: ${item.boxCellSno}',
+                    style: TextStyle(fontSize: 13),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 4),
+
+                  // Dispatch Date
+                  Text(
+                    'Dispatched:\n${DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate)}',
+                    style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 12
+                    ),
                   ),
                 ],
               ),
-              trailing: Container(
-                padding: EdgeInsets.all(2),
-                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(50)),color: Colors.black),
-                child: Icon(
-                  Icons.chevron_right,
-                  color:Colors.white,
-                ),
-              ),
-              onTap: () => _showItemDetails(context, item),
             ),
           ),
         );

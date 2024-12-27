@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_page/Theme/app_theme.dart';
 import '../../../../Provider/food_store_provider.dart';
 import '../../../../Widgets/Common/app_colors.dart';
 
@@ -76,7 +75,7 @@ class _DispatchScreenState extends State<DispatchScreen>
                         const SizedBox(height: 30),
                         _buildScanSection(context, provider),
                         const SizedBox(height: 30),
-                        if (provider.storedItems.isNotEmpty)
+                        if (provider.foodItems.isNotEmpty)
                           _buildAvailableItems(provider)
                         else
                           _buildEnhancedEmptyState(),
@@ -144,9 +143,9 @@ class _DispatchScreenState extends State<DispatchScreen>
                       ),
                     ),
                     Text(
-                      provider.storedItems.length > 1
-                          ? '${provider.storedItems.length} Items'
-                          : '${provider.storedItems.length} Item',
+                      provider.foodItems.length > 1
+                          ? '${provider.foodItems.length} Items'
+                          : '${provider.foodItems.length} Item',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 28,
@@ -404,7 +403,7 @@ class _DispatchScreenState extends State<DispatchScreen>
           ),
         ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.2, end: 0),
         SizedBox(height: 20),
-        ...provider.storedItems
+        ...provider.foodItems
             .map((item) => _buildEnhancedItemCard(item, provider))
             .toList(),
       ],

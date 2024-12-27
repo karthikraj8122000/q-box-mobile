@@ -13,7 +13,7 @@ class FoodStoreProvider with ChangeNotifier {
   final CommonService commonService = CommonService();
 
   // State variables
-  final List<FoodItem> _storedItems = [];
+  // final List<FoodItem> _storedItems = [];
   final List<FoodItem> _dispatchedItems = [];
   List<dynamic> _foodTemsList = [];
 
@@ -37,7 +37,7 @@ class FoodStoreProvider with ChangeNotifier {
   bool _isLoading = false;
 
   // Getters
-  List<FoodItem> get storedItems => _storedItems;
+  // List<FoodItem> get storedItems => _storedItems;
   List<FoodItem> get dispatchedItems => _dispatchedItems;
   String? get qboxId => _qboxId;
   String? get foodItem => _foodItem;
@@ -74,24 +74,55 @@ class FoodStoreProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> getQboxes() async {
-    print("Qbox counts");
+  Future<void> getQboxes() async {
     _isLoading = true;
     notifyListeners();
-    Map<String,dynamic> params = {};
+    Map<String,dynamic> params = {
+      "qboxEntitySno":3
+    };
     try {
       var result = await apiService.post(
           "8912",
           "masters",
-          "search_box_cell_food",
+          "get_qbox_current_status",
           params
       );
       print("result");
       print(result);
       if (result != null && result['data'] != null) {
         _qboxList = result['data'];
+        notifyListeners();
+      } else {
+        commonService.presentToast('Failed to retrieve QBox details.');
+      }
+    } catch (e) {
+      debugPrint('$e');
+      commonService.presentToast('An error occurred while retrieving QBox details.');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+
+  Future<dynamic> getFoodItems() async {
+    print("Happy bday");
+    Map<String,dynamic> params = {
+      "qboxEntitySno":3
+    };
+    try {
+      var result = await apiService.post(
+        "8912",
+        "masters",
+        "search_box_cell_food",
+        params
+      );
+      print("result");
+      print(result);
+      if (result != null && result['data'] != null) {
+        _foodTemsList = result['data'];
         print("foods");
-        print(_qboxList);
+        print(_foodTemsList);
         notifyListeners();
       } else {
         commonService.presentToast('Failed at retrieving the food item.');
@@ -100,9 +131,6 @@ class FoodStoreProvider with ChangeNotifier {
       debugPrint('$e');
       commonService
           .presentToast('An error occurred while retrieving the food item.');
-    } finally {
-      _isLoading = false;
-      notifyListeners();
     }
   }
 
@@ -221,31 +249,6 @@ class FoodStoreProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-  //
-  // Future<dynamic> getFoodItems() async {
-  //   print("Happy bday");
-  //   try {
-  //     var result = await apiService.get(
-  //       "8912",
-  //       "masters",
-  //       "search_box_cell_food",
-  //     );
-  //     print("result");
-  //     print(result);
-  //     if (result != null && result['data'] != null) {
-  //       _foodTemsList = result['data'];
-  //       print("foods");
-  //       print(_foodTemsList);
-  //       notifyListeners();
-  //     } else {
-  //       commonService.presentToast('Failed at retrieving the food item.');
-  //     }
-  //   } catch (e) {
-  //     debugPrint('$e');
-  //     commonService
-  //         .presentToast('An error occurred while retrieving the food item.');
-  //   }
-  // }
 
   Future<void> storeFoodItem(BuildContext context) async {
     debugPrint("storeFoodItem called");
@@ -270,7 +273,7 @@ class FoodStoreProvider with ChangeNotifier {
         );
 
         if (result != null && result['data'] != null) {
-          _storedItems.add(newFoodItem);
+          _foodTemsList.add(newFoodItem);
           clearStorageInputs();
           commonService.presentToast('Food item stored successfully!');
         } else {
@@ -305,7 +308,7 @@ class FoodStoreProvider with ChangeNotifier {
     setProcessingScan(true);
 
     final isMatched =
-        _storedItems.any((item) => item.uniqueCode == scannedValue);
+    _foodTemsList.any((item) => item.uniqueCode == scannedValue);
 
     if (isMatched) {
       setScannedDispatchItem(scannedValue);
@@ -322,7 +325,7 @@ class FoodStoreProvider with ChangeNotifier {
   Future<void> dispatchFoodItem(BuildContext context) async {
     if (_scannedDispatchItem != null) {
       try {
-        var itemToDispatch = _storedItems.firstWhere(
+        var itemToDispatch = _foodTemsList.firstWhere(
           (item) => item.uniqueCode == _scannedDispatchItem,
           orElse: () => throw Exception('Item not found'),
         );
@@ -376,7 +379,7 @@ class FoodStoreProvider with ChangeNotifier {
 // Helper method to handle successful dispatch
   void _handleSuccessfulDispatch(FoodItem itemToDispatch) {
     _dispatchedItems.add(itemToDispatch);
-    _storedItems
+    _foodTemsList
         .removeWhere((item) => item.uniqueCode == itemToDispatch.uniqueCode);
     setScannedDispatchItem(null);
   }
@@ -409,7 +412,6 @@ class FoodStoreProvider with ChangeNotifier {
   List<FoodItem> getSortedDispatchedItems() {
     var items = List<FoodItem>.from(_dispatchedItems);
 
-    // Apply date range filter
     if (_startDate != null && _endDate != null) {
       items = items.where((item) {
         return item.storageDate.isAfter(_startDate!) &&
@@ -436,13 +438,13 @@ class FoodStoreProvider with ChangeNotifier {
   // Helper Methods
   FoodItem? findStoredItem(String uniqueCode) {
     try {
-      return _storedItems.firstWhere((item) => item.uniqueCode == uniqueCode);
+      return _foodTemsList.firstWhere((item) => item.uniqueCode == uniqueCode);
     } catch (e) {
       return null;
     }
   }
 
   bool isItemStored(String uniqueCode) {
-    return _storedItems.any((item) => item.uniqueCode == uniqueCode);
+    return _foodTemsList.any((item) => item.uniqueCode == uniqueCode);
   }
 }

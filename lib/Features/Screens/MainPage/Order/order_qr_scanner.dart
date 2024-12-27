@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/qr_scanner_screen.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/scan_history_screen.dart';
 import '../../../../Provider/order/order_qr_scanning_provider.dart';
-import '../../../../Widgets/Common/app_colors.dart';
 import '../../../../Widgets/Custom/custom_modern_tabbar.dart';
 
 class InwardOrder extends StatefulWidget {
@@ -77,7 +76,7 @@ class _InwardOrderState extends State<InwardOrder> with TickerProviderStateMixin
       margin: EdgeInsets.symmetric(horizontal: 24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: ModernTabBar(
         controller: _tabController,

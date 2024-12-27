@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +15,7 @@ class QboxCells extends StatefulWidget {
 }
 
 class _QboxCellsState extends State<QboxCells> {
-  final int defaultQboxCount = 12;
+  final int defaultQboxCount = 10;
 
   @override
   void initState() {
@@ -25,13 +27,12 @@ class _QboxCellsState extends State<QboxCells> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<FoodStoreProvider>(
-      builder: (context, provider, child) {
-        if (provider.isLoading) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.mintGreen),
-          );
-        }
+    return Consumer<FoodStoreProvider>(builder: (context, provider, child) {
+      if (provider.isLoading) {
+        return const Center(
+          child: CircularProgressIndicator(color: AppColors.mintGreen),
+        );
+      } else if (provider.qboxList.isNotEmpty) {
         return GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -40,9 +41,12 @@ class _QboxCellsState extends State<QboxCells> {
             crossAxisCount: _getGridCrossAxisCount(context),
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
+            mainAxisExtent: null,
             childAspectRatio: 0.8,
           ),
-          itemCount: provider.qboxList.isEmpty ? defaultQboxCount : provider.qboxList.length,
+          itemCount: provider.qboxList.isEmpty
+              ? defaultQboxCount
+              : provider.qboxList.length,
           itemBuilder: (context, index) {
             if (provider.qboxList.isEmpty) {
               return _buildEmptyQboxCard(index);
@@ -51,8 +55,10 @@ class _QboxCellsState extends State<QboxCells> {
             return _buildQboxCard(qbox, index);
           },
         );
-      },
-    );
+      } else {
+        return Center(child: _buildEnhancedEmptyState());
+      }
+    });
   }
 
   int _getGridCrossAxisCount(BuildContext context) {
@@ -62,8 +68,46 @@ class _QboxCellsState extends State<QboxCells> {
     } else if (width > 800) {
       return 3; // Tablet
     } else {
-      return 4; // Mobile
+      return 3; // Mobile
     }
+  }
+
+  Widget _buildEnhancedEmptyState() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 40),
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: AppColors.darkPaleYellow.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.inventory_2_rounded,
+              size: 64,
+              color: AppColors.darkPaleYellow,
+            ),
+          )
+              .animate(onPlay: (controller) => controller.repeat())
+              .shimmer(duration: 2000.ms)
+              .then()
+              .shake(hz: 2, curve: Curves.easeInOutCubic),
+          SizedBox(height: 32),
+          Text(
+            'No Qboxes found',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+        ],
+      ),
+    )
+        .animate()
+        .fadeIn(duration: 800.ms)
+        .scale(begin: Offset(0.8, 0.8), end: Offset(1, 1));
   }
 
   Widget _buildEmptyQboxCard(int index) {
@@ -103,22 +147,121 @@ class _QboxCellsState extends State<QboxCells> {
   }
 
   Widget _buildQboxCard(dynamic qbox, int index) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+    final foodStatus = qbox['foodUniqueCode'];
+
+    if (foodStatus != null) {
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min, // This makes the column wrap its content
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      image: DecorationImage(
+                        image: AssetImage('assets/food.jpeg'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  AppText(
+                    text: "QBox ${qbox['boxCellSno']}",
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  const SizedBox(height: 8),
+                  if (foodStatus != null) ...[
+                    Flexible(
+                      child: AppText(
+                        text: "SKU: $foodStatus",
+                        fontSize: 14,
+                        color: Colors.grey[800],
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+                ],
+              ),
+            ),
+          )
+              .animate()
+              .fadeIn(duration: (900 + index * 100).ms)
+              .slideY(begin: 0.2, end: 0);
+        },
+      );
+    }
+
+    // Empty state card
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.8),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Center(child: Text("Qbox Cell: ${qbox['boxCellSno']}")),
-    )
-        .animate()
-        .fadeIn(duration: (900 + index * 100).ms)
-        .slideY(begin: 0.2, end: 0);
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: 10.0,
+                sigmaY: 10.0,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min, // Makes the column wrap its content
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.inbox_outlined,
+                      size: 40,
+                      color: Colors.grey[400],
+                    ),
+                    AppText(
+                      text: "QBox ${qbox['boxCellSno']}",
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const Text(
+                      "Empty",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ).animate(onPlay: (controller) => controller.repeat())
+            .shimmer(duration: 2000.ms)
+            .then();
+      },
+    );
   }
+
 }

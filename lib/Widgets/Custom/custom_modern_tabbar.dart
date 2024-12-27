@@ -27,7 +27,7 @@ class ModernTabBar extends StatelessWidget {
       height: 60,
       decoration: BoxDecoration(
         color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
         padding: const EdgeInsets.all(4),
@@ -35,7 +35,7 @@ class ModernTabBar extends StatelessWidget {
           controller: controller,
           onTap: onTap,
           indicator: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(10),
             color: AppColors.mintGreen,
           ),
           labelStyle: const TextStyle(

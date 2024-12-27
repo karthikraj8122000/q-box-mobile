@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_page/Features/Screens/MainPage/Load-unload/load-unload-main.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/order_qr_scanner.dart';
 import 'package:qr_page/Features/Screens/MainPage/dispatch_screen/dispatch_screen.dart';
 import 'package:qr_page/Features/Screens/MainPage/dispatch_history/history.dart';
@@ -20,16 +21,18 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
 
   final List<Widget> _screens = [
     FoodStorageScreen(),
+    LoadOrUnload(),
     InwardOrder(),
-    DispatchScreen(),
+    // DispatchScreen(),
     DispatchHistoryScreen(),
   ];
 
   // List of navigation items
   final List<NavigationItem> _items = [
     NavigationItem(icon: Icons.home_outlined, label: 'Home', selectedIcon: Icons.home),
+    NavigationItem(icon: Icons.outbox, label: 'Load/Unload', selectedIcon: Icons.outbox),
     NavigationItem(icon: Icons.shopping_cart, label: 'Inward Order', selectedIcon: Icons.shopping_cart),
-    NavigationItem(icon: Icons.outbox, label: 'Unload', selectedIcon: Icons.outbox),
+    // NavigationItem(icon: Icons.outbox, label: 'Unload', selectedIcon: Icons.outbox),
     NavigationItem(icon: Icons.history, label: 'History', selectedIcon: Icons.history),
   ];
 

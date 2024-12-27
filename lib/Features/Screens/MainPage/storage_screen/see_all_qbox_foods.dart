@@ -35,13 +35,13 @@ class _SeeAllQboxFoodsState extends State<SeeAllQboxFoods> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                if (provider.storedItems.isEmpty) {
+                if (provider.foodItems.isEmpty) {
                   return _buildEmptyState();
                 }
-                final item = provider.storedItems[index];
+                final item = provider.foodItems[index];
                 return _buildItemCard(item, provider);
               },
-              childCount: provider.storedItems.isEmpty ? 1 : provider.storedItems.length,
+              childCount: provider.foodItems.isEmpty ? 1 : provider.foodItems.length,
             ),
           ),
         ],
