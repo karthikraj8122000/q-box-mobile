@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Core/Router/app_router.dart';
 import 'package:qr_page/Provider/food_store_provider.dart';
-import 'package:qr_page/Provider/login_provider.dart';
-import 'package:qr_page/Widgets/Common/app_colors.dart';
+import 'package:qr_page/Provider/network_provider.dart';
+import 'package:qr_page/Provider/qbox_delivery_provider.dart';
 import 'Provider/auth_provider.dart';
-import 'Provider/order/order_qr_scanning_provider.dart';
 import 'Provider/order/scan_provider.dart';
-import 'Provider/router_loading_provider.dart';
 
 
-void main() async {
+void main(){
   runApp(const MyApp());
 }
 
@@ -21,47 +19,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LoginProvider()),
         ChangeNotifierProvider(create: (_) => FoodStoreProvider()),
-        ChangeNotifierProvider(create: (_) => LoadingProvider()),
         ChangeNotifierProvider(create: (_) => ScanProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => NetworkProvider()),
+        ChangeNotifierProvider(create: (_) => DeliveryProvider()),
       ],
-      child: Consumer<LoginProvider>(
-        builder: (context, loginProvider, _) {
-          final router = AppRouter.router;
-          router.routerDelegate.addListener(() {
-            Provider.of<LoadingProvider>(context, listen: false).startLoading();
-            Future.delayed(Duration(milliseconds: 100), () {
-              Provider.of<LoadingProvider>(context, listen: false).stopLoading();
-            });
-          });
-
+      child:  Consumer<AuthProvider>(
+        builder: (context, AuthProvider, _) {
           return MaterialApp.router(
-            routerConfig: router,
+            routerConfig: AppRouter.router, // Make sure your AppRouter is set up correctly
             debugShowCheckedModeBanner: false,
             title: 'QBox',
             theme: ThemeData(
               useMaterial3: false,
             ),
-            builder: (context, child) {
-              return Consumer<LoadingProvider>(
-                builder: (context, loadingProvider, _) {
-                  return Stack(
-                    children: [
-                      child!,
-                      if (loadingProvider.isLoading)
-                        Container(
-                          color: Colors.black.withOpacity(0.5),
-                          child: Center(
-                            child: CircularProgressIndicator(color: AppColors.black,),
-                          ),
-                        ),
-                    ],
-                  );
-                },
-              );
-            },
           );
         },
       ),

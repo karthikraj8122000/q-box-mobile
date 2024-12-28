@@ -118,10 +118,12 @@ class AuthProvider extends ChangeNotifier {
   Future<void> logout() async {
     isLoading = true;
     notifyListeners();
-    //
-    // await _tokenService.signOut();
-    // isAuthenticated = false;
-    // currentUser = null;
+
+    await _tokenService.signOut();
+    isAuthenticated = false;
+    currentUser = null;
+    isLoading = false;
+    notifyListeners();
     // email = '';
     // password = '';
     // isLoading = false;

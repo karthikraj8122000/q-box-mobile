@@ -3,8 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/qr_scanner_screen.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/scan_history_screen.dart';
+import 'package:qr_page/Widgets/Common/network_error.dart';
 import '../../../../Provider/order/order_qr_scanning_provider.dart';
-import '../../../../Widgets/Common/app_colors.dart';
 import '../../../../Widgets/Custom/custom_modern_tabbar.dart';
 
 class InwardOrder extends StatefulWidget {
@@ -37,34 +37,36 @@ class _InwardOrderState extends State<InwardOrder> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => OrderScanningProvider(),
-      child: Consumer<OrderScanningProvider>(
-        builder: (context, provider, child) => Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.transparent,
-            title: Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: Text('Inward Order', style: TextStyle(color: Colors.black)),
+    return NetworkWrapper(
+      child: ChangeNotifierProvider(
+        create: (_) => OrderScanningProvider(),
+        child: Consumer<OrderScanningProvider>(
+          builder: (context, provider, child) => Scaffold(
+            appBar: AppBar(
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.transparent,
+              title: Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Text('Inward Order', style: TextStyle(color: Colors.black)),
+              ),
             ),
-          ),
-          body: SafeArea(
-            child: Column(
-              children: [
-                SizedBox(height: 16),
-                _buildTabBar(),
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      OrderQRScannerScreen(),
-                      ScanHistoryScreen(),
-                    ],
+            body: SafeArea(
+              child: Column(
+                children: [
+                  SizedBox(height: 16),
+                  _buildTabBar(),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        OrderQRScannerScreen(),
+                        ScanHistoryScreen(),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -77,7 +79,7 @@ class _InwardOrderState extends State<InwardOrder> with TickerProviderStateMixin
       margin: EdgeInsets.symmetric(horizontal: 24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: ModernTabBar(
         controller: _tabController,

@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.qr_page.app-mergeDebugResources-43:/values-w820dp-v13/values-w820dp-v13.xml",
+            "outputFile": "com.example.qr_page.app-mergeDebugResources-55:/values-w820dp-v13/values-w820dp-v13.xml",
             "map": [
                 {
                     "source": "/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/packaged_res/debug/values-w820dp-v13/values-w820dp-v13.xml",

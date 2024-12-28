@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:qr_page/Features/Screens/MainPage/Customer%20Delivery/main/delivery_tracking.dart';
+import 'package:qr_page/Features/Screens/MainPage/Dashboard/dashboard.dart';
+import 'package:qr_page/Features/Screens/MainPage/Load-unload/load-unload-main.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/order_qr_scanner.dart';
-import 'package:qr_page/Features/Screens/MainPage/dispatch_screen/dispatch_screen.dart';
-import 'package:qr_page/Features/Screens/MainPage/dispatch_history/history.dart';
-import 'package:qr_page/Features/Screens/MainPage/storage_screen/storage_screen.dart';
+import 'package:qr_page/Features/Screens/MainPage/unload_history/history.dart';
 import '../../../Utils/utils.dart';
 import 'dart:math' as math;
 import '../../../Widgets/Common/app_colors.dart';
@@ -17,238 +18,109 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> with TickerProviderStateMixin {
   int _selectedIndex = 0;
-  late AnimationController _animationController;
-  late AnimationController _scaleController;
-  late Animation<double> _bubbleAnimation;
-  Animation<double>? _scaleAnimation;
 
   final List<Widget> _screens = [
-    FoodStorageScreen(),
+    Dashboard(),
+    LoadOrUnload(),
     InwardOrder(),
-    DispatchScreen(),
-    DispatchHistoryScreen(),
+    DeliveryTrackingScreen(),
+    UnloadHistoryScreen(),
   ];
 
-  final List<IconData> _icons = [
-    Icons.bolt_outlined,
-    Icons.shopping_cart,
-    Icons.local_shipping_outlined,
-    Icons.history_outlined,
+  // List of navigation items
+  final List<NavigationItem> _items = [
+    NavigationItem(icon: Icons.home_outlined, label: 'Home', selectedIcon: Icons.home),
+    NavigationItem(icon: Icons.outbox, label: 'Load/Unload', selectedIcon: Icons.outbox),
+    NavigationItem(icon: Icons.shopping_cart, label: 'Inward Order', selectedIcon: Icons.shopping_cart),
+    NavigationItem(icon: Icons.delivery_dining, label: 'Delivery', selectedIcon: Icons.delivery_dining_rounded),
+    NavigationItem(icon: Icons.history, label: 'History', selectedIcon: Icons.history),
   ];
-
-  final List<String> _labels = ['Home', 'Order', 'Delivery', 'History'];
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-    _scaleController = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
-    _bubbleAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.elasticOut,
-    ));
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.8,
-    ).animate(CurvedAnimation(
-      parent: _scaleController,
-      curve: Curves.easeInOut,
-    ));
-
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    _scaleController.dispose();
-    super.dispose();
-  }
-
-  void _onItemTapped(int index) {
-    if (_selectedIndex != index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-      _animationController.forward(from: 0.0);
-      _scaleController.forward().then((_) {
-        _scaleController.reverse();
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: handleWillPop(context),
       child: Scaffold(
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: _screens,
+        body: Center(
+          child: IndexedStack(
+            index: _selectedIndex,
+            children: _screens,
+          ),
         ),
         bottomNavigationBar: Container(
-          height: 80,
           decoration: BoxDecoration(
-            color: AppColors.background,
             boxShadow: [
               BoxShadow(
-                color: AppColors.primaryText.withOpacity(0.08),
-                offset: const Offset(0, -1),
-                blurRadius: 10,
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 8,
+                offset: const Offset(0, -2),
               ),
             ],
           ),
-          child: Stack(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(
-                  _icons.length,
-                      (index) => _buildNavItem(index),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            child: BottomAppBar(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(_items.length, (index) {
+                    return _buildNavItem(_items[index], index);
+                  }),
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(int index) {
-    bool isSelected = _selectedIndex == index;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => _onItemTapped(index),
-        child: AnimatedBuilder(
-          animation: _scaleAnimation!,
-          builder: (context, child) {
-            return Transform.scale(
-              scale: isSelected ? _scaleAnimation!.value : 1.0,
-              child: SizedBox(
-                height: 80,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    if (isSelected)
-                      AnimatedBuilder(
-                        animation: _bubbleAnimation,
-                        builder: (context, child) {
-                          return Transform.translate(
-                            offset: Offset(0, -8 * _bubbleAnimation.value),
-                            child: Transform.rotate(
-                              angle: 2 * math.pi * _bubbleAnimation.value,
-                              child: Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: AppColors.black,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  _icons[index],
-                                  color: Colors.white,
-                                  size: 24,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    if (!isSelected)
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            _icons[index],
-                            color: AppColors.navInactive,
-                            size: 24,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            _labels[index],
-                            style: TextStyle(
-                              color: AppColors.navInactive,
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ],
-                      ),
-                  ],
+  Widget _buildNavItem(NavigationItem item, int index) {
+    final isSelected = _selectedIndex == index;
+    return InkWell(
+      onTap: () => setState(() => _selectedIndex = index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.mintGreen.withOpacity(0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isSelected ? item.selectedIcon : item.icon,
+              color: isSelected ? AppColors.mintGreen : Colors.grey,
+            ),
+            if (isSelected) ...[
+              const SizedBox(width: 8),
+              AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 200),
+                style: TextStyle(
+                  color: isSelected ? AppColors.mintGreen : Colors.grey,
+                  fontWeight: FontWeight.bold,
                 ),
+                child: Text(item.label),
               ),
-            );
-          },
+            ],
+          ],
         ),
       ),
     );
   }
 }
 
-class BubblePainter extends CustomPainter {
-  final double bubbleContext;
-  final Color color;
-  final int selectedIndex;
-  final int itemCount;
+class NavigationItem {
+  final IconData icon;
+  final IconData selectedIcon;
+  final String label;
 
-  BubblePainter({
-    required this.bubbleContext,
-    required this.color,
-    required this.selectedIndex,
-    required this.itemCount,
+  NavigationItem({
+    required this.icon,
+    required this.label,
+    required this.selectedIcon,
   });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-
-    final itemWidth = size.width / itemCount;
-    final centerX = itemWidth * selectedIndex + (itemWidth / 2);
-    final centerY = size.height - 20;
-
-    final path = Path();
-    path.moveTo(0, size.height);
-
-    // Draw bubble effect
-    for (double x = 0; x < size.width; x++) {
-      final distanceFromCenter = (x - centerX).abs();
-      final influence = math.max(0, 1 - distanceFromCenter / (itemWidth * 1.5));
-      final y = size.height -
-          (30 * influence * bubbleContext) -
-          (10 * math.sin(x / 20) * influence * bubbleContext);
-      path.lineTo(x, y);
-    }
-
-    path.lineTo(size.width, size.height);
-    path.close();
-    // Draw the bubbles
-    final bubbleRadius = 4.0;
-    final bubbleCount = 3;
-    for (int i = 0; i < bubbleCount; i++) {
-      final bubbleX = centerX + (i - 1) * 15 * bubbleContext;
-      final bubbleY = centerY - 40 * bubbleContext;
-      canvas.drawCircle(
-        Offset(bubbleX, bubbleY),
-        bubbleRadius * (1 - bubbleContext),
-        paint,
-      );
-    }
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(BubblePainter oldDelegate) {
-    return oldDelegate.bubbleContext != bubbleContext ||
-        oldDelegate.selectedIndex != selectedIndex;
-  }
 }

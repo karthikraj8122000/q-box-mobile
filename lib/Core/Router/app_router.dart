@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_page/Features/Screens/DeliveryPartner/home.dart';
 import 'package:qr_page/Features/Screens/Login/second_login.dart';
+import 'package:qr_page/Features/Screens/MainPage/Customer%20Delivery/sub/delivery_status.dart';
+import 'package:qr_page/Features/Screens/MainPage/Customer%20Delivery/sub/scan_qbox_unload.dart';
 import 'package:qr_page/Features/Screens/MainPage/main_page.dart';
-import 'package:qr_page/Features/Screens/MainPage/storage_screen/see_all_qbox_foods.dart';
 import 'package:qr_page/Features/Screens/Splash/animated_splash.dart';
 import 'package:qr_page/Provider/auth_provider.dart';
-import '../../Utils/go_router_observer.dart';
+
+import '../../Features/Screens/MainPage/Dashboard/see_all_qbox_foods.dart';
 
 class AppRouter {
   static final GlobalKey<NavigatorState> _routerKey =
@@ -23,11 +24,7 @@ class AppRouter {
         path: AnimeSplashScreen.routeName,
         builder: (_, __) => const AnimeSplashScreen(),
       ),
-      GoRoute(
-        name: HomePage.routeName,
-        path: HomePage.routeName,
-        builder: (_, __) => const HomePage(),
-      ),
+
       GoRoute(
         name: SeeAllQboxFoods.routeName,
         path: SeeAllQboxFoods.routeName,
@@ -43,6 +40,18 @@ class AppRouter {
         name: MainNavigationScreen.routeName,
         builder: (_, __) =>  MainNavigationScreen(),
       ),
+
+      GoRoute(
+        name: ScanQBoxScreen.routeName,
+        path: ScanQBoxScreen.routeName,
+        builder: (_, __) => const ScanQBoxScreen(),
+      ),
+
+      GoRoute(
+        name: DeliveryStatusScreen.routeName,
+        path: DeliveryStatusScreen.routeName,
+        builder: (_, __) => const DeliveryStatusScreen(),
+      ),
       GoRoute(
         path: '/',
         builder: (context, state) {
@@ -55,7 +64,6 @@ class AppRouter {
         },
       ),
     ],
-    observers: [GoRouterObserver()],
   );
 
   static GoRouter get router => _router;
