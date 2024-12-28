@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.qr_page.app-mergeDebugResources-53:/values-si/values-si.xml",
+            "outputFile": "com.example.qr_page.app-mergeDebugResources-55:/values-si/values-si.xml",
             "map": [
                 {
                     "source": "/home/swomb/.gradle/caches/transforms-3/6a30de138cdfb89bc1ef42a02f38770d/transformed/preference-1.2.1/res/values-si/values-si.xml",

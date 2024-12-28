@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import '../Model/Data_Models/Food_item/foot_item_model.dart';
@@ -16,6 +17,7 @@ class FoodStoreProvider with ChangeNotifier {
   // final List<FoodItem> _storedItems = [];
   final List<FoodItem> _dispatchedItems = [];
   List<dynamic> _foodTemsList = [];
+  final List<dynamic> _scannedFoodItems = [];
 
   // Storage Screen Variables
   String? _qboxId;
@@ -32,7 +34,6 @@ class FoodStoreProvider with ChangeNotifier {
 
   // Dispatch Screen Variables
   String? _scannedDispatchItem;
-
   List<dynamic> _qboxList = [];
   bool _isLoading = false;
 
@@ -49,6 +50,7 @@ class FoodStoreProvider with ChangeNotifier {
   String? get scannedDispatchItem => _scannedDispatchItem;
   bool get buttonLoading => _buttonLoading;
   List<dynamic> get foodItems => _foodTemsList;
+  List<dynamic> get scannedFoodItems => _scannedFoodItems;
 
   bool get isLoading => _isLoading;
   List<dynamic> get qboxList => _qboxList;
@@ -74,19 +76,19 @@ class FoodStoreProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearScannedItems() {
+    _scannedFoodItems.clear();
+    _scannedDispatchItem = null;
+    notifyListeners();
+  }
+
   Future<void> getQboxes() async {
     _isLoading = true;
     notifyListeners();
-    Map<String,dynamic> params = {
-      "qboxEntitySno":3
-    };
+    Map<String, dynamic> params = {"qboxEntitySno": 3};
     try {
       var result = await apiService.post(
-          "8912",
-          "masters",
-          "get_qbox_current_status",
-          params
-      );
+          "8912", "masters", "get_qbox_current_status", params);
       print("result");
       print(result);
       if (result != null && result['data'] != null) {
@@ -95,34 +97,24 @@ class FoodStoreProvider with ChangeNotifier {
       } else {
         commonService.presentToast('Failed to retrieve QBox details.');
       }
-    } catch (e) {
-      debugPrint('$e');
-      commonService.presentToast('An error occurred while retrieving QBox details.');
+    } on DioError catch (e) {
+      if (e.type == DioErrorType.connectionError) {
+        throw Exception('No Internet Connection');
+      }
+      throw Exception('Failed to fetch data');
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
 
-
   Future<dynamic> getFoodItems() async {
-    print("Happy bday");
-    Map<String,dynamic> params = {
-      "qboxEntitySno":3
-    };
+    Map<String, dynamic> params = {"qboxEntitySno": 3};
     try {
       var result = await apiService.post(
-        "8912",
-        "masters",
-        "search_box_cell_food",
-        params
-      );
-      print("result");
-      print(result);
+          "8912", "masters", "search_box_cell_food", params);
       if (result != null && result['data'] != null) {
         _foodTemsList = result['data'];
-        print("foods");
-        print(_foodTemsList);
         notifyListeners();
       } else {
         commonService.presentToast('Failed at retrieving the food item.');
@@ -307,31 +299,60 @@ class FoodStoreProvider with ChangeNotifier {
     if (_isProcessingScan) return;
     setProcessingScan(true);
 
-    final isMatched =
-    _foodTemsList.any((item) => item.uniqueCode == scannedValue);
+    var matchedItem = _foodTemsList.firstWhere(
+        (item) => item['uniqueCode'] == scannedValue,
+        orElse: () => null);
 
-    if (isMatched) {
-      setScannedDispatchItem(scannedValue);
-      commonService.presentToast("Qbox found: $scannedValue");
+    if (matchedItem != null) {
+      bool alreadyScanned =
+          _scannedFoodItems.any((item) => item['box'] == scannedValue);
+
+      if (!alreadyScanned) {
+        _scannedFoodItems.add(matchedItem);
+        setScannedDispatchItem(scannedValue);
+        commonService.presentToast("Item added to scan list: $scannedValue");
+      } else {
+        commonService.presentToast("Item already scanned!");
+      }
     } else {
-      commonService.presentToast("No Qbox found!");
+      commonService.presentToast("Invalid item or item not found!");
       setScannedDispatchItem(null);
     }
 
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
     setProcessingScan(false);
+    notifyListeners();
   }
+  // Future<void> handleDispatchQRScan(BuildContext context, String? scannedValue) async {
+  //   if (_isProcessingScan) return;
+  //   setProcessingScan(true);
+  //
+  //   final isMatched =
+  //   _foodTemsList.any((item) => item.uniqueCode == scannedValue);
+  //
+  //   if (isMatched) {
+  //     setScannedDispatchItem(scannedValue);
+  //     commonService.presentToast("Qbox found: $scannedValue");
+  //   } else {
+  //     commonService.presentToast("No Qbox found!");
+  //     setScannedDispatchItem(null);
+  //   }
+  //
+  //   await Future.delayed(Duration(seconds: 2));
+  //   setProcessingScan(false);
+  // }
 
   Future<void> dispatchFoodItem(BuildContext context) async {
-    if (_scannedDispatchItem != null) {
-      try {
-        var itemToDispatch = _foodTemsList.firstWhere(
-          (item) => item.uniqueCode == _scannedDispatchItem,
-          orElse: () => throw Exception('Item not found'),
-        );
+    if (_scannedFoodItems.isEmpty) {
+      commonService.presentToast('No items to unload.');
+      return;
+    }
+    try {
+      bool allSuccess = true;
 
+      for (var item in _scannedFoodItems) {
         Map<String, dynamic> body = {
-          "uniqueCode": itemToDispatch.uniqueCode,
+          "uniqueCode": item['uniqueCode'],
           "wfStageCd": 12,
           "qboxEntitySno": 2,
         };
@@ -345,36 +366,33 @@ class FoodStoreProvider with ChangeNotifier {
           );
 
           if (result != null && result['data'] != null) {
-            _handleSuccessfulDispatch(itemToDispatch);
-          } else if (result != null &&
-              result['error']
-                  ?.contains('relation "sku_inventory" does not exist')) {
-            _handleSuccessfulDispatch(itemToDispatch);
-            commonService.presentToast('Dispatched successfully!');
+            _foodTemsList.removeWhere(
+                (foodItem) => foodItem['uniqueCode'] == item['uniqueCode']);
           } else {
-            commonService.presentToast('Failed to dispatch. Please try again.');
+            allSuccess = false;
+            commonService
+                .presentToast('Failed to unload ${item['uniqueCode']}');
           }
         } catch (apiError) {
-          if (apiError
-              .toString()
-              .contains('relation "sku_inventory" does not exist')) {
-            _handleSuccessfulDispatch(itemToDispatch);
-            commonService
-                .presentToast('Dispatched locally. Database update pending.');
-          } else {
-            throw apiError;
-          }
+          allSuccess = false;
+          print('Error unloading ${item['uniqueCode']}: $apiError');
         }
-      } catch (e) {
-        print('Error: $e');
-        commonService
-            .presentToast('An error occurred while dispatching the food item.');
       }
-      notifyListeners();
-    } else {
-      commonService.presentToast('No scanned food item to dispatch.');
+
+      if (allSuccess) {
+        commonService.presentToast('All items unloaded successfully!');
+        clearScannedItems();
+      } else {
+        commonService
+            .presentToast('Some items failed to unload. Please try again.');
+      }
+    } catch (e) {
+      print('Error: $e');
+      commonService.presentToast('An error occurred while unloading items.');
     }
+    notifyListeners();
   }
+
 
 // Helper method to handle successful dispatch
   void _handleSuccessfulDispatch(FoodItem itemToDispatch) {

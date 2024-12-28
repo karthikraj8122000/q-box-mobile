@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Core/Router/app_router.dart';
 import 'package:qr_page/Provider/food_store_provider.dart';
-import 'package:qr_page/Utils/network_error_state.dart';
+import 'package:qr_page/Provider/network_provider.dart';
+import 'package:qr_page/Provider/qbox_delivery_provider.dart';
 import 'Provider/auth_provider.dart';
 import 'Provider/order/scan_provider.dart';
 
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => FoodStoreProvider()),
         ChangeNotifierProvider(create: (_) => ScanProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => NetworkErrorState()),
+        ChangeNotifierProvider(create: (_) => NetworkProvider()),
+        ChangeNotifierProvider(create: (_) => DeliveryProvider()),
       ],
       child:  Consumer<AuthProvider>(
         builder: (context, AuthProvider, _) {

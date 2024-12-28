@@ -1,52 +1,49 @@
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-//
-// import '../../Utils/network_error_state.dart';
-//
-// class NetworkErrorWidget extends StatelessWidget {
-//   final Widget child;
-//
-//   const NetworkErrorWidget({
-//     Key? key,
-//     required this.child,
-//   }) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer<NetworkErrorState>(
-//       builder: (context, networkState, _) {
-//         if (networkState.connectionState == ConnectionState.offline) {
-//           return Center(
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 const Icon(
-//                   Icons.cloud_off,
-//                   size: 48,
-//                   color: Colors.grey,
-//                 ),
-//                 const SizedBox(height: 16),
-//                 Text(
-//                   networkState.errorMessage,
-//                   textAlign: TextAlign.center,
-//                   style: const TextStyle(
-//                     fontSize: 16,
-//                     color: Colors.grey,
-//                   ),
-//                 ),
-//                 const SizedBox(height: 16),
-//                 ElevatedButton(
-//                   onPressed: () {
-//                     // Implement your retry logic here
-//                   },
-//                   child: const Text('Retry'),
-//                 ),
-//               ],
-//             ),
-//           );
-//         }
-//         return child;
-//       },
-//     );
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:qr_page/Widgets/Common/app_colors.dart';
+
+import '../../Provider/network_provider.dart';
+
+class NetworkWrapper extends StatelessWidget {
+  final Widget child; // The page to display when online
+
+  const NetworkWrapper({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<NetworkProvider>(
+      builder: (context, networkProvider, _) {
+        if (!networkProvider.isOnline) {
+          // Show "No Internet Connection" UI
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.wifi_off, size: 100, color: Colors.red),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'No Internet Connection',
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.mintGreen
+                    ),
+                    onPressed: () {
+                      networkProvider.checkInitialConnection();
+                    },
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+        // Render the main page when online
+        return child;
+      },
+    );
+  }
+}

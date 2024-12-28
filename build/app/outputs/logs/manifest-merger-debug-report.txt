@@ -9,6 +9,8 @@ MERGED from [com.google.android.material:material:1.3.0] /home/swomb/.gradle/cac
 MERGED from [com.google.android.material:material:1.3.0] /home/swomb/.gradle/caches/transforms-3/336115a95420fd1ecf3d13be9638caed/transformed/material-1.3.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/swomb/.gradle/caches/transforms-3/146c7740b6900c42283b3451b0dec7f9/transformed/constraintlayout-2.0.1/AndroidManifest.xml:9:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/swomb/.gradle/caches/transforms-3/146c7740b6900c42283b3451b0dec7f9/transformed/constraintlayout-2.0.1/AndroidManifest.xml:9:5-20
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:36:5-42:19
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:36:5-42:19
 MERGED from [com.google.android.gms:play-services-vision:20.1.3] /home/swomb/.gradle/caches/transforms-3/e71f126f2761123ccafb0a96cb550b98/transformed/jetified-play-services-vision-20.1.3/AndroidManifest.xml:7:5-20
 MERGED from [com.google.android.gms:play-services-vision:20.1.3] /home/swomb/.gradle/caches/transforms-3/e71f126f2761123ccafb0a96cb550b98/transformed/jetified-play-services-vision-20.1.3/AndroidManifest.xml:7:5-20
 MERGED from [com.google.android.gms:play-services-vision-common:19.1.3] /home/swomb/.gradle/caches/transforms-3/7ac2ce572edea08cfc59e0f7740474d6/transformed/jetified-play-services-vision-common-19.1.3/AndroidManifest.xml:7:5-20
@@ -51,6 +53,8 @@ MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] /home
 MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:28:5-36:19
 MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:25:5-39:19
 MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:25:5-39:19
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] /home/swomb/.gradle/caches/transforms-3/9db3e21e5ca1ba20cec34e443e0489ba/transformed/jetified-android-maps-utils-3.6.0/AndroidManifest.xml:7:5-11:19
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] /home/swomb/.gradle/caches/transforms-3/9db3e21e5ca1ba20cec34e443e0489ba/transformed/jetified-android-maps-utils-3.6.0/AndroidManifest.xml:7:5-11:19
 MERGED from [com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:46:5-54:19
 MERGED from [com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:46:5-54:19
 MERGED from [com.google.android.odml:image:1.0.0-beta1] /home/swomb/.gradle/caches/transforms-3/2ecd1a9d23f7891f70af2fb062d2fcd4/transformed/jetified-image-1.0.0-beta1/AndroidManifest.xml:7:5-20
@@ -69,7 +73,9 @@ INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/andr
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:1:1-54:12
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:1:1-54:12
 MERGED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:1:1-54:12
+MERGED from [:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-21:12
+MERGED from [:google_maps_flutter_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/google_maps_flutter_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-36:12
 MERGED from [:flutter_plugin_android_lifecycle] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_plugin_android_lifecycle/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:flutter_secure_storage] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_secure_storage/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
@@ -83,6 +89,7 @@ MERGED from [com.google.android.material:material:1.3.0] /home/swomb/.gradle/cac
 MERGED from [androidx.preference:preference:1.2.1] /home/swomb/.gradle/caches/transforms-3/6a30de138cdfb89bc1ef42a02f38770d/transformed/preference-1.2.1/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/swomb/.gradle/caches/transforms-3/146c7740b6900c42283b3451b0dec7f9/transformed/constraintlayout-2.0.1/AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat:1.4.2] /home/swomb/.gradle/caches/transforms-3/4b6526175f05ef41dd8ad0648117671c/transformed/appcompat-1.4.2/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:17:1-44:12
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/swomb/.gradle/caches/transforms-3/7d14002fcdee3ea951b981c81127cf50/transformed/jetified-viewpager2-1.0.0/AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.gms:play-services-vision:20.1.3] /home/swomb/.gradle/caches/transforms-3/e71f126f2761123ccafb0a96cb550b98/transformed/jetified-play-services-vision-20.1.3/AndroidManifest.xml:2:1-9:12
 MERGED from [com.google.mlkit:barcode-scanning:17.2.0] /home/swomb/.gradle/caches/transforms-3/12b337a8aa1b70b563f5067c214f2210/transformed/jetified-barcode-scanning-17.2.0/AndroidManifest.xml:2:1-7:12
@@ -161,6 +168,7 @@ MERGED from [com.google.firebase:firebase-components:16.1.0] /home/swomb/.gradle
 MERGED from [com.google.firebase:firebase-encoders-json:17.1.0] /home/swomb/.gradle/caches/transforms-3/f7b71735ca785709a95ca95bd469d36e/transformed/jetified-firebase-encoders-json-17.1.0/AndroidManifest.xml:15:1-23:12
 MERGED from [androidx.window.extensions.core:core:1.0.0] /home/swomb/.gradle/caches/transforms-3/320650fa8a842ae8e386be45cdf30967/transformed/jetified-core-1.0.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] /home/swomb/.gradle/caches/transforms-3/5b0d049e6914a8abcf2946ec43a1eaa1/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] /home/swomb/.gradle/caches/transforms-3/9db3e21e5ca1ba20cec34e443e0489ba/transformed/jetified-android-maps-utils-3.6.0/AndroidManifest.xml:2:1-13:12
 MERGED from [com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:17:1-56:12
 MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] /home/swomb/.gradle/caches/transforms-3/62aa0ffefe9d6fd3e9a171e2d2ac7b7d/transformed/jetified-relinker-1.4.5/AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.odml:image:1.0.0-beta1] /home/swomb/.gradle/caches/transforms-3/2ecd1a9d23f7891f70af2fb062d2fcd4/transformed/jetified-image-1.0.0-beta1/AndroidManifest.xml:2:1-9:12
@@ -214,6 +222,8 @@ ADDED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android
 		ADDED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:10:22-78
 queries
 ADDED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:48:5-53:15
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:30:5-34:15
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:30:5-34:15
 intent#action:name:android.intent.action.PROCESS_TEXT+data:mimeType:text/plain
 ADDED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:49:9-52:18
 action#android.intent.action.PROCESS_TEXT
@@ -228,8 +238,12 @@ uses-sdk
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml
+MERGED from [:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:google_maps_flutter_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/google_maps_flutter_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:google_maps_flutter_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/google_maps_flutter_android/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:6:5-8:41
 MERGED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:6:5-8:41
 MERGED from [:flutter_plugin_android_lifecycle] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_plugin_android_lifecycle/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
@@ -256,6 +270,8 @@ MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/swomb/.grad
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/swomb/.gradle/caches/transforms-3/146c7740b6900c42283b3451b0dec7f9/transformed/constraintlayout-2.0.1/AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.appcompat:appcompat:1.4.2] /home/swomb/.gradle/caches/transforms-3/4b6526175f05ef41dd8ad0648117671c/transformed/appcompat-1.4.2/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.appcompat:appcompat:1.4.2] /home/swomb/.gradle/caches/transforms-3/4b6526175f05ef41dd8ad0648117671c/transformed/appcompat-1.4.2/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/swomb/.gradle/caches/transforms-3/7d14002fcdee3ea951b981c81127cf50/transformed/jetified-viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/swomb/.gradle/caches/transforms-3/7d14002fcdee3ea951b981c81127cf50/transformed/jetified-viewpager2-1.0.0/AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.android.gms:play-services-vision:20.1.3] /home/swomb/.gradle/caches/transforms-3/e71f126f2761123ccafb0a96cb550b98/transformed/jetified-play-services-vision-20.1.3/AndroidManifest.xml:5:5-44
@@ -412,6 +428,8 @@ MERGED from [androidx.window.extensions.core:core:1.0.0] /home/swomb/.gradle/cac
 MERGED from [androidx.window.extensions.core:core:1.0.0] /home/swomb/.gradle/caches/transforms-3/320650fa8a842ae8e386be45cdf30967/transformed/jetified-core-1.0.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] /home/swomb/.gradle/caches/transforms-3/5b0d049e6914a8abcf2946ec43a1eaa1/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] /home/swomb/.gradle/caches/transforms-3/5b0d049e6914a8abcf2946ec43a1eaa1/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:5:5-44
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] /home/swomb/.gradle/caches/transforms-3/9db3e21e5ca1ba20cec34e443e0489ba/transformed/jetified-android-maps-utils-3.6.0/AndroidManifest.xml:5:5-44
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] /home/swomb/.gradle/caches/transforms-3/9db3e21e5ca1ba20cec34e443e0489ba/transformed/jetified-android-maps-utils-3.6.0/AndroidManifest.xml:5:5-44
 MERGED from [com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:20:5-44
 MERGED from [com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:20:5-44
 MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] /home/swomb/.gradle/caches/transforms-3/62aa0ffefe9d6fd3e9a171e2d2ac7b7d/transformed/jetified-relinker-1.4.5/AndroidManifest.xml:5:5-43
@@ -430,10 +448,22 @@ INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/andr
 		INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/debug/AndroidManifest.xml
 uses-permission#android.permission.INTERNET
 ADDED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/debug/AndroidManifest.xml:6:5-66
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:24:5-67
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:24:5-67
 MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:26:5-67
 MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:26:5-67
 	android:name
 		ADDED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/debug/AndroidManifest.xml:6:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-79
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:23:5-79
+MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:23:5-79
+MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:25:5-79
+MERGED from [com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:25:5-79
+MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:22:5-79
+MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:22:5-79
+	android:name
+		ADDED from [:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-76
 uses-permission#android.permission.FLASHLIGHT
 ADDED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:13:5-69
 	android:name
@@ -480,6 +510,22 @@ ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Q
 		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:32:17-33
 	android:name
 		ADDED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:31:17-63
+uses-feature#0x00020000
+ADDED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:26:5-28:35
+	android:glEsVersion
+		ADDED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:27:9-41
+	android:required
+		ADDED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:28:9-32
+package#com.google.android.apps.maps
+ADDED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:33:9-64
+	android:name
+		ADDED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:33:18-61
+uses-library#org.apache.http.legacy
+ADDED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:39:9-41:40
+	android:required
+		ADDED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:41:13-37
+	android:name
+		ADDED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:40:13-50
 service#com.google.mlkit.common.internal.MlKitComponentDiscoveryService
 ADDED from [com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0] /home/swomb/.gradle/caches/transforms-3/2f4fa5be52eed92602b8860318897af4/transformed/jetified-play-services-mlkit-barcode-scanning-18.3.0/AndroidManifest.xml:9:9-15:19
 MERGED from [com.google.mlkit:vision-common:17.3.0] /home/swomb/.gradle/caches/transforms-3/bf4755d3479dbc2a1736a6c6c26babf2/transformed/jetified-vision-common-17.3.0/AndroidManifest.xml:9:9-15:19
@@ -532,6 +578,8 @@ ADDED from [com.google.android.gms:play-services-base:18.1.0] /home/swomb/.gradl
 		ADDED from [com.google.android.gms:play-services-base:18.1.0] /home/swomb/.gradle/caches/transforms-3/9a3b9caa53e8885d030aab39282fb142/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:19-85
 meta-data#com.google.android.gms.version
 ADDED from [com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] /home/swomb/.gradle/caches/transforms-3/9db3e21e5ca1ba20cec34e443e0489ba/transformed/jetified-android-maps-utils-3.6.0/AndroidManifest.xml:8:9-10:69
+MERGED from [com.google.maps.android:android-maps-utils:3.6.0] /home/swomb/.gradle/caches/transforms-3/9db3e21e5ca1ba20cec34e443e0489ba/transformed/jetified-android-maps-utils-3.6.0/AndroidManifest.xml:8:9-10:69
 	android:value
 		ADDED from [com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
 	android:name
@@ -658,12 +706,6 @@ action#androidx.profileinstaller.action.BENCHMARK_OPERATION
 ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
 	android:name
 		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
-uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from [com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:25:5-79
-MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:22:5-79
-MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:22:5-79
-	android:name
-		ADDED from [com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:25:22-76
 service#com.google.android.datatransport.runtime.backends.TransportBackendDiscovery
 ADDED from [com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:29:9-35:19
 MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:36:9-38:40

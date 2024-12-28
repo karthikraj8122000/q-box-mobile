@@ -95,9 +95,7 @@ class _LoadQboxState extends State<LoadQbox> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 30,
-        ),
+        const SizedBox(height: 30),
         Text(
           'Loaded Items',
           style: TextStyle(
@@ -106,16 +104,21 @@ class _LoadQboxState extends State<LoadQbox> {
             color: Colors.black87,
           ),
         ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.2, end: 0),
-        SizedBox(height: 20),
-        ListView.builder(
+        const SizedBox(height: 20),
+        GridView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           padding: const EdgeInsets.all(16),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.8,
+            mainAxisExtent: null,
+          ),
           itemCount: provider.foodItems.length,
           itemBuilder: (context, index) {
-            if (provider.foodItems.isEmpty) {
-              return Container();
-            }
+            if (provider.foodItems.isEmpty) return Container();
             final qbox = provider.foodItems[index];
             return _buildEnhancedItemCard(qbox, index);
           },
@@ -126,7 +129,6 @@ class _LoadQboxState extends State<LoadQbox> {
 
   Widget _buildEnhancedItemCard(dynamic qbox, int index) {
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
@@ -135,63 +137,51 @@ class _LoadQboxState extends State<LoadQbox> {
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
             blurRadius: 20,
-            offset: Offset(0, 10),
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.all(20),
-        child: Row(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 80,
-              height: 80,
+              width: MediaQuery.of(context).size.width,
+              height: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                image: DecorationImage(
+                image: const DecorationImage(
                   image: AssetImage('assets/food.jpeg'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 8),
-                  _buildItemDetail('QBox ID', qbox['boxCellSno'].toString()),
-                  _buildItemDetail('Added', _formatDateTime(qbox['entryTime'])),
-                ],
+            const SizedBox(height: 12),
+            Text(
+              'QBox ID: ${qbox['boxCellSno']}',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Added: ${_formatDateTime(qbox['entryTime'])}',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
       ),
-    ).animate().fadeIn(duration: 900.ms).slideX(begin: 0.2, end: 0);
+    ).animate().fadeIn(duration: 900.ms).slideY(begin: 0.2, end: 0);
   }
 
-  Widget _buildItemDetail(String label, String value) {
-    return Row(
-      children: [
-        Text(
-          '$label: ',
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[600],
-          ),
-        ),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.black87,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildScanningSection(
       FoodStoreProvider provider, BuildContext context) {

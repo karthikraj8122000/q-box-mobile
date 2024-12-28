@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.qr_page.app-mergeDebugResources-53:/values-kn/values-kn.xml",
+            "outputFile": "com.example.qr_page.app-mergeDebugResources-55:/values-kn/values-kn.xml",
             "map": [
                 {
                     "source": "/home/swomb/.gradle/caches/transforms-3/9a3b9caa53e8885d030aab39282fb142/transformed/jetified-play-services-base-18.1.0/res/values-kn/values.xml",

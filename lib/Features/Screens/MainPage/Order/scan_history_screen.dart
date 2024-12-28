@@ -22,7 +22,7 @@ class ScanHistoryScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'No scan history',
+                  'No orders found',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Colors.grey,
                   ),

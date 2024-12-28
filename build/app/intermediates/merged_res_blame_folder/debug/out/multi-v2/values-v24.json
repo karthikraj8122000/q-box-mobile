@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.qr_page.app-mergeDebugResources-53:/values-v24/values-v24.xml",
+            "outputFile": "com.example.qr_page.app-mergeDebugResources-55:/values-v24/values-v24.xml",
             "map": [
                 {
                     "source": "/home/swomb/.gradle/caches/transforms-3/d33a00fcbfb98b10445fe3efb72da296/transformed/media-1.0.0/res/values-v24/values-v24.xml",

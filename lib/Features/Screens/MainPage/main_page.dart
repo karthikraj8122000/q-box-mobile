@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:qr_page/Features/Screens/MainPage/Customer%20Delivery/main/delivery_tracking.dart';
+import 'package:qr_page/Features/Screens/MainPage/Dashboard/dashboard.dart';
 import 'package:qr_page/Features/Screens/MainPage/Load-unload/load-unload-main.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/order_qr_scanner.dart';
-import 'package:qr_page/Features/Screens/MainPage/dispatch_screen/dispatch_screen.dart';
-import 'package:qr_page/Features/Screens/MainPage/dispatch_history/history.dart';
-import 'package:qr_page/Features/Screens/MainPage/storage_screen/storage_screen.dart';
+import 'package:qr_page/Features/Screens/MainPage/unload_history/history.dart';
 import '../../../Utils/utils.dart';
 import 'dart:math' as math;
 import '../../../Widgets/Common/app_colors.dart';
@@ -20,11 +20,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    FoodStorageScreen(),
+    Dashboard(),
     LoadOrUnload(),
     InwardOrder(),
-    // DispatchScreen(),
-    DispatchHistoryScreen(),
+    DeliveryTrackingScreen(),
+    UnloadHistoryScreen(),
   ];
 
   // List of navigation items
@@ -32,7 +32,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
     NavigationItem(icon: Icons.home_outlined, label: 'Home', selectedIcon: Icons.home),
     NavigationItem(icon: Icons.outbox, label: 'Load/Unload', selectedIcon: Icons.outbox),
     NavigationItem(icon: Icons.shopping_cart, label: 'Inward Order', selectedIcon: Icons.shopping_cart),
-    // NavigationItem(icon: Icons.outbox, label: 'Unload', selectedIcon: Icons.outbox),
+    NavigationItem(icon: Icons.delivery_dining, label: 'Delivery', selectedIcon: Icons.delivery_dining_rounded),
     NavigationItem(icon: Icons.history, label: 'History', selectedIcon: Icons.history),
   ];
 

@@ -22,18 +22,121 @@ class _UnloadQboxState extends State<UnloadQbox> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
           _buildDispatchStats(provider),
           const SizedBox(height: 30),
           _buildScanSection(context, provider),
           const SizedBox(height: 30),
-          if (provider.foodItems.isNotEmpty)
-            _buildAvailableItems(provider)
+          if (provider.scannedFoodItems.isNotEmpty)
+            _buildScannedItems(provider)
           else
             _buildEnhancedEmptyState(),
         ],
       ),
     );
+  }
+
+  Widget _buildScannedItems(FoodStoreProvider provider) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Scanned Items',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              TextButton.icon(
+                onPressed: () => provider.clearScannedItems(),
+                icon: Icon(Icons.clear_all, color: Colors.red),
+                label: Text('Clear All', style: TextStyle(color: Colors.red)),
+              ),
+            ],
+          ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.2, end: 0),
+          SizedBox(height: 20),
+          Expanded(
+            child: ListView.builder(
+              itemCount: provider.scannedFoodItems.length,
+              itemBuilder: (context, index) {
+                final item = provider.scannedFoodItems[index];
+                return _buildScannedItemCard(item, provider);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildScannedItemCard(dynamic item, FoodStoreProvider provider) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 20,
+            offset: Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(20),
+        child: Row(
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                image: DecorationImage(
+                  image: AssetImage('assets/food.jpeg'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'QBox ID: ${item['boxCellSno']}',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Added: ${_formatDateTime(item['entryTime'])}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.close, color: Colors.red),
+              onPressed: () {
+                provider.scannedFoodItems.remove(item);
+                provider.notifyListeners();
+              },
+            ),
+          ],
+        ),
+      ),
+    ).animate().fadeIn(duration: 900.ms).slideX(begin: 0.2, end: 0);
   }
 
   Widget _buildEnhancedEmptyState() {
@@ -60,7 +163,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
                 .shake(hz: 2, curve: Curves.easeInOutCubic),
             SizedBox(height: 32),
             Text(
-              'No Items to Dispatch',
+              'No Items to Unload',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -69,7 +172,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
             ),
             SizedBox(height: 12),
             Text(
-              'Store some items first before dispatching',
+              'Store some items first before unloading',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -383,35 +486,31 @@ class _UnloadQboxState extends State<UnloadQbox> {
           ),
         ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.2, end: 0),
         SizedBox(height: 20),
-        ListView.builder(
+        GridView.builder(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           padding: const EdgeInsets.all(16),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.8,
+            mainAxisExtent: null,
+          ),
           itemCount: provider.foodItems.length,
           itemBuilder: (context, index) {
-            if (provider.foodItems.isEmpty) {
-              return Container();
-            }
+            if (provider.foodItems.isEmpty) return Container();
             final qbox = provider.foodItems[index];
             return _buildEnhancedItemCard(qbox, index,provider);
           },
         ),
-        // Wrap(
-        //   spacing: 16, // Horizontal spacing between items
-        //   runSpacing: 16, // Vertical spacing between rows
-        //   children: provider.foodItems
-        //       .map((item) => _buildEnhancedItemCard(item, provider))
-        //       .toList(),
-        // ),
       ],
     );
   }
 
-
   Widget _buildEnhancedItemCard(dynamic qbox, int index,FoodStoreProvider provider) {
     final isHighlighted = qbox['uniqueCode'] == provider.scannedDispatchItem;
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
@@ -420,41 +519,98 @@ class _UnloadQboxState extends State<UnloadQbox> {
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
             blurRadius: 20,
-            offset: Offset(0, 10),
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.all(20),
-        child: Row(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 80,
-              height: 80,
+              width: MediaQuery.of(context).size.width,
+              height: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                image: DecorationImage(
+                image: const DecorationImage(
                   image: AssetImage('assets/food.jpeg'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 8),
-                  _buildItemDetail('QBox ID', qbox['boxCellSno'].toString(),isHighlighted),
-                  _buildItemDetail('Added', _formatDateTime(qbox['entryTime']),isHighlighted),
-                ],
+            const SizedBox(height: 12),
+            Text(
+              'QBox ID: ${qbox['boxCellSno']}',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Added: ${_formatDateTime(qbox['entryTime'])}',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
       ),
-    ).animate().fadeIn(duration: 900.ms).slideX(begin: 0.2, end: 0);
+    ).animate().fadeIn(duration: 900.ms).slideY(begin: 0.2, end: 0);
   }
+
+  // Widget _buildEnhancedItemCard(dynamic qbox, int index,FoodStoreProvider provider) {
+  //   final isHighlighted = qbox['uniqueCode'] == provider.scannedDispatchItem;
+  //   return Container(
+  //     margin: EdgeInsets.only(bottom: 16),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(24),
+  //       border: Border.all(color: Colors.transparent),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: Colors.black.withOpacity(0.1),
+  //           blurRadius: 20,
+  //           offset: Offset(0, 10),
+  //         ),
+  //       ],
+  //     ),
+  //     child: Padding(
+  //       padding: EdgeInsets.all(20),
+  //       child: Row(
+  //         children: [
+  //           Container(
+  //             width: 80,
+  //             height: 80,
+  //             decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(16),
+  //               image: DecorationImage(
+  //                 image: AssetImage('assets/food.jpeg'),
+  //                 fit: BoxFit.cover,
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(width: 20),
+  //           Expanded(
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 SizedBox(height: 8),
+  //                 _buildItemDetail('QBox ID', qbox['boxCellSno'].toString(),isHighlighted),
+  //                 _buildItemDetail('Added', _formatDateTime(qbox['entryTime']),isHighlighted),
+  //               ],
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   ).animate().fadeIn(duration: 900.ms).slideX(begin: 0.2, end: 0);
+  // }
   //
   // Widget _buildEnhancedItemCard(dynamic item, FoodStoreProvider provider) {
   //   final isHighlighted = item.uniqueCode == provider.scannedDispatchItem;

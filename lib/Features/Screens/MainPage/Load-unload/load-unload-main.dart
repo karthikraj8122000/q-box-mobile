@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/MainPage/Load-unload/unload-from-qbox.dart';
+import 'package:qr_page/Widgets/Common/network_error.dart';
 
 import '../../../../Provider/order/order_qr_scanning_provider.dart';
 import '../../../../Widgets/Custom/custom_modern_tabbar.dart';
@@ -41,39 +42,41 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => OrderScanningProvider(),
-      child: Consumer<OrderScanningProvider>(
-        builder: (context, provider, child) => Scaffold(
-          body: NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverAppBar(
-                  pinned: true,
-                  automaticallyImplyLeading: false,
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: Text('Load/Unload',
-                          style: TextStyle(color: Colors.black)),
+    return NetworkWrapper(
+      child: ChangeNotifierProvider(
+        create: (_) => OrderScanningProvider(),
+        child: Consumer<OrderScanningProvider>(
+          builder: (context, provider, child) => Scaffold(
+            body: NestedScrollView(
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  SliverAppBar(
+                    pinned: true,
+                    automaticallyImplyLeading: false,
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Text('Load/Unload',
+                            style: TextStyle(color: Colors.black)),
+                      ),
+                      background: Container(color: Colors.grey[100]),
                     ),
-                    background: Container(color: Colors.grey[100]),
                   ),
-                ),
-                SliverPersistentHeader(
-                  delegate: _SliverAppBarDelegate(
-                    _buildTabBar(),
+                  SliverPersistentHeader(
+                    delegate: _SliverAppBarDelegate(
+                      _buildTabBar(),
+                    ),
+                    pinned: true,
                   ),
-                  pinned: true,
-                ),
-              ];
-            },
-            body: TabBarView(
-              controller: _tabController,
-              children: [
-                LoadQbox(),
-                UnloadQbox()
-              ],
+                ];
+              },
+              body: TabBarView(
+                controller: _tabController,
+                children: [
+                  LoadQbox(),
+                  UnloadQbox()
+                ],
+              ),
             ),
           ),
         ),
