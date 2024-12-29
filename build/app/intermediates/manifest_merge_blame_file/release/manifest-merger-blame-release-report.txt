@@ -1,0 +1,425 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.qr_page"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="35" />
+9-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml
+10
+11    <uses-feature
+11-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:5:5-7:36
+12        android:name="android.hardware.camera"
+12-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:6:9-47
+13        android:required="true" />
+13-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:7:9-33
+14
+15    <uses-permission android:name="android.permission.CAMERA" />
+15-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:9:5-65
+15-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:9:22-62
+16    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+16-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:10:5-81
+16-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:10:22-78
+17    <!--
+18         Required to query activities that can process text, see:
+19         https://developer.android.com/training/package-visibility?hl=en and
+20         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+21
+22         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+23    -->
+24    <queries>
+24-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:48:5-53:15
+25        <intent>
+25-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:49:9-52:18
+26            <action android:name="android.intent.action.PROCESS_TEXT" />
+26-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:50:13-72
+26-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:50:21-70
+27
+28            <data android:mimeType="text/plain" />
+28-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:51:13-50
+28-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:51:19-48
+29        </intent>
+30        <!-- Needs to be explicitly declared on Android R+ -->
+31        <package android:name="com.google.android.apps.maps" />
+31-->[com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:33:9-64
+31-->[com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:33:18-61
+32    </queries>
+33
+34    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+34-->[:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/release/AndroidManifest.xml:9:5-79
+34-->[:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/release/AndroidManifest.xml:9:22-76
+35    <uses-permission android:name="android.permission.FLASHLIGHT" />
+35-->[:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/release/AndroidManifest.xml:13:5-69
+35-->[:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/release/AndroidManifest.xml:13:22-66
+36    <uses-permission android:name="android.permission.INTERNET" />
+36-->[com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:24:5-67
+36-->[com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:24:22-64
+37
+38    <uses-feature
+38-->[com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:26:5-28:35
+39        android:glEsVersion="0x00020000"
+39-->[com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:27:9-41
+40        android:required="true" />
+40-->[com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:28:9-32
+41
+42    <permission
+42-->[androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+43        android:name="com.example.qr_page.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+43-->[androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+44        android:protectionLevel="signature" />
+44-->[androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+45
+46    <uses-permission android:name="com.example.qr_page.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+46-->[androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+46-->[androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+47
+48    <uses-feature
+48-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:28:5-30:36
+49        android:name="android.hardware.camera.front"
+49-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:29:9-53
+50        android:required="false" /> <!-- TODO replace above two with next line after Android 4.2 -->
+50-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:30:9-33
+51    <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
+52    <uses-feature
+52-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:33:5-35:36
+53        android:name="android.hardware.camera.autofocus"
+53-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:34:9-57
+54        android:required="false" />
+54-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:35:9-33
+55    <uses-feature
+55-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:36:5-38:36
+56        android:name="android.hardware.camera.flash"
+56-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:37:9-53
+57        android:required="false" />
+57-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:38:9-33
+58    <uses-feature
+58-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:39:5-41:36
+59        android:name="android.hardware.screen.landscape"
+59-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:40:9-57
+60        android:required="false" />
+60-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:41:9-33
+61    <uses-feature
+61-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:42:5-44:36
+62        android:name="android.hardware.wifi"
+62-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:43:9-45
+63        android:required="false" />
+63-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:44:9-33
+64
+65    <application
+66        android:name="android.app.Application"
+66-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:13:9-42
+67        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+67-->[androidx.core:core:1.13.1] /home/swomb/.gradle/caches/transforms-3/fa7ca5853438f9fcefc94b445f011004/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+68        android:icon="@mipmap/ic_launcher"
+68-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:14:9-43
+69        android:label="Qbox"
+69-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:12:9-29
+70        android:largeHeap="true"
+70-->[:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/release/AndroidManifest.xml:16:9-33
+71        android:theme="@style/Theme.AppCompat.NoActionBar" >
+71-->[:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/release/AndroidManifest.xml:17:9-59
+72        <activity
+72-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:15:9-36:20
+73            android:name="com.example.qr_page.MainActivity"
+73-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:16:13-41
+74            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+74-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:20:13-163
+75            android:exported="true"
+75-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:17:13-36
+76            android:hardwareAccelerated="true"
+76-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:21:13-47
+77            android:launchMode="singleTop"
+77-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:18:13-43
+78            android:theme="@style/LaunchTheme"
+78-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:19:13-47
+79            android:windowSoftInputMode="adjustResize" >
+79-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:22:13-55
+80
+81            <!--
+82                 Specifies an Android theme to apply to this Activity as soon as
+83                 the Android process has started. This theme is visible to the user
+84                 while the Flutter UI initializes. After that, this theme continues
+85                 to determine the Window background behind the Flutter UI.
+86            -->
+87            <meta-data
+87-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:28:13-31:17
+88                android:name="io.flutter.embedding.android.NormalTheme"
+88-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:29:15-70
+89                android:resource="@style/NormalTheme" />
+89-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:30:15-52
+90
+91            <intent-filter>
+91-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:32:13-35:29
+92                <action android:name="android.intent.action.MAIN" />
+92-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:33:17-68
+92-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:33:25-66
+93
+94                <category android:name="android.intent.category.LAUNCHER" />
+94-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:34:17-76
+94-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:34:27-74
+95            </intent-filter>
+96        </activity>
+97        <!--
+98             Don't delete the meta-data below.
+99             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+100        -->
+101        <meta-data
+101-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:39:9-41:33
+102            android:name="flutterEmbedding"
+102-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:40:13-44
+103            android:value="2" />
+103-->/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:41:13-30
+104
+105        <activity android:name="com.amolg.flutterbarcodescanner.BarcodeCaptureActivity" />
+105-->[:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/release/AndroidManifest.xml:18:9-91
+105-->[:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/release/AndroidManifest.xml:18:19-88
+106
+107        <provider
+107-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:11:9-19:20
+108            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+108-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:12:13-82
+109            android:authorities="com.example.qr_page.flutter.image_provider"
+109-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:13:13-74
+110            android:exported="false"
+110-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:14:13-37
+111            android:grantUriPermissions="true" >
+111-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:15:13-47
+112            <meta-data
+112-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:16:13-18:75
+113                android:name="android.support.FILE_PROVIDER_PATHS"
+113-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:17:17-67
+114                android:resource="@xml/flutter_image_picker_file_paths" />
+114-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:18:17-72
+115        </provider> <!-- Trigger Google Play services to install the backported photo picker module. -->
+116        <service
+116-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:21:9-33:19
+117            android:name="com.google.android.gms.metadata.ModuleDependencies"
+117-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:22:13-78
+118            android:enabled="false"
+118-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:23:13-36
+119            android:exported="false" >
+119-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:24:13-37
+120            <intent-filter>
+120-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:26:13-28:29
+121                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+121-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:27:17-94
+121-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:27:25-91
+122            </intent-filter>
+123
+124            <meta-data
+124-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:30:13-32:36
+125                android:name="photopicker_activity:0:required"
+125-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:31:17-63
+126                android:value="" />
+126-->[:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:32:17-33
+127        </service> <!-- Needs to be explicitly declared on P+ -->
+128        <uses-library
+128-->[com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:39:9-41:40
+129            android:name="org.apache.http.legacy"
+129-->[com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:40:13-50
+130            android:required="false" />
+130-->[com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/a5eddea0a72996034f83325ae84d0517/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:41:13-37
+131
+132        <service
+132-->[com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0] /home/swomb/.gradle/caches/transforms-3/2f4fa5be52eed92602b8860318897af4/transformed/jetified-play-services-mlkit-barcode-scanning-18.3.0/AndroidManifest.xml:9:9-15:19
+133            android:name="com.google.mlkit.common.internal.MlKitComponentDiscoveryService"
+133-->[com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0] /home/swomb/.gradle/caches/transforms-3/2f4fa5be52eed92602b8860318897af4/transformed/jetified-play-services-mlkit-barcode-scanning-18.3.0/AndroidManifest.xml:10:13-91
+134            android:directBootAware="true"
+134-->[com.google.mlkit:common:18.9.0] /home/swomb/.gradle/caches/transforms-3/ef808783c97470d39c93a999f34feccf/transformed/jetified-common-18.9.0/AndroidManifest.xml:17:13-43
+135            android:exported="false" >
+135-->[com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0] /home/swomb/.gradle/caches/transforms-3/2f4fa5be52eed92602b8860318897af4/transformed/jetified-play-services-mlkit-barcode-scanning-18.3.0/AndroidManifest.xml:11:13-37
+136            <meta-data
+136-->[com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0] /home/swomb/.gradle/caches/transforms-3/2f4fa5be52eed92602b8860318897af4/transformed/jetified-play-services-mlkit-barcode-scanning-18.3.0/AndroidManifest.xml:12:13-14:85
+137                android:name="com.google.firebase.components:com.google.mlkit.vision.barcode.internal.BarcodeRegistrar"
+137-->[com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0] /home/swomb/.gradle/caches/transforms-3/2f4fa5be52eed92602b8860318897af4/transformed/jetified-play-services-mlkit-barcode-scanning-18.3.0/AndroidManifest.xml:13:17-120
+138                android:value="com.google.firebase.components.ComponentRegistrar" />
+138-->[com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0] /home/swomb/.gradle/caches/transforms-3/2f4fa5be52eed92602b8860318897af4/transformed/jetified-play-services-mlkit-barcode-scanning-18.3.0/AndroidManifest.xml:14:17-82
+139            <meta-data
+139-->[com.google.mlkit:vision-common:17.3.0] /home/swomb/.gradle/caches/transforms-3/bf4755d3479dbc2a1736a6c6c26babf2/transformed/jetified-vision-common-17.3.0/AndroidManifest.xml:12:13-14:85
+140                android:name="com.google.firebase.components:com.google.mlkit.vision.common.internal.VisionCommonRegistrar"
+140-->[com.google.mlkit:vision-common:17.3.0] /home/swomb/.gradle/caches/transforms-3/bf4755d3479dbc2a1736a6c6c26babf2/transformed/jetified-vision-common-17.3.0/AndroidManifest.xml:13:17-124
+141                android:value="com.google.firebase.components.ComponentRegistrar" />
+141-->[com.google.mlkit:vision-common:17.3.0] /home/swomb/.gradle/caches/transforms-3/bf4755d3479dbc2a1736a6c6c26babf2/transformed/jetified-vision-common-17.3.0/AndroidManifest.xml:14:17-82
+142            <meta-data
+142-->[com.google.mlkit:common:18.9.0] /home/swomb/.gradle/caches/transforms-3/ef808783c97470d39c93a999f34feccf/transformed/jetified-common-18.9.0/AndroidManifest.xml:20:13-22:85
+143                android:name="com.google.firebase.components:com.google.mlkit.common.internal.CommonComponentRegistrar"
+143-->[com.google.mlkit:common:18.9.0] /home/swomb/.gradle/caches/transforms-3/ef808783c97470d39c93a999f34feccf/transformed/jetified-common-18.9.0/AndroidManifest.xml:21:17-120
+144                android:value="com.google.firebase.components.ComponentRegistrar" />
+144-->[com.google.mlkit:common:18.9.0] /home/swomb/.gradle/caches/transforms-3/ef808783c97470d39c93a999f34feccf/transformed/jetified-common-18.9.0/AndroidManifest.xml:22:17-82
+145        </service>
+146
+147        <provider
+147-->[com.google.mlkit:common:18.9.0] /home/swomb/.gradle/caches/transforms-3/ef808783c97470d39c93a999f34feccf/transformed/jetified-common-18.9.0/AndroidManifest.xml:9:9-13:38
+148            android:name="com.google.mlkit.common.internal.MlKitInitProvider"
+148-->[com.google.mlkit:common:18.9.0] /home/swomb/.gradle/caches/transforms-3/ef808783c97470d39c93a999f34feccf/transformed/jetified-common-18.9.0/AndroidManifest.xml:10:13-78
+149            android:authorities="com.example.qr_page.mlkitinitprovider"
+149-->[com.google.mlkit:common:18.9.0] /home/swomb/.gradle/caches/transforms-3/ef808783c97470d39c93a999f34feccf/transformed/jetified-common-18.9.0/AndroidManifest.xml:11:13-69
+150            android:exported="false"
+150-->[com.google.mlkit:common:18.9.0] /home/swomb/.gradle/caches/transforms-3/ef808783c97470d39c93a999f34feccf/transformed/jetified-common-18.9.0/AndroidManifest.xml:12:13-37
+151            android:initOrder="99" />
+151-->[com.google.mlkit:common:18.9.0] /home/swomb/.gradle/caches/transforms-3/ef808783c97470d39c93a999f34feccf/transformed/jetified-common-18.9.0/AndroidManifest.xml:13:13-35
+152
+153        <activity
+153-->[com.google.android.gms:play-services-base:18.1.0] /home/swomb/.gradle/caches/transforms-3/9a3b9caa53e8885d030aab39282fb142/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
+154            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+154-->[com.google.android.gms:play-services-base:18.1.0] /home/swomb/.gradle/caches/transforms-3/9a3b9caa53e8885d030aab39282fb142/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:19-85
+155            android:exported="false"
+155-->[com.google.android.gms:play-services-base:18.1.0] /home/swomb/.gradle/caches/transforms-3/9a3b9caa53e8885d030aab39282fb142/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:22:19-43
+156            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+156-->[com.google.android.gms:play-services-base:18.1.0] /home/swomb/.gradle/caches/transforms-3/9a3b9caa53e8885d030aab39282fb142/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:21:19-78
+157
+158        <meta-data
+158-->[com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
+159            android:name="com.google.android.gms.version"
+159-->[com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
+160            android:value="@integer/google_play_services_version" />
+160-->[com.google.android.gms:play-services-basement:18.1.0] /home/swomb/.gradle/caches/transforms-3/0807c46b5221cc69a562a5273054445c/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
+161        <!--
+162        Service for holding metadata. Cannot be instantiated.
+163        Metadata will be merged from other manifests.
+164        -->
+165        <service
+165-->[androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:29:9-33:78
+166            android:name="androidx.camera.core.impl.MetadataHolderService"
+166-->[androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:30:13-75
+167            android:enabled="false"
+167-->[androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:31:13-36
+168            android:exported="false" >
+168-->[androidx.camera:camera-core:1.3.1] /home/swomb/.gradle/caches/transforms-3/1a06028474323e843ac880cab4b6713f/transformed/jetified-camera-core-1.3.1/AndroidManifest.xml:32:13-37
+169            <meta-data
+169-->[androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:30:13-32:89
+170                android:name="androidx.camera.core.impl.MetadataHolderService.DEFAULT_CONFIG_PROVIDER"
+170-->[androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:31:17-103
+171                android:value="androidx.camera.camera2.Camera2Config$DefaultProvider" />
+171-->[androidx.camera:camera-camera2:1.3.1] /home/swomb/.gradle/caches/transforms-3/f00a9bda5cf0db61cc94a498c6840ef7/transformed/jetified-camera-camera2-1.3.1/AndroidManifest.xml:32:17-86
+172        </service>
+173
+174        <uses-library
+174-->[androidx.window:window:1.2.0] /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/AndroidManifest.xml:23:9-25:40
+175            android:name="androidx.window.extensions"
+175-->[androidx.window:window:1.2.0] /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/AndroidManifest.xml:24:13-54
+176            android:required="false" />
+176-->[androidx.window:window:1.2.0] /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/AndroidManifest.xml:25:13-37
+177        <uses-library
+177-->[androidx.window:window:1.2.0] /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/AndroidManifest.xml:26:9-28:40
+178            android:name="androidx.window.sidecar"
+178-->[androidx.window:window:1.2.0] /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/AndroidManifest.xml:27:13-51
+179            android:required="false" />
+179-->[androidx.window:window:1.2.0] /home/swomb/.gradle/caches/transforms-3/397acd1fdbefa19ec53e6c5ae44b0212/transformed/jetified-window-1.2.0/AndroidManifest.xml:28:13-37
+180
+181        <provider
+181-->[androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:26:9-34:20
+182            android:name="androidx.startup.InitializationProvider"
+182-->[androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:27:13-67
+183            android:authorities="com.example.qr_page.androidx-startup"
+183-->[androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:28:13-68
+184            android:exported="false" >
+184-->[androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:29:13-37
+185            <meta-data
+185-->[androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:31:13-33:52
+186                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+186-->[androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:32:17-75
+187                android:value="androidx.startup" />
+187-->[androidx.emoji2:emoji2:1.0.0] /home/swomb/.gradle/caches/transforms-3/76b2f0c005c765e43e36a3212e52e26f/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:33:17-49
+188            <meta-data
+188-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+189                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+189-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+190                android:value="androidx.startup" />
+190-->[androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/852ab9d4e16b4180bb488d04dbebe10e/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+191            <meta-data
+191-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+192                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+192-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+193                android:value="androidx.startup" />
+193-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+194        </provider>
+195
+196        <receiver
+196-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+197            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+197-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+198            android:directBootAware="false"
+198-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+199            android:enabled="true"
+199-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+200            android:exported="true"
+200-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+201            android:permission="android.permission.DUMP" >
+201-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+202            <intent-filter>
+202-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+203                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+203-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+203-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+204            </intent-filter>
+205            <intent-filter>
+205-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+206                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+206-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+206-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+207            </intent-filter>
+208            <intent-filter>
+208-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+209                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+209-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+209-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+210            </intent-filter>
+211            <intent-filter>
+211-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+212                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+212-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+212-->[androidx.profileinstaller:profileinstaller:1.3.1] /home/swomb/.gradle/caches/transforms-3/ec1578e118534dcba3eeefeec7bda244/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+213            </intent-filter>
+214        </receiver>
+215
+216        <service
+216-->[com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:29:9-35:19
+217            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+217-->[com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:30:13-103
+218            android:exported="false" >
+218-->[com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:31:13-37
+219            <meta-data
+219-->[com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:32:13-34:39
+220                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+220-->[com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:33:17-94
+221                android:value="cct" />
+221-->[com.google.android.datatransport:transport-backend-cct:2.3.3] /home/swomb/.gradle/caches/transforms-3/5a7d1c88dc142d0fb087d72c3dfa28ed/transformed/jetified-transport-backend-cct-2.3.3/AndroidManifest.xml:34:17-36
+222        </service>
+223        <service
+223-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:26:9-30:19
+224            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+224-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:27:13-117
+225            android:exported="false"
+225-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:28:13-37
+226            android:permission="android.permission.BIND_JOB_SERVICE" >
+226-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:29:13-69
+227        </service>
+228
+229        <receiver
+229-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:32:9-34:40
+230            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+230-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:33:13-132
+231            android:exported="false" />
+231-->[com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/665b6b106e777bd48649e2da44dbf3b9/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:34:13-37
+232
+233        <activity
+233-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:47:9-53:63
+234            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+234-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:48:13-74
+235            android:clearTaskOnLaunch="true"
+235-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:49:13-45
+236            android:screenOrientation="sensorLandscape"
+236-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:50:13-56
+237            android:stateNotNeeded="true"
+237-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:51:13-42
+238            android:theme="@style/zxing_CaptureTheme"
+238-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:52:13-54
+239            android:windowSoftInputMode="stateAlwaysHidden" />
+239-->[com.journeyapps:zxing-android-embedded:4.3.0] /home/swomb/.gradle/caches/transforms-3/7abce6ecd6fcd23bf26e2bc8a4372f16/transformed/jetified-zxing-android-embedded-4.3.0/AndroidManifest.xml:53:13-60
+240    </application>
+241
+242</manifest>
