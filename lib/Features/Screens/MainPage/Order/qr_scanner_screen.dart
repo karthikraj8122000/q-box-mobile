@@ -1,10 +1,13 @@
 // lib/screens/order/order_qr_scanner_screen.dart
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/widgets/food_items_grid.dart';
 import 'package:qr_page/Provider/order/order_card.dart';
 import 'package:qr_page/Services/api_service.dart';
+import 'package:qr_page/Services/toast_service.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 
 import '../../../../Model/Data_Models/inward_food_model.dart';
@@ -28,6 +31,8 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
   bool _showSummary = false;
   String scan = "notComplete";
   List purchaseOrder = [];
+  final CommonService commonService = CommonService();
+
   @override
   void dispose() {
     for (var controller in _controllers) {
@@ -69,8 +74,7 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
         scan = 'complete';
         purchaseOrder = response['data'];
       });
-      // Extract totalItems from the response
-      // return response['data'] ?? [];
+
     } catch (error) {
       throw Exception('Failed to fetch totalItems: $error');
     }
@@ -113,9 +117,12 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
         scan = 'complete';
         setState(() {});
         // _fetchOrderDetails(scannedOrPunchedValue);
+      }else{
+        commonService.errorToast("failed to load!");
       }
     } catch (error) {
       // Handle error response
+      commonService.errorToast("Error:$e");
       print('API Error: $error');
       // Show error message to user if necessary
     }

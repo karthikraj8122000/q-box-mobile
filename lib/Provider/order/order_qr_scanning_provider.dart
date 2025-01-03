@@ -40,7 +40,7 @@ class OrderScanningProvider extends ChangeNotifier {
       print("QR code scanned: $_scanBarcode");
       notifyListeners();
       if (barcodeScanRes != '-1') {
-        await get(barcodeScanRes);
+        // await get(barcodeScanRes);
         print("After get() call, value: $value");
         if (await _isValidOrder(barcodeScanRes)) {
           print("Order is valid, showing action dialog");
@@ -169,26 +169,26 @@ class OrderScanningProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> get(String orderId) async {
-    Map<String, dynamic> params = {"partnerPurchaseOrderId": orderId.isNotEmpty ? orderId : _scanSalesBarcode};
-    print("Calling API with params: $params");
-    var result = await apiService.post(
-        "8912", "masters", "partner_channel_inward_delivery", params);
-    print("API result: $result");
-    if (result != null && result['data'] != null) {
-      value = result['data'];
-      print('Order data: $value');
-      if (value['purchaseOrderDtls'] != null) {
-        commonService.presentToast('Order details retrieved successfully');
-      } else {
-        commonService.errorToast('No order details found');
-      }
-    } else {
-      commonService.errorToast('Failed to retrieve order details');
-    }
-
-    _scanBarcode = "";
-    notifyListeners();
-  }
+  // Future<void> get(String orderId) async {
+  //   Map<String, dynamic> params = {"partnerPurchaseOrderId": orderId.isNotEmpty ? orderId : _scanSalesBarcode};
+  //   print("Calling API with params: $params");
+  //   var result = await apiService.post(
+  //       "8912", "masters", "partner_channel_inward_delivery", params);
+  //   print("API result: $result");
+  //   if (result != null && result['data'] != null) {
+  //     value = result['data'];
+  //     print('Order data: $value');
+  //     if (value['purchaseOrderDtls'] != null) {
+  //       commonService.presentToast('Order details retrieved successfully');
+  //     } else {
+  //       commonService.errorToast('No order details found');
+  //     }
+  //   } else {
+  //     commonService.errorToast('Failed to retrieve order details');
+  //   }
+  //
+  //   _scanBarcode = "";
+  //   notifyListeners();
+  // }
 }
 

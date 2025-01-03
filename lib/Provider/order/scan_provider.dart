@@ -85,21 +85,21 @@ class ScanProvider with ChangeNotifier {
   //   // return item != null && item.qrCode != null && item.status == 'pending';
   // }
 
-  Future<void> getInwardOrder(String orderId) async {
-    Map<String, dynamic> params = {"partnerPurchaseOrderId": orderId.isNotEmpty ? orderId : _scanSalesBarcode};
-    var result = await apiService.post(
-        "8912", "masters", "partner_channel_inward_delivery", params);
-    if (result != null && result['data'] != null) {
-      value = result['data'];
-      if (value['purchaseOrderDtls'] != null) {
-        _currentOrder = Order.fromJson(value['purchaseOrderDtls']);
-        commonService.presentToast('Order is Delivered');
-      } else {
-        commonService.presentToast('Invalid Order');
-      }
-    }
-    _scanBarcode = "";
-    notifyListeners();
-  }
+  // Future<void> getInwardOrder(String orderId) async {
+  //   Map<String, dynamic> params = {"partnerPurchaseOrderId": orderId.isNotEmpty ? orderId : _scanSalesBarcode};
+  //   var result = await apiService.post(
+  //       "8912", "masters", "partner_channel_inward_delivery", params);
+  //   if (result != null && result['data'] != null) {
+  //     value = result['data'];
+  //     if (value['purchaseOrderDtls'] != null) {
+  //       _currentOrder = Order.fromJson(value['purchaseOrderDtls']);
+  //       commonService.presentToast('Order is Delivered');
+  //     } else {
+  //       commonService.presentToast('Invalid Order');
+  //     }
+  //   }
+  //   _scanBarcode = "";
+  //   notifyListeners();
+  // }
 }
 
