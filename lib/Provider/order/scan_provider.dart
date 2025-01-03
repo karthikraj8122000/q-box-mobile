@@ -21,12 +21,11 @@ class ScanProvider with ChangeNotifier {
   String get scanBarcode => _scanBarcode;
   String get scanSalesBarcode => _scanSalesBarcode;
 
-  Future<void> fetchOrderDetails(String orderId) async {
-    // Simulated API call
+  Future<void> fetchOrderDetails(String orderId,int totalItems) async {
     await Future.delayed(Duration(seconds: 1));
     _currentOrder = Order(
       orderId: orderId,
-      totalItems: 3,
+      totalItems: totalItems,
       items: [
         InwardFoodModel(id: '1', name: 'Pizza', price: 10.99, qrCode: 'PIZZA001'),
         InwardFoodModel(id: '2', name: 'Burger', price: 8.99, qrCode: 'BURGER001'),

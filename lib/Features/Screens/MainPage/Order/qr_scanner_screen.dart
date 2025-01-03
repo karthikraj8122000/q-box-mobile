@@ -55,7 +55,7 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
   void _fetchOrderDetails(String orderId) async {
     final orderProvider = Provider.of<ScanProvider>(context, listen: false);
     try {
-      await orderProvider.fetchOrderDetails(orderId);
+      await orderProvider.fetchOrderDetails(orderId,orderProvider.currentOrder!.totalItems);
     } catch (e) {
       _showError('Error fetching order details: $e');
     }
