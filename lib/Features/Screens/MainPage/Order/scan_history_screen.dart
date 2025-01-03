@@ -97,7 +97,7 @@ class ScanHistoryScreen extends StatelessWidget {
                 children: [
                   Text('Order ID:', style: TextStyle(fontWeight: FontWeight.bold)),
                   Text(order.orderId),
-                  Text(order.status),
+                  // Text(order.status),
                 ],
               ),
               TableRow(
@@ -113,7 +113,6 @@ class ScanHistoryScreen extends StatelessWidget {
       ),
     );
   }
-
 
 
 

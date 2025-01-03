@@ -49,44 +49,14 @@ class _InwardOrderState extends State<InwardOrder> with TickerProviderStateMixin
               title: Text('Inward Order Receiving', style: TextStyle(color: Colors.black)),
             ),
             body: SafeArea(
-              child: Column(
-                children: [
-                  _buildTabBar(),
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        OrderQRScannerScreen(),
-                        ScanHistoryScreen(),
-                      ],
-                    ),
-                  ),
-                ],
+              child: SingleChildScrollView(
+                child:OrderQRScannerScreen(),
               ),
             ),
           ),
         ),
       ),
     );
-  }
-
-  Widget _buildTabBar() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: ModernTabBar(
-        controller: _tabController,
-        tabItems: _tabItems,
-        onTap: (index) {
-          print('Tapped on tab $index');
-        },
-      ),
-    ).animate()
-        .fadeIn(duration: 600.ms)
-        .slideY(begin: 0.2, end: 0);
   }
 }
 
