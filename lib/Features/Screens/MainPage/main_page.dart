@@ -24,7 +24,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
     LoadOrUnload(),
     InwardOrder(),
     DeliveryTrackingScreen(),
-    UnloadHistoryScreen(),
+    HistoryScreen(),
   ];
 
   // List of navigation items

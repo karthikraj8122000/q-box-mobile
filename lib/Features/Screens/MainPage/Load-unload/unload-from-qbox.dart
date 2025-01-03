@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_page/Widgets/Common/app_text.dart';
 
+import '../../../../Model/Data_Models/Food_item/foot_item_model.dart';
 import '../../../../Provider/food_store_provider.dart';
+import '../../../../Theme/app_theme.dart';
 import '../../../../Widgets/Common/app_colors.dart';
 
 class UnloadQbox extends StatefulWidget {
@@ -17,179 +21,118 @@ class _UnloadQboxState extends State<UnloadQbox> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<FoodStoreProvider>(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildDispatchStats(provider),
-          const SizedBox(height: 30),
-          _buildScanSection(context, provider),
-          const SizedBox(height: 30),
-          if (provider.scannedFoodItems.isNotEmpty)
-            _buildScannedItems(provider)
-          else
-            _buildEnhancedEmptyState(),
-        ],
-      ),
+    final sortedItems = provider.getSortedDispatchedItems();
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+          sliver: SliverList(
+            delegate: SliverChildListDelegate([
+              _buildDispatchStats(context, provider),
+              const SizedBox(height: 30),
+              _buildScanSection(context, provider),
+              const SizedBox(height: 30),
+              AppText(
+                text: "Unloaded History",
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
+            ]),
+          ),
+        ),
+        if (sortedItems.isNotEmpty)
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: isTablet ? 2.2:1.0,
+                crossAxisSpacing: 2,
+                mainAxisSpacing: 2,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                  final item = sortedItems[index];
+                  return _buildGridItem(context, item);
+                },
+                childCount: sortedItems.length,
+              ),
+            ),
+          )
+        else
+          SliverToBoxAdapter(
+            child: _buildEnhancedEmptyState(context),
+          ),
+      ],
     );
   }
-
-  Widget _buildScannedItems(FoodStoreProvider provider) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildGridItem(BuildContext context, FoodItem item) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+      ),
+      elevation: 4,
+      child: InkWell(
+        onTap: () => _showItemDetails(context, item),
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Scanned Items',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              TextButton.icon(
-                onPressed: () => provider.clearScannedItems(),
-                icon: Icon(Icons.clear_all, color: Colors.red),
-                label: Text('Clear All', style: TextStyle(color: Colors.red)),
-              ),
-            ],
-          ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.2, end: 0),
-          SizedBox(height: 20),
-          Expanded(
-            child: ListView.builder(
-              itemCount: provider.scannedFoodItems.length,
-              itemBuilder: (context, index) {
-                final item = provider.scannedFoodItems[index];
-                return _buildScannedItemCard(item, provider);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildScannedItemCard(dynamic item, FoodStoreProvider provider) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(20),
-        child: Row(
-          children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                image: DecorationImage(
-                  image: AssetImage('assets/food.jpeg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'QBox ID: ${item['boxCellSno']}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                  CircleAvatar(
+                    backgroundColor: AppTheme.appTheme.withOpacity(0.2),
+                    child: Icon(
+                      Icons.outbox,
+                      color: AppTheme.appTheme,
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Added: ${_formatDateTime(item['entryTime'])}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
+                  Container(
+                    padding: EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                      color: Colors.black,
+                    ),
+                    child: Icon(
+                      Icons.chevron_right,
+                      color: Colors.white,
+                      size: 20,
                     ),
                   ),
                 ],
               ),
-            ),
-            IconButton(
-              icon: Icon(Icons.close, color: Colors.red),
-              onPressed: () {
-                provider.scannedFoodItems.remove(item);
-                provider.notifyListeners();
-              },
-            ),
-          ],
+              SizedBox(height: 12),
+              Text(
+                item.uniqueCode,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Container: ${item.boxCellSno}',
+                style: TextStyle(fontSize: 13),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(height: 4),
+              Text(
+                'Unloaded at:\n${DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate)}',
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+              ),
+            ],
+          ),
         ),
       ),
-    ).animate().fadeIn(duration: 900.ms).slideX(begin: 0.2, end: 0);
-  }
-
-  Widget _buildEnhancedEmptyState() {
-    return Center(
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 40),
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: AppColors.darkPaleYellow.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.inventory_2_rounded,
-                size: 64,
-                color: AppColors.darkPaleYellow,
-              ),
-            )
-                .animate(onPlay: (controller) => controller.repeat())
-                .shimmer(duration: 2000.ms)
-                .then()
-                .shake(hz: 2, curve: Curves.easeInOutCubic),
-            SizedBox(height: 32),
-            Text(
-              'No Items to Unload',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            SizedBox(height: 12),
-            Text(
-              'Store some items first before unloading',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[600],
-                height: 1.5,
-              ),
-            ),
-          ],
-        ),
-      )
-          .animate()
-          .fadeIn(duration: 800.ms)
-          .scale(begin: Offset(0.8, 0.8), end: Offset(1, 1)),
     );
   }
 
-  Widget _buildDispatchStats(FoodStoreProvider provider) {
+  Widget _buildDispatchStats(BuildContext context, FoodStoreProvider provider) {
     return Container(
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -291,6 +234,143 @@ class _UnloadQboxState extends State<UnloadQbox> {
         ),
       ],
     );
+  }
+
+  Widget _buildDispatchedItemsGrid(BuildContext context, List<FoodItem> items) {
+    return GridView.builder(
+      padding: EdgeInsets.all(0),
+      scrollDirection: Axis.vertical,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // Number of columns
+          childAspectRatio:
+          2.2, // Adjust this value to control card height
+          crossAxisSpacing: 16, // Horizontal spacing between cards
+          mainAxisSpacing: 16),
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return Card(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16))),
+          elevation: 4,
+          child: InkWell(
+            onTap: () => _showItemDetails(context, item),
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header with Icon and Arrow
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor:
+                        AppTheme.appTheme.withOpacity(0.2),
+                        child: Icon(
+                          Icons.local_shipping,
+                          color: AppTheme.appTheme,
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(50)),
+                            color: Colors.black),
+                        child: Icon(
+                          Icons.chevron_right,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+
+                  // Unique Code
+                  Text(
+                    item.uniqueCode,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 14),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 8),
+
+                  // Container Number
+                  Text(
+                    'Container: ${item.boxCellSno}',
+                    style: TextStyle(fontSize: 13),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 4),
+
+                  // Dispatch Date
+                  Text(
+                    'Unloaded at:\n${DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate)}',
+                    style:
+                    TextStyle(color: Colors.grey[600], fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildEnhancedEmptyState(BuildContext context) {
+    return Center(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 40),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: AppColors.darkPaleYellow.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.inventory_2_rounded,
+                size: 64,
+                color: AppColors.darkPaleYellow,
+              ),
+            )
+                .animate(onPlay: (controller) => controller.repeat())
+                .shimmer(duration: 2000.ms)
+                .then()
+                .shake(hz: 2, curve: Curves.easeInOutCubic),
+            SizedBox(height: 32),
+            Text(
+              'No Items to Unload',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            SizedBox(height: 12),
+            Text(
+              'Store some items first before unloading',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ).animate()
+        .fadeIn(duration: 800.ms)
+        .scale(begin: Offset(0.8, 0.8), end: Offset(1, 1));
   }
 
   Widget _buildScanSection(BuildContext context, FoodStoreProvider provider) {
@@ -472,248 +552,60 @@ class _UnloadQboxState extends State<UnloadQbox> {
     );
   }
 
-  Widget _buildAvailableItems(FoodStoreProvider provider) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Title
-        Text(
-          'Available Items',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
+  void _showItemDetails(BuildContext context, FoodItem item) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Item Details',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.appTheme,
+                ),
+              ),
+              SizedBox(height: 16),
+              _buildDetailRow('Food Item', item.uniqueCode),
+              _buildDetailRow('Qbox ID', item.boxCellSno),
+              _buildDetailRow(
+                'Unloaded Date',
+                DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate),
+              ),
+            ],
           ),
-        ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.2, end: 0),
-        SizedBox(height: 20),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-          padding: const EdgeInsets.all(16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 0.8,
-            mainAxisExtent: null,
-          ),
-          itemCount: provider.foodItems.length,
-          itemBuilder: (context, index) {
-            if (provider.foodItems.isEmpty) return Container();
-            final qbox = provider.foodItems[index];
-            return _buildEnhancedItemCard(qbox, index,provider);
-          },
-        ),
-      ],
+        );
+      },
     );
   }
 
-  Widget _buildEnhancedItemCard(dynamic qbox, int index,FoodStoreProvider provider) {
-    final isHighlighted = qbox['uniqueCode'] == provider.scannedDispatchItem;
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.transparent),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: Colors.grey[700],
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 150,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                image: const DecorationImage(
-                  image: AssetImage('assets/food.jpeg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'QBox ID: ${qbox['boxCellSno']}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Added: ${_formatDateTime(qbox['entryTime'])}',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    ).animate().fadeIn(duration: 900.ms).slideY(begin: 0.2, end: 0);
-  }
-
-  // Widget _buildEnhancedItemCard(dynamic qbox, int index,FoodStoreProvider provider) {
-  //   final isHighlighted = qbox['uniqueCode'] == provider.scannedDispatchItem;
-  //   return Container(
-  //     margin: EdgeInsets.only(bottom: 16),
-  //     decoration: BoxDecoration(
-  //       color: Colors.white,
-  //       borderRadius: BorderRadius.circular(24),
-  //       border: Border.all(color: Colors.transparent),
-  //       boxShadow: [
-  //         BoxShadow(
-  //           color: Colors.black.withOpacity(0.1),
-  //           blurRadius: 20,
-  //           offset: Offset(0, 10),
-  //         ),
-  //       ],
-  //     ),
-  //     child: Padding(
-  //       padding: EdgeInsets.all(20),
-  //       child: Row(
-  //         children: [
-  //           Container(
-  //             width: 80,
-  //             height: 80,
-  //             decoration: BoxDecoration(
-  //               borderRadius: BorderRadius.circular(16),
-  //               image: DecorationImage(
-  //                 image: AssetImage('assets/food.jpeg'),
-  //                 fit: BoxFit.cover,
-  //               ),
-  //             ),
-  //           ),
-  //           SizedBox(width: 20),
-  //           Expanded(
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 SizedBox(height: 8),
-  //                 _buildItemDetail('QBox ID', qbox['boxCellSno'].toString(),isHighlighted),
-  //                 _buildItemDetail('Added', _formatDateTime(qbox['entryTime']),isHighlighted),
-  //               ],
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   ).animate().fadeIn(duration: 900.ms).slideX(begin: 0.2, end: 0);
-  // }
-  //
-  // Widget _buildEnhancedItemCard(dynamic item, FoodStoreProvider provider) {
-  //   final isHighlighted = item.uniqueCode == provider.scannedDispatchItem;
-  //   return Container(
-  //     margin: EdgeInsets.only(bottom: 16),
-  //     decoration: BoxDecoration(
-  //       color: Colors.white,
-  //       borderRadius: BorderRadius.circular(24),
-  //       border: Border.all(
-  //           color: isHighlighted ? AppColors.mintGreen : Colors.transparent),
-  //       boxShadow: [
-  //         BoxShadow(
-  //           color: Colors.black.withOpacity(0.1),
-  //           blurRadius: 20,
-  //           offset: Offset(0, 10),
-  //         ),
-  //       ],
-  //     ),
-  //     child: Padding(
-  //       padding: EdgeInsets.all(20),
-  //       child: Row(
-  //         children: [
-  //           Container(
-  //             width: 80,
-  //             height: 80,
-  //             decoration: BoxDecoration(
-  //               borderRadius: BorderRadius.circular(16),
-  //               image: DecorationImage(
-  //                 image: AssetImage('assets/food.jpeg'),
-  //                 fit: BoxFit.cover,
-  //               ),
-  //             ),
-  //           ),
-  //           SizedBox(width: 20),
-  //           Expanded(
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 Text(
-  //                   item.uniqueCode,
-  //                   style: TextStyle(
-  //                     fontSize: 18,
-  //                     fontWeight: FontWeight.bold,
-  //                     color: Colors.black87,
-  //                   ),
-  //                 ),
-  //                 SizedBox(height: 8),
-  //                 _buildItemDetail(
-  //                   'QBox ID',
-  //                   item.boxCellSno,
-  //                   isHighlighted,
-  //                 ),
-  //                 _buildItemDetail(
-  //                   'Added',
-  //                   _formatDate(item.storageDate),
-  //                   isHighlighted,
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           if (isHighlighted)
-  //             Container(
-  //               padding: EdgeInsets.all(12),
-  //               decoration: BoxDecoration(
-  //                 color: AppColors.mintGreen.withOpacity(0.3),
-  //                 shape: BoxShape.circle,
-  //               ),
-  //               child: Icon(
-  //                 Icons.check_rounded,
-  //                 color: AppColors.white,
-  //                 size: 24,
-  //               ),
-  //             ),
-  //         ],
-  //       ),
-  //     ),
-  //   ).animate().fadeIn(duration: 900.ms).slideX(begin: 0.2, end: 0);
-  // }
-
-  String _formatDateTime(String dateTime) {
-    final dt = DateTime.parse(dateTime);
-    return "${dt.day}/${dt.month}/${dt.year} ${dt.hour}:${dt.minute}";
-  }
-
-  Widget _buildItemDetail(String label, String value, bool isHighlighted) {
-    return Row(
-      children: [
-        Text(
-          '$label: ',
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[600],
-          ),
-        ),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.black87,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
     );
   }
 }
+

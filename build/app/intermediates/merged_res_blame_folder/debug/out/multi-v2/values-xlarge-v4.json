@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.qr_page.app-mergeDebugResources-55:/values-xlarge-v4/values-xlarge-v4.xml",
+            "outputFile": "com.example.qr_page.app-mergeDebugResources-56:/values-xlarge-v4/values-xlarge-v4.xml",
             "map": [
                 {
-                    "source": "/home/swomb/.gradle/caches/transforms-3/4b6526175f05ef41dd8ad0648117671c/transformed/appcompat-1.4.2/res/values-xlarge-v4/values-xlarge-v4.xml",
+                    "source": "/home/swomb/.gradle/caches/transforms-3/484ac69f434a9bca5b82b44283145b0f/transformed/appcompat-1.4.2/res/values-xlarge-v4/values-xlarge-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7",
                         "startColumns": "4,4,4,4,4,4",

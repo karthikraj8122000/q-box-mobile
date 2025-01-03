@@ -112,7 +112,7 @@ class _DeliveryTrackingScreenState extends State<DeliveryTrackingScreen> {
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(Icons.person_outline,color: AppColors.black),
+              child: Icon(Icons.person_outline, color: AppColors.black),
             ),
             SizedBox(width: 12),
             Expanded(
@@ -122,10 +122,9 @@ class _DeliveryTrackingScreenState extends State<DeliveryTrackingScreen> {
                   Text(
                     customerName,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: AppColors.black
-                    ),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: AppColors.black),
                   ),
                   Text(
                     orderId,
@@ -150,7 +149,8 @@ class _DeliveryTrackingScreenState extends State<DeliveryTrackingScreen> {
                 SizedBox(height: 8),
                 _buildInfoRow(Icons.shopping_bag, orderDetails),
                 SizedBox(height: 8),
-                _buildInfoRow(Icons.access_time, 'Expected: $expectedDeliveryTime'),
+                _buildInfoRow(
+                    Icons.access_time, 'Expected: $expectedDeliveryTime'),
                 SizedBox(height: 8),
                 _buildInfoRow(Icons.note, specialInstructions),
                 SizedBox(height: 16),
@@ -260,6 +260,7 @@ class _DeliveryTrackingScreenState extends State<DeliveryTrackingScreen> {
   }
 
   Widget _buildQuickActions() {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -271,30 +272,49 @@ class _DeliveryTrackingScreenState extends State<DeliveryTrackingScreen> {
           ),
         ),
         SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: _buildActionCard(
+        if (isTablet)
+          Row(
+            children: [
+              Expanded(
+                child: _buildActionCard(
+                    'Scan QBox',
+                    'Load/Unload items',
+                    Icons.qr_code_scanner,
+                    Colors.blue,
+                    () => GoRouter.of(context).push(ScanQBoxScreen.routeName)),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: _buildActionCard(
+                  'Delivery Status',
+                  'Update order status',
+                  Icons.local_shipping,
+                  Colors.green,
+                  () =>
+                      GoRouter.of(context).push(DeliveryStatusScreen.routeName),
+                ),
+              ),
+            ],
+          )
+        else
+          Column(children: [
+            _buildActionCard(
                 'Scan QBox',
                 'Load/Unload items',
                 Icons.qr_code_scanner,
                 Colors.blue,
-                    () => GoRouter.of(context).push(ScanQBoxScreen.routeName)
-              ),
+                () => GoRouter.of(context).push(ScanQBoxScreen.routeName)),
+            SizedBox(height: 16),
+            _buildActionCard(
+              'Delivery Status',
+              'Update order status',
+              Icons.local_shipping,
+              Colors.green,
+              () => GoRouter.of(context).push(DeliveryStatusScreen.routeName),
             ),
-            SizedBox(width: 16),
-            Expanded(
-              child: _buildActionCard(
-                'Delivery Status',
-                'Update order status',
-                Icons.local_shipping,
-                Colors.green,
-                    () => GoRouter.of(context).push(DeliveryStatusScreen.routeName),
-              ),
-            ),
-          ],
-        ),
+          ]),
         SizedBox(height: 16),
+        if (isTablet)
         Row(
           children: [
             Expanded(
@@ -303,7 +323,7 @@ class _DeliveryTrackingScreenState extends State<DeliveryTrackingScreen> {
                 'Handle issues',
                 Icons.support_agent,
                 Colors.orange,
-                    () {},
+                () {},
               ),
             ),
             SizedBox(width: 16),
@@ -313,11 +333,31 @@ class _DeliveryTrackingScreenState extends State<DeliveryTrackingScreen> {
                 'Optimize deliveries',
                 Icons.map,
                 Colors.purple,
-                    () {},
+                () {},
               ),
             ),
           ],
-        ),
+        )
+        else
+          Column(
+            children: [
+              _buildActionCard(
+                'Customer Support',
+                'Handle issues',
+                Icons.support_agent,
+                Colors.orange,
+                    () {},
+              ),
+              SizedBox(height: 16),
+              _buildActionCard(
+                'Route Planning',
+                'Optimize deliveries',
+                Icons.map,
+                Colors.purple,
+                    () {},
+              ),
+            ],
+          )
       ],
     );
   }
@@ -342,7 +382,7 @@ class _DeliveryTrackingScreenState extends State<DeliveryTrackingScreen> {
                 'Unload food items',
                 Icons.qr_code_scanner,
                 Colors.blue,
-                    () {},
+                () {},
               ),
             ),
             SizedBox(width: 16),
@@ -352,7 +392,7 @@ class _DeliveryTrackingScreenState extends State<DeliveryTrackingScreen> {
                 'Update order status',
                 Icons.local_shipping,
                 Colors.green,
-                    () {},
+                () {},
               ),
             ),
           ],
@@ -361,7 +401,8 @@ class _DeliveryTrackingScreenState extends State<DeliveryTrackingScreen> {
     );
   }
 
-  Widget _buildActionCard(String title, String subtitle, IconData icon, Color color, VoidCallback onTap) {
+  Widget _buildActionCard(String title, String subtitle, IconData icon,
+      Color color, VoidCallback onTap) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -467,7 +508,8 @@ class _DeliveryTrackingScreenState extends State<DeliveryTrackingScreen> {
     );
   }
 
-  Widget _buildDeliveryCard(String orderId, String item, String qbox, String address, DeliveryStatus status) {
+  Widget _buildDeliveryCard(String orderId, String item, String qbox,
+      String address, DeliveryStatus status) {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(

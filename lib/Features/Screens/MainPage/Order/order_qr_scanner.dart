@@ -24,7 +24,7 @@ class _InwardOrderState extends State<InwardOrder> with TickerProviderStateMixin
     super.initState();
     _tabItems = [
       TabItem(title: 'Scan QR', icon: Icons.qr_code_scanner_rounded),
-      TabItem(title: 'Orders', icon: Icons.shopping_cart_rounded),
+      TabItem(title: 'SKU Details', icon: Icons.edit),
     ];
     _tabController = TabController(length: _tabItems.length, vsync: this);
   }
@@ -46,15 +46,11 @@ class _InwardOrderState extends State<InwardOrder> with TickerProviderStateMixin
               elevation: 0,
               automaticallyImplyLeading: false,
               backgroundColor: Colors.transparent,
-              title: Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Text('Inward Order', style: TextStyle(color: Colors.black)),
-              ),
+              title: Text('Inward Order Receiving', style: TextStyle(color: Colors.black)),
             ),
             body: SafeArea(
               child: Column(
                 children: [
-                  SizedBox(height: 16),
                   _buildTabBar(),
                   Expanded(
                     child: TabBarView(

@@ -61,8 +61,8 @@ class ModernTabBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(item.icon, size: 20),
-          const SizedBox(width: 8),
-          Text(item.title),
+          SizedBox(width: 8,),
+          Text(item.title,textAlign: TextAlign.center,),
         ],
       ),
     );
