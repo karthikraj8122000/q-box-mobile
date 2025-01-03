@@ -4,7 +4,7 @@
             "outputFile": "com.amolg.flutterbarcodescanner.flutter_barcode_scanner-mergeReleaseResources-36:/values-ldltr-v21/values-ldltr-v21.xml",
             "map": [
                 {
-                    "source": "/home/swomb/.gradle/caches/transforms-3/fbbd3d4a9e7c71014ba83db3d244e66c/transformed/appcompat-1.2.0/res/values-ldltr-v21/values-ldltr-v21.xml",
+                    "source": "/home/swomb/.gradle/caches/transforms-3/8054ea1890a3781e2f4c37a9c2922756/transformed/appcompat-1.2.0/res/values-ldltr-v21/values-ldltr-v21.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -19,7 +19,7 @@
             "outputFile": "com.amolg.flutterbarcodescanner.flutter_barcode_scanner-merged_res-38:/values-ldltr-v21/values-ldltr-v21.xml",
             "map": [
                 {
-                    "source": "/home/swomb/.gradle/caches/transforms-3/fbbd3d4a9e7c71014ba83db3d244e66c/transformed/appcompat-1.2.0/res/values-ldltr-v21/values-ldltr-v21.xml",
+                    "source": "/home/swomb/.gradle/caches/transforms-3/8054ea1890a3781e2f4c37a9c2922756/transformed/appcompat-1.2.0/res/values-ldltr-v21/values-ldltr-v21.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

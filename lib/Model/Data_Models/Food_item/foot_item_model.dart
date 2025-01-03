@@ -25,11 +25,14 @@ class FoodItem {
 
   factory FoodItem.fromMap(Map<String, dynamic> map) {
     return FoodItem(
-      boxCellSno: map['boxCellSno'],
-      uniqueCode: map['uniqueCode'],
-      wfStageCd: map['wfStageCd'],
-      qboxEntitySno: map['qboxEntitySno'],
-      storageDate: DateTime.parse(map['storageDate']),
+        boxCellSno: map['boxCellSno'],
+        uniqueCode: map['uniqueCode'],
+        wfStageCd: map['wfStageCd'],
+        qboxEntitySno: map['qboxEntitySno'],
+        storageDate: DateTime.parse(map['storageDate']),
     );
+
   }
 }
+
+

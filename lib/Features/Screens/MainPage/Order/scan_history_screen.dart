@@ -1,131 +1,151 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:provider/provider.dart';
-
+import 'package:qr_page/Model/Data_Models/inward_food_model.dart';
+import 'package:qr_page/Widgets/Common/app_colors.dart';
 import '../../../../Provider/order/scan_provider.dart';
 
 class ScanHistoryScreen extends StatelessWidget {
   const ScanHistoryScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ScanProvider>(
-      builder: (context, scanProvider, child) {
-        if (scanProvider.scanResults.isEmpty) {
-          return Center(
+      builder: (context, orderProvider, child) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Icon(
-                  Icons.history,
-                  size: 64,
-                  color: Colors.grey,
+                Text(
+                  'Scanned Orders',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 16),
-                Text(
-                  'No orders found',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.grey,
-                  ),
-                ),
+                if (orderProvider.orders.isEmpty)
+                  Center(child: Text('No orders scanned yet.'))
+                else
+                  ...orderProvider.orders.map((order) => _buildOrderCard(context, order)).toList(),
               ],
             ),
-          );
-        }
-
-        return ListView.builder(
-          padding: EdgeInsets.all(16),
-          itemCount: scanProvider.scanResults.length,
-          itemBuilder: (context, index) {
-            final result = scanProvider.scanResults[index];
-            final status = scanProvider.getStatusDescription(result.status);
-            final statusColor = result.status == 9
-                ? Colors.green
-                : result.status == 8
-                    ? Colors.red
-                    : Colors.grey;
-
-            return Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Order Details',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    _buildDetailRow('Order ID', '12'),
-                    _buildDetailRow('Sku code', result.code),
-                    _buildDetailRow('Status', status, isStatus: true, statusColor: statusColor),
-                    // _buildDetailRow('Date', DateTime.timestamp() as String),
-                    // _buildDetailRow('Items','1'),
-                    Divider(height: 32),
-                    _buildDetailRow(
-                      'Total Amount',
-                      '\$245.00',
-                      isBold: true,
-                      textStyle: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.redAccent,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
+          ),
         );
       },
     );
   }
 
-  Widget _buildDetailRow(String label, String value, {bool isStatus = false, bool isBold = false, TextStyle? textStyle,Color? statusColor}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: isBold ? 16 : 14,
-            ),
-          ),
-          if (isStatus)
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color:statusColor ?? Colors.grey,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Text(
-                value,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                ),
-              ),
-            )
-          else
+  void _showOrderDetails(BuildContext context, Order order) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: EdgeInsets.all(16),
+        height: MediaQuery.of(context).size.height * 0.7,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Text(
-              value,
-              style: textStyle ?? TextStyle(
-                fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-                fontSize: 14,
+              'Order Details',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                columns: [
+                  DataColumn(label: Text('Item')),
+                  DataColumn(label: Text('Price')),
+                  DataColumn(label: Text('Status')),
+                  if (order.items.any((item) => item.rejectionReason != null))
+                    DataColumn(label: Text('Reason')),
+                ],
+                rows: order.items.map((item) => DataRow(
+                  cells: [
+                    DataCell(Text(item.name)),
+                    DataCell(Text('\$${item.price.toStringAsFixed(2)}')),
+                    DataCell(Text(item.status.toUpperCase())),
+                    if (order.items.any((item) => item.rejectionReason != null))
+                      DataCell(Text(item.rejectionReason ?? '-')),
+                  ],
+                )).toList(),
               ),
             ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-}
+  Widget _buildOrderCard(BuildContext context, Order order) {
+    return Card(
+      margin: EdgeInsets.only(bottom: 16),
+      child: InkWell(
+        onTap: () => _showOrderDetails(context, order),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Table(
+            columnWidths: {
+              0: FlexColumnWidth(2),
+              1: FlexColumnWidth(1),
+              2: FlexColumnWidth(1),
+            },
+            children: [
+              TableRow(
+                children: [
+                  Text('Order ID:', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(order.orderId),
+                  Text(order.status),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Text('Total Items:', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(order.totalItems.toString()),
+                  Text(''),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
+
+
+
+//
+  // Widget _buildFoodItemCard(InwardFoodModel item) {
+  //   return Card(
+  //     margin: EdgeInsets.only(bottom: 8),
+  //     child: ListTile(
+  //       title: Text(item.name),
+  //       subtitle: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Text('Price: \$${item.price.toStringAsFixed(2)}'),
+  //           if (item.rejectionReason != null)
+  //             Text(
+  //               'Rejection Reason: ${item.rejectionReason}',
+  //               style: TextStyle(color: Colors.red),
+  //             ),
+  //         ],
+  //       ),
+  //       trailing: Container(
+  //         padding: EdgeInsets.all(8),
+  //         decoration: BoxDecoration(
+  //           color: item.status == 'accepted' ? Colors.green : Colors.red,
+  //           borderRadius: BorderRadius.circular(8),
+  //         ),
+  //         child: Text(
+  //           item.status.toUpperCase(),
+  //           style: TextStyle(color: Colors.white),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+}

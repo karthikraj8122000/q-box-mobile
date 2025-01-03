@@ -15,176 +15,34 @@ class LoadQbox extends StatefulWidget {
 class _LoadQboxState extends State<LoadQbox> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<FoodStoreProvider>().getFoodItems();
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<FoodStoreProvider>(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildDashboardCard(context, provider),
-          const SizedBox(height: 30),
-          _buildScanningSection(provider, context),
-          if (provider.foodItems.isNotEmpty)
-            _buildMappedItems(provider)
-          else
-            _buildEnhancedEmptyState(),
-        ],
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildDashboardCard(context, provider),
+                const SizedBox(height: 30),
+                _buildScanningSection(provider, context),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildEnhancedEmptyState() {
-    return Center(
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 40),
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: AppColors.darkPaleYellow.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.inventory_2_rounded,
-                size: 64,
-                color: AppColors.darkPaleYellow,
-              ),
-            )
-                .animate(onPlay: (controller) => controller.repeat())
-                .shimmer(duration: 2000.ms)
-                .then()
-                .shake(hz: 2, curve: Curves.easeInOutCubic),
-            SizedBox(height: 32),
-            Text(
-              'No Items to Dispatch',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            SizedBox(height: 12),
-            Text(
-              'Store some items first before dispatching',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[600],
-                height: 1.5,
-              ),
-            ),
-          ],
-        ),
-      )
-          .animate()
-          .fadeIn(duration: 800.ms)
-          .scale(begin: Offset(0.8, 0.8), end: Offset(1, 1)),
-    );
-  }
+  Widget _buildScanningSection(FoodStoreProvider provider, BuildContext context) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
 
-  Widget _buildMappedItems(FoodStoreProvider provider) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 30),
-        Text(
-          'Loaded Items',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ).animate().fadeIn(duration: 800.ms).slideY(begin: 0.2, end: 0),
-        const SizedBox(height: 20),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-          padding: const EdgeInsets.all(16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 0.8,
-            mainAxisExtent: null,
-          ),
-          itemCount: provider.foodItems.length,
-          itemBuilder: (context, index) {
-            if (provider.foodItems.isEmpty) return Container();
-            final qbox = provider.foodItems[index];
-            return _buildEnhancedItemCard(qbox, index);
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildEnhancedItemCard(dynamic qbox, int index) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.transparent),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 150,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                image: const DecorationImage(
-                  image: AssetImage('assets/food.jpeg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'QBox ID: ${qbox['boxCellSno']}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Added: ${_formatDateTime(qbox['entryTime'])}',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    ).animate().fadeIn(duration: 900.ms).slideY(begin: 0.2, end: 0);
-  }
-
-
-  Widget _buildScanningSection(
-      FoodStoreProvider provider, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -197,151 +55,174 @@ class _LoadQboxState extends State<LoadQbox> {
           ),
         ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.2, end: 0),
         SizedBox(height: 20),
-        Row(
-          children: [
-            Expanded(
-              child: _buildEnhancedScanCard(
+        if (isTablet)
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _buildEnhancedScanCard(
+                  'Scan QBox',
+                  'Select storage container',
+                  AppColors.mintGreen,
+                  Icons.qr_code_scanner_rounded,
+                  provider.qboxId,
+                      () => provider.scanContainer(context),
+                ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.2, end: 0),
+              ),
+              SizedBox(width: 24),
+              Expanded(
+                child: _buildEnhancedScanCard(
+                  'Scan Food Item',
+                  'Add item to selected container',
+                  AppColors.darkPaleYellow,
+                  Icons.fastfood_rounded,
+                  provider.foodItem,
+                  provider.qboxId != null ? () => provider.scanFoodItem(context) : null,
+                ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0),
+              ),
+            ],
+          )
+        else
+          Column(
+            children: [
+              _buildEnhancedScanCard(
                 'Scan QBox',
                 'Select storage container',
                 AppColors.mintGreen,
                 Icons.qr_code_scanner_rounded,
                 provider.qboxId,
-                () => provider.scanContainer(context),
+                    () => provider.scanContainer(context),
               ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.2, end: 0),
-            ),
-            SizedBox(width: 16),
-            Expanded(
-              child: _buildEnhancedScanCard(
+              SizedBox(height: 16),
+              _buildEnhancedScanCard(
                 'Scan Food Item',
                 'Add item to selected container',
                 AppColors.darkPaleYellow,
                 Icons.fastfood_rounded,
                 provider.foodItem,
-                provider.qboxId != null
-                    ? () => provider.scanFoodItem(context)
-                    : null,
+                provider.qboxId != null ? () => provider.scanFoodItem(context) : null,
               ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0),
-            ),
-            SizedBox(height: 24),
-          ],
-        ),
+            ],
+          ),
         SizedBox(height: 16),
         _buildEnhancedStoreButton(provider, context),
       ],
     );
   }
 
+
   Widget _buildEnhancedScanCard(
-    String title,
-    String subtitle,
-    Color color,
-    IconData icon,
-    String? scannedValue,
-    VoidCallback? onTap,
-  ) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: color.withOpacity(0.1),
-            blurRadius: 20,
-            offset: Offset(0, 10),
+      String title,
+      String subtitle,
+      Color color,
+      IconData icon,
+      String? scannedValue,
+      VoidCallback? onTap,
+      ) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+        final double iconSize = isTablet ? 32 : 28;
+        final double fontSize = isTablet ? 18 : 16;
+        final double subtitleFontSize = isTablet ? 14 : 12;
+
+        return Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: color.withOpacity(0.1),
+                blurRadius: 20,
+                offset: Offset(0, 10),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(24),
-          child: Padding(
-            padding: EdgeInsets.all(24),
-            child: Column(
-              children: [
-                Row(
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(24),
+              child: Padding(
+                padding: EdgeInsets.all(isTablet ? 24 : 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: color.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Icon(icon, color: color, size: 28),
-                    ),
-                    SizedBox(width: 20),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            subtitle,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: color.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.arrow_forward_rounded,
-                        color: color,
-                      ),
-                    ),
-                  ],
-                ),
-                if (scannedValue != null) ...[
-                  SizedBox(height: 20),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: color.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
+                    Row(
                       children: [
-                        Icon(
-                          Icons.check_circle_rounded,
-                          color: color,
-                          size: 20,
+                        Container(
+                          padding: EdgeInsets.all(isTablet ? 16 : 12),
+                          decoration: BoxDecoration(
+                            color: color.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Icon(icon, color: color, size: iconSize),
                         ),
-                        SizedBox(width: 12),
+                        SizedBox(width: isTablet ? 20 : 16),
                         Expanded(
-                          child: Text(
-                            scannedValue,
-                            style: TextStyle(
-                              color: color,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                style: TextStyle(
+                                  fontSize: fontSize,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                subtitle,
+                                style: TextStyle(
+                                  fontSize: subtitleFontSize,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
-              ],
+                    if (scannedValue != null) ...[
+                      SizedBox(height: isTablet ? 20 : 16),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: color.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle_rounded,
+                              color: color,
+                              size: isTablet ? 24 : 20,
+                            ),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                scannedValue,
+                                style: TextStyle(
+                                  color: color,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: subtitleFontSize,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -356,22 +237,22 @@ class _LoadQboxState extends State<LoadQbox> {
         gradient: LinearGradient(
           colors: isEnabled
               ? [
-                  AppColors.darkMintGreen,
-                  AppColors.mintGreen.withOpacity(0.8),
-                ]
+            AppColors.darkMintGreen,
+            AppColors.mintGreen.withOpacity(0.8),
+          ]
               : [
-                  Colors.grey[300]!,
-                  Colors.grey[400]!,
-                ],
+            Colors.grey[300]!,
+            Colors.grey[400]!,
+          ],
         ),
         boxShadow: isEnabled
             ? [
-                BoxShadow(
-                  color: AppColors.mintGreen.withOpacity(0.3),
-                  blurRadius: 20,
-                  offset: Offset(0, 10),
-                ),
-              ]
+          BoxShadow(
+            color: AppColors.mintGreen.withOpacity(0.3),
+            blurRadius: 20,
+            offset: Offset(0, 10),
+          ),
+        ]
             : [],
       ),
       child: Material(
@@ -433,12 +314,12 @@ class _LoadQboxState extends State<LoadQbox> {
                   SizedBox(width: 20),
                   Expanded(
                       child: Text(
-                    "Load Food Item Details",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.white),
-                  ))
+                        "Load Food Item Details",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.white),
+                      ))
                 ],
               ),
               SizedBox(height: 24),
@@ -451,7 +332,7 @@ class _LoadQboxState extends State<LoadQbox> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildStat('Total Items', '${provider.foodItems.length}'),
+                    _buildStat('Total Items', '${provider.storedItems.length}'),
                     _buildVerticalDivider(),
                     _buildStat(
                         'Available Boxes', '${provider.qboxList.length}'),
@@ -502,8 +383,5 @@ class _LoadQboxState extends State<LoadQbox> {
       ],
     );
   }
-
- // Date _formatDate(DateTime date) {
- //    return '${date.day}/${date.month}/${date.year}';
- //  }
 }
+

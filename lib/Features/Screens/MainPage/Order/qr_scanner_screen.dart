@@ -1,209 +1,370 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:qr_page/Widgets/Common/app_colors.dart';
-import 'package:qr_page/Widgets/Common/app_text.dart';
 import 'package:qr_page/Widgets/Common/divider_text.dart';
+import '../../../../Model/Data_Models/inward_food_model.dart';
 import '../../../../Provider/order/scan_provider.dart';
+import '../../../../Widgets/Common/app_colors.dart';
 
-class OrderQRScannerScreen extends StatelessWidget {
-  const OrderQRScannerScreen({super.key});
+class OrderQRScannerScreen extends StatefulWidget {
+  const OrderQRScannerScreen({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.qr_code_scanner,
-                    size: 200,
-                    color: AppColors.lightBlack,
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    'Scan for order',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Scan a QR code or manually enter a code to order food',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 24),
-                  ElevatedButton.icon(
-                    icon: Icon(Icons.qr_code_scanner),
-                    label: Text('Scan QR Code'),
-                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.lightBlack,
-                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                    ),
-                    onPressed: () => _scanQR(context),
-                  ),
-                  SizedBox(height: 16),
+  State<OrderQRScannerScreen> createState() => _OrderQRScannerScreenState();
+}
 
-                ],
-              ),
-            ),
-            CustomDivider(text: "OR"),
-            SizedBox(
-              // width: double.infinity,
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: ElevatedButton.icon(
-                  icon: Icon(Icons.keyboard),
-                  label: Text('Enter Code Manually'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.lightBlack,
-                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  ),
-                  onPressed: () => _showManualEntryDialog(context),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
+  final List<TextEditingController> _controllers = List.generate(6, (index) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
+
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    for (var node in _focusNodes) {
+      node.dispose();
+    }
+    super.dispose();
   }
 
-
-  Future<void> _scanQR(BuildContext context) async {
-    String barcodeScanRes;
+  Future<void> _scanOrderQR(BuildContext context) async {
     try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+      String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
         '#ff6666',
         'Cancel',
         true,
         ScanMode.QR,
       );
-    } on PlatformException {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to scan QR code')),
-      );
-      return;
-    }
 
-    if (barcodeScanRes == '-1') {
-      return;
+      if (barcodeScanRes != '-1') {
+        _fetchOrderDetails(context, barcodeScanRes);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error scanning QR code: $e')),
+      );
     }
-    _processQRCode(context, barcodeScanRes);
   }
 
-  void _showManualEntryDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        String enteredCode = '';
-        return AlertDialog(
-          title: Text('Enter Code'),
-          content: TextField(
-            onChanged: (value) {
-              enteredCode = value;
-            },
-            decoration: InputDecoration(
-              hintText: 'Enter the food order code',
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel',style: TextStyle(color: AppColors.black),),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.buttonBgColor
-              ),
-              child: Text('Submit'),
-              onPressed: () {
-                if (enteredCode.isNotEmpty) {
-                  Navigator.of(context).pop();
-                  _processCode(context, enteredCode);
-                }
-              },
-            ),
-          ],
+  void _fetchOrderDetails(BuildContext context, String orderId) async {
+    final orderProvider = Provider.of<ScanProvider>(context, listen: false);
+    try {
+      await orderProvider.fetchOrderDetails(orderId);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching order details: $e')),
+      );
+    }
+  }
+
+  void _handleManualEntry() {
+    String orderId = _controllers.map((c) => c.text).join();
+    if (orderId.length == 6) {
+      _fetchOrderDetails(context, orderId);
+    }
+  }
+
+  Future<void> _scanItemQR(String itemId) async {
+    try {
+      String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+        '#ff6666',
+        'Cancel',
+        true,
+        ScanMode.QR,
+      );
+
+      if (barcodeScanRes != '-1') {
+        Provider.of<ScanProvider>(context, listen: false)
+            .updateFoodItemQRCode(itemId, barcodeScanRes);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Item QR scanned successfully')),
         );
-      },
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error scanning QR code: $e')),
+      );
+    }
+  }
+
+  Widget _buildOTPFields() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(
+        6,
+            (index) => SizedBox(
+          width: 60,
+          child: TextField(
+            controller: _controllers[index],
+            focusNode: _focusNodes[index],
+            textAlign: TextAlign.center,
+            keyboardType: TextInputType.text,
+            maxLength: 1,
+            decoration: InputDecoration(
+              counterText: '',
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (value) {
+              if (value.length == 1 && index < 5) {
+                _focusNodes[index + 1].requestFocus();
+              }
+              if (value.isEmpty && index > 0) {
+                _focusNodes[index - 1].requestFocus();
+              }
+
+            },
+          ),
+        ),
+      ),
     );
   }
 
-  void _processCode(BuildContext context, String code) {
-    final scanProvider = Provider.of<ScanProvider>(context, listen: false);
-    scanProvider.addScanResult(code);
-    _showResultDialog(context, code);
+  Widget _buildOrderDetails(Order order) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Order Details',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 16),
+        Text('Order ID: ${order.orderId}'),
+        Text('Total Items: ${order.totalItems}'),
+        SizedBox(height: 16),
+        Text(
+          'Food Items:',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        ...order.items.where((item) => item.status == 'pending').map((item) => _buildFoodItemCard(item)).toList(),
+      ],
+    );
   }
 
-  void _processQRCode(BuildContext context, String qrCode) {
-    final scanProvider = Provider.of<ScanProvider>(context, listen: false);
-    scanProvider.addScanResult(qrCode);
-    _showResultDialog(context, qrCode);
-  }
+  Widget _buildFoodItemCard(InwardFoodModel item) {
+    bool isScanned = item.qrCode != null;
 
-  void _showResultDialog(BuildContext context, String code) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Scanned Successfully'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Scanned Code:'),
-              SizedBox(height: 8),
-              Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  code,
-                  style: TextStyle(fontFamily: 'monospace'),
-                ),
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.black,
-              ),
-              onPressed: () {
-                Provider.of<ScanProvider>(context, listen: false)
-                    .updateScanStatus(code, 8);
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Order item rejected')),
-                );
-              },
-              child: Text('Reject'),
-            ),
-            ElevatedButton(
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(item.name),
+            subtitle: Text('Price: \$${item.price.toStringAsFixed(2)}'),
+            trailing: item.status == 'pending' ? ElevatedButton.icon(
+              onPressed: () => _scanItemQR(item.id),
+              icon: Icon(Icons.qr_code_scanner),
+              label: Text('Scan QR'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.buttonBgColor
+                backgroundColor: AppColors.mintGreen,
               ),
-              child: Text('Accept'),
-              onPressed: () {
-                Provider.of<ScanProvider>(context, listen: false)
-                    .updateScanStatus(code, 9);
-                Navigator.of(context).pop();
+            ) : null,
+          ),
+          if (item.status == 'pending' && isScanned)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _updateItemStatus(item.id, 'accepted'),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                    child: Text('Accept'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => _showRejectDialog(item.id),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    child: Text('Reject'),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Order item accepted')),
-                );
+  void _updateItemStatus(String itemId, String status, {String? reason, File? photo}) {
+    Provider.of<ScanProvider>(context, listen: false).updateFoodItemStatus(
+      itemId,
+      status,
+      reason: reason,
+      photo: photo,
+    );
+  }
+
+  Future<void> _rescanFoodItem(String itemId) async {
+    try {
+      String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+        '#ff6666',
+        'Cancel',
+        true,
+        ScanMode.QR,
+      );
+
+      if (barcodeScanRes != '-1') {
+        // Update the food item with the new scanned data
+        Provider.of<ScanProvider>(context, listen: false).updateFoodItemQRCode(itemId, barcodeScanRes);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error scanning QR code: $e')),
+      );
+    }
+  }
+
+  Future<void> _showRejectDialog(String itemId) async {
+    final TextEditingController _reasonController = TextEditingController();
+    File? _photo;
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Reject Item'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _reasonController,
+              decoration: InputDecoration(
+                labelText: 'Reason for rejection',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 3,
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {
+                final ImagePicker _picker = ImagePicker();
+                final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+                if (image != null) {
+                  _photo = File(image.path);
+                }
               },
+              child: Text('Take Photo'),
             ),
           ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel', style: TextStyle(color: AppColors.black)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.mintGreen, foregroundColor: AppColors.white),
+            onPressed: () {
+              _updateItemStatus(
+                itemId,
+                'rejected',
+                reason: _reasonController.text,
+                photo: _photo,
+              );
+              Navigator.pop(context);
+            },
+            child: Text('Confirm'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    return Consumer<ScanProvider>(
+      builder: (context, orderProvider, child) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (!orderProvider.isOrderScanned) ...[
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        "assets/qrscan.jpg",
+                        height: 120,
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        'Scan QR Code',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Use your phone to scan the QR code.',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.black54,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 24),
+                      OutlinedButton.icon(
+                        onPressed: () => _scanOrderQR(context),
+                        icon: Icon(Icons.qr_code_scanner),
+                        label: Text('Scan Now'),
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                          backgroundColor: Colors.transparent,
+                          foregroundColor: AppColors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24),
+                CustomDivider(text: "OR"),
+                SizedBox(height: 24),
+                Text(
+                  'Manual Entry',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                     _buildOTPFields(),
+                      SizedBox(height: 24),
+                      OutlinedButton.icon(
+                        onPressed: () => _handleManualEntry(),
+                        label: Text('Submit'),
+                        iconAlignment: IconAlignment.end,
+                        icon: Icon(Icons.arrow_forward),
+                        style: ElevatedButton.styleFrom(
+
+                          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                          backgroundColor: Colors.transparent,
+                          foregroundColor: AppColors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              if (orderProvider.isOrderScanned && orderProvider.currentOrder != null) ...[
+                _buildOrderDetails(orderProvider.currentOrder!),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.mintGreen, padding: EdgeInsets.symmetric(vertical: 12)),
+                  onPressed: () => orderProvider.resetOrder(),
+                  child: Text('Scan New Order'),
+                ),
+              ],
+            ],
+          ),
         );
       },
     );

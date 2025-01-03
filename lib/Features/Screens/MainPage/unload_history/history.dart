@@ -3,36 +3,95 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_page/Theme/app_theme.dart';
-import 'package:qr_page/Widgets/Common/app_text.dart';
 import 'package:qr_page/Widgets/Common/network_error.dart';
-
 import '../../../../Model/Data_Models/Food_item/foot_item_model.dart';
 import '../../../../Provider/food_store_provider.dart';
+import '../../../../Widgets/Custom/custom_modern_tabbar.dart';
 
-class UnloadHistoryScreen extends StatelessWidget {
-  const UnloadHistoryScreen({super.key});
+class HistoryScreen extends StatefulWidget {
+  static const String routeName = '/scanning';
+  const HistoryScreen({super.key});
+
+  @override
+  State<HistoryScreen> createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateMixin {
+  late TabController _tabController;
+  late List<TabItem> _tabItems;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabItems = [
+      TabItem(title: 'Inward Order', icon: Icons.arrow_downward),
+      TabItem(title: 'Outward Order', icon: Icons.arrow_upward),
+    ];
+    _tabController = TabController(length: _tabItems.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<FoodStoreProvider>(context);
 
     return NetworkWrapper(
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: Text('Order History', style: TextStyle(color: Colors.black),),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.filter_list, color: Colors.black),
-              onPressed: () => _showFilterBottomSheet(context, provider),
-            ),
-          ],
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            title: Text('Order History', style: TextStyle(color: Colors.black),),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.filter_list, color: Colors.black),
+                onPressed: () => _showFilterBottomSheet(context, provider),
+              ),
+            ],
+          ),
+          body: Column(
+            children: [
+              SizedBox(height: 16),
+              _buildTabBar(),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildBody(context, provider),
+                    _buildBody(context, provider),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-        body: _buildBody(context, provider),
       ),
     );
+  }
+
+  Widget _buildTabBar() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ModernTabBar(
+        controller: _tabController,
+        tabItems: _tabItems,
+        onTap: (index) {
+          print('Tapped on tab $index');
+        },
+      ),
+    ).animate()
+        .fadeIn(duration: 600.ms)
+        .slideY(begin: 0.2, end: 0);
   }
 
   Widget _buildBody(BuildContext context, FoodStoreProvider provider) {
@@ -64,62 +123,15 @@ class UnloadHistoryScreen extends StatelessWidget {
     );
   }
 
-  // Widget _buildDispatchedItemsList(BuildContext context, List<FoodItem> items) {
-  //   return ListView.builder(
-  //     itemCount: items.length,
-  //     itemBuilder: (context, index) {
-  //       final item = items[index];
-  //       return Card(
-  //         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
-  //         elevation: 4,
-  //         child: Padding(
-  //           padding: const EdgeInsets.all(12.0),
-  //           child: ListTile(
-  //             leading: CircleAvatar(
-  //               backgroundColor: AppTheme.appTheme.withOpacity(0.2),
-  //               child: Icon(
-  //                 Icons.local_shipping,
-  //                 color: AppTheme.appTheme,
-  //               ),
-  //             ),
-  //             title: Text(
-  //               item.uniqueCode,
-  //               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-  //             ),
-  //             subtitle: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 Text('Container: ${item.boxCellSno}'),
-  //                 Text(
-  //                   'Dispatched: ${DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate)}',
-  //                   style: TextStyle(color: Colors.grey[600]),
-  //                 ),
-  //               ],
-  //             ),
-  //             trailing: Container(
-  //               padding: EdgeInsets.all(2),
-  //               decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(50)),color: Colors.black),
-  //               child: Icon(
-  //                 Icons.chevron_right,
-  //                 color:Colors.white,
-  //               ),
-  //             ),
-  //             onTap: () => _showItemDetails(context, item),
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
   Widget _buildDispatchedItemsGrid(BuildContext context, List<FoodItem> items) {
-    return GridView.builder(
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    return isTablet? GridView.builder(
       padding: EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,  // Number of columns
-        childAspectRatio: 0.8,  // Adjust this value to control card height
+        childAspectRatio:2.2,  // Adjust this value to control card height
         crossAxisSpacing: 16,  // Horizontal spacing between cards
-        mainAxisSpacing: 16,   // Vertical spacing between cards
+        mainAxisSpacing: 16,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
@@ -137,7 +149,6 @@ class UnloadHistoryScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header with Icon and Arrow
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -199,6 +210,86 @@ class UnloadHistoryScreen extends StatelessWidget {
           ),
         );
       },
+    ):Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+        final item = items[index];
+        return Card(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16))
+          ),
+          elevation: 4,
+          child: InkWell(
+            onTap: () => _showItemDetails(context, item),
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: AppTheme.appTheme.withOpacity(0.2),
+                        child: Icon(
+                          Icons.local_shipping,
+                          color: AppTheme.appTheme,
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            color: Colors.black
+                        ),
+                        child: Icon(
+                          Icons.chevron_right,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+
+                  // Unique Code
+                  Text(
+                    item.uniqueCode,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 8),
+
+                  // Container Number
+                  Text(
+                    'Container: ${item.boxCellSno}',
+                    style: TextStyle(fontSize: 13),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 4),
+
+                  // Dispatch Date
+                  Text(
+                    'Unloaded at:\n${DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate)}',
+                    style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 12
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 

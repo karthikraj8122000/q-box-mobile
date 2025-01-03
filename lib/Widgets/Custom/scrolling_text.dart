@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../Common/app_colors.dart';
+
 class ScrollingText extends StatefulWidget {
   final String text;
   final TextStyle style;
   final double speed;
+  final Color backgroundColor;
 
   const ScrollingText({
     super.key,
     required this.text,
     this.style = const TextStyle(fontSize: 24, color: Colors.white),
     this.speed = 50,
+    this.backgroundColor = AppColors.mintGreen
   });
 
   @override
@@ -55,7 +59,7 @@ class _ScrollingTextState extends State<ScrollingText> {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      color: Colors.black,
+      color: widget.backgroundColor,
       child: ListView.builder(
         controller: _scrollController,
         scrollDirection: Axis.horizontal,

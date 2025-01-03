@@ -47,11 +47,11 @@ class OrderScanningProvider extends ChangeNotifier {
           _showOrderActionDialog(context, barcodeScanRes);
         } else {
           print("Invalid order");
-          commonService.presentToast('Invalid order');
+          commonService.errorToast('Invalid order');
         }
       } else {
         print("Scanning cancelled");
-        commonService.presentToast('Scanning cancelled');
+        commonService.errorToast('Scanning cancelled');
       }
     } catch (e) {
       print("Error scanning QR code: $e");
@@ -144,7 +144,7 @@ class OrderScanningProvider extends ChangeNotifier {
       notifyListeners();
       value = {};
     } else {
-      commonService.presentToast('No order details available');
+      commonService.errorToast('No order details available');
     }
   }
 
@@ -157,7 +157,7 @@ class OrderScanningProvider extends ChangeNotifier {
       notifyListeners();
       value = {};
     } else {
-      commonService.presentToast('No order details available');
+      commonService.errorToast('No order details available');
     }
   }
 
@@ -181,10 +181,10 @@ class OrderScanningProvider extends ChangeNotifier {
       if (value['purchaseOrderDtls'] != null) {
         commonService.presentToast('Order details retrieved successfully');
       } else {
-        commonService.presentToast('No order details found');
+        commonService.errorToast('No order details found');
       }
     } else {
-      commonService.presentToast('Failed to retrieve order details');
+      commonService.errorToast('Failed to retrieve order details');
     }
 
     _scanBarcode = "";

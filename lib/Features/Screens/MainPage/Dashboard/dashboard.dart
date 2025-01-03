@@ -1,7 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:qr_page/Provider/dashboard_provider.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
+import 'package:qr_page/Widgets/Common/app_text.dart';
+import 'package:qr_page/Widgets/Custom/custom_appbar.dart';
 import '../../../../Model/Data_Models/dashboard_model/dashboard_model.dart';
 import '../../../../Theme/app_theme.dart';
 import '../../../../Widgets/Custom/scrolling_text.dart';
@@ -17,7 +21,6 @@ class _DashboardState extends State<Dashboard>
     with SingleTickerProviderStateMixin {
   String entityName = "10 Mins Delivery Nungambakkam";
   late final QBoxSettings qboxSettings;
-  // late AnimationController _controller;
   Animation<double>? _animation;
 
   // Add new animation controller for header
@@ -27,7 +30,10 @@ class _DashboardState extends State<Dashboard>
   @override
   void initState() {
     super.initState();
-    final Map<String, dynamic> rawSettings = {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<DashboardProvider>().getQboxes();
+    });
+    final Map<String, dynamic> qboxEntity = {
       "qboxEntityName": "10 Mins Delivery Nungambakkam",
       "rowCount": 2,
       "columnCount": 4,
@@ -96,9 +102,8 @@ class _DashboardState extends State<Dashboard>
         },
       ]
     };
-    qboxSettings = QBoxSettings.fromMap(rawSettings);
+    qboxSettings = QBoxSettings.fromMap(qboxEntity);
 
-    // Initialize header animation
     _headerController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -111,8 +116,6 @@ class _DashboardState extends State<Dashboard>
       parent: _headerController,
       curve: Curves.easeOut,
     ));
-
-    // Start the animation
     _headerController.forward();
   }
 
@@ -179,9 +182,7 @@ class _DashboardState extends State<Dashboard>
               _buildDetailRow('Food Name', item.foodName),
               _buildDetailRow('Qbox ID', item.qboxId.toString()),
               _buildDetailRow('Sku Code', item.foodCode),
-              _buildDetailRow('Created at', item.storageDate.toString()
-                  // DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate),
-                  ),
+              _buildDetailRow('Created at', item.storageDate.toString()),
             ],
           ),
         );
@@ -193,12 +194,17 @@ class _DashboardState extends State<Dashboard>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+            backgroundColor: AppColors.mintGreen,
+            automaticallyImplyLeading: false,
+            title: Align(
+                alignment: Alignment.center,
+                child: AppText(
+                    text: qboxSettings?.qboxEntityName ?? "Default Entity Name",
+                    fontSize: 16))),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              ScrollingText(text: qboxSettings?.qboxEntityName ?? "Default Entity Name"),
-              // _buildHeader(
-              //     qboxSettings?.qboxEntityName ?? "Default Entity Name"),
               _buildCurrentTime(),
               _buildInventoryTable(),
               _buildQeuBoxStatus(),
@@ -237,20 +243,16 @@ class _DashboardState extends State<Dashboard>
   // Updated header with sliding animation
   Widget _buildHeader(String title) {
     return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 12),
-      color: AppColors.mintGreen,
-      child: Text(
-        title,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 1.2,
-        ),
-      ),
-    );
+        width: double.infinity,
+        padding: EdgeInsets.all(8),
+        color: AppColors.mintGreen,
+        child: AppText(
+          text: title,
+          fontSize: 18,
+          color: AppColors.white,
+          textAlign: TextAlign.center,
+        ));
+    // ScrollingText(text: title,);
   }
 
   Widget _buildCurrentTime() {
@@ -272,7 +274,7 @@ class _DashboardState extends State<Dashboard>
         ],
       ),
       child: Text(
-        'Current Inventory - ${DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.now())}',
+        'Current Inventory - ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.now())}',
         textAlign: TextAlign.center,
         style: TextStyle(
             fontSize: 18, fontWeight: FontWeight.w500, color: AppColors.white),
@@ -424,7 +426,7 @@ class _DashboardState extends State<Dashboard>
               physics: NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: qboxSettings.columnCount ?? 3,
-                childAspectRatio: 0.8,
+                childAspectRatio: 1,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
               ),
@@ -437,10 +439,7 @@ class _DashboardState extends State<Dashboard>
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 20.0),
-          child: _buildItemCount(),
-        ),
+        _buildItemCount(),
         SizedBox(height: 20),
       ],
     );
@@ -513,12 +512,15 @@ class _DashboardState extends State<Dashboard>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CircleAvatar(
-                            radius: 40,
-                            backgroundImage: AssetImage(item.foodImage),
-                            backgroundColor:
-                                isFilled ? Colors.white : Colors.grey.shade200,
-                          ),
+                          isFilled
+                              ? CircleAvatar(
+                                  radius: 30,
+                                  backgroundImage: AssetImage(item.foodImage),
+                                  backgroundColor: isFilled
+                                      ? Colors.white
+                                      : Colors.grey.shade200,
+                                )
+                              : Image.asset("assets/empty.png"),
                           SizedBox(height: 8),
                           Text(
                             item.foodName,
@@ -615,7 +617,8 @@ class _DashboardState extends State<Dashboard>
                       ),
                       SizedBox(width: 8),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
                           color: AppColors.mintGreen,
                           borderRadius: BorderRadius.circular(12),

@@ -73,7 +73,7 @@ class AuthProvider extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
       print('$e');
-      commonService.presentToast("Error: ${e.toString()}");
+      commonService.errorToast("Error: ${e.toString()}");
       return false;
     }
   }
@@ -110,7 +110,7 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       isLoading = false;
       notifyListeners();
-      commonService.presentToast("Error: ${e.toString()}");
+      commonService.errorToast("Error: ${e.toString()}");
       return false;
     }
   }

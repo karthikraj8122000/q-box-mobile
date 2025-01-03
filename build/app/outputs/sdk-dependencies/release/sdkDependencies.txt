@@ -1426,6 +1426,54 @@ library {
 }
 library {
   maven_library {
+    groupId: "com.google.android.gms"
+    artifactId: "play-services-auth"
+    version: "20.4.0"
+  }
+  digests {
+    sha256: "\231;)\003AI\270\374\306\021\020e\243\356\355\215\316\362\373\025\243\n\237v[\3059\362O\236\313\272"
+  }
+  repo_index {
+  }
+}
+library {
+  maven_library {
+    groupId: "com.google.android.gms"
+    artifactId: "play-services-auth-api-phone"
+    version: "18.0.1"
+  }
+  digests {
+    sha256: "\225d\025NE\346%\322\346$\a@\372\212 R\205\260\326\235\3728q\322\271\b\266\3125\272X\'"
+  }
+  repo_index {
+  }
+}
+library {
+  maven_library {
+    groupId: "com.google.android.gms"
+    artifactId: "play-services-auth-base"
+    version: "18.0.4"
+  }
+  digests {
+    sha256: "\253RK\030r]\220\243\006\r\247\\A\3241\3237\266\331\017^\2259\357\356\337!Zu\336\266?"
+  }
+  repo_index {
+  }
+}
+library {
+  maven_library {
+    groupId: "com.google.android.gms"
+    artifactId: "play-services-fido"
+    version: "19.0.0"
+  }
+  digests {
+    sha256: "]\252mT\375\037k\202)\370\205}z\347\253T\207u\346\212-P\232\343d\2609\375\335\325,\350"
+  }
+  repo_index {
+  }
+}
+library {
+  maven_library {
     groupId: "io.flutter"
     artifactId: "armeabi_v7a_release"
     version: "1.0.0-83bacfc52569459a4a654727cad2546820cb0d6a"
@@ -1465,7 +1513,7 @@ library {
 }
 library {
   digests {
-    sha256: "\f\317`\006\275+\235,\301\272a\017\177\267\226J{1l$\216u\ndV\323((K\341X\266"
+    sha256: "\324hLf\002\277\233fZ\336\201a\216\207\257\330\250,\266\000\267x\254\003\245EcR\025\277-\266"
   }
 }
 library_dependencies {
@@ -2335,12 +2383,42 @@ library_dependencies {
   library_dep_index: 67
   library_dep_index: 33
 }
+library_dependencies {
+  library_index: 118
+  library_dep_index: 38
+  library_dep_index: 41
+  library_dep_index: 119
+  library_dep_index: 120
+  library_dep_index: 79
+  library_dep_index: 80
+  library_dep_index: 121
+  library_dep_index: 81
+}
+library_dependencies {
+  library_index: 119
+  library_dep_index: 79
+  library_dep_index: 80
+  library_dep_index: 81
+}
+library_dependencies {
+  library_index: 120
+  library_dep_index: 33
+  library_dep_index: 79
+  library_dep_index: 80
+  library_dep_index: 81
+}
+library_dependencies {
+  library_index: 121
+  library_dep_index: 79
+  library_dep_index: 80
+  library_dep_index: 81
+}
 module_dependencies {
   module_name: "base"
   dependency_index: 4
-  dependency_index: 118
-  dependency_index: 119
-  dependency_index: 120
+  dependency_index: 122
+  dependency_index: 123
+  dependency_index: 124
   dependency_index: 0
   dependency_index: 50
   dependency_index: 59
@@ -2362,7 +2440,9 @@ module_dependencies {
   dependency_index: 113
   dependency_index: 115
   dependency_index: 117
-  dependency_index: 121
+  dependency_index: 118
+  dependency_index: 119
+  dependency_index: 125
 }
 repositories {
   maven_repo {
@@ -2397,6 +2477,16 @@ repositories {
 repositories {
   maven_repo {
     url: "https://jcenter.bintray.com/"
+  }
+}
+repositories {
+  maven_repo {
+    url: "https://dl.google.com/dl/android/maven2/"
+  }
+}
+repositories {
+  maven_repo {
+    url: "https://repo.maven.apache.org/maven2/"
   }
 }
 repositories {
