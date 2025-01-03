@@ -8,8 +8,9 @@ import '../../../../Provider/order/order_qr_scanning_provider.dart';
 import '../../../../Widgets/Custom/custom_modern_tabbar.dart';
 
 class InwardOrder extends StatefulWidget {
+  final VoidCallback onSendItemPressed;
   static const String routeName = '/scanning';
-  const InwardOrder({Key? key}) : super(key: key);
+  const InwardOrder({super.key, required this.onSendItemPressed});
 
   @override
   State<InwardOrder> createState() => _InwardOrderState();

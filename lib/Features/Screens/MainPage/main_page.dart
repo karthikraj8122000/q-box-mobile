@@ -18,15 +18,20 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> with TickerProviderStateMixin {
   int _selectedIndex = 0;
+  late List<Widget> _screens;
+  // final List<Widget> _screens = [
+  //   Dashboard(),
+  //   LoadOrUnload(),
+  //   InwardOrder(onSendItemPressed: _navigateToHistoryScreen),
+  //   DeliveryTrackingScreen(),
+  //   HistoryScreen(),
+  // ];
 
-  final List<Widget> _screens = [
-    Dashboard(),
-    LoadOrUnload(),
-    InwardOrder(),
-    DeliveryTrackingScreen(),
-    HistoryScreen(),
-  ];
-
+  void _navigateToHistoryScreen() {
+    setState(() {
+      _selectedIndex = 4; // Set the index to navigate to the History screen
+    });
+  }
   // List of navigation items
   final List<NavigationItem> _items = [
     NavigationItem(icon: Icons.home_outlined, label: 'Home', selectedIcon: Icons.home),
@@ -35,6 +40,18 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
     NavigationItem(icon: Icons.delivery_dining, label: 'Delivery', selectedIcon: Icons.delivery_dining_rounded),
     NavigationItem(icon: Icons.history, label: 'History', selectedIcon: Icons.history),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      Dashboard(),
+      LoadOrUnload(),
+      InwardOrder(onSendItemPressed: _navigateToHistoryScreen),
+      DeliveryTrackingScreen(),
+      HistoryScreen(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {

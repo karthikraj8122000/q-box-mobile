@@ -72,8 +72,8 @@ class FoodItemCard extends StatelessWidget {
         statusText = 'Pending';
     }
 
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 8),
+    return Container(
+      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: AppColors.lightBlack))),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

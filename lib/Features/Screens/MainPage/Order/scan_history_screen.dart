@@ -33,7 +33,6 @@ class ScanHistoryScreen extends StatelessWidget {
       },
     );
   }
-
   void _showOrderDetails(BuildContext context, Order order) {
     showModalBottomSheet(
       context: context,
@@ -56,21 +55,31 @@ class ScanHistoryScreen extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: [
-                  DataColumn(label: Text('Item')),
-                  DataColumn(label: Text('Price')),
-                  DataColumn(label: Text('Status')),
-                  if (order.items.any((item) => item.rejectionReason != null))
-                    DataColumn(label: Text('Reason')),
+                  DataColumn(label: Text('Field')),
+                  DataColumn(label: Text('Value')),
                 ],
-                rows: order.items.map((item) => DataRow(
-                  cells: [
-                    DataCell(Text(item.name)),
-                    DataCell(Text('\$${item.price.toStringAsFixed(2)}')),
-                    DataCell(Text(item.status.toUpperCase())),
-                    if (order.items.any((item) => item.rejectionReason != null))
-                      DataCell(Text(item.rejectionReason ?? '-')),
-                  ],
-                )).toList(),
+                rows: [
+                  DataRow(cells: [
+                    DataCell(Text('Order ID')),
+                    DataCell(Text(order.partnerPurchaseOrderId)),
+                  ]),
+                  DataRow(cells: [
+                    DataCell(Text('Restaurant')),
+                    DataCell(Text(order.restaurantName)),
+                  ]),
+                  DataRow(cells: [
+                    DataCell(Text('Delivery Partner')),
+                    DataCell(Text(order.deliveryPartnerName)),
+                  ]),
+                  DataRow(cells: [
+                    DataCell(Text('QBox Entity')),
+                    DataCell(Text(order.qboxEntityName)),
+                  ]),
+                  DataRow(cells: [
+                    DataCell(Text('Order Status')),
+                    DataCell(Text(_getOrderStatus(order.orderStatusCd))),
+                  ]),
+                ],
               ),
             ),
           ],
@@ -78,7 +87,6 @@ class ScanHistoryScreen extends StatelessWidget {
       ),
     );
   }
-
   Widget _buildOrderCard(BuildContext context, Order order) {
     return Card(
       margin: EdgeInsets.only(bottom: 16),
@@ -89,22 +97,31 @@ class ScanHistoryScreen extends StatelessWidget {
           child: Table(
             columnWidths: {
               0: FlexColumnWidth(2),
-              1: FlexColumnWidth(1),
-              2: FlexColumnWidth(1),
+              1: FlexColumnWidth(3),
             },
             children: [
               TableRow(
                 children: [
                   Text('Order ID:', style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(order.orderId),
-                  // Text(order.status),
+                  Text(order.partnerPurchaseOrderId),
                 ],
               ),
               TableRow(
                 children: [
-                  Text('Total Items:', style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(order.totalItems.toString()),
-                  Text(''),
+                  Text('Restaurant:', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(order.restaurantName),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Text('Delivery Partner:', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(order.deliveryPartnerName),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Text('Order Status:', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(_getOrderStatus(order.orderStatusCd)),
                 ],
               ),
             ],
@@ -113,7 +130,16 @@ class ScanHistoryScreen extends StatelessWidget {
       ),
     );
   }
-
+  String _getOrderStatus(int statusCd) {
+    switch (statusCd) {
+      case 1:
+        return 'Pending';
+      case 2:
+        return 'Completed';
+      default:
+        return 'Unknown';
+    }
+  }
 
 
 //
