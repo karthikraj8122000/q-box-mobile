@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/widgets/food_items_grid.dart';
+import 'package:qr_page/Provider/order/order_card.dart';
+import 'package:qr_page/Services/api_service.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 
 import '../../../../Model/Data_Models/inward_food_model.dart';
@@ -20,10 +22,12 @@ class OrderQRScannerScreen extends StatefulWidget {
 }
 
 class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
-  final List<TextEditingController> _controllers = List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> _controllers =
+      List.generate(6, (index) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
   bool _showSummary = false;
-
+  String scan = "notComplete";
+  List purchaseOrder = [];
   @override
   void dispose() {
     for (var controller in _controllers) {
@@ -45,19 +49,30 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
       );
 
       if (barcodeScanRes != '-1') {
-        _fetchOrderDetails(barcodeScanRes);
+        // _fetchOrderDetails(barcodeScanRes);
+        _handleEntry(barcodeScanRes);
       }
     } catch (e) {
       _showError('Error scanning QR code: $e');
     }
   }
 
-  void _fetchOrderDetails(String orderId) async {
-    final orderProvider = Provider.of<ScanProvider>(context, listen: false);
+  _getTotalItems() async {
+    final String endpoint = 'search_purchase_order';
+    final String port = '8912'; // Replace with your port
+    final String service = 'masters'; // Replace with your service
     try {
-      await orderProvider.fetchOrderDetails(orderId,orderProvider.currentOrder!.totalItems);
-    } catch (e) {
-      _showError('Error fetching order details: $e');
+      final apiService = ApiService();
+      final response = await apiService.post(port, service, endpoint, {});
+      print("object${response}");
+      setState(() {
+        scan = 'complete';
+        purchaseOrder = response['data'];
+      });
+      // Extract totalItems from the response
+      // return response['data'] ?? [];
+    } catch (error) {
+      throw Exception('Failed to fetch totalItems: $error');
     }
   }
 
@@ -69,8 +84,40 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
 
   void _handleManualEntry() {
     String orderId = _controllers.map((c) => c.text).join();
-    if (orderId.length == 6) {
-      _fetchOrderDetails(orderId);
+    _handleEntry(orderId);
+    // if (orderId.length == 6) {
+    //   _fetchOrderDetails(orderId);
+    // }
+  }
+
+  void _handleEntry(orderId) async {
+    final String endpoint = 'partner_channel_inward_delivery';
+    final String port = '8912'; // Replace with your actual port
+    final String service = 'masters'; // Replace with your actual service
+    final String scannedOrPunchedValue =
+        orderId; // Replace with the actual value entered by the user
+
+    final Map<String, dynamic> requestBody = {
+      'partnerPurchaseOrderId': scannedOrPunchedValue,
+    };
+
+    try {
+      // Instantiate ApiService
+      final apiService = ApiService();
+      final response =
+          await apiService.post(port, service, endpoint, requestBody);
+      print('API Response: $response');
+      if (response['data'] != null &&
+          response['data']["purchaseOrder"] != null) {
+        _getTotalItems();
+        scan = 'complete';
+        setState(() {});
+        // _fetchOrderDetails(scannedOrPunchedValue);
+      }
+    } catch (error) {
+      // Handle error response
+      print('API Error: $error');
+      // Show error message to user if necessary
     }
   }
 
@@ -97,13 +144,13 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
       context,
       item,
       scannedCode,
-          (item, code) {
+      (item, code) {
         // Handle Accept
         Provider.of<ScanProvider>(context, listen: false)
             .updateFoodItemStatus(item.id, 'accepted');
         Navigator.of(context).pop();
       },
-          (item, code) {
+      (item, code) {
         // Handle Reject
         Navigator.of(context).pop();
         _handleRejection(item);
@@ -115,7 +162,7 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
     ScanningDialogs.showRejectionDialog(
       context,
       item,
-          (reason, photo) {
+      (reason, photo) {
         Provider.of<ScanProvider>(context, listen: false).updateFoodItemStatus(
           item.id,
           'rejected',
@@ -131,7 +178,7 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(
         6,
-            (index) => SizedBox(
+        (index) => SizedBox(
           width: 60,
           child: TextField(
             controller: _controllers[index],
@@ -173,20 +220,21 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
               Text(
                 'Scan QR Code',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               SizedBox(height: 8),
               Text(
                 'Use your phone to scan the QR code.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.black54,
-                ),
+                      color: Colors.black54,
+                    ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 24),
               OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(foregroundColor: AppColors.mintGreen),
+                style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.mintGreen),
                 onPressed: _scanOrderQR,
                 icon: Icon(Icons.qr_code_scanner),
                 label: Text('Scan Now'),
@@ -211,7 +259,8 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
               SizedBox(height: 24),
               OutlinedButton.icon(
                 iconAlignment: IconAlignment.end,
-                style: OutlinedButton.styleFrom(foregroundColor: AppColors.mintGreen),
+                style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.mintGreen),
                 onPressed: _handleManualEntry,
                 icon: Icon(Icons.arrow_forward),
                 label: Text('Submit'),
@@ -223,85 +272,33 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
     );
   }
 
-  Widget _buildOrderView(Order order) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          'Order Details',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 16),
-
-        ...order.items.map(
-              (item) => FoodItemCard(
-            item: item,
-            onScanPressed: (item) {
-              ScanningDialogs.showScanningDialog(
-                context,
-                item,
-                _handleScanItem,
-              );
-            },
-          ),
-        ),
-        SizedBox(height: 16),
-        if (_showSummary)
-          OrderSummaryCard(order: order)
-        else
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OutlinedButton.icon(
-                onPressed: () {
-                  Provider.of<ScanProvider>(context, listen: false).resetOrder();
-                },
-                icon: Icon(Icons.refresh),
-                label: Text('Try Again'),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: AppColors.black,
-                ),
-              ),
-              OutlinedButton.icon(
-                onPressed: () {
-                  setState(() {
-                    _showSummary = true;
-                  });
-                },
-                icon: Icon(Icons.save),
-                label: Text('Save Order'),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                  backgroundColor: AppColors.mintGreen,
-                  foregroundColor: AppColors.white,
-                ),
-              ),
-
-            ],
-          ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ScanProvider>(
       builder: (context, orderProvider, child) {
         return SingleChildScrollView(
-          padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (!orderProvider.isOrderScanned)
+              if (scan == "notComplete")
                 _buildInitialScanView()
-              else if (orderProvider.currentOrder != null)
-                _buildOrderView(orderProvider.currentOrder!),
+              else if (scan == "complete")
+                purchaseOrder.isNotEmpty
+                    ? SizedBox(
+                  height: MediaQuery.of(context).size.height ,  // You can adjust the height as needed
+                  child: ListView.builder(
+                    itemCount: purchaseOrder.length,
+                    itemBuilder: (context, index) {
+                      return OrderCard(order:purchaseOrder[index]);
+                    },
+                  ),
+                )
+                    : Container(),  // Empty container if the list is empty
             ],
           ),
         );
       },
     );
   }
+
 }

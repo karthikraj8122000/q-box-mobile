@@ -27,31 +27,32 @@ class OrderSummaryCard extends StatelessWidget {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 16),
-                  Text('Order ID: ${order.orderId}'),
-                  Text('Total Items: ${order.totalItems}'),
+                  Text('Order ID: ${order.partnerPurchaseOrderId}'),
+                  Text('Total Items: ${order}'),
                   SizedBox(height: 16),
-                  ...order.items.map((item) => Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(item.name),
-                        Text(
-                          item.status.toUpperCase(),
-                          style: TextStyle(
-                            color: item.status == 'accepted' ? Colors.green :
-                            item.status == 'rejected' ? Colors.red : Colors.grey,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )).toList(),
+                  // ...order.map((item) => Padding(
+                  //   padding: EdgeInsets.symmetric(vertical: 4),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Text(item.id),
+                  //       Text(
+                  //         item.status.toUpperCase(),
+                  //         style: TextStyle(
+                  //           color: item.status == 'accepted' ? Colors.green :
+                  //           item.status == 'rejected' ? Colors.red : Colors.grey,
+                  //           fontWeight: FontWeight.bold,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // )).toList(),
       
                 ],
               ),
             ),
           ),
+
         OutlinedButton.icon(
             onPressed: () {},
             icon: Icon(Icons.qr_code_scanner),
