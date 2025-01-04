@@ -19,6 +19,11 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> with TickerProviderStateMixin {
   int _selectedIndex = 0;
   late List<Widget> _screens;
+  void setSelectedIndex(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
   // final List<Widget> _screens = [
   //   Dashboard(),
   //   LoadOrUnload(),
@@ -29,7 +34,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
 
   void _navigateToHistoryScreen() {
     setState(() {
-      _selectedIndex = 4; // Set the index to navigate to the History screen
+      _selectedIndex = 0; // Set the index to navigate to the History screen
     });
   }
   // List of navigation items
@@ -47,7 +52,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
     _screens = [
       Dashboard(),
       LoadOrUnload(),
-      InwardOrder(onSendItemPressed: _navigateToHistoryScreen),
+      InwardOrder(),
       DeliveryTrackingScreen(),
       HistoryScreen(),
     ];

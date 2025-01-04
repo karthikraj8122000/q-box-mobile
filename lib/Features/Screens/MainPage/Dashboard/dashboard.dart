@@ -1,16 +1,17 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_page/Model/Data_Models/dashboard_model/dashboard_model.dart';
 import 'package:qr_page/Provider/dashboard_provider.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 import 'package:qr_page/Widgets/Common/app_text.dart';
-import 'package:qr_page/Widgets/Custom/custom_appbar.dart';
-import '../../../../Model/Data_Models/dashboard_model/dashboard_model.dart';
 import '../../../../Theme/app_theme.dart';
-import '../../../../Widgets/Custom/scrolling_text.dart';
+import 'inventory_table.dart';
 
 class Dashboard extends StatefulWidget {
+
   const Dashboard({super.key});
 
   @override
@@ -26,10 +27,75 @@ class _DashboardState extends State<Dashboard>
   // Add new animation controller for header
   late AnimationController _headerController;
   late Animation<Offset> _headerSlideAnimation;
+  List<InventoryItem> inventoryItems = [];
+  bool isLoading = true;
+
+  Future<void> loadInventoryData() async {
+    if (!mounted) return;
+
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      // Simulate API call with your test data
+      const String jsonData = '''
+        [
+          {
+            "inCount": 1,
+            "skuCode": "SIVMLS",
+            "outCount": 0,
+            "totalCount": 1,
+            "description": "A2B South Indian Veg Meals"
+          },
+          {
+            "inCount": 2,
+            "skuCode": "CHBRYNI",
+            "outCount": 0,
+            "totalCount": 2,
+            "description": "Star Chicken Briyani"
+          }
+        ]
+      ''';
+
+      final List<dynamic> decodedData = json.decode(jsonData);
+
+      if (mounted) {
+        setState(() {
+          inventoryItems = decodedData
+              .map((item) => InventoryItem.fromJson(Map<String, dynamic>.from(item)))
+              .toList();
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+          // Add error handling state if needed
+          inventoryItems = []; // Reset to empty list on error
+        });
+      }
+      print('Error loading inventory data: $e');
+      // You might want to show a snackbar or error message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to load inventory data: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+
+  Future<void> refreshInventoryData() async {
+    await loadInventoryData();
+  }
 
   @override
   void initState() {
     super.initState();
+    loadInventoryData();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<DashboardProvider>().getQboxes();
     });
@@ -102,6 +168,7 @@ class _DashboardState extends State<Dashboard>
         },
       ]
     };
+
     qboxSettings = QBoxSettings.fromMap(qboxEntity);
 
     _headerController = AnimationController(
@@ -195,21 +262,25 @@ class _DashboardState extends State<Dashboard>
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-            backgroundColor: AppColors.mintGreen,
-            automaticallyImplyLeading: false,
-            title: Align(
-                alignment: Alignment.center,
-                child: AppText(
-                    text: qboxSettings?.qboxEntityName ?? "Default Entity Name",
-                    fontSize: 16))),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildCurrentTime(),
-              _buildInventoryTable(),
-              _buildQeuBoxStatus(),
-              _buildHotBoxStatus(),
-            ],
+          backgroundColor: AppColors.mintGreen,
+          automaticallyImplyLeading: false,
+          title: Align(
+              alignment: Alignment.center,
+              child: AppText(
+                  text: qboxSettings?.qboxEntityName ?? "Default Entity Name",
+                  fontSize: 16)),
+        ),
+        body: RefreshIndicator(
+          onRefresh: refreshInventoryData,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                _buildCurrentTime(),
+                _buildInventoryTable(),
+                _buildQeuBoxStatus(),
+                _buildHotBoxStatus(),
+              ],
+            ),
           ),
         ),
       ),
@@ -284,56 +355,71 @@ class _DashboardState extends State<Dashboard>
 
   // Redesigned inventory table
   Widget _buildInventoryTable() {
-    return Container(
-      margin: EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                    child: Text('Item',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center)),
-                Expanded(
-                    child: Text('In',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center)),
-                Expanded(
-                    child: Text('Out',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center)),
-                Expanded(
-                    child: Text('Total',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center)),
-              ],
-            ),
-          ),
-          _buildInventoryRow('Briyani', '44', '91', '135', isEven: true),
-          _buildInventoryRow('Sambar', '40', '85', '125', isEven: false),
-          _buildInventoryRow('Chicken Rice', '30', '70', '100', isEven: true),
-          _buildInventoryRow('Dosa', '25', '60', '85', isEven: false),
-        ],
-      ),
-    );
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (inventoryItems.isEmpty) {
+      return Center(
+        child: Text(
+          'No inventory items available',
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      );
+    }
+
+    return InventoryTableWidget(inventoryItems: inventoryItems);
+
+    //   Container(
+    //   margin: EdgeInsets.all(16.0),
+    //   decoration: BoxDecoration(
+    //     color: Colors.white,
+    //     borderRadius: BorderRadius.circular(12),
+    //     boxShadow: [
+    //       BoxShadow(
+    //         color: Colors.black12,
+    //         blurRadius: 8,
+    //         offset: Offset(0, 2),
+    //       ),
+    //     ],
+    //   ),
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       Container(
+    //         padding: EdgeInsets.all(12),
+    //         decoration: BoxDecoration(
+    //           color: Colors.grey.shade100,
+    //           borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+    //         ),
+    //         child: Row(
+    //           children: [
+    //             Expanded(
+    //                 child: Text('Item',
+    //                     style: TextStyle(fontWeight: FontWeight.bold),
+    //                     textAlign: TextAlign.center)),
+    //             Expanded(
+    //                 child: Text('In',
+    //                     style: TextStyle(fontWeight: FontWeight.bold),
+    //                     textAlign: TextAlign.center)),
+    //             Expanded(
+    //                 child: Text('Out',
+    //                     style: TextStyle(fontWeight: FontWeight.bold),
+    //                     textAlign: TextAlign.center)),
+    //             Expanded(
+    //                 child: Text('Total',
+    //                     style: TextStyle(fontWeight: FontWeight.bold),
+    //                     textAlign: TextAlign.center)),
+    //           ],
+    //         ),
+    //       ),
+    //       _buildInventoryRow('Briyani', '44', '91', '135', isEven: true),
+    //       _buildInventoryRow('Sambar', '40', '85', '125', isEven: false),
+    //       _buildInventoryRow('Chicken Rice', '30', '70', '100', isEven: true),
+    //       _buildInventoryRow('Dosa', '25', '60', '85', isEven: false),
+    //     ],
+    //   ),
+    // );
   }
 
   Widget _buildInventoryRow(

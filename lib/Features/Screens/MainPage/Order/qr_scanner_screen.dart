@@ -15,6 +15,7 @@ import 'widgets/order_summary_card.dart';
 import 'widgets/scanning_dialogs.dart';
 
 class OrderQRScannerScreen extends StatefulWidget {
+  static const String routeName = '/order-scan';
   const OrderQRScannerScreen({super.key});
 
   @override
@@ -28,6 +29,8 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
   bool _showSummary = false;
   String scan = "notComplete";
   List purchaseOrder = [];
+
+
   @override
   void dispose() {
     for (var controller in _controllers) {
@@ -37,6 +40,17 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
       node.dispose();
     }
     super.dispose();
+  }
+
+  void resetScan() {
+    setState(() {
+      scan = "notComplete";
+      purchaseOrder = [];
+      // Clear the text controllers
+      for (var controller in _controllers) {
+        controller.clear();
+      }
+    });
   }
 
   Future<void> _scanOrderQR() async {
@@ -102,7 +116,6 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
     };
 
     try {
-      // Instantiate ApiService
       final apiService = ApiService();
       final response =
           await apiService.post(port, service, endpoint, requestBody);
@@ -284,15 +297,30 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
                 _buildInitialScanView()
               else if (scan == "complete")
                 purchaseOrder.isNotEmpty
-                    ? SizedBox(
-                  height: MediaQuery.of(context).size.height ,  // You can adjust the height as needed
-                  child: ListView.builder(
-                    itemCount: purchaseOrder.length,
-                    itemBuilder: (context, index) {
-                      return OrderCard(order:purchaseOrder[index]);
-                    },
-                  ),
-                )
+                    ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        ElevatedButton.icon(
+
+                          onPressed: () => resetScan(),
+                          icon: Icon(Icons.qr_code_scanner),
+                          label: Text('Scan New Order'),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 16,horizontal: 16),
+                            backgroundColor: AppColors.mintGreen,
+                          ),
+                        ),
+                        SizedBox(
+                                          height: MediaQuery.of(context).size.height ,  // You can adjust the height as needed
+                                          child: ListView.builder(
+                        itemCount: purchaseOrder.length,
+                        itemBuilder: (context, index) {
+                          return OrderCard(order:purchaseOrder[index]);
+                        },
+                                          ),
+                                        ),
+                      ],
+                    )
                     : Container(),  // Empty container if the list is empty
             ],
           ),
@@ -302,3 +330,4 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
   }
 
 }
+

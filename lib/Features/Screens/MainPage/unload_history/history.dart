@@ -6,10 +6,11 @@ import 'package:qr_page/Theme/app_theme.dart';
 import 'package:qr_page/Widgets/Common/network_error.dart';
 import '../../../../Model/Data_Models/Food_item/foot_item_model.dart';
 import '../../../../Provider/food_store_provider.dart';
+import '../../../../Provider/order/order_card.dart';
 import '../../../../Widgets/Custom/custom_modern_tabbar.dart';
 
 class HistoryScreen extends StatefulWidget {
-  static const String routeName = '/scanning';
+  static const String routeName = '/history';
   const HistoryScreen({super.key});
 
   @override
@@ -19,6 +20,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateMixin {
   late TabController _tabController;
   late List<TabItem> _tabItems;
+  List purchaseOrder = [];
 
   @override
   void initState() {
@@ -29,6 +31,7 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
     ];
     _tabController = TabController(length: _tabItems.length, vsync: this);
   }
+
 
   @override
   void dispose() {
@@ -98,7 +101,13 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
     final sortedItems = provider.getSortedDispatchedItems();
     return sortedItems.isEmpty
         ? _buildEmptyState(context)
-        : _buildDispatchedItemsGrid(context, sortedItems);
+
+        :ListView.builder(
+      itemCount: purchaseOrder.length,
+      itemBuilder: (context, index) {
+        return OrderCard(order:purchaseOrder[index]);
+      },
+    );
   }
 
   Widget _buildEmptyState(BuildContext context) {
@@ -122,6 +131,7 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
       ),
     );
   }
+
 
   Widget _buildDispatchedItemsGrid(BuildContext context, List<FoodItem> items) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;

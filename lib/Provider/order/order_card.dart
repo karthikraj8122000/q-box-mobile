@@ -80,14 +80,15 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                   // Decorative Header
                   Container(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          AppColors.mintGreen,
-                          AppColors.mintGreen.withGreen(180),
-                        ],
-                      ),
+                      color: AppColors.mintGreen
+                      // gradient: LinearGradient(
+                      //   begin: Alignment.topLeft,
+                      //   end: Alignment.bottomRight,
+                      //   colors: [
+                      //     AppColors.mintGreen,
+                      //     AppColors.mintGreen.withGreen(180),
+                      //   ],
+                      // ),
                     ),
                     child: Stack(
                       children: [
@@ -219,7 +220,6 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                           value: widget.order['qboxEntity1name'],
                           color: Color(0xFF9C27B0),
                         ),
-
                         // Action Buttons
                         Row(
                           children: [
