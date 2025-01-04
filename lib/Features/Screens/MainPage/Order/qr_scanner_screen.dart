@@ -188,11 +188,12 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
 
   Widget _buildOTPFields() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
-        6,
-        (index) => SizedBox(
+        4,
+        (index) => Container(
           width: 60,
+          margin: EdgeInsets.all(12),
           child: TextField(
             controller: _controllers[index],
             focusNode: _focusNodes[index],
@@ -268,6 +269,11 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Text(
+                'Enter last 4-digit order id',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: AppColors.lightBlack),
+                textAlign: TextAlign.center,
+              ),
               _buildOTPFields(),
               SizedBox(height: 24),
               OutlinedButton.icon(

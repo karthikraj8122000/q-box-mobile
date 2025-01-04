@@ -24,6 +24,16 @@ class _DashboardState extends State<Dashboard>
   late final QBoxSettings qboxSettings;
   Animation<double>? _animation;
 
+  late List<dynamic> qboxLists = [];
+
+  late final qboxCount;
+
+  var inventoryData;
+  int rowCount = 0;
+  int columnCount = 0;
+
+  late DashboardProvider _provider;
+
   // Add new animation controller for header
   late AnimationController _headerController;
   late Animation<Offset> _headerSlideAnimation;
@@ -97,7 +107,7 @@ class _DashboardState extends State<Dashboard>
     super.initState();
     loadInventoryData();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<DashboardProvider>().getQboxes();
+      Provider.of<DashboardProvider>(context, listen: false).getQboxes();
     });
     final Map<String, dynamic> qboxEntity = {
       "qboxEntityName": "10 Mins Delivery Nungambakkam",
@@ -248,7 +258,7 @@ class _DashboardState extends State<Dashboard>
               SizedBox(height: 16),
               _buildDetailRow('Food Name', item.foodName),
               _buildDetailRow('Qbox ID', item.qboxId.toString()),
-              _buildDetailRow('Sku Code', item.foodCode),
+              _buildDetailRow('Sku Code', item.foodCode.isNotEmpty ? item.foodCode : '--'),
               _buildDetailRow('Created at', item.storageDate.toString()),
             ],
           ),
@@ -259,30 +269,51 @@ class _DashboardState extends State<Dashboard>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.mintGreen,
-          automaticallyImplyLeading: false,
-          title: Align(
-              alignment: Alignment.center,
-              child: AppText(
-                  text: qboxSettings?.qboxEntityName ?? "Default Entity Name",
-                  fontSize: 16)),
-        ),
-        body: RefreshIndicator(
-          onRefresh: refreshInventoryData,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                _buildCurrentTime(),
-                _buildInventoryTable(),
-                _buildQeuBoxStatus(),
-                _buildHotBoxStatus(),
-              ],
+    return ChangeNotifierProvider(
+      create: (_) => DashboardProvider(),
+      child: Consumer<DashboardProvider>(
+        builder: (context, provider,child) {
+          if (provider.qboxLists.isEmpty) {
+            provider.getQboxes();
+          }
+
+          debugPrint('QboxListsss: ${provider.qboxLists}', wrapWidth: 1024);  // Adjust the wrap width as needed
+          if (provider.qboxLists.isNotEmpty && provider.qboxLists[1] != null) {
+            qboxLists = provider.qboxLists[1]?['qboxes'] ?? [];
+            // qboxCount = provider.qboxLists[1]['qboxInventory'];
+             inventoryData = provider.qboxLists[1] as Map<String, dynamic>?;
+             rowCount = int.tryParse(inventoryData?["rowCount"]?.toString() ?? '0') ?? 0;
+             columnCount = int.tryParse(inventoryData?["columnCount"]?.toString() ?? '1') ?? 1;
+            print('Row Count: $rowCount');
+            print('Column Count: $columnCount');
+          }
+          return SafeArea(
+            child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: AppColors.mintGreen,
+                automaticallyImplyLeading: false,
+                title: Align(
+                    alignment: Alignment.center,
+                    child: AppText(
+                        text: qboxSettings?.qboxEntityName ?? "Default Entity Name",
+                        fontSize: 16)),
+              ),
+              body: RefreshIndicator(
+                onRefresh: refreshInventoryData,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _buildCurrentTime(),
+                      _buildInventoryTable(),
+                      _buildQeuBoxStatus(),
+                      _buildHotBoxStatus(),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
+          );
+        }
       ),
     );
   }
@@ -459,19 +490,22 @@ class _DashboardState extends State<Dashboard>
 
   Widget _buildQeuBoxStatus() {
     final int totalCells =
-        (qboxSettings?.rowCount ?? 0) * (qboxSettings?.columnCount ?? 0);
+        (rowCount) * (columnCount);
 
-    final List<QBox> allCells = List.generate(totalCells, (index) {
-      if (index < (qboxSettings?.qboxes?.length ?? 0)) {
-        return qboxSettings!.qboxes[index];
-      } else {
-        return QBox(
-            foodName: "Empty",
-            qboxId: index,
-            foodCode: "empty",
-            foodImage: "assets/empty.png");
-      }
-    });
+
+    print('totalCells$totalCells');
+
+    // final List<QBox> allCells = List.generate(totalCells, (index) {
+    //   if (index < (qboxSettings?.qboxes?.length ?? 0)) {
+    //     return qboxSettings!.qboxes[index];
+    //   } else {
+    //     return QBox(
+    //         foodName: "Empty",
+    //         qboxId: index,
+    //         foodCode: "empty",
+    //         foodImage: "assets/empty.png");
+    //   }
+    // });
 
     return Column(
       children: [
@@ -506,23 +540,29 @@ class _DashboardState extends State<Dashboard>
           scrollDirection: Axis.horizontal,
           child: Container(
             padding: EdgeInsets.all(20.0),
-            width: qboxSettings.columnCount * 180.0,
+            width: columnCount * 180.0,
             child: GridView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: qboxSettings.columnCount ?? 3,
+                crossAxisCount: columnCount > 0 ? columnCount : 1,
                 childAspectRatio: 1,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
               ),
               itemCount: totalCells,
               itemBuilder: (context, index) {
-                final cell = allCells[index];
-                final bool isEmpty = cell.foodName == 'Empty';
-                return _buildGridCell(cell);
+                final cell = qboxLists[index];
+                if (cell != null) {
+                  // Convert the Map to QBox
+                  QBox qbox = QBox.fromMap(cell as Map<String, dynamic>);
+                  return _buildGridCell(qbox);
+                } else {
+                  return Container(); // Placeholder for invalid cell
+                }
               },
             ),
+
           ),
         ),
         _buildItemCount(),
@@ -533,7 +573,7 @@ class _DashboardState extends State<Dashboard>
 
   // Enhanced QBox grid cell
   Widget _buildGridCell(QBox item) {
-    bool isFilled = item.foodName != 'Empty';
+    bool isFilled = item.foodName != 'EMPTY';
     return InkWell(
       onTap: () {
         if (isFilled) {
@@ -598,15 +638,15 @@ class _DashboardState extends State<Dashboard>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          isFilled
-                              ? CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage: AssetImage(item.foodImage),
-                                  backgroundColor: isFilled
-                                      ? Colors.white
-                                      : Colors.grey.shade200,
-                                )
-                              : Image.asset("assets/empty.png"),
+                          isFilled ?CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage("assets/biriyani.jpg"),
+                        backgroundColor: isFilled
+                            ? Colors.white
+                            : Colors.grey.shade200,
+                      ):Image.asset("assets/empty.png"),
+
+
                           SizedBox(height: 8),
                           Text(
                             item.foodName,
@@ -619,7 +659,7 @@ class _DashboardState extends State<Dashboard>
                           if (isFilled) ...[
                             SizedBox(height: 4),
                             Text(
-                              'ID: ${item.qboxId} | SKU: ${item.foodCode}',
+                              'ID: ${item.qboxId}',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.shade600,

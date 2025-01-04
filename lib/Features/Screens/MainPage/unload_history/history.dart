@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/outward_delivery_history.dart';
 import 'package:qr_page/Theme/app_theme.dart';
 import 'package:qr_page/Widgets/Common/network_error.dart';
 import '../../../../Model/Data_Models/Food_item/foot_item_model.dart';
 import '../../../../Provider/food_store_provider.dart';
 import '../../../../Provider/order/order_card.dart';
 import '../../../../Widgets/Custom/custom_modern_tabbar.dart';
+import '../Order/order_history_card.dart';
 
 class HistoryScreen extends StatefulWidget {
   static const String routeName = '/history';
@@ -66,8 +68,9 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    _buildBody(context, provider),
-                    _buildBody(context, provider),
+                    InwardOrdersList(),
+                    // _buildBody(context, provider),
+                    OutwardOrdersList(),
                   ],
                 ),
               ),
@@ -76,6 +79,14 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
         ),
       ),
     );
+  }
+
+  Widget InwardOrdersList(){
+    return OrderHistoryCard();
+  }
+
+  Widget OutwardOrdersList(){
+    return OutwardOrderHistoryCard();
   }
 
   Widget _buildTabBar() {
@@ -225,81 +236,81 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
       child: ListView.builder(
           itemCount: items.length,
           itemBuilder: (context, index) {
-        final item = items[index];
-        return Card(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16))
-          ),
-          elevation: 4,
-          child: InkWell(
-            onTap: () => _showItemDetails(context, item),
-            borderRadius: BorderRadius.circular(16),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            final item = items[index];
+            return Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16))
+              ),
+              elevation: 4,
+              child: InkWell(
+                onTap: () => _showItemDetails(context, item),
+                borderRadius: BorderRadius.circular(16),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        backgroundColor: AppTheme.appTheme.withOpacity(0.2),
-                        child: Icon(
-                          Icons.local_shipping,
-                          color: AppTheme.appTheme,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: AppTheme.appTheme.withOpacity(0.2),
+                            child: Icon(
+                              Icons.local_shipping,
+                              color: AppTheme.appTheme,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(50)),
+                                color: Colors.black
+                            ),
+                            child: Icon(
+                              Icons.chevron_right,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ],
                       ),
-                      Container(
-                        padding: EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(50)),
-                            color: Colors.black
+                      SizedBox(height: 12),
+
+                      // Unique Code
+                      Text(
+                        item.uniqueCode,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14
                         ),
-                        child: Icon(
-                          Icons.chevron_right,
-                          color: Colors.white,
-                          size: 20,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 8),
+
+                      // Container Number
+                      Text(
+                        'Container: ${item.boxCellSno}',
+                        style: TextStyle(fontSize: 13),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 4),
+
+                      // Dispatch Date
+                      Text(
+                        'Unloaded at:\n${DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate)}',
+                        style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 12
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 12),
-
-                  // Unique Code
-                  Text(
-                    item.uniqueCode,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: 8),
-
-                  // Container Number
-                  Text(
-                    'Container: ${item.boxCellSno}',
-                    style: TextStyle(fontSize: 13),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: 4),
-
-                  // Dispatch Date
-                  Text(
-                    'Unloaded at:\n${DateFormat('MMM dd, yyyy HH:mm').format(item.storageDate)}',
-                    style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-        );
-      }),
+            );
+          }),
     );
   }
 

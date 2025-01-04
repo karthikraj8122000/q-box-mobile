@@ -10,24 +10,25 @@ class DashboardProvider with ChangeNotifier {
 
   List<dynamic> get qboxLists => _qboxList;
 
-Future<dynamic> getQboxes() async {
-  print("hrllo");
-  Map<String, dynamic> params = {"qboxEntitySno": 3};
-  try {
-    var result = await apiService.post(
-        "8912", "masters", "get_box_cell_inventory", params);
-    print("karthikqbox");
-    print(result);
-    if (result != null && result['data'] != null) {
-      _qboxList = result['data'];
-      notifyListeners();
-    } else {
-      commonService.errorToast('Failed at retrieving the food item.');
+  Future<void> getQboxes() async {
+    print("Fetching Qboxes...");
+    Map<String, dynamic> params = {"qboxEntitySno": 20};
+    try {
+      var result = await apiService.post(
+          "8911", "masters", "get_box_cell_inventory", params);
+      print("API Response: $result");
+      if (result != null && result['data'] != null) {
+        _qboxList = result['data'].values.toList();
+        print("Updated _qboxList: $_qboxList");
+        notifyListeners();
+      } else {
+        commonService.errorToast('Failed to retrieve the data.');
+      }
+    } catch (e) {
+      debugPrint('$e');
+      commonService.errorToast('An error occurred while retrieving the data.');
     }
-  } catch (e) {
-    debugPrint('$e');
-    commonService
-        .errorToast('An error occurred while retrieving the food item.');
   }
-}
+
+
 }
