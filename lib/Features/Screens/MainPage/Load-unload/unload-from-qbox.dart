@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,8 @@ import 'package:qr_page/Widgets/Common/app_text.dart';
 
 import '../../../../Model/Data_Models/Food_item/foot_item_model.dart';
 import '../../../../Provider/food_store_provider.dart';
+import '../../../../Services/api_service.dart';
+import '../../../../Services/toast_service.dart';
 import '../../../../Theme/app_theme.dart';
 import '../../../../Widgets/Common/app_colors.dart';
 
@@ -18,6 +21,48 @@ class UnloadQbox extends StatefulWidget {
 }
 
 class _UnloadQboxState extends State<UnloadQbox> {
+
+  String qBoxOutBarcode = '';
+  final ApiService apiService = ApiService();
+  final CommonService commonService = CommonService();
+
+  unloadFromQBox() async {
+    Map<String, dynamic> body = {
+      "uniqueCode": qBoxOutBarcode,
+      "wfStageCd":12,
+      "qboxEntitySno": 3
+    };
+    print('$body');
+    try {
+      var result = await apiService.post("8912", "masters","unload_sku_from_qbox_to_hotbox", body);
+      if (result != null && result['data'] != null) {
+        print('RESULT$result');
+        commonService.presentToast('Food Unloaded from the qbox');
+        qBoxOutBarcode = '';
+      }else{
+        commonService.presentToast('Something went wrong....');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+    setState(() {
+    });
+  }
+
+  Future<void> scanBarcode() async {
+    String barcodeScanRes;
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
+      setState(() {
+        qBoxOutBarcode = barcodeScanRes;
+      });
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<FoodStoreProvider>(context);
@@ -377,7 +422,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -390,18 +435,19 @@ class _UnloadQboxState extends State<UnloadQbox> {
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(32),
         child: InkWell(
-          onTap: () async {
-            String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-              "#ff6666",
-              "Cancel",
-              true,
-              ScanMode.QR,
-            );
-            if (barcodeScanRes != '-1') {
-              provider.handleDispatchQRScan(context, barcodeScanRes);
-            }
-          },
-          borderRadius: BorderRadius.circular(32),
+          onTap: () => scanBarcode(),
+          // async {
+          //   String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          //     "#ff6666",
+          //     "Cancel",
+          //     true,
+          //     ScanMode.QR,
+          //   );
+          //   if (barcodeScanRes != '-1') {
+          //     provider.handleDispatchQRScan(context, barcodeScanRes);
+          //   }
+          // },
+          borderRadius: BorderRadius.circular(24),
           child: Padding(
             padding: EdgeInsets.all(24),
             child: Column(
@@ -444,51 +490,61 @@ class _UnloadQboxState extends State<UnloadQbox> {
                         ],
                       ),
                     ),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(color: AppColors.lightBlack,borderRadius: BorderRadius.all(Radius.circular(50))),
+                      child: Icon(
+                        Icons.arrow_forward_ios,
+                        color: AppColors.white,
+                        size: 18,
+                      ),
+                    ),
                   ],
                 ),
-                SizedBox(height: 24),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: provider.scannedDispatchItem != null
-                        ? AppColors.mintGreen.withOpacity(0.1)
-                        : Colors.grey[100],
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: provider.scannedDispatchItem != null
-                          ? AppColors.mintGreen.withOpacity(0.3)
-                          : Colors.grey[300]!,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        provider.scannedDispatchItem != null
-                            ? Icons.check_circle_rounded
-                            : Icons.qr_code_2_rounded,
-                        color: provider.scannedDispatchItem != null
-                            ? AppColors.mintGreen
-                            : Colors.grey[400],
-                        size: 24,
+
+                if (qBoxOutBarcode.isNotEmpty && qBoxOutBarcode != '-1') ...[
+                  SizedBox(height: 24),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: qBoxOutBarcode.isNotEmpty
+                          ? AppColors.mintGreen.withOpacity(0.1)
+                          : Colors.grey[100],
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: qBoxOutBarcode.isNotEmpty
+                            ? AppColors.mintGreen.withOpacity(0.3)
+                            : Colors.grey[300]!,
                       ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        child: Text(
-                          provider.scannedDispatchItem ?? 'No item scanned yet',
-                          style: TextStyle(
-                            color: provider.scannedDispatchItem != null
-                                ? AppColors.mintGreen
-                                : Colors.grey[600],
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          qBoxOutBarcode.isNotEmpty
+                              ? Icons.check_circle_rounded
+                              : Icons.qr_code_2_rounded,
+                          color: qBoxOutBarcode.isNotEmpty
+                              ? AppColors.mintGreen
+                              : Colors.grey[400],
+                          size: 24,
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            qBoxOutBarcode ?? 'No item scanned yet',
+                            style: TextStyle(
+                              color: qBoxOutBarcode.isNotEmpty
+                                  ? AppColors.mintGreen
+                                  : Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                if (provider.scannedDispatchItem != null) ...[
                   SizedBox(height: 24),
                   _buildDispatchButton(provider, context),
                 ],
@@ -502,29 +558,38 @@ class _UnloadQboxState extends State<UnloadQbox> {
 
   Widget _buildDispatchButton(
       FoodStoreProvider provider, BuildContext context) {
+    final isEnabled = qBoxOutBarcode.isNotEmpty;
     return Container(
       width: double.infinity,
       height: 56,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         gradient: LinearGradient(
-          colors: [
-            AppColors.darkPaleYellow,
-            AppColors.darkPaleYellow.withOpacity(0.8),
+          colors: isEnabled
+              ? [
+            AppColors.darkMintGreen,
+            AppColors.mintGreen.withOpacity(0.8),
+          ]
+              : [
+            Colors.grey[300]!,
+            Colors.grey[400]!,
           ],
         ),
-        boxShadow: [
+        boxShadow: isEnabled
+            ? [
           BoxShadow(
-            color: AppColors.darkPaleYellow.withOpacity(0.3),
+            color: AppColors.mintGreen.withOpacity(0.3),
             blurRadius: 20,
             offset: Offset(0, 10),
           ),
-        ],
+        ]
+            : [],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => provider.dispatchFoodItem(context),
+          onTap: isEnabled ? () =>  unloadFromQBox() : null,
+          // onTap: () => provider.dispatchFoodItem(context),
           borderRadius: BorderRadius.circular(16),
           child: Center(
             child: Row(

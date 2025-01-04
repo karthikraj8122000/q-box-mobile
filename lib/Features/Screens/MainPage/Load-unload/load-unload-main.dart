@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/MainPage/Load-unload/unload-from-qbox.dart';
+import 'package:qr_page/Services/api_service.dart';
+import 'package:qr_page/Services/toast_service.dart';
 import 'package:qr_page/Widgets/Common/network_error.dart';
 
 import '../../../../Provider/order/order_qr_scanning_provider.dart';
@@ -21,6 +25,7 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
   late TabController _tabController;
   late List<TabItem> _tabItems;
 
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +41,7 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
     _tabController.dispose();
     super.dispose();
   }
+
 
 
   @override
@@ -98,6 +104,7 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
       ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0),
     );
   }
+
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
