@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_page/Widgets/Common/network_error.dart';
 
 import '../../../../Provider/food_store_provider.dart';
 import '../../../../Widgets/Common/app_colors.dart';
@@ -67,6 +68,7 @@ class _LoadQboxState extends State<LoadQbox> {
                   Icons.qr_code_scanner_rounded,
                   provider.qboxId,
                       () => provider.scanContainer(context),
+                    context
                 ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.2, end: 0),
               ),
               SizedBox(width: 24),
@@ -77,9 +79,10 @@ class _LoadQboxState extends State<LoadQbox> {
                   AppColors.darkPaleYellow,
                   Icons.fastfood_rounded,
                   provider.foodItem,
-                  provider.qboxId != null ? () => provider.scanFoodItem(context) : null,
+                  provider.qboxId != null ? () => provider.scanFoodItem(context) : null,context
                 ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0),
               ),
+
             ],
           )
         else
@@ -92,6 +95,7 @@ class _LoadQboxState extends State<LoadQbox> {
                 Icons.qr_code_scanner_rounded,
                 provider.qboxId,
                     () => provider.scanContainer(context),
+                  context
               ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.2, end: 0),
               SizedBox(height: 16),
               _buildEnhancedScanCard(
@@ -100,7 +104,7 @@ class _LoadQboxState extends State<LoadQbox> {
                 AppColors.darkPaleYellow,
                 Icons.fastfood_rounded,
                 provider.foodItem,
-                provider.qboxId != null ? () => provider.scanFoodItem(context) : null,
+                provider.qboxId != null ? () => provider.scanFoodItem(context) : null,context
               ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0),
             ],
           ),
@@ -118,7 +122,10 @@ class _LoadQboxState extends State<LoadQbox> {
       IconData icon,
       String? scannedValue,
       VoidCallback? onTap,
+      BuildContext context
       ) {
+    final provider = Provider.of<FoodStoreProvider>(context);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
@@ -142,7 +149,15 @@ class _LoadQboxState extends State<LoadQbox> {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: onTap,
+              onTap: () {
+                if (onTap == null) {
+                  if (title.contains('Scan Food Item')) {
+                    provider.scanFoodItem(context); // This will show the toast
+                  }
+                } else {
+                  onTap();
+                }
+              },
               borderRadius: BorderRadius.circular(24),
               child: Padding(
                 padding: EdgeInsets.all(isTablet ? 24 : 16),
@@ -181,6 +196,15 @@ class _LoadQboxState extends State<LoadQbox> {
                                 ),
                               ),
                             ],
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(color: AppColors.lightBlack,borderRadius: BorderRadius.all(Radius.circular(50))),
+                          child: Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColors.white,
+                            size: 18,
                           ),
                         ),
                       ],

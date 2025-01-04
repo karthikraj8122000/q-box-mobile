@@ -25,12 +25,6 @@ class AppRouter {
         path: AnimeSplashScreen.routeName,
         builder: (_, __) => const AnimeSplashScreen(),
       ),
-
-      GoRoute(
-        name: SeeAllQboxFoods.routeName,
-        path: SeeAllQboxFoods.routeName,
-        builder: (_, __) => const SeeAllQboxFoods(),
-      ),
       GoRoute(
         name: LoginScreen.routeName,
         path: LoginScreen.routeName,
@@ -41,6 +35,13 @@ class AppRouter {
         name: MainNavigationScreen.routeName,
         builder: (_, __) =>  MainNavigationScreen(),
       ),
+      GoRoute(
+        name: SeeAllQboxFoods.routeName,
+        path: SeeAllQboxFoods.routeName,
+        builder: (_, __) => const SeeAllQboxFoods(),
+      ),
+
+
 
       GoRoute(
         name: ScanQBoxScreen.routeName,

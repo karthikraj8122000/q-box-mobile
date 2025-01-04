@@ -6,7 +6,6 @@ import 'package:qr_page/Widgets/Common/network_error.dart';
 
 import '../../../../Provider/order/order_qr_scanning_provider.dart';
 import '../../../../Widgets/Custom/custom_modern_tabbar.dart';
-import '../Order/scan_history_screen.dart';
 import 'load-to-qbox.dart';
 
 class LoadOrUnload extends StatefulWidget {
@@ -37,7 +36,6 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
     _tabController.dispose();
     super.dispose();
   }
-
 
 
   @override
