@@ -320,7 +320,6 @@ class FoodStoreProvider with ChangeNotifier {
     setProcessingScan(false);
   }
 
-
   Future<void> dispatchFoodItem(BuildContext context) async {
     debugPrint("sjdnasmn");
     if (_scannedDispatchItem != null) {

@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:qr_page/Features/Screens/MainPage/Order/widgets/food_items_grid.dart';
 import 'package:qr_page/Provider/order/order_card.dart';
 import 'package:qr_page/Services/api_service.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
@@ -10,9 +9,7 @@ import 'package:qr_page/Widgets/Common/app_colors.dart';
 import '../../../../Model/Data_Models/inward_food_model.dart';
 import '../../../../Provider/order/scan_provider.dart';
 import '../../../../Widgets/Common/divider_text.dart';
-import 'widgets/food_item_card.dart';
-import 'widgets/order_summary_card.dart';
-import 'widgets/scanning_dialogs.dart';
+
 
 class OrderQRScannerScreen extends StatefulWidget {
   static const String routeName = '/order-scan';
@@ -132,58 +129,6 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
       print('API Error: $error');
       // Show error message to user if necessary
     }
-  }
-
-  Future<void> _handleScanItem(InwardFoodModel item) async {
-    try {
-      String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-        '#ff6666',
-        'Cancel',
-        true,
-        ScanMode.QR,
-      );
-
-      if (barcodeScanRes != '-1' && mounted) {
-        Navigator.of(context).pop(); // Close scanning dialog
-        _handleAcceptReject(item, barcodeScanRes);
-      }
-    } catch (e) {
-      _showError('Error scanning QR code: $e');
-    }
-  }
-
-  void _handleAcceptReject(InwardFoodModel item, String scannedCode) {
-    ScanningDialogs.showAcceptRejectDialog(
-      context,
-      item,
-      scannedCode,
-      (item, code) {
-        // Handle Accept
-        Provider.of<ScanProvider>(context, listen: false)
-            .updateFoodItemStatus(item.id, 'accepted');
-        Navigator.of(context).pop();
-      },
-      (item, code) {
-        // Handle Reject
-        Navigator.of(context).pop();
-        _handleRejection(item);
-      },
-    );
-  }
-
-  void _handleRejection(InwardFoodModel item) {
-    ScanningDialogs.showRejectionDialog(
-      context,
-      item,
-      (reason, photo) {
-        Provider.of<ScanProvider>(context, listen: false).updateFoodItemStatus(
-          item.id,
-          'rejected',
-          reason: reason,
-          photo: photo,
-        );
-      },
-    );
   }
 
   Widget _buildOTPFields() {
