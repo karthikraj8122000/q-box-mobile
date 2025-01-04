@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/Login/second_login.dart';
 import 'package:qr_page/Features/Screens/MainPage/Customer%20Delivery/sub/delivery_status.dart';
 import 'package:qr_page/Features/Screens/MainPage/Customer%20Delivery/sub/scan_qbox_unload.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/qr_scanner_screen.dart';
 import 'package:qr_page/Features/Screens/MainPage/main_page.dart';
 import 'package:qr_page/Features/Screens/Splash/animated_splash.dart';
 import 'package:qr_page/Provider/auth_provider.dart';
@@ -52,6 +53,13 @@ class AppRouter {
         path: DeliveryStatusScreen.routeName,
         builder: (_, __) => const DeliveryStatusScreen(),
       ),
+
+      GoRoute(
+        name: OrderQRScannerScreen.routeName,
+        path: OrderQRScannerScreen.routeName,
+        builder: (_, __) => const OrderQRScannerScreen(),
+      ),
+
       GoRoute(
         path: '/',
         builder: (context, state) {

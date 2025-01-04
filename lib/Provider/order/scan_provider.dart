@@ -28,7 +28,7 @@ class ScanProvider with ChangeNotifier {
       qboxEntityName: 'QBox Entity Name', // Replace with actual data
       restaurantName: 'Restaurant Name', // Replace with actual data
       purchaseOrderSno: 0,
-      qboxEntitySno: 0,
+      qboxEntitySno: 20,
       restaurantSno: 0,
       deliveryPartnerSno: 0,
       orderStatusCd: 1, // Example status code

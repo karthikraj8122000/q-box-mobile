@@ -82,47 +82,52 @@ class FoodStoreProvider with ChangeNotifier {
     notifyListeners();
   }
 
+
+  List<dynamic> get qboxLists => _qboxList;
+
   Future<void> getQboxes() async {
-    _isLoading = true;
-    notifyListeners();
-    Map<String, dynamic> params = {"qboxEntitySno": 3};
+    print("Fetching Qboxes...");
+    Map<String, dynamic> params = {"qboxEntitySno": 20};
     try {
       var result = await apiService.post(
-          "8912", "masters", "get_qbox_current_status", params);
-      print("result");
-      print(result);
+          "8911", "masters", "get_box_cell_inventory", params);
+      print("API Response: $result");
       if (result != null && result['data'] != null) {
-        _qboxList = result['data'];
+        _qboxList = result['data'].values.toList();
+        print("Updated _qboxList: $_qboxList");
         notifyListeners();
       } else {
-        commonService.errorToast('Failed to retrieve QBox details.');
+        commonService.errorToast('Failed to retrieve the data.');
       }
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.connectionError) {
-        throw Exception('No Internet Connection');
-      }
-      throw Exception('Failed to fetch data');
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+    } catch (e) {
+      debugPrint('$e');
+      commonService.errorToast('An error occurred while retrieving the data.');
     }
   }
-
-  // Future<dynamic> getFoodItems() async {
+  //
+  // Future<void> getQboxes() async {
+  //   _isLoading = true;
+  //   notifyListeners();
   //   Map<String, dynamic> params = {"qboxEntitySno": 3};
   //   try {
   //     var result = await apiService.post(
-  //         "8912", "masters", "search_box_cell_food", params);
+  //         "8912", "masters", "get_qbox_current_status", params);
+  //     print("result");
+  //     print(result);
   //     if (result != null && result['data'] != null) {
-  //       _foodTemsList = result['data'];
+  //       _qboxList = result['data'];
   //       notifyListeners();
   //     } else {
-  //       commonService.errorToast('Failed at retrieving the food item.');
+  //       commonService.errorToast('Failed to retrieve QBox details.');
   //     }
-  //   } catch (e) {
-  //     debugPrint('$e');
-  //     commonService
-  //         .errorToast('An error occurred while retrieving the food item.');
+  //   } on DioError catch (e) {
+  //     if (e.type == DioErrorType.connectionError) {
+  //       throw Exception('No Internet Connection');
+  //     }
+  //     throw Exception('Failed to fetch data');
+  //   } finally {
+  //     _isLoading = false;
+  //     notifyListeners();
   //   }
   // }
 
@@ -147,7 +152,7 @@ class FoodStoreProvider with ChangeNotifier {
         barrierDismissible: false,
         builder: (context) => AlertDialog(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -296,12 +301,13 @@ class FoodStoreProvider with ChangeNotifier {
 
   Future<void> handleDispatchQRScan(
       BuildContext context, String? scannedValue) async {
+    debugPrint("hsjshs");
     if (_isProcessingScan) return;
     setProcessingScan(true);
 
     final isMatched =
     _storedItems.any((item) => item.uniqueCode == scannedValue);
-
+    print("dfsfsfsf$isMatched");
     if (isMatched) {
       setScannedDispatchItem(scannedValue);
       commonService.presentToast("Qbox found: $scannedValue");
@@ -314,8 +320,8 @@ class FoodStoreProvider with ChangeNotifier {
     setProcessingScan(false);
   }
 
-
   Future<void> dispatchFoodItem(BuildContext context) async {
+    debugPrint("sjdnasmn");
     if (_scannedDispatchItem != null) {
       try {
         var itemToDispatch = _storedItems.firstWhere(
@@ -326,9 +332,10 @@ class FoodStoreProvider with ChangeNotifier {
         Map<String, dynamic> body = {
           "uniqueCode": itemToDispatch.uniqueCode,
           "wfStageCd": 12,
-          "qboxEntitySno": 3,
+          "qboxEntitySno": 20,
         };
 
+        debugPrint("unloadddd$body");
         try {
           var result = await apiService.post(
             "8912",
