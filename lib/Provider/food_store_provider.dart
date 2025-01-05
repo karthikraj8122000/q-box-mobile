@@ -352,7 +352,7 @@ class FoodStoreProvider with ChangeNotifier {
             _handleSuccessfulDispatch(itemToDispatch);
             commonService.presentToast('Unloaded successfully!');
           } else {
-            commonService.presentToast('Failed to dispatch. Please try again.');
+            commonService.errorToast('Failed to unload. Please try again.');
           }
         } catch (apiError) {
           if (apiError
@@ -368,11 +368,11 @@ class FoodStoreProvider with ChangeNotifier {
       } catch (e) {
         print('Error: $e');
         commonService
-            .presentToast('An error occurred while dispatching the food item.');
+            .errorToast('An error occurred while dispatching the food item.');
       }
       notifyListeners();
     } else {
-      commonService.presentToast('No scanned food item to dispatch.');
+      commonService.errorToast('No scanned food item to dispatch.');
     }
   }
 

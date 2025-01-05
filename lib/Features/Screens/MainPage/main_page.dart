@@ -3,10 +3,10 @@ import 'package:qr_page/Features/Screens/MainPage/Customer%20Delivery/main/deliv
 import 'package:qr_page/Features/Screens/MainPage/Dashboard/dashboard.dart';
 import 'package:qr_page/Features/Screens/MainPage/Load-unload/load-unload-main.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/order_qr_scanner.dart';
-import 'package:qr_page/Features/Screens/MainPage/unload_history/history.dart';
 import '../../../Utils/utils.dart';
 import 'dart:math' as math;
 import '../../../Widgets/Common/app_colors.dart';
+import 'Order History/history.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   static const String routeName = '/landing-page';
@@ -18,25 +18,20 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> with TickerProviderStateMixin {
   int _selectedIndex = 0;
-  late List<Widget> _screens;
+  // late List<Widget> _screens;
   void setSelectedIndex(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-  // final List<Widget> _screens = [
-  //   Dashboard(),
-  //   LoadOrUnload(),
-  //   InwardOrder(onSendItemPressed: _navigateToHistoryScreen),
-  //   DeliveryTrackingScreen(),
-  //   HistoryScreen(),
-  // ];
+  final List<Widget> _screens = [
+    Dashboard(),
+    LoadOrUnload(),
+    InwardOrder(),
+    DeliveryTrackingScreen(),
+    HistoryScreen(),
+  ];
 
-  void _navigateToHistoryScreen() {
-    setState(() {
-      _selectedIndex = 0; // Set the index to navigate to the History screen
-    });
-  }
   // List of navigation items
   final List<NavigationItem> _items = [
     NavigationItem(icon: Icons.home_outlined, label: 'Home', selectedIcon: Icons.home),
@@ -49,13 +44,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Ticker
   @override
   void initState() {
     super.initState();
-    _screens = [
-      Dashboard(),
-      LoadOrUnload(),
-      InwardOrder(),
-      DeliveryTrackingScreen(),
-      HistoryScreen(),
-    ];
   }
 
   @override

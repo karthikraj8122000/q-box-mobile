@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/qr_scanner_screen.dart';
-import 'package:qr_page/Features/Screens/MainPage/Order/scan_history_screen.dart';
-import 'package:qr_page/Widgets/Common/app_colors.dart';
 import 'package:qr_page/Widgets/Common/network_error.dart';
 import '../../../../Provider/order/order_qr_scanning_provider.dart';
 import '../../../../Widgets/Custom/custom_modern_tabbar.dart';

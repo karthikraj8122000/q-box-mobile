@@ -3,11 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:qr_page/Core/Router/app_router.dart';
 import 'package:qr_page/Provider/dashboard_provider.dart';
 import 'package:qr_page/Provider/food_store_provider.dart';
+import 'package:qr_page/Provider/inward_order_provider.dart';
 import 'package:qr_page/Provider/network_provider.dart';
-import 'package:qr_page/Provider/order/order_provider.dart';
 import 'package:qr_page/Provider/qbox_delivery_provider.dart';
 import 'Provider/auth_provider.dart';
-import 'Provider/order/scan_provider.dart';
 
 
 void main(){
@@ -22,13 +21,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => FoodStoreProvider()),
-        ChangeNotifierProvider(create: (_) => ScanProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => NetworkProvider()),
         ChangeNotifierProvider(create: (_) => DeliveryProvider()),
         ChangeNotifierProvider(create: (_) => DashboardProvider()),
-        ChangeNotifierProvider(create: (_) => OrderProvider()),
-
+        ChangeNotifierProvider(create: (_) => InwardOrderDtlProvider()),
       ],
       child:  Consumer<AuthProvider>(
         builder: (context, AuthProvider, _) {

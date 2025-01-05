@@ -7,6 +7,7 @@ import 'package:qr_page/Model/Data_Models/dashboard_model/dashboard_model.dart';
 import 'package:qr_page/Provider/dashboard_provider.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 import 'package:qr_page/Widgets/Common/app_text.dart';
+import 'package:qr_page/Widgets/Common/network_error.dart';
 import '../../../../Theme/app_theme.dart';
 import 'inventory_table.dart';
 
@@ -20,23 +21,20 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard>
     with SingleTickerProviderStateMixin {
-  String entityName = "10 Mins Delivery Nungambakkam";
-  late final QBoxSettings qboxSettings;
+
   Animation<double>? _animation;
-
   late List<dynamic> qboxLists = [];
-
   late final qboxCount;
 
   var inventoryData;
+  var foodCountData;
+  int skuInventoryCount = 0;
   int rowCount = 0;
   int columnCount = 0;
 
   late DashboardProvider _provider;
-
   // Add new animation controller for header
   late AnimationController _headerController;
-  late Animation<Offset> _headerSlideAnimation;
   List<InventoryItem> inventoryItems = [];
   bool isLoading = true;
 
@@ -52,15 +50,15 @@ class _DashboardState extends State<Dashboard>
       const String jsonData = '''
         [
           {
-            "inCount": 1,
             "skuCode": "SIVMLS",
+             "inCount": 1,
             "outCount": 0,
             "totalCount": 1,
             "description": "A2B South Indian Veg Meals"
           },
           {
-            "inCount": 2,
             "skuCode": "CHBRYNI",
+             "inCount": 2,
             "outCount": 0,
             "totalCount": 2,
             "description": "Star Chicken Briyani"
@@ -82,12 +80,10 @@ class _DashboardState extends State<Dashboard>
       if (mounted) {
         setState(() {
           isLoading = false;
-          // Add error handling state if needed
           inventoryItems = []; // Reset to empty list on error
         });
       }
       print('Error loading inventory data: $e');
-      // You might want to show a snackbar or error message to the user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to load inventory data: ${e.toString()}'),
@@ -97,7 +93,6 @@ class _DashboardState extends State<Dashboard>
     }
   }
 
-
   Future<void> refreshInventoryData() async {
     await loadInventoryData();
   }
@@ -105,95 +100,21 @@ class _DashboardState extends State<Dashboard>
   @override
   void initState() {
     super.initState();
-    loadInventoryData();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DashboardProvider>(context, listen: false).getQboxes();
-    });
-    final Map<String, dynamic> qboxEntity = {
-      "qboxEntityName": "10 Mins Delivery Nungambakkam",
-      "rowCount": 2,
-      "columnCount": 4,
-      "qboxes": [
-        {
-          "foodName": "Briyani",
-          "qboxId": 1,
-          "foodCode": "BR01",
-          "foodImage": "assets/biriyani.jpg",
-          "createdAt": "1 hour ago"
-        },
-        {
-          "foodName": "Chicken Rice",
-          "qboxId": 2,
-          "foodCode": "SM01",
-          "foodImage": "assets/friedrice.png",
-          "createdAt": "1 hour ago"
-        },
-        {
-          "foodName": "Dosa",
-          "qboxId": 3,
-          "foodCode": "DS01",
-          "foodImage": "assets/biriyani.jpg",
-          "createdAt": "1 hour ago"
-        },
-        {
-          "foodName": "Idli",
-          "qboxId": 4,
-          "foodCode": "ID01",
-          "foodImage": "assets/friedrice.png"
-        },
-        {
-          "foodName": "Empty",
-          "qboxId": 5,
-          "foodCode": "empty",
-          "foodImage": "assets/empty.png",
-          "createdAt": "1 hour ago"
-        },
-        {
-          "foodName": "Empty",
-          "qboxId": 6,
-          "foodCode": "empty",
-          "foodImage": "assets/empty.png",
-          "createdAt": "1 hour ago"
-        },
-        {
-          "foodName": "Chicken Rice",
-          "qboxId": 7,
-          "foodCode": "SM02",
-          "foodImage": "assets/friedrice.png",
-          "createdAt": "1 hour ago"
-        },
-        {
-          "foodName": "Dosa",
-          "qboxId": 8,
-          "foodCode": "DS02",
-          "foodImage": "assets/biriyani.jpg",
-          "createdAt": "1 hour ago"
-        },
-        {
-          "foodName": "Dosa",
-          "qboxId": 9,
-          "foodCode": "DS03",
-          "foodImage": "assets/biriyani.jpg",
-          "createdAt": "1 hour ago"
-        },
-      ]
-    };
-
-    qboxSettings = QBoxSettings.fromMap(qboxEntity);
-
+    _loadData();
     _headerController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
     );
 
-    _headerSlideAnimation = Tween<Offset>(
-      begin: const Offset(-1.0, 0.0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _headerController,
-      curve: Curves.easeOut,
-    ));
     _headerController.forward();
+  }
+
+  Future<void> _loadData() async {
+    await loadInventoryData();
+    if (!mounted) return;
+
+    final provider = Provider.of<DashboardProvider>(context, listen: false);
+    await provider.getQboxes();
   }
 
   @override
@@ -269,25 +190,45 @@ class _DashboardState extends State<Dashboard>
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => DashboardProvider(),
-      child: Consumer<DashboardProvider>(
-        builder: (context, provider,child) {
-          if (provider.qboxLists.isEmpty) {
-            provider.getQboxes();
+    return Consumer<DashboardProvider>(
+      builder: (context, provider,child) {
+        if (provider.isLoading) {
+          return const Center(child: CircularProgressIndicator(color: AppColors.mintGreen,));
+        }
+        if (provider.error != null) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(provider.error!),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.mintGreen),
+                  onPressed: _loadData,
+                  child: Text('Retry'),
+                ),
+              ],
+            ),
+          );
+        }
+        if (provider.qboxLists.isNotEmpty) {
+          var firstItem = provider.qboxLists.isNotEmpty ? provider.qboxLists[0] : null;
+          var secondItem = provider.qboxLists.length > 1 ? provider.qboxLists[1] : null;
+    
+          if (firstItem is Map<String, dynamic>) {
+            foodCountData = firstItem;
+            skuInventoryCount = int.tryParse(foodCountData['skuInventorySnoCount']?.toString() ?? '0') ?? 0;
           }
-
-          debugPrint('QboxListsss: ${provider.qboxLists}', wrapWidth: 1024);  // Adjust the wrap width as needed
-          if (provider.qboxLists.isNotEmpty && provider.qboxLists[1] != null) {
-            qboxLists = provider.qboxLists[1]?['qboxes'] ?? [];
-            // qboxCount = provider.qboxLists[1]['qboxInventory'];
-             inventoryData = provider.qboxLists[1] as Map<String, dynamic>?;
-             rowCount = int.tryParse(inventoryData?["rowCount"]?.toString() ?? '0') ?? 0;
-             columnCount = int.tryParse(inventoryData?["columnCount"]?.toString() ?? '1') ?? 1;
-            print('Row Count: $rowCount');
-            print('Column Count: $columnCount');
+    
+          if (secondItem is Map<String, dynamic>) {
+            inventoryData = secondItem;
+            qboxLists = inventoryData['qboxes'] as List<dynamic>? ?? [];
+            rowCount = int.tryParse(inventoryData["rowCount"]?.toString() ?? '0') ?? 0;
+            columnCount = int.tryParse(inventoryData["columnCount"]?.toString() ?? '1') ?? 1;
           }
-          return SafeArea(
+        }
+    
+        return NetworkWrapper(
+          child: SafeArea(
             child: Scaffold(
               appBar: AppBar(
                 backgroundColor: AppColors.mintGreen,
@@ -295,11 +236,11 @@ class _DashboardState extends State<Dashboard>
                 title: Align(
                     alignment: Alignment.center,
                     child: AppText(
-                        text: qboxSettings?.qboxEntityName ?? "Default Entity Name",
+                        text: inventoryData?['qboxEntityName'] ?? "Entity",
                         fontSize: 16)),
               ),
               body: RefreshIndicator(
-                onRefresh: refreshInventoryData,
+                onRefresh: _loadData,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -312,9 +253,9 @@ class _DashboardState extends State<Dashboard>
                 ),
               ),
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }
     );
   }
 
@@ -340,21 +281,6 @@ class _DashboardState extends State<Dashboard>
         ],
       ),
     );
-  }
-
-  // Updated header with sliding animation
-  Widget _buildHeader(String title) {
-    return Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(8),
-        color: AppColors.mintGreen,
-        child: AppText(
-          text: title,
-          fontSize: 18,
-          color: AppColors.white,
-          textAlign: TextAlign.center,
-        ));
-    // ScrollingText(text: title,);
   }
 
   Widget _buildCurrentTime() {
@@ -400,112 +326,12 @@ class _DashboardState extends State<Dashboard>
     }
 
     return InventoryTableWidget(inventoryItems: inventoryItems);
-
-    //   Container(
-    //   margin: EdgeInsets.all(16.0),
-    //   decoration: BoxDecoration(
-    //     color: Colors.white,
-    //     borderRadius: BorderRadius.circular(12),
-    //     boxShadow: [
-    //       BoxShadow(
-    //         color: Colors.black12,
-    //         blurRadius: 8,
-    //         offset: Offset(0, 2),
-    //       ),
-    //     ],
-    //   ),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       Container(
-    //         padding: EdgeInsets.all(12),
-    //         decoration: BoxDecoration(
-    //           color: Colors.grey.shade100,
-    //           borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-    //         ),
-    //         child: Row(
-    //           children: [
-    //             Expanded(
-    //                 child: Text('Item',
-    //                     style: TextStyle(fontWeight: FontWeight.bold),
-    //                     textAlign: TextAlign.center)),
-    //             Expanded(
-    //                 child: Text('In',
-    //                     style: TextStyle(fontWeight: FontWeight.bold),
-    //                     textAlign: TextAlign.center)),
-    //             Expanded(
-    //                 child: Text('Out',
-    //                     style: TextStyle(fontWeight: FontWeight.bold),
-    //                     textAlign: TextAlign.center)),
-    //             Expanded(
-    //                 child: Text('Total',
-    //                     style: TextStyle(fontWeight: FontWeight.bold),
-    //                     textAlign: TextAlign.center)),
-    //           ],
-    //         ),
-    //       ),
-    //       _buildInventoryRow('Briyani', '44', '91', '135', isEven: true),
-    //       _buildInventoryRow('Sambar', '40', '85', '125', isEven: false),
-    //       _buildInventoryRow('Chicken Rice', '30', '70', '100', isEven: true),
-    //       _buildInventoryRow('Dosa', '25', '60', '85', isEven: false),
-    //     ],
-    //   ),
-    // );
-  }
-
-  Widget _buildInventoryRow(
-      String item, String inCount, String outCount, String total,
-      {required bool isEven}) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-      decoration: BoxDecoration(
-        color: isEven ? Colors.grey.shade50 : Colors.white,
-        border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(item,
-                style:
-                    TextStyle(color: Colors.green, fontWeight: FontWeight.w600),
-                textAlign: TextAlign.center),
-          ),
-          Expanded(
-            child: Text(inCount, textAlign: TextAlign.center),
-          ),
-          Expanded(
-            child: Text(outCount, textAlign: TextAlign.center),
-          ),
-          Expanded(
-            child: Text(
-              total,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   Widget _buildQeuBoxStatus() {
     final int totalCells =
         (rowCount) * (columnCount);
-
-
     print('totalCells$totalCells');
-
-    // final List<QBox> allCells = List.generate(totalCells, (index) {
-    //   if (index < (qboxSettings?.qboxes?.length ?? 0)) {
-    //     return qboxSettings!.qboxes[index];
-    //   } else {
-    //     return QBox(
-    //         foodName: "Empty",
-    //         qboxId: index,
-    //         foodCode: "empty",
-    //         foodImage: "assets/empty.png");
-    //   }
-    // });
 
     return Column(
       children: [
@@ -690,10 +516,15 @@ class _DashboardState extends State<Dashboard>
 
   Widget _buildItemCount() {
     Map<String, int> foodCounts = {};
-    for (var box in qboxSettings.qboxes) {
-      foodCounts[box.foodName] = (foodCounts[box.foodName] ?? 0) + 1;
-    }
+    final int totalVisibleCells = rowCount * columnCount;
 
+    for (int i = 0; i < totalVisibleCells && i < qboxLists.length; i++) {
+      var boxData = qboxLists[i];
+      String foodName = boxData['foodName'];
+      if (foodName.isNotEmpty) {
+        foodCounts[foodName] = (foodCounts[foodName] ?? 0) + 1;
+      }
+    }
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: EdgeInsets.all(16),

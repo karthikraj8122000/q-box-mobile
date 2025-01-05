@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_page/Widgets/Common/network_error.dart';
 
 import '../../../../Provider/food_store_provider.dart';
+import '../../../../Services/api_service.dart';
+import '../../../../Services/toast_service.dart';
 import '../../../../Widgets/Common/app_colors.dart';
 
 class LoadQbox extends StatefulWidget {
@@ -13,9 +18,68 @@ class LoadQbox extends StatefulWidget {
 }
 
 class _LoadQboxState extends State<LoadQbox> {
+
+  String qBoxBarcode = '';
+  String foodBarcode = '';
+
+  String qBoxOutStatus = '';
+
+  final ApiService apiService = ApiService();
+  final CommonService commonService = CommonService();
+
   @override
   void initState() {
     super.initState();
+  }
+
+  loadToQBox() async {
+    print('loadToQBox');
+    Map<String, dynamic> body = {
+      "uniqueCode": foodBarcode,
+      "wfStageCd":11,
+      "boxCellSno":qBoxBarcode,
+      "qboxEntitySno": 3
+    };
+    print('$body');
+    try {
+      var result = await apiService.post("8912", "masters","load_sku_in_qbox", body);
+      if (result != null && result['data'] != null) {
+        print('RESULT$result');
+        qBoxBarcode = '';
+        foodBarcode = '';
+        commonService.presentToast('Food Loaded inside the qbox');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+    setState(() {
+
+    });
+  }
+
+  Future<void> scanBarcode(String name) async {
+    if (qBoxBarcode.isEmpty) {
+      commonService.presentToast('Please scan QBox ID first',
+          backgroundColor: Colors.red);
+      return;
+    }
+    String barcodeScanRes;
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
+
+      if (barcodeScanRes != '-1') {  // Only update if scan wasn't cancelled
+        setState(() {
+          if (name == 'Scan QBox') {
+            qBoxBarcode = barcodeScanRes;
+          } else if (name == 'Scan Food Item') {
+            foodBarcode = barcodeScanRes;
+          }
+        });
+      }
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
   }
 
   @override
@@ -65,8 +129,10 @@ class _LoadQboxState extends State<LoadQbox> {
                   'Select storage container',
                   AppColors.mintGreen,
                   Icons.qr_code_scanner_rounded,
-                  provider.qboxId,
-                      () => provider.scanContainer(context),
+                  qBoxBarcode
+                  // provider.qboxId,
+                  //     () => provider.scanContainer(context),
+                  //   context
                 ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.2, end: 0),
               ),
               SizedBox(width: 24),
@@ -76,10 +142,12 @@ class _LoadQboxState extends State<LoadQbox> {
                   'Add item to selected container',
                   AppColors.darkPaleYellow,
                   Icons.fastfood_rounded,
-                  provider.foodItem,
-                  provider.qboxId != null ? () => provider.scanFoodItem(context) : null,
+                    foodBarcode
+                  // provider.foodItem,
+                  // provider.qboxId != null ? () => provider.scanFoodItem(context) : null,context
                 ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0),
               ),
+
             ],
           )
         else
@@ -90,8 +158,10 @@ class _LoadQboxState extends State<LoadQbox> {
                 'Select storage container',
                 AppColors.mintGreen,
                 Icons.qr_code_scanner_rounded,
-                provider.qboxId,
-                    () => provider.scanContainer(context),
+                qBoxBarcode
+                // provider.qboxId,
+                //     () => provider.scanContainer(context),
+                //   context
               ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.2, end: 0),
               SizedBox(height: 16),
               _buildEnhancedScanCard(
@@ -99,8 +169,9 @@ class _LoadQboxState extends State<LoadQbox> {
                 'Add item to selected container',
                 AppColors.darkPaleYellow,
                 Icons.fastfood_rounded,
-                provider.foodItem,
-                provider.qboxId != null ? () => provider.scanFoodItem(context) : null,
+                foodBarcode
+                // provider.foodItem,
+                // provider.qboxId != null ? () => provider.scanFoodItem(context) : null,context
               ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0),
             ],
           ),
@@ -116,9 +187,9 @@ class _LoadQboxState extends State<LoadQbox> {
       String subtitle,
       Color color,
       IconData icon,
-      String? scannedValue,
-      VoidCallback? onTap,
+      String barcodeValue
       ) {
+    // final provider = Provider.of<FoodStoreProvider>(context);
     return LayoutBuilder(
       builder: (context, constraints) {
         final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
@@ -142,7 +213,7 @@ class _LoadQboxState extends State<LoadQbox> {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: onTap,
+              onTap: () => scanBarcode(title),
               borderRadius: BorderRadius.circular(24),
               child: Padding(
                 padding: EdgeInsets.all(isTablet ? 24 : 16),
@@ -183,9 +254,18 @@ class _LoadQboxState extends State<LoadQbox> {
                             ],
                           ),
                         ),
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(color: AppColors.lightBlack,borderRadius: BorderRadius.all(Radius.circular(50))),
+                          child: Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColors.white,
+                            size: 18,
+                          ),
+                        ),
                       ],
                     ),
-                    if (scannedValue != null) ...[
+                    if (barcodeValue.isNotEmpty && barcodeValue != '-1') ...[
                       SizedBox(height: isTablet ? 20 : 16),
                       Container(
                         width: double.infinity,
@@ -204,7 +284,7 @@ class _LoadQboxState extends State<LoadQbox> {
                             SizedBox(width: 12),
                             Expanded(
                               child: Text(
-                                scannedValue,
+                                barcodeValue,
                                 style: TextStyle(
                                   color: color,
                                   fontWeight: FontWeight.w500,
@@ -228,7 +308,8 @@ class _LoadQboxState extends State<LoadQbox> {
 
   Widget _buildEnhancedStoreButton(
       FoodStoreProvider provider, BuildContext context) {
-    final isEnabled = provider.qboxId != null && provider.foodItem != null;
+    // final isEnabled = provider.qboxId != null && provider.foodItem != null;
+    final isEnabled =qBoxBarcode.isNotEmpty && foodBarcode.isNotEmpty;
     return Container(
       width: double.infinity,
       height: 60,
@@ -258,7 +339,8 @@ class _LoadQboxState extends State<LoadQbox> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: isEnabled ? () => provider.storeFoodItem(context) : null,
+            onTap: isEnabled ? () =>  loadToQBox() : null,
+          // onTap: isEnabled ? () => provider.storeFoodItem(context) : null,
           borderRadius: BorderRadius.circular(20),
           child: Center(
             child: Row(
