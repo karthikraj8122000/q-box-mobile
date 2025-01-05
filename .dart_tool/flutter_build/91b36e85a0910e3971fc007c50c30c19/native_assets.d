@@ -1,0 +1,1 @@
+ /home/swomb/Music/Q-Box/q-box-mobile/.dart_tool/flutter_build/91b36e85a0910e3971fc007c50c30c19/native_assets.yaml: 

@@ -42,7 +42,7 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
-        4,
+        5,
             (index) => Container(
           width: 60,
           margin: EdgeInsets.all(12),
@@ -57,7 +57,7 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
               border: OutlineInputBorder(),
             ),
             onChanged: (value) {
-              if (value.length == 1 && index < 3) {
+              if (value.length == 1 && index < 4) {
                 _focusNodes[index + 1].requestFocus();
               }
               if (value.isEmpty && index > 0) {
@@ -137,7 +137,7 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
                     foregroundColor: AppColors.mintGreen),
                 onPressed: () {
                   final orderId = _controllers.map((c) => c.text).join();
-                  context.read<InwardOrderDtlProvider>().handleEntry(context, orderId);
+                  context.read<InwardOrderDtlProvider>().handleEntry(context, 'SWIGGY_$orderId');
                 },
                 icon: Icon(Icons.download_done),
                 label: Text('Submit'),

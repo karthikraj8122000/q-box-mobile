@@ -30,7 +30,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
     Map<String, dynamic> body = {
       "uniqueCode": qBoxOutBarcode,
       "wfStageCd":12,
-      "qboxEntitySno": 3
+      "qboxEntitySno": 20
     };
     print('$body');
     try {
