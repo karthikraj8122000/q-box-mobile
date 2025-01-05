@@ -78,38 +78,38 @@ class _UnloadQboxState extends State<UnloadQbox> {
               _buildDispatchStats(context, provider),
               const SizedBox(height: 30),
               _buildScanSection(context, provider),
-              const SizedBox(height: 30),
-              AppText(
-                text: "Unloaded History",
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-              ),
+              // const SizedBox(height: 30),
+              // AppText(
+              //   text: "Unloaded History",
+              //   fontSize: 18,
+              //   fontWeight: FontWeight.w800,
+              // ),
             ]),
           ),
         ),
-        if (sortedItems.isNotEmpty)
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: isTablet ? 2.2:1.0,
-                crossAxisSpacing: 2,
-                mainAxisSpacing: 2,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                  final item = sortedItems[index];
-                  return _buildGridItem(context, item);
-                },
-                childCount: sortedItems.length,
-              ),
-            ),
-          )
-        else
-          SliverToBoxAdapter(
-            child: _buildEnhancedEmptyState(context),
-          ),
+        // if (sortedItems.isNotEmpty)
+        //   SliverPadding(
+        //     padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        //     sliver: SliverGrid(
+        //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        //         crossAxisCount: 2,
+        //         childAspectRatio: isTablet ? 2.2:1.0,
+        //         crossAxisSpacing: 2,
+        //         mainAxisSpacing: 2,
+        //       ),
+        //       delegate: SliverChildBuilderDelegate(
+        //             (context, index) {
+        //           final item = sortedItems[index];
+        //           return _buildGridItem(context, item);
+        //         },
+        //         childCount: sortedItems.length,
+        //       ),
+        //     ),
+        //   )
+        // else
+        //   SliverToBoxAdapter(
+        //     child: _buildEnhancedEmptyState(context),
+        //   ),
       ],
     );
   }

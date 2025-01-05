@@ -248,7 +248,7 @@ class _DashboardState extends State<Dashboard>
                 actions: [
                   // Wrap your IconButton with this code
                   IconButton(
-                    icon: const Icon(Icons.logout),
+                    icon: const Icon(Icons.logout_sharp),
                     onPressed: () {
                       showDialog(
                         context: context,

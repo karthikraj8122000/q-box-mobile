@@ -90,7 +90,8 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
   }
 
   Widget _buildTabBar() {
-    return Container(
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    return isTablet ? Container(
       margin: EdgeInsets.symmetric(horizontal: 24),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -105,7 +106,27 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
       ),
     ).animate()
         .fadeIn(duration: 600.ms)
-        .slideY(begin: 0.2, end: 0);
+        .slideY(begin: 0.2, end: 0):LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: ModernTabBar(
+              controller: _tabController,
+              tabItems: _tabItems,
+              onTap: (index) {
+                print('Tapped on tab $index');
+              },
+              isScrollable: true,
+              labelPadding: EdgeInsets.symmetric(horizontal: 16),
+            ),
+          ).animate()
+              .fadeIn(duration: 600.ms)
+              .slideY(begin: 0.2, end: 0);
+    });
   }
 
   Widget _buildBody(BuildContext context, FoodStoreProvider provider) {
