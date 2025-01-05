@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Model/Data_Models/dashboard_model/dashboard_model.dart';
@@ -326,7 +327,9 @@ class _DashboardState extends State<Dashboard>
       );
     }
 
-    return InventoryTableWidget(inventoryItems: inventoryItems);
+    return InventoryTableWidget(inventoryItems: inventoryItems).animate()
+        .fadeIn(duration: 500.ms)
+        .slideX(begin: 0.2, end: 0);
   }
 
   Widget _buildQeuBoxStatus() {
@@ -383,7 +386,7 @@ class _DashboardState extends State<Dashboard>
                 if (cell != null) {
                   // Convert the Map to QBox
                   QBox qbox = QBox.fromMap(cell as Map<String, dynamic>);
-                  return _buildGridCell(qbox);
+                  return _buildGridCell(qbox).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0);
                 } else {
                   return Container(); // Placeholder for invalid cell
                 }
@@ -472,8 +475,6 @@ class _DashboardState extends State<Dashboard>
                             ? Colors.white
                             : Colors.grey.shade200,
                       ):Image.asset("assets/empty.png"),
-
-
                           SizedBox(height: 8),
                           Text(
                             item.foodName,
@@ -486,7 +487,7 @@ class _DashboardState extends State<Dashboard>
                           if (isFilled) ...[
                             SizedBox(height: 4),
                             Text(
-                              'ID: ${item.qboxId}',
+                              'Qbox ID: ${item.qboxId}',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.shade600,
@@ -495,7 +496,7 @@ class _DashboardState extends State<Dashboard>
                           ] else ...[
                             SizedBox(height: 4),
                             Text(
-                              'ID: ${item.qboxId}',
+                              'Qbox ID: ${item.qboxId}',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey.shade600,
@@ -597,7 +598,9 @@ class _DashboardState extends State<Dashboard>
           ),
         ],
       ),
-    );
+    ).animate()
+        .fadeIn(duration: 500.ms)
+        .slideX(begin: 0.2, end: 0);
   }
 
   // Enhanced Hot Box status
@@ -629,7 +632,7 @@ class _DashboardState extends State<Dashboard>
                 fontWeight: FontWeight.w500,
                 color: AppColors.white),
           ),
-        ),
+        ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.2, end: 0),
         Container(
           margin: EdgeInsets.all(16),
           decoration: BoxDecoration(

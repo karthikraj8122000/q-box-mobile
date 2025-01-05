@@ -218,10 +218,10 @@ class _Label extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Use the title directly as a string
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return AppText(
       text: item.title,
-      fontSize: 12,
+      fontSize:isTablet ? 16: 12,
       fontWeight: FontWeight.w700,
       color: AppColors.mintGreen,
     );

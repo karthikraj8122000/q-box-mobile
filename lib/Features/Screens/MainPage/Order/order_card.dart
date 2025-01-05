@@ -36,6 +36,7 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
   }
 
   Widget build(BuildContext context) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final statusColor = widget.order['orderStatusCd'] == 2
         ? Color(0xFF4CAF50)
         : Color(0xFFFFA726);
@@ -181,6 +182,7 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                           ],
                         ),
                         SizedBox(height: 32),
+                      if(isTablet)
                        Row(
                          children: [
                            Expanded(child: _buildInfoCard(
@@ -197,7 +199,25 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                              color: Color(0xFFE91E63),
                            ), )
                          ],
-                       ),
+                       )
+                        else
+                        Column(
+                          children: [
+                            _buildInfoCard(
+                              icon: Icons.delivery_dining,
+                              title: 'Delivery Partner',
+                              value: widget.order['deliveryPartner1name'],
+                              color: Color(0xFF2196F3),
+                            ),
+                            SizedBox(height: 16),
+                            _buildInfoCard(
+                              icon: Icons.restaurant_menu,
+                              title: 'Restaurant',
+                              value: widget.order['restaurant1name'],
+                              color: Color(0xFFE91E63),
+                            )
+                          ],
+                        ),
                         SizedBox(height: 16),
                         _buildInfoCard(
                           icon: Icons.store,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../Services/api_service.dart';
@@ -299,7 +300,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
               ],
             ),
           ),
-        );
+        ).animate().fadeIn(duration: 800.ms,delay: (50 * index).ms).slideY(begin: -0.2, end: 0);
       },
     );
   }

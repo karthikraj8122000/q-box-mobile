@@ -5,6 +5,7 @@ import 'package:qr_page/Provider/dashboard_provider.dart';
 import 'package:qr_page/Provider/food_store_provider.dart';
 import 'package:qr_page/Provider/inward_order_provider.dart';
 import 'package:qr_page/Provider/network_provider.dart';
+import 'package:qr_page/Provider/order/order_qr_scanning_provider.dart';
 import 'package:qr_page/Provider/qbox_delivery_provider.dart';
 import 'Provider/auth_provider.dart';
 
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DeliveryProvider()),
         ChangeNotifierProvider(create: (_) => DashboardProvider()),
         ChangeNotifierProvider(create: (_) => InwardOrderDtlProvider()),
+        ChangeNotifierProvider(create: (_) => OrderScanningProvider()),
       ],
       child:  Consumer<AuthProvider>(
         builder: (context, AuthProvider, _) {

@@ -229,7 +229,7 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
               ),
             ),
           ),
-        );
+        ).animate().fadeIn(duration: 800.ms,delay: (50 * index).ms).slideY(begin: -0.2, end: 0);
       },
     ):Padding(
       padding: const EdgeInsets.all(16.0),
@@ -309,7 +309,7 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
                   ),
                 ),
               ),
-            );
+            ).animate().fadeIn(duration: 800.ms,delay: (50 * index).ms).slideY(begin: -0.2, end: 0);
           }),
     );
   }

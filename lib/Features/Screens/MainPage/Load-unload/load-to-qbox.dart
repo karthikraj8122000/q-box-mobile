@@ -130,9 +130,6 @@ class _LoadQboxState extends State<LoadQbox> {
                   AppColors.mintGreen,
                   Icons.qr_code_scanner_rounded,
                   qBoxBarcode
-                  // provider.qboxId,
-                  //     () => provider.scanContainer(context),
-                  //   context
                 ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.2, end: 0),
               ),
               SizedBox(width: 24),
@@ -143,8 +140,6 @@ class _LoadQboxState extends State<LoadQbox> {
                   AppColors.darkPaleYellow,
                   Icons.fastfood_rounded,
                     foodBarcode
-                  // provider.foodItem,
-                  // provider.qboxId != null ? () => provider.scanFoodItem(context) : null,context
                 ).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0),
               ),
 

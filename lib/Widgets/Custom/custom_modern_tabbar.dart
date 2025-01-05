@@ -12,12 +12,16 @@ class ModernTabBar extends StatelessWidget {
   final TabController controller;
   final List<TabItem> tabItems;
   final Function(int)? onTap;
+  final bool isScrollable;
+  final EdgeInsetsGeometry labelPadding;
 
   const ModernTabBar({
     Key? key,
     required this.controller,
     required this.tabItems,
     this.onTap,
+    this.isScrollable = true,
+    this.labelPadding = const EdgeInsets.symmetric(horizontal: 16),
   }) : super(key: key);
 
   @override
@@ -34,6 +38,8 @@ class ModernTabBar extends StatelessWidget {
         child: TabBar(
           controller: controller,
           onTap: onTap,
+          isScrollable: isScrollable,
+          labelPadding: labelPadding,
           indicator: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: AppColors.mintGreen,

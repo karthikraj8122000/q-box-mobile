@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 import '../../../../Provider/inward_order_provider.dart';
@@ -183,13 +184,13 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
                             vertical: 16, horizontal: 16),
                         backgroundColor: AppColors.mintGreen,
                       ),
-                    ),
+                    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0),
                     SizedBox(
                       height: MediaQuery.of(context).size.height,
                       child: ListView.builder(
                         itemCount: provider.purchaseOrders.length,
                         itemBuilder: (context, index) {
-                          return OrderCard(order: provider.purchaseOrders[index]);
+                          return OrderCard(order: provider.purchaseOrders[index]).animate().fadeIn(duration: 800.ms, delay: (50 * index).ms).slideY(begin: -0.2, end: 0);
                         },
                       ),
                     ),

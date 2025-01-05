@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../Services/api_service.dart';
@@ -251,7 +252,6 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                           children: [
                             IconButton(
                               onPressed: () {
-                                // Handle share action
                               },
                               icon: const Icon(Icons.delete),
                               style: IconButton.styleFrom(
@@ -263,7 +263,6 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                             const SizedBox(width: 12),
                             IconButton(
                               onPressed: () {
-                                // Handle share action
                               },
                               icon: const Icon(Icons.share),
                               style: IconButton.styleFrom(
@@ -281,7 +280,7 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
               ],
             ),
           ),
-        );
+        ).animate().fadeIn(duration: 800.ms,delay: (50 * index).ms).slideY(begin: -0.2, end: 0);
       },
     );
   }
