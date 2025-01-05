@@ -5,7 +5,7 @@ import 'package:qr_page/Widgets/Common/app_colors.dart';
 class OrderCard extends StatefulWidget {
   final Map<String, dynamic> order;
 
-  const OrderCard({Key? key, required this.order}) : super(key: key);
+  const OrderCard({super.key, required this.order});
 
   @override
   _OrderCardState createState() => _OrderCardState();
@@ -81,14 +81,6 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                   Container(
                     decoration: BoxDecoration(
                       color: AppColors.mintGreen
-                      // gradient: LinearGradient(
-                      //   begin: Alignment.topLeft,
-                      //   end: Alignment.bottomRight,
-                      //   colors: [
-                      //     AppColors.mintGreen,
-                      //     AppColors.mintGreen.withGreen(180),
-                      //   ],
-                      // ),
                     ),
                     child: Stack(
                       children: [
@@ -188,12 +180,7 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                             _buildStatusBadge(statusColor),
                           ],
                         ),
-
                         SizedBox(height: 32),
-
-                        // Info Cards Section
-
-
                        Row(
                          children: [
                            Expanded(child: _buildInfoCard(
@@ -203,7 +190,6 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                              color: Color(0xFF2196F3),
                            ),),
                            Expanded(child: SizedBox(width: 100,)),
-
                            Expanded(child:_buildInfoCard(
                              icon: Icons.restaurant_menu,
                              title: 'Restaurant',
@@ -213,41 +199,11 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                          ],
                        ),
                         SizedBox(height: 16),
-
                         _buildInfoCard(
                           icon: Icons.store,
                           title: 'QBox Entity',
                           value: widget.order['qboxEntity1name'],
                           color: Color(0xFF9C27B0),
-                        ),
-                        // Action Buttons
-                        Row(
-                          children: [
-                            // Expanded(
-                            //   child: _buildActionButton(
-                            //     icon: Icons.refresh,
-                            //     label: 'Try Again',
-                            //     onPressed: () {
-                            //       Provider.of<ScanProvider>(context, listen: false)
-                            //           .resetOrder();
-                            //     },
-                            //     isPrimary: false,
-                            //   ),
-                            // ),
-                            // SizedBox(width: 16),
-                            // Expanded(
-                            //   child: _buildActionButton(
-                            //     icon: Icons.save,
-                            //     label: 'Save Order',
-                            //     onPressed: () {
-                            //       setState(() {
-                            //         _showSummary = true;
-                            //       });
-                            //     },
-                            //     isPrimary: true,
-                            //   ),
-                            // ),
-                          ],
                         ),
                       ],
                     ),
@@ -260,7 +216,6 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                       padding: EdgeInsets.symmetric(horizontal: 24),
                       child: OrderSummaryCard(order: widget.order),
                     ),
-
                   SizedBox(height: 16),
                 ],
               ),

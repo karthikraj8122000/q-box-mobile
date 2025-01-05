@@ -58,11 +58,11 @@ class _LoadQboxState extends State<LoadQbox> {
   }
 
   Future<void> scanBarcode(String name) async {
-    if (qBoxBarcode.isEmpty) {
-      commonService.presentToast('Please scan QBox ID first',
-          backgroundColor: Colors.red);
-      return;
-    }
+    // if (qBoxBarcode.isEmpty) {
+    //   commonService.presentToast('Please scan QBox ID first',
+    //       backgroundColor: Colors.red);
+    //   return;
+    // }
     String barcodeScanRes;
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(

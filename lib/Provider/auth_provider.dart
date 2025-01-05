@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:qr_page/Features/Screens/MainPage/main_page.dart';
+import 'package:qr_page/Core/Router/app_router.dart';
 import 'dart:convert';
 
 import '../Services/toast_service.dart';
@@ -105,7 +105,8 @@ class AuthProvider extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
       commonService.presentToast("Login successfully!");
-      GoRouter.of(context).push(MainNavigationScreen.routeName);
+      // GoRouter.of(context).push(.routeName);
+      AppRouter.navigateToHomeView();
       return true;
     } catch (e) {
       isLoading = false;
@@ -124,10 +125,6 @@ class AuthProvider extends ChangeNotifier {
     currentUser = null;
     isLoading = false;
     notifyListeners();
-    // email = '';
-    // password = '';
-    // isLoading = false;
-    // notifyListeners();
   }
 
   Future<bool> checkAuthStatus() async {

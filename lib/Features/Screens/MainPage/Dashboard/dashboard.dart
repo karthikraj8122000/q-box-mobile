@@ -12,6 +12,7 @@ import '../../../../Theme/app_theme.dart';
 import 'inventory_table.dart';
 
 class Dashboard extends StatefulWidget {
+  static const String routeName = '/dashboard';
 
   const Dashboard({super.key});
 

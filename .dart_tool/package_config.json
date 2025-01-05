@@ -26,6 +26,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "badges",
+      "rootUri": "file:///home/swomb/.pub-cache/hosted/pub.dev/badges-3.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "boolean_selector",
       "rootUri": "file:///home/swomb/.pub-cache/hosted/pub.dev/boolean_selector-2.1.1",
       "packageUri": "lib/",
@@ -740,7 +746,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-01-04T16:08:28.845498Z",
+  "generated": "2025-01-05T06:44:46.115006Z",
   "generator": "pub",
   "generatorVersion": "3.6.0",
   "flutterRoot": "file:///home/swomb/snap/flutter/common/flutter",

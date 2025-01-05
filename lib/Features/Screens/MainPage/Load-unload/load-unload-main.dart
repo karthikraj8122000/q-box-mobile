@@ -104,8 +104,8 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
       ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0),
     );
   }
-
 }
+
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   _SliverAppBarDelegate(this._tabBar);

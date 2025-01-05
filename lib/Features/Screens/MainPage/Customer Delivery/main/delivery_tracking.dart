@@ -7,6 +7,7 @@ import 'package:qr_page/Widgets/Common/app_colors.dart';
 import '../sub/delivery_status.dart';
 
 class DeliveryTrackingScreen extends StatefulWidget {
+  static const String routeName = '/delivery-management';
   const DeliveryTrackingScreen({super.key});
 
   @override
