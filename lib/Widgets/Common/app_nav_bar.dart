@@ -7,8 +7,6 @@ import 'package:qr_page/Features/Screens/MainPage/Order%20History/history.dart';
 import '../../Features/Screens/MainPage/Order/order_qr_scanner.dart';
 import 'app_bootom_bar.dart';
 import 'app_colors.dart';
-import 'app_text.dart'; // Make sure you import this
-
 
 class AppNavBar extends StatefulWidget {
   const AppNavBar({
@@ -28,19 +26,114 @@ class _AppNavBarState extends State<AppNavBar> {
     super.initState();
   }
 
+  Future<bool> _onWillPop() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.exit_to_app_rounded,
+                color: AppColors.mintGreen,
+                size: 48,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Exit App',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Are you sure you want to exit?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.mintGreen,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text(
+                        'Exit',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ) ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     print('object ${widget.child}');
-    return Scaffold(
-      body: widget.child,
-      bottomNavigationBar: AppBottomBar(
-        opacity: .2,
-        currentIndex: _calculateSelectedIndex(context),
-        onTap: (int? index) => _onTap(context, index ?? 0),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(23)),
-        elevation: 8,
-        hasInk: true,
-        items: _navigationItems,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        body: widget.child,
+        bottomNavigationBar: AppBottomBar(
+          opacity: .2,
+          currentIndex: _calculateSelectedIndex(context),
+          onTap: (int? index) => _onTap(context, index ?? 0),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(23)),
+          elevation: 8,
+          hasInk: true,
+          items: _navigationItems,
+        ),
       ),
     );
   }

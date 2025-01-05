@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OrderScanningProvider()),
       ],
       child:  Consumer<AuthProvider>(
-        builder: (context, AuthProvider, _) {
+        builder: (context, authProvider, _) {
           return MaterialApp.router(
             routerConfig: AppRouter.router, // Make sure your AppRouter is set up correctly
             debugShowCheckedModeBanner: false,
