@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:qr_page/Features/Screens/MainPage/Customer%20Delivery/main/delivery_tracking.dart';
 import 'package:qr_page/Features/Screens/MainPage/Dashboard/dashboard.dart';
 import 'package:qr_page/Features/Screens/MainPage/Load-unload/load-unload-main.dart';
-import 'package:qr_page/Features/Screens/MainPage/Order%20History/history.dart';
-import '../../Features/Screens/MainPage/Order/order_qr_scanner.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/Order%20History/order_history_main.dart';
+import '../../Features/Screens/MainPage/Order/Inward Order/inward_order_main.dart';
 import 'app_bottom_bar.dart';
 import 'app_colors.dart';
 

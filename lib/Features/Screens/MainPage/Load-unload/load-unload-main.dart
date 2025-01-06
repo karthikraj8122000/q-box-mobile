@@ -8,7 +8,7 @@ import 'package:qr_page/Services/api_service.dart';
 import 'package:qr_page/Services/toast_service.dart';
 import 'package:qr_page/Widgets/Common/network_error.dart';
 
-import '../../../../Provider/order/order_qr_scanning_provider.dart';
+import '../../../../Provider/order_qr_scanning_provider.dart';
 import '../../../../Widgets/Custom/custom_modern_tabbar.dart';
 import 'load-to-qbox.dart';
 
@@ -59,8 +59,7 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
                   flexibleSpace: FlexibleSpaceBar(
                     title: Padding(
                       padding: const EdgeInsets.only(left: 20.0),
-                      child: Text('Load/Unload',
-                          style: TextStyle(color: Colors.black)),
+                      child: Text('Load/Unload',style: TextStyle(color: Colors.black)),
                     ),
                     background: Container(color: Colors.grey[100]),
                   ),
@@ -86,22 +85,6 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
     );
   }
 
-  // Widget _buildTabBar() {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(horizontal: 24),
-  //     decoration: BoxDecoration(
-  //       color: Colors.white,
-  //       borderRadius: BorderRadius.circular(10),
-  //     ),
-  //     child: ModernTabBar(
-  //       controller: _tabController,
-  //       tabItems: _tabItems,
-  //       onTap: (index) {
-  //         print('Tapped on tab $index');
-  //       },
-  //     ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0),
-  //   );
-  // }
   Widget _buildTabBar() {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
       return isTablet?Container(

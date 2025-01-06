@@ -14,6 +14,7 @@ import 'package:qr_page/Widgets/Common/network_error.dart';
 import '../../../../Provider/auth_provider.dart';
 import '../../../../Services/auth_service.dart';
 import '../../../../Theme/app_theme.dart';
+import '../../../../Widgets/Custom/custom_grid.dart';
 import 'inventory_table.dart';
 
 class Dashboard extends StatefulWidget {
@@ -53,7 +54,6 @@ class _DashboardState extends State<Dashboard>
         isLoading = true;
       });
 
-      // Simulate API call with your test data
       const String jsonData = '''
         [
           {
@@ -473,6 +473,23 @@ class _DashboardState extends State<Dashboard>
           ),
         ),
         SizedBox(height: 20),
+        // SizedBox(
+        //   height: MediaQuery.of(context).size.height * 0.5, // Adjust this value as needed
+        //   child: DynamicGrid(
+        //     rowCount: rowCount,
+        //     columnCount: columnCount,
+        //     itemBuilder: (context, index) {
+        //       if (index < qboxLists.length) {
+        //         final cell = qboxLists[index];
+        //         if (cell != null) {
+        //           QBox qbox = QBox.fromMap(cell as Map<String, dynamic>);
+        //           return _buildGridCell(qbox).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0);
+        //         }
+        //       }
+        //       return Container(); // Placeholder for invalid cell
+        //     },
+        //   ),
+        // ),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Container(
@@ -483,7 +500,7 @@ class _DashboardState extends State<Dashboard>
               physics: NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: columnCount > 0 ? columnCount : 1,
-                childAspectRatio: 1,
+                childAspectRatio:1,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
               ),
@@ -491,7 +508,6 @@ class _DashboardState extends State<Dashboard>
               itemBuilder: (context, index) {
                 final cell = qboxLists[index];
                 if (cell != null) {
-                  // Convert the Map to QBox
                   QBox qbox = QBox.fromMap(cell as Map<String, dynamic>);
                   return _buildGridCell(qbox).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0);
                 } else {
@@ -499,7 +515,6 @@ class _DashboardState extends State<Dashboard>
                 }
               },
             ),
-
           ),
         ),
         _buildItemCount(),

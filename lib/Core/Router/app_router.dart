@@ -5,16 +5,17 @@ import 'package:provider/provider.dart';
 import 'package:qr_page/Core/Router/bottom_bar_routes.dart';
 import 'package:qr_page/Features/Screens/Login/second_login.dart';
 import 'package:qr_page/Features/Screens/MainPage/Customer%20Delivery/main/delivery_tracking.dart';
-import 'package:qr_page/Features/Screens/MainPage/Customer%20Delivery/sub/delivery_status.dart';
-import 'package:qr_page/Features/Screens/MainPage/Customer%20Delivery/sub/scan_qbox_unload.dart';
 import 'package:qr_page/Features/Screens/MainPage/Dashboard/dashboard.dart';
 import 'package:qr_page/Features/Screens/MainPage/Load-unload/load-unload-main.dart';
-import 'package:qr_page/Features/Screens/MainPage/Order%20History/history.dart';
-import 'package:qr_page/Features/Screens/MainPage/Order/order_qr_scanner.dart';
-import 'package:qr_page/Features/Screens/MainPage/Order/qr_scanner_screen.dart';
+import 'package:qr_page/Features/Screens/MainPage/Load-unload/load_history.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/Order%20History/order_history_main.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/Inward%20Order/inward_order_main.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/Inward%20Order/qr_scanner_screen.dart';
 import 'package:qr_page/Features/Screens/Splash/animated_splash.dart';
 import 'package:qr_page/Provider/auth_provider.dart';
 
+import '../../Features/Screens/MainPage/Customer Delivery/Common/delivery_status.dart';
+import '../../Features/Screens/MainPage/Customer Delivery/Common/scan_qbox_unload.dart';
 import '../../Features/Screens/MainPage/Dashboard/see_all_qbox_foods.dart';
 import '../../Widgets/Common/app_nav_bar.dart';
 
@@ -48,8 +49,6 @@ class AppRouter {
         builder: (_, __) => const SeeAllQboxFoods(),
       ),
 
-
-
       GoRoute(
         name: ScanQBoxScreen.routeName,
         path: ScanQBoxScreen.routeName,
@@ -66,6 +65,12 @@ class AppRouter {
         name: OrderQRScannerScreen.routeName,
         path: OrderQRScannerScreen.routeName,
         builder: (_, __) => const OrderQRScannerScreen(),
+      ),
+
+      GoRoute(
+        name: NotificationHistoryScreen.routeName,
+        path: NotificationHistoryScreen.routeName,
+        builder: (_, __) => const NotificationHistoryScreen(),
       ),
 
       ShellRoute(
