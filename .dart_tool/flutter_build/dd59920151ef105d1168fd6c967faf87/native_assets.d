@@ -1,0 +1,1 @@
+ /home/swomb/Documents/Projects/git\ projects/Qbox/q-box-mobile/.dart_tool/flutter_build/dd59920151ef105d1168fd6c967faf87/native_assets.yaml: 

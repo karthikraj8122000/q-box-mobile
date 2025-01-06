@@ -20,7 +20,7 @@ class ModernTabBar extends StatelessWidget {
     required this.controller,
     required this.tabItems,
     this.onTap,
-    this.isScrollable = true,
+    this.isScrollable = false,
     this.labelPadding = const EdgeInsets.symmetric(horizontal: 16),
   }) : super(key: key);
 

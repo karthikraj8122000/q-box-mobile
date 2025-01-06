@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import '../Model/Data_Models/Food_item/foot_item_model.dart';
 import '../Services/api_service.dart';
 import '../Services/toast_service.dart';
 import '../Theme/app_theme.dart';
@@ -13,12 +12,8 @@ class FoodStoreProvider with ChangeNotifier {
   final ApiService apiService = ApiService();
   final CommonService commonService = CommonService();
 
-  // State variables
-  final List<FoodItem> _storedItems = [];
-  final List<FoodItem> _dispatchedItems = [];
   List<dynamic> _foodTemsList = [];
   final List<dynamic> _scannedFoodItems = [];
-
   // Storage Screen Variables
   String? _qboxId;
   String? _foodItem;
@@ -38,8 +33,7 @@ class FoodStoreProvider with ChangeNotifier {
   bool _isLoading = false;
 
   // Getters
-  List<FoodItem> get storedItems => _storedItems;
-  List<FoodItem> get dispatchedItems => _dispatchedItems;
+
   String? get qboxId => _qboxId;
   String? get foodItem => _foodItem;
   bool get isProcessingScan => _isProcessingScan;
@@ -247,46 +241,6 @@ class FoodStoreProvider with ChangeNotifier {
     }
   }
 
-  Future<void> storeFoodItem(BuildContext context) async {
-    debugPrint("storeFoodItem called");
-    if (_qboxId != null &&
-        _qboxId!.isNotEmpty &&
-        _foodItem != null &&
-        _foodItem!.isNotEmpty) {
-      final newFoodItem = FoodItem(
-        boxCellSno: _qboxId!,
-        uniqueCode: _foodItem!,
-        wfStageCd: 11,
-        qboxEntitySno: 3,
-        storageDate: DateTime.now(),
-      );
-
-      try {
-        var result = await apiService.post(
-          "8912",
-          "masters",
-          "load_sku_in_qbox",
-          newFoodItem.toMap(),
-        );
-
-        if (result != null && result['data'] != null) {
-          _storedItems.add(newFoodItem);
-          clearStorageInputs();
-          commonService.presentToast('Food item stored successfully!');
-        } else {
-          commonService.presentToast(
-              'Failed to store the food item.May be scanned invalid qbox.Please try again.');
-        }
-      } catch (e) {
-        print('Error: $e');
-        commonService
-            .presentToast('An error occurred while storing the food item.');
-      }
-      notifyListeners();
-    } else {
-      commonService.presentToast('Please provide valid QBox ID and Food Item.');
-    }
-  }
 
   // Dispatch Screen Methods
   void setScannedDispatchItem(String? item) {
@@ -297,91 +251,6 @@ class FoodStoreProvider with ChangeNotifier {
   void setProcessingScan(bool value) {
     _isProcessingScan = value;
     notifyListeners();
-  }
-
-  Future<void> handleDispatchQRScan(
-      BuildContext context, String? scannedValue) async {
-    debugPrint("hsjshs");
-    if (_isProcessingScan) return;
-    setProcessingScan(true);
-
-    final isMatched =
-    _storedItems.any((item) => item.uniqueCode == scannedValue);
-    print("dfsfsfsf$isMatched");
-    if (isMatched) {
-      setScannedDispatchItem(scannedValue);
-      commonService.presentToast("Qbox found: $scannedValue");
-    } else {
-      commonService.presentToast("No Qbox found!");
-      setScannedDispatchItem(null);
-    }
-
-    await Future.delayed(Duration(seconds: 2));
-    setProcessingScan(false);
-  }
-
-  Future<void> dispatchFoodItem(BuildContext context) async {
-    debugPrint("sjdnasmn");
-    if (_scannedDispatchItem != null) {
-      try {
-        var itemToDispatch = _storedItems.firstWhere(
-              (item) => item.uniqueCode == _scannedDispatchItem,
-          orElse: () => throw Exception('Item not found'),
-        );
-
-        Map<String, dynamic> body = {
-          "uniqueCode": itemToDispatch.uniqueCode,
-          "wfStageCd": 12,
-          "qboxEntitySno": 20,
-        };
-
-        debugPrint("unloadddd$body");
-        try {
-          var result = await apiService.post(
-            "8912",
-            "masters",
-            "unload_sku_from_qbox_to_hotbox",
-            body,
-          );
-
-          if (result != null && result['data'] != null) {
-            _handleSuccessfulDispatch(itemToDispatch);
-          } else if (result != null &&
-              result['error']
-                  ?.contains('relation "sku_inventory" does not exist')) {
-            _handleSuccessfulDispatch(itemToDispatch);
-            commonService.presentToast('Unloaded successfully!');
-          } else {
-            commonService.errorToast('Failed to unload. Please try again.');
-          }
-        } catch (apiError) {
-          if (apiError
-              .toString()
-              .contains('relation "sku_inventory" does not exist')) {
-            _handleSuccessfulDispatch(itemToDispatch);
-            commonService
-                .presentToast('Unloaded locally. Database update pending.');
-          } else {
-            throw apiError;
-          }
-        }
-      } catch (e) {
-        print('Error: $e');
-        commonService
-            .errorToast('An error occurred while dispatching the food item.');
-      }
-      notifyListeners();
-    } else {
-      commonService.errorToast('No scanned food item to dispatch.');
-    }
-  }
-
-// Helper method to handle successful dispatch
-  void _handleSuccessfulDispatch(FoodItem itemToDispatch) {
-    _dispatchedItems.add(itemToDispatch);
-    _storedItems
-        .removeWhere((item) => item.uniqueCode == itemToDispatch.uniqueCode);
-    setScannedDispatchItem(null);
   }
 
   // Dispatch History Screen Methods
@@ -409,42 +278,5 @@ class FoodStoreProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<FoodItem> getSortedDispatchedItems() {
-    var items = List<FoodItem>.from(_dispatchedItems);
 
-    if (_startDate != null && _endDate != null) {
-      items = items.where((item) {
-        return item.storageDate.isAfter(_startDate!) &&
-            item.storageDate.isBefore(_endDate!.add(Duration(days: 1)));
-      }).toList();
-    }
-
-    // Apply sorting
-    switch (_sortBy) {
-      case 'Date':
-        items.sort((a, b) => a.storageDate.compareTo(b.storageDate));
-        break;
-      case 'Food Item Name':
-        items.sort((a, b) => a.boxCellSno.compareTo(b.boxCellSno));
-        break;
-      case 'Qbox ID':
-        items.sort((a, b) => a.uniqueCode.compareTo(b.uniqueCode));
-        break;
-    }
-
-    return _isAscending ? items : items.reversed.toList();
-  }
-
-  // Helper Methods
-  FoodItem? findStoredItem(String uniqueCode) {
-    try {
-      return _storedItems.firstWhere((item) => item.uniqueCode == uniqueCode);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  bool isItemStored(String uniqueCode) {
-    return _storedItems.any((item) => item.uniqueCode == uniqueCode);
-  }
 }
