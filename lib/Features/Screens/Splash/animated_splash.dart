@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_page/Features/Screens/Login/second_login.dart';
-import 'package:qr_page/Features/Screens/MainPage/main_page.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 import 'dart:async';
 
+import '../../../Core/Router/app_router.dart';
 import '../../../Services/token_service.dart';
 
 
@@ -45,10 +45,6 @@ class _SplashScreenState extends State<AnimeSplashScreen> with SingleTickerProvi
     );
     _animationController.forward();
     Timer(const Duration(seconds: 5), goToPage);
-    // Timer(
-    //   Duration(seconds: 3),
-    //       () => GoRouter.of(context).push(LoginScreen.routeName),
-    // );
   }
 
   @override
@@ -61,11 +57,12 @@ class _SplashScreenState extends State<AnimeSplashScreen> with SingleTickerProvi
     var user = await tokenService.getUser();
     print('users$user');
     if (user != null) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MainNavigationScreen(),
-          ));
+      AppRouter.navigateToHomeView();
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => const MainNavigationScreen(),
+      //     ));
     } else {
       Navigator.push(
           context,

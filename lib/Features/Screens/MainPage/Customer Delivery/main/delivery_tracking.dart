@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
-import 'package:qr_page/Features/Screens/MainPage/Customer%20Delivery/sub/scan_qbox_unload.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 
-import '../sub/delivery_status.dart';
+import '../Common/delivery_status.dart';
+import '../Common/scan_qbox_unload.dart';
+
 
 class DeliveryTrackingScreen extends StatefulWidget {
+  static const String routeName = '/delivery-management';
   const DeliveryTrackingScreen({super.key});
 
   @override

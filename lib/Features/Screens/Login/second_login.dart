@@ -60,6 +60,8 @@
     Widget build(BuildContext context) {
       final authProvider = Provider.of<AuthProvider>(context);
       var obsecureText = authProvider.obsecureText;
+      final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
       return FadeTransition(
         opacity: _animation!,
         child: Scaffold(
@@ -91,7 +93,7 @@
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width*0.6,
+                            width: isTablet?MediaQuery.of(context).size.width*0.6:MediaQuery.of(context).size.width,
                             padding: const EdgeInsets.all(24),
                             decoration: BoxDecoration(
                               color: Colors.white,
