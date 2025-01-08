@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/Login/second_login.dart';
 import 'package:qr_page/Model/Data_Models/dashboard_model/dashboard_model.dart';
 import 'package:qr_page/Provider/dashboard_provider.dart';
+import 'package:qr_page/Services/toast_service.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 import 'package:qr_page/Widgets/Common/app_text.dart';
 import 'package:qr_page/Widgets/Common/network_error.dart';
@@ -32,12 +33,14 @@ class _DashboardState extends State<Dashboard>
   Animation<double>? _animation;
   late List<dynamic> qboxLists = [];
   late final qboxCount;
+  final CommonService commonService = CommonService();
 
   var inventoryData;
   var foodCountData;
   int skuInventoryCount = 0;
   int rowCount = 0;
   int columnCount = 0;
+  int totalCellCount = 0;
 
   late DashboardProvider _provider;
   // Add new animation controller for header
@@ -91,12 +94,8 @@ class _DashboardState extends State<Dashboard>
         });
       }
       print('Error loading inventory data: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to load inventory data: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      commonService.presentToast('Failed to load inventory data: ${e.toString()}');
+
     }
   }
 
@@ -198,173 +197,173 @@ class _DashboardState extends State<Dashboard>
   @override
   Widget build(BuildContext context) {
     return Consumer<DashboardProvider>(
-      builder: (context, provider,child) {
-        if (provider.isLoading) {
-          return const Center(child: CircularProgressIndicator(color: AppColors.mintGreen,));
-        }
-        if (provider.error != null) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(provider.error!),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.mintGreen),
-                  onPressed: _loadData,
-                  child: Text('Retry'),
-                ),
-              ],
-            ),
-          );
-        }
-        if (provider.qboxLists.isNotEmpty) {
-          var firstItem = provider.qboxLists.isNotEmpty ? provider.qboxLists[0] : null;
-          var secondItem = provider.qboxLists.length > 1 ? provider.qboxLists[1] : null;
-    
-          if (firstItem is Map<String, dynamic>) {
-            foodCountData = firstItem;
-            skuInventoryCount = int.tryParse(foodCountData['skuInventorySnoCount']?.toString() ?? '0') ?? 0;
+        builder: (context, provider,child) {
+          if (provider.isLoading) {
+            return const Center(child: CircularProgressIndicator(color: AppColors.mintGreen,));
           }
-    
-          if (secondItem is Map<String, dynamic>) {
-            inventoryData = secondItem;
-            qboxLists = inventoryData['qboxes'] as List<dynamic>? ?? [];
-            rowCount = int.tryParse(inventoryData["rowCount"]?.toString() ?? '0') ?? 0;
-            columnCount = int.tryParse(inventoryData["columnCount"]?.toString() ?? '1') ?? 1;
-          }
-        }
-    
-        return NetworkWrapper(
-          child: SafeArea(
-            child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: AppColors.mintGreen,
-                automaticallyImplyLeading: false,
-                title: Align(
-                    alignment: Alignment.center,
-                    child: AppText(
-                        text: inventoryData?['qboxEntityName'] ?? "Entity",
-                        fontSize: 24,fontWeight: FontWeight.w900,)),
-                actions: [
-                  // Wrap your IconButton with this code
-                  IconButton(
-                    icon: const Icon(Icons.logout_sharp),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.logout_rounded,
-                                    color: Colors.red,
-                                    size: 48,
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const Text(
-                                    'Logout',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  const Text(
-                                    'Are you sure you want to logout?',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Expanded(
-                                        child: TextButton(
-                                          onPressed: () => Navigator.pop(context),
-                                          style: TextButton.styleFrom(
-                                            padding: const EdgeInsets.symmetric(vertical: 12),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
-                                          ),
-                                          child: const Text(
-                                            'Cancel',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.black54,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                            GoRouter.of(context).push(LoginScreen.routeName);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.red,
-                                            padding: const EdgeInsets.symmetric(vertical: 12),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
-                                          ),
-                                          child: const Text(
-                                            'Logout',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  )
+          if (provider.error != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(provider.error!),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.mintGreen),
+                    onPressed: _loadData,
+                    child: Text('Retry'),
+                  ),
                 ],
               ),
-              body: RefreshIndicator(
-                onRefresh: _loadData,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _buildCurrentTime(),
-                      _buildInventoryTable(),
-                      _buildQeuBoxStatus(),
-                      _buildHotBoxStatus(),
-                    ],
+            );
+          }
+          if (provider.qboxLists.isNotEmpty) {
+            var firstItem = provider.qboxLists.isNotEmpty ? provider.qboxLists[0] : null;
+            var secondItem = provider.qboxLists.length > 1 ? provider.qboxLists[1] : null;
+
+            if (firstItem is Map<String, dynamic>) {
+              foodCountData = firstItem;
+              skuInventoryCount = int.tryParse(foodCountData['skuInventorySnoCount']?.toString() ?? '0') ?? 0;
+            }
+
+            if (secondItem is Map<String, dynamic>) {
+              inventoryData = secondItem;
+              qboxLists = inventoryData['qboxes'] as List<dynamic>? ?? [];
+              rowCount = int.tryParse(inventoryData["rowCount"]?.toString() ?? '0') ?? 0;
+              columnCount = int.tryParse(inventoryData["columnCount"]?.toString() ?? '1') ?? 1;
+            }
+          }
+
+          return NetworkWrapper(
+            child: SafeArea(
+              child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: AppColors.mintGreen,
+                  automaticallyImplyLeading: false,
+                  title: Align(
+                      alignment: Alignment.center,
+                      child: AppText(
+                        text: inventoryData?['qboxEntityName'] ?? "Entity",
+                        fontSize: 24,fontWeight: FontWeight.w900,)),
+                  actions: [
+                    // Wrap your IconButton with this code
+                    IconButton(
+                      icon: const Icon(Icons.logout_sharp),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.logout_rounded,
+                                      color: Colors.red,
+                                      size: 48,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    const Text(
+                                      'Logout',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      'Are you sure you want to logout?',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Expanded(
+                                          child: TextButton(
+                                            onPressed: () => Navigator.pop(context),
+                                            style: TextButton.styleFrom(
+                                              padding: const EdgeInsets.symmetric(vertical: 12),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'Cancel',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              GoRouter.of(context).push(LoginScreen.routeName);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.red,
+                                              padding: const EdgeInsets.symmetric(vertical: 12),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'Logout',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    )
+                  ],
+                ),
+                body: RefreshIndicator(
+                  onRefresh: _loadData,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildCurrentTime(),
+                        _buildInventoryTable(),
+                        _buildQeuBoxStatus(),
+                        _buildHotBoxStatus(),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        );
-      }
+          );
+        }
     );
   }
 
@@ -440,22 +439,25 @@ class _DashboardState extends State<Dashboard>
   }
 
   Widget _buildQeuBoxStatus() {
-    final int totalCells =
-        (rowCount) * (columnCount);
-    print('totalCells$totalCells');
+    final int totalCells = rowCount * columnCount;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final padding = 16.0;
+    final cellWidth = (screenWidth - (padding * 2) - ((columnCount - 1) * 8)) / columnCount;
+    final cellHeight = cellWidth * 1.2; // Maintain a good aspect ratio
+    final fontSize = cellWidth * 0.12;
 
     return Column(
       children: [
         Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.red.shade400, Colors.red.shade600],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Colors.black26,
                 blurRadius: 4,
@@ -463,163 +465,124 @@ class _DashboardState extends State<Dashboard>
               ),
             ],
           ),
-          child: Text(
+          child: const Text(
             'QBox - Current Status',
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
-                color: AppColors.white),
-          ),
-        ),
-        SizedBox(height: 20),
-
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Container(
-            padding: EdgeInsets.all(20.0),
-            width: columnCount * 180.0,
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: columnCount > 0 ? columnCount : 1,
-                childAspectRatio:1,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-              ),
-              itemCount: totalCells,
-              itemBuilder: (context, index) {
-                final cell = qboxLists[index];
-                if (cell != null) {
-                  QBox qbox = QBox.fromMap(cell as Map<String, dynamic>);
-                  return _buildGridCell(qbox).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0);
-                } else {
-                  return Container(); // Placeholder for invalid cell
-                }
-              },
+                color: AppColors.white
             ),
           ),
         ),
+        const SizedBox(height: 16),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: padding),
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columnCount,
+              childAspectRatio: cellWidth / cellHeight,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+            ),
+            itemCount: totalCells,
+            itemBuilder: (context, index) {
+              final cell = qboxLists[index];
+              if (cell != null) {
+                QBox qbox = QBox.fromMap(cell as Map<String, dynamic>);
+                return _buildGridCell(qbox, cellHeight,fontSize);
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+        const SizedBox(height: 16),
         _buildItemCount(),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
       ],
     );
   }
 
-  // Enhanced QBox grid cell
-  Widget _buildGridCell(QBox item) {
-    bool isFilled = item.foodName != 'EMPTY';
-    return InkWell(
-      onTap: () {
-        if (isFilled) {
-          _showItemDetails(context, item);
-        } else {
-          _showEmptyItemDetails(context, item);
-        }
-      },
-      child: AnimatedBuilder(
-        animation: _animation ?? const AlwaysStoppedAnimation<double>(0),
-        builder: (context, child) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: isFilled
-                  ? LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.white,
-                        Colors.blue.shade50,
-                      ],
-                    )
-                  : LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.white,
-                        Colors.red.shade100,
-                      ],
+  Widget _buildGridCell(QBox qbox, double cellHeight,double fontSize) {
+    // rowCount = 4;
+    // columnCount = 4;
+    totalCellCount = rowCount * columnCount;
+    bool isFilled = qbox.foodCode.isNotEmpty;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isFilled
+              ? [Colors.green.shade300, Colors.green.shade800]
+              : [Colors.red.shade300, Colors.red.shade800],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isFilled
+                ? Colors.green.shade300
+                : Colors.grey.withOpacity(0.1),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (totalCellCount <= 25) ...[
+            Column(
+              children: [
+                isFilled? Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.white, // Change to your desired outline color
+                      width: 2.0,          // Adjust the border width as needed
                     ),
-              boxShadow: [
-                BoxShadow(
-                  color: isFilled
-                      ? Colors.blue.withOpacity(0.2)
-                      : Colors.grey.withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: Offset(0, 4),
-                ),
+                    borderRadius: BorderRadius.circular(100), // Same radius as ClipRRect
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.asset(
+                      "assets/biriyani.jpg",
+                      height: cellHeight * 0.4,
+                      width: cellHeight * 0.4,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                )
+                    :Container(
+                  child: AppText(text: "EMPTY", fontSize: fontSize,color: AppColors.white,fontWeight: FontWeight.w900,),
+                )
+                // Icon(
+                //   Icons.question_mark_rounded,
+                //   size: cellHeight * 0.4,
+                //   color: AppColors.white,
+                // ),
               ],
-            ),
-            child: Card(
-              elevation: 0,
-              color: Colors.transparent,
-              child: Stack(
-                children: [
-                  Positioned(
-                    right: 8,
-                    top: 8,
-                    child: Container(
-                      width: 12,
-                      height: 12,
-                      decoration: BoxDecoration(
-                        color: isFilled ? Colors.green : Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(12),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          isFilled ?CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage("assets/biriyani.jpg"),
-                        backgroundColor: isFilled
-                            ? Colors.white
-                            : Colors.grey.shade200,
-                      ):Image.asset("assets/empty.png"),
-                          SizedBox(height: 8),
-                          Text(
-                            item.foodName,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: isFilled ? Colors.black87 : Colors.grey,
-                            ),
-                          ),
-                          if (isFilled) ...[
-                            SizedBox(height: 4),
-                            Text(
-                              'Qbox ID: ${item.qboxId}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                          ] else ...[
-                            SizedBox(height: 4),
-                            Text(
-                              'Qbox ID: ${item.qboxId}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+            )
+          ] else ...[
+          ],
+          SizedBox(height: 5,),
+          Text('R${qbox.rowNo}-C${qbox.columnNo}',style: TextStyle(color:AppColors.white,fontSize:fontSize),),
+          SizedBox(height: 5,),
+          Text('${qbox.qboxId}',style: TextStyle(color: AppColors.white,fontSize:fontSize,fontWeight: FontWeight.w800),),
+          // Text(qbox.foodCode.isNotEmpty ? qbox.foodCode : 'Empty'),
+        ],
       ),
     );
+  }
+
+
+  String _truncateText(String text) {
+    if (text == 'EMPTY') return text;
+    List<String> words = text.split(' ');
+    if (words.length <= 2) return text;
+    return '${words[0]} ${words[1]}...';
   }
 
   Widget _buildItemCount() {
@@ -683,7 +646,7 @@ class _DashboardState extends State<Dashboard>
                       SizedBox(width: 8),
                       Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
                           color: AppColors.mintGreen,
                           borderRadius: BorderRadius.circular(12),

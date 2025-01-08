@@ -211,9 +211,7 @@ class FoodStoreProvider with ChangeNotifier {
       // Return scan result only if confirmed, otherwise return null
       return confirmed == true ? scanResult : null;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error scanning: $e')),
-      );
+      commonService.presentToast('Error scanning: $e');
       return null;
     }
   }
