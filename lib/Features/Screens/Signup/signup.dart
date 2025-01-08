@@ -4,6 +4,7 @@ import 'package:qr_page/Widgets/Common/app_colors.dart';
 
 import '../../../Provider/auth_provider.dart';
 import '../../../Services/auth_service.dart';
+import '../../../Services/toast_service.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const String routeName = '/signup';
@@ -21,6 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
   late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  final CommonService commonService = CommonService();
 
   @override
   void initState() {
@@ -56,16 +58,13 @@ class _SignUpScreenState extends State<SignUpScreen> with SingleTickerProviderSt
         );
 
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Account created successfully!')),
-          );
+          commonService.presentToast('Account created successfully!');
+
           Navigator.pop(context); // Go back to login screen
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${e.toString()}')),
-          );
+          commonService.presentToast('Error: ${e.toString()}');
         }
       }
     }

@@ -50,7 +50,7 @@ class _LoadQboxState extends State<LoadQbox> {
         "uniqueCode": foodBarcode,
         "wfStageCd": 11,
         "boxCellSno": qBoxBarcode,
-        "qboxEntitySno": 20
+        "qboxEntitySno": 22
       };
 
       print('$body');
@@ -81,63 +81,6 @@ class _LoadQboxState extends State<LoadQbox> {
     setState(() {
     });
   }
-  //
-  // loadToQBox() async {
-  //
-  //   try {
-  //     print('loadToQBox');
-  //     Map<String, dynamic> body = {
-  //       "uniqueCode": foodBarcode,
-  //       "wfStageCd":11,
-  //       "boxCellSno":qBoxBarcode,
-  //       "qboxEntitySno": 20
-  //     };
-  //
-  //     print('$body');
-  //     var result = await apiService.post("8912", "masters","load_sku_in_qbox", body);
-  //     if (result != null && result['data'] != null) {
-  //       print('RESULT$result');
-  //       qBoxBarcode = '';
-  //       foodBarcode = '';
-  //       commonService.presentToast('Food Loaded inside the qbox');
-  //     }
-  //   } catch (e) {
-  //     print('Error: $e');
-  //   }
-  //   setState(() {
-  //
-  //   });
-  // }
-  // Future<void> loadToQBox() async {
-  //   debugPrint("storeFoodItem called");
-  //   if(qBoxBarcode.isNotEmpty && foodBarcode.isNotEmpty){
-  //     Map<String, dynamic> body = {
-  //       "uniqueCode": foodBarcode,
-  //       "wfStageCd": 11,
-  //       "boxCellSno": qBoxBarcode,
-  //       "qboxEntitySno": 20
-  //     };
-  //     try {
-  //       var result = await apiService.post("8912", "masters", "load_sku_in_qbox", body);
-  //       if (result != null && result['data'] != null) {
-  //         qBoxBarcode = '';
-  //         foodBarcode = '';
-  //         commonService.presentToast('Food Loaded inside the qbox no $qBoxBarcode');
-  //       }
-  //       else {
-  //         commonService
-  //             .errorToast('Failed to store the food item. Please try again.');
-  //       }
-  //     } catch (e) {
-  //       commonService
-  //           .presentToast('An error occurred while storing the food item.');
-  //     }
-  //     setState(() {});
-  //   }
-  //   else{
-  //     commonService.presentToast('Please provide valid QBox ID and Food Item.');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -390,9 +333,31 @@ class _LoadQboxState extends State<LoadQbox> {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.red.withOpacity(0.1)),
         ),
-        child: Column(
+        child:
+        Row(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Column(
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[800],
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
             Container(
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -401,23 +366,7 @@ class _LoadQboxState extends State<LoadQbox> {
               ),
               child: Icon(icon, color: AppColors.mintGreen, size: 24),
             ),
-            SizedBox(height: 12),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
-              ),
-            ),
-            SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
-            ),
+
           ],
         ),
       ),
@@ -463,7 +412,7 @@ class _LoadQboxState extends State<LoadQbox> {
             ),
           if (foodCode.isNotEmpty)
             _buildItemRow(
-              type: 'Food',
+              type: 'Food Code',
               code: foodCode,
               icon: foodIcon,
               onDelete: () {
@@ -538,5 +487,4 @@ class _LoadQboxState extends State<LoadQbox> {
       ),
     ).animate().fadeIn(duration: 900.ms);
   }
-
 }

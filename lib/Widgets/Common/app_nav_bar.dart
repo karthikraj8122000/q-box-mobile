@@ -9,12 +9,11 @@ import 'app_bottom_bar.dart';
 import 'app_colors.dart';
 
 class AppNavBar extends StatefulWidget {
+  final child;
   const AppNavBar({
     required this.child,
     Key? key,
   }) : super(key: key ?? const ValueKey<String>('AppNavBar'));
-
-  final child;
 
   @override
   _AppNavBarState createState() => _AppNavBarState();
@@ -22,13 +21,14 @@ class AppNavBar extends StatefulWidget {
 
 class _AppNavBarState extends State<AppNavBar> {
 
-  int _selectedIndex = 0;
   @override
   void initState() {
     super.initState();
   }
 
   Future<bool> _onWillPop() async {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
     return await showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -36,6 +36,7 @@ class _AppNavBarState extends State<AppNavBar> {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Container(
+          width:isTablet? 300:MediaQuery.of(context).size.width,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Colors.white,

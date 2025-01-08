@@ -1,18 +1,26 @@
+// Modified InwardOrderDtlProvider
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:go_router/go_router.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/Inward%20Order/qr_scanner_screen.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/View%20Order/view_order.dart';
 import 'package:qr_page/Services/api_service.dart';
+import 'package:qr_page/Services/toast_service.dart';
 
 class InwardOrderDtlProvider extends ChangeNotifier {
-  String _scanStatus = "complete";
+  String _scanStatus = "notComplete";
   List _purchaseOrders = [];
   final ApiService _apiService = ApiService();
+  final CommonService commonService = CommonService();
+  bool _isLoading = true;
+  String? _error;
 
-  // Getters
   String get scanStatus => _scanStatus;
   List get purchaseOrders => _purchaseOrders;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
 
-  void resetScan() {
-    _scanStatus = "notComplete";
+  void resetScan(BuildContext context) {
     _purchaseOrders = [];
     notifyListeners();
   }
@@ -27,10 +35,33 @@ class InwardOrderDtlProvider extends ChangeNotifier {
       );
 
       if (barcodeScanRes != '-1') {
-        handleEntry(context, barcodeScanRes);
+        await handleEntry(context, barcodeScanRes);
+        GoRouter.of(context).push(ViewOrder.routeName);
+        // if (_scanStatus == 'complete') {
+        //   GoRouter.of(context).push(ViewOrder.routeName);
+        // }
       }
     } catch (e) {
       _showError(context, 'Error scanning QR code: $e');
+    }
+  }
+
+  Future<bool> validateManualEntry(List<String> digits) {
+    return Future.value(digits.every((digit) => digit.isNotEmpty));
+  }
+
+  Future<void> handleManualEntry(BuildContext context, List<TextEditingController> controllers) async {
+    final digits = controllers.map((c) => c.text).toList();
+
+    if (await validateManualEntry(digits)) {
+      final orderId = digits.join();
+      await handleEntry(context, 'SWIGGY_$orderId');
+      GoRouter.of(context).push(ViewOrder.routeName);
+      // if (_scanStatus == 'complete') {
+      //   GoRouter.of(context).push(ViewOrder.routeName);
+      // }
+    } else {
+      _showError(context, 'Please fill all fields');
     }
   }
 
@@ -40,19 +71,30 @@ class InwardOrderDtlProvider extends ChangeNotifier {
     const String service = 'masters';
 
     try {
-      final response = await _apiService.post(port, service, endpoint, {});
-      _scanStatus = 'complete';
-      _purchaseOrders = response['data'];
+      _isLoading = true;
+      _error = null;
       notifyListeners();
-    } catch (error) {
-      throw Exception('Failed to fetch totalItems: $error');
+
+      final response = await _apiService.post(port, service, endpoint, {});
+      if(response != null && response['data'] != null){
+        _purchaseOrders = response['data'];
+        notifyListeners();
+      }else{
+        _error = 'Failed to retrieve the data.';
+        commonService.errorToast(_error!);
+      }
+    } catch (e) {
+      _error = 'An error occurred while retrieving the data.';
+      debugPrint('$e');
+      commonService.errorToast(_error!);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
   void _showError(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    commonService.errorToast(message);
   }
 
   Future<void> handleEntry(BuildContext context, String orderId) async {

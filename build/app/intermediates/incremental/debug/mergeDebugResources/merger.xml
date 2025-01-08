@@ -7034,7 +7034,7 @@
         <item name="android:windowBackground">@drawable/launch_background</item>
     </style><style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
-    </style></file><file path="/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/res/values/styles.xml" qualifiers=""><style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+    </style></file><file name="ic_launcher" path="/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" qualifiers="anydpi-v26" type="mipmap"/><file path="/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/res/values/styles.xml" qualifiers=""><style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
         
         <item name="android:windowBackground">@drawable/launch_background</item>
     </style><style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">

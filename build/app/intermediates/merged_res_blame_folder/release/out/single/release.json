@@ -1332,6 +1332,10 @@
         "source": "com.example.qr_page.app-appcompat-1.4.2-19:/drawable-xxhdpi-v4/abc_list_selector_disabled_holo_light.9.png"
     },
     {
+        "merged": "com.example.qr_page.app-merged_res-58:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.example.qr_page.app-main-51:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
         "merged": "com.example.qr_page.app-merged_res-58:/color_mtrl_fab_icon_text_color_selector.xml.flat",
         "source": "com.example.qr_page.app-material-1.3.0-34:/color/mtrl_fab_icon_text_color_selector.xml"
     },
