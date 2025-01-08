@@ -80,11 +80,12 @@ class _WelcomeCardState extends State<WelcomeCard> {
           child: Container(
             height: 200,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [AppColors.mintGreen.withOpacity(0.8), AppColors.mintGreen],
-              ),
+              color: AppColors.white
+              // gradient: LinearGradient(
+              //   begin: Alignment.topLeft,
+              //   end: Alignment.bottomRight,
+              //   colors: [AppColors.mintGreen.withOpacity(0.8), AppColors.mintGreen],
+              // ),
             ),
             child: Column(
               children: [
