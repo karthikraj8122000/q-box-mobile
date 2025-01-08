@@ -244,7 +244,7 @@ class _DashboardState extends State<Dashboard>
                     alignment: Alignment.center,
                     child: AppText(
                         text: inventoryData?['qboxEntityName'] ?? "Entity",
-                        fontSize: 16)),
+                        fontSize: 24,fontWeight: FontWeight.w900,)),
                 actions: [
                   // Wrap your IconButton with this code
                   IconButton(
@@ -473,23 +473,7 @@ class _DashboardState extends State<Dashboard>
           ),
         ),
         SizedBox(height: 20),
-        // SizedBox(
-        //   height: MediaQuery.of(context).size.height * 0.5, // Adjust this value as needed
-        //   child: DynamicGrid(
-        //     rowCount: rowCount,
-        //     columnCount: columnCount,
-        //     itemBuilder: (context, index) {
-        //       if (index < qboxLists.length) {
-        //         final cell = qboxLists[index];
-        //         if (cell != null) {
-        //           QBox qbox = QBox.fromMap(cell as Map<String, dynamic>);
-        //           return _buildGridCell(qbox).animate().fadeIn(duration: 600.ms).slideX(begin: -0.2, end: 0);
-        //         }
-        //       }
-        //       return Container(); // Placeholder for invalid cell
-        //     },
-        //   ),
-        // ),
+
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Container(

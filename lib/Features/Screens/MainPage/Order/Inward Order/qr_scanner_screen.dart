@@ -1,11 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 import '../../../../../Provider/inward_order_provider.dart';
 import '../../../../../Widgets/Common/divider_text.dart';
 import '../Common/order_card.dart';
+import '../View Order/view_order.dart';
 
 class OrderQRScannerScreen extends StatefulWidget {
   static const String routeName = '/order-scan';
@@ -16,17 +17,9 @@ class OrderQRScannerScreen extends StatefulWidget {
 }
 
 class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
-  final List<TextEditingController> _controllers = List.generate(5, (index) => TextEditingController());
+  final List<TextEditingController> _controllers =
+      List.generate(5, (index) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(5, (index) => FocusNode());
-
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<InwardOrderDtlProvider>().getTotalItems();
-    });
-  }
 
   @override
   void dispose() {
@@ -44,7 +37,7 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
         5,
-            (index) => Container(
+        (index) => Container(
           width: 60,
           margin: EdgeInsets.all(12),
           child: TextField(
@@ -55,7 +48,15 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
             maxLength: 1,
             decoration: InputDecoration(
               counterText: '',
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.mintGreen),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: AppColors.mintGreen, width: 2),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.red),
+              ),
             ),
             onChanged: (value) {
               if (value.length == 1 && index < 4) {
@@ -72,6 +73,7 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
   }
 
   Widget _buildInitialScanView() {
+    final provider = Provider.of<InwardOrderDtlProvider>(context);
     return Column(
       children: [
         Padding(
@@ -87,24 +89,29 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
               Text(
                 'Scan QR Code',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               SizedBox(height: 8),
               Text(
                 'Use your phone to scan the QR code.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.black54,
-                ),
+                      color: Colors.black54,
+                    ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 24),
-              OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.mintGreen),
-                onPressed: () => context.read<InwardOrderDtlProvider>().scanOrderQR(context),
+              ElevatedButton.icon(
+                iconAlignment: IconAlignment.start,
                 icon: Icon(Icons.qr_code_scanner),
                 label: Text('Scan Now'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.all(16),
+                  backgroundColor: AppColors.mintGreen,
+                ),
+                onPressed: () {
+                  context.read<InwardOrderDtlProvider>().scanOrderQR(context);
+                },
               ),
             ],
           ),
@@ -125,33 +132,40 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
               Text(
                 'Enter last 5-digit order id',
                 style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.lightBlack),
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.lightBlack,
+                ),
                 textAlign: TextAlign.center,
               ),
               _buildOTPFields(),
               SizedBox(height: 24),
-              OutlinedButton.icon(
-                iconAlignment: IconAlignment.end,
-                style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.mintGreen),
-                onPressed: () {
-                  final orderId = _controllers.map((c) => c.text).join();
-                  context.read<InwardOrderDtlProvider>().handleEntry(context, 'SWIGGY_$orderId');
-                },
-                icon: Icon(Icons.download_done),
-                label: Text('Submit'),
-              ),
-              SizedBox(height: 24),
-              ElevatedButton.icon(
-                iconAlignment: IconAlignment.end,
-                icon: Icon(Icons.arrow_forward),
-                label: Text('Go To Orders'),
+              ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(16),
-                    backgroundColor: AppColors.mintGreen),
-                onPressed: () => context.read<InwardOrderDtlProvider>().getTotalItems(),
+                  padding: EdgeInsets.all(16),
+                  backgroundColor: AppColors.mintGreen,
+                ),
+                onPressed: () {
+                  context
+                      .read<InwardOrderDtlProvider>()
+                      .handleManualEntry(context, _controllers);
+                },
+                child: Text('Submit'),
+              ),
+
+              SizedBox(height: 30),
+             OutlinedButton.icon(
+                  iconAlignment: IconAlignment.end,
+                  icon: Icon(Icons.arrow_forward),
+                  style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 24),
+                      foregroundColor: AppColors.mintGreen,
+                      side: BorderSide(color: AppColors.mintGreen)
+                  ),
+                  onPressed: () {
+                    GoRouter.of(context).push(ViewOrder.routeName);
+                  },
+                  label: Text("Go To Orders")
               )
             ],
           ),
@@ -162,45 +176,17 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<InwardOrderDtlProvider>(
-      builder: (context, provider, child) {
-        return SingleChildScrollView(
+    return Scaffold(
+      body: Center(
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (provider.scanStatus == "notComplete")
-                _buildInitialScanView()
-              else if (provider.scanStatus == "complete")
-                provider.purchaseOrders.isNotEmpty
-                    ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () => provider.resetScan(),
-                      icon: Icon(Icons.qr_code_scanner),
-                      label: Text('Scan New Order'),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 16),
-                        backgroundColor: AppColors.mintGreen,
-                      ),
-                    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: ListView.builder(
-                        itemCount: provider.purchaseOrders.length,
-                        itemBuilder: (context, index) {
-                          return OrderCard(order: provider.purchaseOrders[index]).animate().fadeIn(duration: 800.ms, delay: (50 * index).ms).slideY(begin: -0.2, end: 0);
-                        },
-                      ),
-                    ),
-                  ],
-                )
-                    : Container(),
+              _buildInitialScanView(),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

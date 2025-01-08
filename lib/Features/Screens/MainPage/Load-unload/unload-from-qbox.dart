@@ -31,7 +31,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
     Map<String, dynamic> body = {
       "uniqueCode": qBoxOutBarcode,
       "wfStageCd":12,
-      "qboxEntitySno": 20
+      "qboxEntitySno": 22
     };
     print('$body');
     try {
@@ -164,7 +164,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.mintGreen, Colors.redAccent],
+          colors: [AppColors.mintGreen, Color(0xFFBE123C)],
         ),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
