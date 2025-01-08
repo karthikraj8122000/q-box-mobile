@@ -213,7 +213,7 @@ class _DeliveryTrackingScreenState extends State<DeliveryTrackingScreen> {
     return Container(
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.red.shade400,
+        color: AppColors.mintGreen,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(

@@ -8,6 +8,10 @@
         "source": "com.example.qr_page.app-main-52:/mipmap-xxxhdpi/ic_launcher.png"
     },
     {
+        "merged": "com.example.qr_page.app-merged_res-58:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.example.qr_page.app-main-52:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
         "merged": "com.example.qr_page.app-merged_res-58:/mipmap-mdpi_ic_launcher.png.flat",
         "source": "com.example.qr_page.app-main-52:/mipmap-mdpi/ic_launcher.png"
     },

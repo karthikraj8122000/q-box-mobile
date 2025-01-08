@@ -26,7 +26,7 @@ class AppColors{
   // Card colors
 
   // static const Color mintGreen = Color(0xFF8fbc8f);
-  static const Color mintGreen = Colors.red;
+  static const Color mintGreen = Color(0xFFEF5350);
   static const Color appGreen = Color(0xFF6c9d6c);
   // static const Color darkMintGreen = Color(0xFF6c9d6c); // Light green cards
   static const Color darkMintGreen = Colors.red;

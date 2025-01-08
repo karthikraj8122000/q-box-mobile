@@ -37,11 +37,7 @@ class _InwardOrderState extends State<InwardOrder> with TickerProviderStateMixin
               backgroundColor: Colors.transparent,
               title: Text('Inward Order Receiving', style: TextStyle(color: Colors.black)),
             ),
-            body: SafeArea(
-              child: SingleChildScrollView(
-                child:OrderQRScannerScreen(),
-              ),
-            ),
+            body: OrderQRScannerScreen(),
           ),
         ),
       ),

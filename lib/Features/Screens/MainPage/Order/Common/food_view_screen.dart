@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:qr_page/Services/api_service.dart';
+import 'package:qr_page/Services/toast_service.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 
 class FoodViewScreen extends StatefulWidget {
@@ -22,6 +26,11 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
   List<Map<String, dynamic>>? inventoryItems;
   bool isExpanded = false;
   final ApiService apiService = ApiService();
+  final ImagePicker _picker = ImagePicker();
+  List<File> selectedImages = [];
+  TextEditingController rejectionReasonController = TextEditingController();
+final CommonService commonService = CommonService();
+
   @override
   void initState() {
     super.initState();
@@ -77,27 +86,257 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
       });
     }
   }
-  Future<void> rejectFood(skuInventorySno) async {
-    print(skuInventorySno);
-    try {
-      // Fetch purchase order details
 
-      final result = await apiService.post('8912', 'masters', 'reject_sku',
-          {"skuInventorySno": skuInventorySno});
-      print(result);
+  Future<void> _showRejectionDialog(int skuInventorySno) async {
+    selectedImages.clear();
+    rejectionReasonController.clear();
+
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.8,
+                  maxWidth: MediaQuery.of(context).size.width * 0.9,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Reject Food Item',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Spacer(),
+                          IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Divider(height: 1),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextField(
+                              controller: rejectionReasonController,
+                              maxLines: 3,
+                              decoration: InputDecoration(
+                                hintText: 'Enter rejection reason',
+                                border: OutlineInputBorder(),
+                                filled: true,
+                                fillColor: Colors.grey[50],
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              'Add Photos (Optional)',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            SizedBox(
+                              height: 100,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  ...selectedImages.map(
+                                        (image) => Padding(
+                                      padding: const EdgeInsets.only(right: 8),
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            width: 100,
+                                            height: 100,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(8),
+                                              image: DecorationImage(
+                                                image: FileImage(image),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            right: 0,
+                                            top: 0,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: IconButton(
+                                                icon: Icon(Icons.close, color: Colors.red, size: 20),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    selectedImages.remove(image);
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ).toList(),
+                                  if (selectedImages.length < 3)
+                                    InkWell(
+                                      onTap: () async {
+                                        final XFile? image = await _picker.pickImage(
+                                          source: ImageSource.camera,
+                                          imageQuality: 70,
+                                        );
+                                        if (image != null) {
+                                          setState(() {
+                                            selectedImages.add(File(image.path));
+                                          });
+                                        }
+                                      },
+                                      child: Container(
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Icon(
+                                          Icons.camera_alt,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Divider(height: 1),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            child: Text('Cancel',style: TextStyle(color: AppColors.black),),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          SizedBox(width: 8),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                            ),
+                            child: Text('Reject'),
+                            onPressed: () {
+                              if (rejectionReasonController.text.trim().isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Please enter rejection reason'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                                return;
+                              }
+                              Navigator.pop(context, true);
+                              _submitRejection(skuInventorySno);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _submitRejection(int skuInventorySno) async {
+    try {
+      List<String> base64Images = [];
+      for (File image in selectedImages) {
+        List<int> imageBytes = await image.readAsBytes();
+        String base64Image = base64Encode(imageBytes);
+        base64Images.add(base64Image);
+      }
+
+      // Prepare rejection data
+      final rejectionData = {
+        "skuInventorySno": skuInventorySno,
+        "rejectionReason": rejectionReasonController.text,
+        "images": base64Images,
+      };
+
+      final result = await apiService.post(
+        '8912',
+        'masters',
+        'reject_sku',
+        rejectionData,
+      );
+
       if (result['data'] != null) {
         inventoryItems = List<Map<String, dynamic>>.from(result['data']);
         setState(() {});
+        commonService.presentToast("Item rejected successfully");
       }
     } catch (e) {
-      print('Error fetching data: $e');
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
+      print('Error rejecting item: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to reject item. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
+  Future<void> rejectFood(int skuInventorySno) async {
+    await _showRejectionDialog(skuInventorySno);
+  }
+  // Future<void> rejectFood(skuInventorySno) async {
+  //   print(skuInventorySno);
+  //   try {
+  //     // Fetch purchase order details
+  //
+  //     final result = await apiService.post('8912', 'masters', 'reject_sku',
+  //         {"skuInventorySno": skuInventorySno});
+  //     print(result);
+  //     if (result['data'] != null) {
+  //       inventoryItems = List<Map<String, dynamic>>.from(result['data']);
+  //       setState(() {});
+  //     }
+  //   } catch (e) {
+  //     print('Error fetching data: $e');
+  //   } finally {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,20 +444,20 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        orderDetails!['foodSku1name'],
+                        orderDetails!['partnerFoodCode'],
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
-                        'Code: ${orderDetails!['partnerFoodCode']}',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
-                          fontSize: 14,
-                        ),
-                      ),
+                      // Text(
+                      //   'Code: ${orderDetails!['partnerFoodCode']}',
+                      //   style: TextStyle(
+                      //     color: Colors.white.withOpacity(0.9),
+                      //     fontSize: 14,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -398,7 +637,7 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.green,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 12),
@@ -423,7 +662,7 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.red,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 12),
@@ -444,11 +683,6 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
                   ],
                 )
               : Container()
-
-          // Icon(
-          //   Icons.chevron_right,
-          //   color: Colors.grey[400],
-          // ),
         ],
       ),
     );
