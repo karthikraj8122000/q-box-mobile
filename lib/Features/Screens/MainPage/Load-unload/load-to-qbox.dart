@@ -1,18 +1,14 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/MainPage/Load-unload/load_history.dart';
-import 'package:qr_page/Provider/dashboard_provider.dart';
+
 import '../../../../Services/api_service.dart';
 import '../../../../Services/toast_service.dart';
 import '../../../../Widgets/Common/app_colors.dart';
-import 'available-slider.dart';
 
 class LoadQbox extends StatefulWidget {
   const LoadQbox({super.key});
@@ -27,11 +23,6 @@ class _LoadQboxState extends State<LoadQbox> {
   final ApiService apiService = ApiService();
   final CommonService commonService = CommonService();
   bool get isReadyToLoad => qBoxBarcode.isNotEmpty && foodBarcode.isNotEmpty;
-  final List<Map<String, dynamic>> foodItems = [
-    {"orderId": 1, "foodCode": 123, "status": "Filled"},
-    {"orderId": 2, "foodCode": 124, "status": "Pending"},
-    {"orderId": 3, "foodCode": 125, "status": "Delivered"},
-  ];
 
   Future<void> scanBarcode(String name) async {
     String barcodeScanRes;
@@ -63,8 +54,7 @@ class _LoadQboxState extends State<LoadQbox> {
       };
 
       print('$body');
-      var result =
-          await apiService.post("8912", "masters", "load_sku_in_qbox", body);
+      var result = await apiService.post("8912", "masters", "load_sku_in_qbox", body);
       if (result != null && result['data'] != null) {
         print('RESULT$result');
         String loadingMessage = result['data']['skuloading'];
@@ -88,7 +78,8 @@ class _LoadQboxState extends State<LoadQbox> {
       print('Error: $e');
       commonService.presentToast('An error occurred: ${e.toString()}');
     }
-    setState(() {});
+    setState(() {
+    });
   }
 
   @override
@@ -109,15 +100,15 @@ class _LoadQboxState extends State<LoadQbox> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          WelcomeCard(),
+                          _buildWelcomeCard(),
+                          SizedBox(height: 32),
                           _buildQuickActions(),
                           SizedBox(height: 32),
                           buildMergedHistoryCard(
                             qBoxBarcode,
                             foodBarcode,
-                            Icons
-                                .inventory, // or whatever icon you use for container
-                            Icons.fastfood, // or whatever icon you use for food
+                            Icons.inventory, // or whatever icon you use for container
+                            Icons.fastfood,  // or whatever icon you use for food
                           )
                         ],
                       ),
@@ -190,11 +181,9 @@ class _LoadQboxState extends State<LoadQbox> {
                   ],
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.notifications_outlined,
-                      color: AppColors.mintGreen),
+                  icon: Icon(Icons.notifications_outlined, color: AppColors.mintGreen),
                   onPressed: () {
-                    GoRouter.of(context)
-                        .push(NotificationHistoryScreen.routeName);
+                    GoRouter.of(context).push(NotificationHistoryScreen.routeName);
                   },
                 ),
               ),
@@ -220,6 +209,80 @@ class _LoadQboxState extends State<LoadQbox> {
         ],
       ),
     ).animate().fadeIn(duration: 500.ms);
+  }
+
+  Widget _buildWelcomeCard() {
+    return Container(
+      padding: EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [AppColors.mintGreen, Color(0xFFBE123C)],
+        ),
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.mintGreen.withOpacity(0.3),
+            blurRadius: 20,
+            offset: Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    'Quick Scan',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text(
+                  'Start Scanning',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Scan QR code to manage your inventory',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.qr_code_scanner,
+              color: AppColors.mintGreen,
+              size: 32,
+            ),
+          ),
+        ],
+      ),
+    ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2);
   }
 
   Widget _buildQuickActions() {
@@ -260,89 +323,57 @@ class _LoadQboxState extends State<LoadQbox> {
     ).animate().fadeIn(duration: 700.ms);
   }
 
-  Widget _buildActionCard(
-      String title, IconData icon, String subtitle, Color bgColor) {
+  Widget _buildActionCard(String title, IconData icon, String subtitle, Color bgColor) {
     return InkWell(
       onTap: () => scanBarcode(title),
       child: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppColors.mintGreen, Color(0xFFBE123C)],
-          ),
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.mintGreen.withOpacity(0.3),
-              blurRadius: 20,
-              offset: Offset(0, 10),
-            ),
-          ],
+          color: bgColor,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.red.withOpacity(0.1)),
         ),
-        // decoration: BoxDecoration(
-        //   color: bgColor,
-        //   borderRadius: BorderRadius.circular(20),
-        //   border: Border.all(color: Colors.red.withOpacity(0.1)),
-        // ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child:
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Column(
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[800],
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
             Container(
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, color: AppColors.mintGreen, size: 50),
-            )
-                .animate(onPlay: (controller) => controller.repeat())
-                .shimmer(duration: 2000.ms)
-                .then()
-                .shake(hz: 2, curve: Curves.easeInOutCubic),
-            SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.white,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.yellow,
-                    ),
-                  ),
-                ],
-              ),
+              child: Icon(icon, color: AppColors.mintGreen, size: 24),
             ),
-            Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(50))),
-              child: Icon(
-                Icons.arrow_forward_ios,
-                color: AppColors.mintGreen,
-                size: 18,
-              ),
-            ),
+
           ],
         ),
       ),
     );
   }
 
-  Widget buildMergedHistoryCard(String containerCode, String foodCode,
-      IconData containerIcon, IconData foodIcon) {
+  Widget buildMergedHistoryCard(String containerCode, String foodCode, IconData containerIcon, IconData foodIcon) {
     if (containerCode.isEmpty && foodCode.isEmpty) {
       return SizedBox.shrink();
     }
@@ -381,7 +412,7 @@ class _LoadQboxState extends State<LoadQbox> {
             ),
           if (foodCode.isNotEmpty)
             _buildItemRow(
-              type: 'Food',
+              type: 'Food Code',
               code: foodCode,
               icon: foodIcon,
               onDelete: () {
@@ -457,4 +488,3 @@ class _LoadQboxState extends State<LoadQbox> {
     ).animate().fadeIn(duration: 900.ms);
   }
 }
-

@@ -21,7 +21,6 @@ class UnloadQbox extends StatefulWidget {
 }
 
 class _UnloadQboxState extends State<UnloadQbox> {
-
   String qBoxOutBarcode = '';
   final ApiService apiService = ApiService();
   final CommonService commonService = CommonService();
@@ -33,7 +32,6 @@ class _UnloadQboxState extends State<UnloadQbox> {
       "wfStageCd":12,
       "qboxEntitySno": 22
     };
-    print('$body');
     try {
       var result = await apiService.post("8912", "masters","unload_sku_from_qbox_to_hotbox", body);
       if (result != null && result['data'] != null) {
@@ -71,7 +69,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
     return CustomScrollView(
       slivers: [
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0,vertical: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
               const SizedBox(height: 30),
@@ -79,13 +77,10 @@ class _UnloadQboxState extends State<UnloadQbox> {
               const SizedBox(height: 30),
               _buildWelcomeCard(),
               const SizedBox(height: 30),
-              // _buildDispatchStats(context, provider),
-              // const SizedBox(height: 30),
               _buildScanSection(context, provider),
             ]),
           ),
         ),
-
       ],
     );
   }
@@ -130,9 +125,11 @@ class _UnloadQboxState extends State<UnloadQbox> {
                 ],
               ),
               child: IconButton(
-                icon: Icon(Icons.notifications_outlined, color: AppColors.mintGreen),
+                icon: Icon(Icons.notifications_outlined,
+                    color: AppColors.mintGreen),
                 onPressed: () {
-                  GoRouter.of(context).push(NotificationHistoryScreen.routeName);
+                  GoRouter.of(context)
+                      .push(NotificationHistoryScreen.routeName);
                 },
               ),
             ),
@@ -337,7 +334,6 @@ class _UnloadQboxState extends State<UnloadQbox> {
     );
   }
 
-
   Widget _buildScanSection(BuildContext context, FoodStoreProvider provider) {
     return Container(
       decoration: BoxDecoration(
@@ -356,7 +352,6 @@ class _UnloadQboxState extends State<UnloadQbox> {
         borderRadius: BorderRadius.circular(32),
         child: InkWell(
           onTap: () => scanBarcode(),
-
           borderRadius: BorderRadius.circular(24),
           child: Padding(
             padding: EdgeInsets.all(24),
@@ -402,7 +397,9 @@ class _UnloadQboxState extends State<UnloadQbox> {
                     ),
                     Container(
                       padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(color: AppColors.lightBlack,borderRadius: BorderRadius.all(Radius.circular(50))),
+                      decoration: BoxDecoration(
+                          color: AppColors.mintGreen.withOpacity(0.5),
+                          borderRadius: BorderRadius.all(Radius.circular(50))),
                       child: Icon(
                         Icons.arrow_forward_ios,
                         color: AppColors.white,
@@ -411,7 +408,6 @@ class _UnloadQboxState extends State<UnloadQbox> {
                     ),
                   ],
                 ),
-
                 if (qBoxOutBarcode.isNotEmpty && qBoxOutBarcode != '-1') ...[
                   SizedBox(height: 24),
                   Container(
@@ -466,8 +462,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
     ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0);
   }
 
-  Widget _buildDispatchButton(
-      FoodStoreProvider provider, BuildContext context) {
+  Widget _buildDispatchButton(FoodStoreProvider provider, BuildContext context) {
     final isEnabled = qBoxOutBarcode.isNotEmpty;
     return Container(
       width: double.infinity,
@@ -477,29 +472,28 @@ class _UnloadQboxState extends State<UnloadQbox> {
         gradient: LinearGradient(
           colors: isEnabled
               ? [
-            AppColors.darkMintGreen,
-            AppColors.mintGreen.withOpacity(0.8),
-          ]
+                  AppColors.darkMintGreen,
+                  AppColors.mintGreen.withOpacity(0.8),
+                ]
               : [
-            Colors.grey[300]!,
-            Colors.grey[400]!,
-          ],
+                  Colors.grey[300]!,
+                  Colors.grey[400]!,
+                ],
         ),
         boxShadow: isEnabled
             ? [
-          BoxShadow(
-            color: AppColors.mintGreen.withOpacity(0.3),
-            blurRadius: 20,
-            offset: Offset(0, 10),
-          ),
-        ]
+                BoxShadow(
+                  color: AppColors.mintGreen.withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: Offset(0, 10),
+                ),
+              ]
             : [],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: isEnabled ? () =>  unloadFromQBox() : null,
-          // onTap: () => provider.dispatchFoodItem(context),
+          onTap: isEnabled ? () => unloadFromQBox() : null,
           borderRadius: BorderRadius.circular(16),
           child: Center(
             child: Row(

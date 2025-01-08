@@ -250,12 +250,7 @@ final CommonService commonService = CommonService();
                             child: Text('Reject'),
                             onPressed: () {
                               if (rejectionReasonController.text.trim().isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Please enter rejection reason'),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
+                                commonService.presentToast('Please enter rejection reason');
                                 return;
                               }
                               Navigator.pop(context, true);
@@ -284,7 +279,6 @@ final CommonService commonService = CommonService();
         base64Images.add(base64Image);
       }
 
-      // Prepare rejection data
       final rejectionData = {
         "skuInventorySno": skuInventorySno,
         "rejectionReason": rejectionReasonController.text,
@@ -305,38 +299,14 @@ final CommonService commonService = CommonService();
       }
     } catch (e) {
       print('Error rejecting item: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to reject item. Please try again.'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      commonService.presentToast('Failed to reject item. Please try again.');
     }
   }
 
   Future<void> rejectFood(int skuInventorySno) async {
     await _showRejectionDialog(skuInventorySno);
   }
-  // Future<void> rejectFood(skuInventorySno) async {
-  //   print(skuInventorySno);
-  //   try {
-  //     // Fetch purchase order details
-  //
-  //     final result = await apiService.post('8912', 'masters', 'reject_sku',
-  //         {"skuInventorySno": skuInventorySno});
-  //     print(result);
-  //     if (result['data'] != null) {
-  //       inventoryItems = List<Map<String, dynamic>>.from(result['data']);
-  //       setState(() {});
-  //     }
-  //   } catch (e) {
-  //     print('Error fetching data: $e');
-  //   } finally {
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   }
-  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -568,7 +538,9 @@ final CommonService commonService = CommonService();
   }
 
   Widget _buildInventoryItem(Map<String, dynamic> item, int index) {
-    return Container(
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    
+    return isTablet? Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         border: Border(
@@ -682,6 +654,127 @@ final CommonService commonService = CommonService();
                     ),
                   ],
                 )
+              : Container()
+        ],
+      ),
+    ):Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey[200]!,
+            width: 1,
+          ),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.mintGreen.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(
+                    '${index + 1}',
+                    style: TextStyle(
+                      color: AppColors.mintGreen,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item['uniqueCode'],
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Stage: ${_getStageText(item['wfStageCd'])}',
+                    style: TextStyle(
+                      color: item['wfStageCd'] == 10
+                          ? Colors.green[600]
+                          : item['wfStageCd'] == 8
+                          ? Colors.red[600]
+                          : Colors.grey[600],
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          item['wfStageCd'] == 7
+              ? Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
+                    elevation: 0,
+                    shadowColor: Colors.greenAccent,
+                  ),
+                  icon: Icon(Icons.check, size: 20, color: Colors.white),
+                  label: Text(
+                    "Accept",
+                    style: TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    acceptFood(item['skuInventorySno']);
+                  },
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
+                    elevation: 0,
+                    shadowColor: Colors.redAccent,
+                  ),
+                  icon: Icon(Icons.close, size: 20, color: Colors.white),
+                  label: Text(
+                    "Reject",
+                    style: TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    rejectFood(item['skuInventorySno']);
+                  },
+                ),
+              ),
+            ],
+          )
               : Container()
         ],
       ),
