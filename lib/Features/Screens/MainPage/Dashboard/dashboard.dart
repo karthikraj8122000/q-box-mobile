@@ -42,8 +42,6 @@ class _DashboardState extends State<Dashboard>
   int columnCount = 0;
   int totalCellCount = 0;
 
-  late DashboardProvider _provider;
-  // Add new animation controller for header
   late AnimationController _headerController;
   List<InventoryItem> inventoryItems = [];
   bool isLoading = true;
@@ -95,7 +93,6 @@ class _DashboardState extends State<Dashboard>
       }
       print('Error loading inventory data: $e');
       commonService.presentToast('Failed to load inventory data: ${e.toString()}');
-
     }
   }
 
@@ -135,6 +132,9 @@ class _DashboardState extends State<Dashboard>
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
+        Future.delayed(Duration(seconds: 4), () {
+          Navigator.of(context).pop();
+        });
         return Container(
           padding: EdgeInsets.all(16),
           child: Column(
@@ -183,8 +183,8 @@ class _DashboardState extends State<Dashboard>
                 ),
               ),
               SizedBox(height: 16),
-              _buildDetailRow('Food Name', item.foodName),
               _buildDetailRow('Qbox ID', item.qboxId.toString()),
+              _buildDetailRow('Location', item.foodName),
               _buildDetailRow('Sku Code', item.foodCode.isNotEmpty ? item.foodCode : '--'),
               _buildDetailRow('Created at', item.storageDate.toString()),
             ],
@@ -230,6 +230,7 @@ class _DashboardState extends State<Dashboard>
               qboxLists = inventoryData['qboxes'] as List<dynamic>? ?? [];
               rowCount = int.tryParse(inventoryData["rowCount"]?.toString() ?? '0') ?? 0;
               columnCount = int.tryParse(inventoryData["columnCount"]?.toString() ?? '1') ?? 1;
+
             }
           }
 
@@ -439,13 +440,13 @@ class _DashboardState extends State<Dashboard>
   }
 
   Widget _buildQeuBoxStatus() {
-    final int totalCells = rowCount * columnCount;
+    final int totalCells = (rowCount) * (columnCount);
     final screenWidth = MediaQuery.of(context).size.width;
     final padding = 16.0;
     final cellWidth = (screenWidth - (padding * 2) - ((columnCount - 1) * 8)) / columnCount;
     final cellHeight = cellWidth * 1.2; // Maintain a good aspect ratio
     final fontSize = cellWidth * 0.12;
-
+    final count =  columnCount;
     return Column(
       children: [
         Container(
@@ -482,18 +483,19 @@ class _DashboardState extends State<Dashboard>
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: columnCount,
+              crossAxisCount: columnCount > 0 ? columnCount : 1,
               childAspectRatio: cellWidth / cellHeight,
               mainAxisSpacing: 8,
               crossAxisSpacing: 8,
             ),
             itemCount: totalCells,
             itemBuilder: (context, index) {
-              final cell = qboxLists[index];
-              if (cell != null) {
-                QBox qbox = QBox.fromMap(cell as Map<String, dynamic>);
-                return _buildGridCell(qbox, cellHeight,fontSize);
+              // final cell = qboxLists[index];
+              if (index < qboxLists.length && qboxLists[index] != null) {
+                QBox qbox = QBox.fromMap(qboxLists[index] as Map<String, dynamic>);
+                return _buildGridCell(qbox, cellHeight, fontSize);
               }
+
               return const SizedBox.shrink();
             },
           ),
@@ -506,84 +508,76 @@ class _DashboardState extends State<Dashboard>
   }
 
   Widget _buildGridCell(QBox qbox, double cellHeight,double fontSize) {
-    // rowCount = 4;
-    // columnCount = 4;
     totalCellCount = rowCount * columnCount;
     bool isFilled = qbox.foodCode.isNotEmpty;
-
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isFilled
-              ? [Colors.green.shade300, Colors.green.shade800]
-              : [Colors.red.shade300, Colors.red.shade800],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isFilled
-                ? Colors.green.shade300
-                : Colors.grey.withOpacity(0.1),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
+    return InkWell(
+      onTap: () {
+        if (isFilled) {
+          _showItemDetails(context, qbox);
+        } else {
+          _showEmptyItemDetails(context, qbox);
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: isFilled
+                ? [Colors.green.shade300, Colors.green.shade800]
+                : [Colors.red.shade300, Colors.red.shade800],
           ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (totalCellCount <= 25) ...[
-            Column(
-              children: [
-                isFilled? Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white, // Change to your desired outline color
-                      width: 2.0,          // Adjust the border width as needed
-                    ),
-                    borderRadius: BorderRadius.circular(100), // Same radius as ClipRRect
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: Image.asset(
-                      "assets/biriyani.jpg",
-                      height: cellHeight * 0.4,
-                      width: cellHeight * 0.4,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                )
-                    :Container(
-                  child: AppText(text: "EMPTY", fontSize: fontSize,color: AppColors.white,fontWeight: FontWeight.w900,),
-                )
-                // Icon(
-                //   Icons.question_mark_rounded,
-                //   size: cellHeight * 0.4,
-                //   color: AppColors.white,
-                // ),
-              ],
-            )
-          ] else ...[
+          boxShadow: [
+            BoxShadow(
+              color: isFilled
+                  ? Colors.green.shade300
+                  : Colors.grey.withOpacity(0.1),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
           ],
-          SizedBox(height: 5,),
-          Text('R${qbox.rowNo}-C${qbox.columnNo}',style: TextStyle(color:AppColors.white,fontSize:fontSize),),
-          SizedBox(height: 5,),
-          Text('${qbox.qboxId}',style: TextStyle(color: AppColors.white,fontSize:fontSize,fontWeight: FontWeight.w800),),
-          // Text(qbox.foodCode.isNotEmpty ? qbox.foodCode : 'Empty'),
-        ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (totalCellCount <= 25) ...[
+              Column(
+                children: [
+                  isFilled? Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.white, // Change to your desired outline color
+                        width: 2.0,          // Adjust the border width as needed
+                      ),
+                      borderRadius: BorderRadius.circular(100), // Same radius as ClipRRect
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Image.asset(
+                        "assets/biriyani.jpg",
+                        height: cellHeight * 0.4,
+                        width: cellHeight * 0.4,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  )
+                      :AppText(text: "EMPTY", fontSize: fontSize,color: AppColors.white,fontWeight: FontWeight.w900,)
+                ],
+              )
+            ] else ...[
+            ],
+            SizedBox(height: 5,),
+            Text('R${qbox.rowNo}-C${qbox.columnNo}',style: TextStyle(color:AppColors.white,fontSize:fontSize),),
+            SizedBox(height: 5,),
+            Text('${qbox.qboxId}',style: TextStyle(color: AppColors.white,fontSize:fontSize,fontWeight: FontWeight.w800),),
+            // Text(qbox.foodCode.isNotEmpty ? qbox.foodCode : 'Empty'),
+          ],
+        ),
       ),
     );
   }
 
-
-  String _truncateText(String text) {
-    if (text == 'EMPTY') return text;
-    List<String> words = text.split(' ');
-    if (words.length <= 2) return text;
-    return '${words[0]} ${words[1]}...';
-  }
 
   Widget _buildItemCount() {
     Map<String, int> foodCounts = {};

@@ -73,13 +73,19 @@ class AppRouter {
         path: NotificationHistoryScreen.routeName,
         builder: (_, __) => const NotificationHistoryScreen(),
       ),
-
+      // GoRoute(
+      //   name: ViewOrder.routeName,
+      //   path: ViewOrder.routeName,
+      //   builder: (_, __) => const ViewOrder(),
+      // ),
       GoRoute(
         name: ViewOrder.routeName,
         path: ViewOrder.routeName,
-        builder: (_, __) => const ViewOrder(),
+        builder: (context, state) {
+  final purchaseOrder = state.extra;
+  return ViewOrder(purchaseOrder:purchaseOrder);
+  }
       ),
-
       ShellRoute(
         navigatorKey: _mainMenuNavigatorKey,
         builder: (_, __, child) {

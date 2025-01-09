@@ -33,47 +33,54 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
   }
 
   Widget _buildOTPFields() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        5,
-        (index) => Container(
-          width: 60,
-          margin: EdgeInsets.all(12),
-          child: TextField(
-            controller: _controllers[index],
-            focusNode: _focusNodes[index],
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.text,
-            maxLength: 1,
-            decoration: InputDecoration(
-              counterText: '',
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.mintGreen),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.mintGreen, width: 2),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.red),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Adjust the width of each OTP field based on screen width
+        double fieldWidth = constraints.maxWidth * 0.12; // Adjust as needed
+        double fieldMargin = constraints.maxWidth * 0.02; // Adjust as needed
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            5,
+                (index) => Container(
+              width: fieldWidth.clamp(40.0, 70.0), // Minimum and maximum width limits
+              margin: EdgeInsets.symmetric(horizontal: fieldMargin),
+              child: TextField(
+                controller: _controllers[index],
+                focusNode: _focusNodes[index],
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.text,
+                maxLength: 1,
+                decoration: InputDecoration(
+                  counterText: '',
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.mintGreen),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.mintGreen, width: 2),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                ),
+                onChanged: (value) {
+                  if (value.length == 1 && index < 4) {
+                    _focusNodes[index + 1].requestFocus();
+                  }
+                  if (value.isEmpty && index > 0) {
+                    _focusNodes[index - 1].requestFocus();
+                  }
+                },
               ),
             ),
-            onChanged: (value) {
-              if (value.length == 1 && index < 4) {
-                _focusNodes[index + 1].requestFocus();
-              }
-              if (value.isEmpty && index > 0) {
-                _focusNodes[index - 1].requestFocus();
-              }
-            },
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   Widget _buildInitialScanView() {
-    final provider = Provider.of<InwardOrderDtlProvider>(context);
     return Column(
       children: [
         Padding(
@@ -138,8 +145,9 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
+              SizedBox(height: 20),
               _buildOTPFields(),
-              SizedBox(height: 24),
+              SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(16),
@@ -162,7 +170,7 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
                       foregroundColor: AppColors.mintGreen,
                       side: BorderSide(color: AppColors.mintGreen)
                   ),
-                  onPressed: () {
+                  onPressed: (){
                     GoRouter.of(context).push(ViewOrder.routeName);
                   },
                   label: Text("Go To Orders")
@@ -171,6 +179,13 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  void onScanComplete(String scannedOrderId) {
+    GoRouter.of(context).push(
+      ViewOrder.routeName,
+      extra: scannedOrderId,
     );
   }
 

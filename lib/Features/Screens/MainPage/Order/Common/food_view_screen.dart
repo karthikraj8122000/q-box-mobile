@@ -29,7 +29,7 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
   final ImagePicker _picker = ImagePicker();
   List<File> selectedImages = [];
   TextEditingController rejectionReasonController = TextEditingController();
-final CommonService commonService = CommonService();
+  final CommonService commonService = CommonService();
 
   @override
   void initState() {
@@ -160,16 +160,19 @@ final CommonService commonService = CommonService();
                               child: ListView(
                                 scrollDirection: Axis.horizontal,
                                 children: [
-                                  ...selectedImages.map(
+                                  ...selectedImages
+                                      .map(
                                         (image) => Padding(
-                                      padding: const EdgeInsets.only(right: 8),
+                                      padding:
+                                      const EdgeInsets.only(right: 8),
                                       child: Stack(
                                         children: [
                                           Container(
                                             width: 100,
                                             height: 100,
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(8),
+                                              borderRadius:
+                                              BorderRadius.circular(8),
                                               image: DecorationImage(
                                                 image: FileImage(image),
                                                 fit: BoxFit.cover,
@@ -185,10 +188,13 @@ final CommonService commonService = CommonService();
                                                 shape: BoxShape.circle,
                                               ),
                                               child: IconButton(
-                                                icon: Icon(Icons.close, color: Colors.red, size: 20),
+                                                icon: Icon(Icons.close,
+                                                    color: Colors.red,
+                                                    size: 20),
                                                 onPressed: () {
                                                   setState(() {
-                                                    selectedImages.remove(image);
+                                                    selectedImages
+                                                        .remove(image);
                                                   });
                                                 },
                                               ),
@@ -197,17 +203,20 @@ final CommonService commonService = CommonService();
                                         ],
                                       ),
                                     ),
-                                  ).toList(),
+                                  )
+                                      .toList(),
                                   if (selectedImages.length < 3)
                                     InkWell(
                                       onTap: () async {
-                                        final XFile? image = await _picker.pickImage(
+                                        final XFile? image =
+                                        await _picker.pickImage(
                                           source: ImageSource.camera,
                                           imageQuality: 70,
                                         );
                                         if (image != null) {
                                           setState(() {
-                                            selectedImages.add(File(image.path));
+                                            selectedImages
+                                                .add(File(image.path));
                                           });
                                         }
                                       },
@@ -216,7 +225,8 @@ final CommonService commonService = CommonService();
                                         height: 100,
                                         decoration: BoxDecoration(
                                           color: Colors.grey[200],
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                          BorderRadius.circular(8),
                                         ),
                                         child: Icon(
                                           Icons.camera_alt,
@@ -238,7 +248,10 @@ final CommonService commonService = CommonService();
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            child: Text('Cancel',style: TextStyle(color: AppColors.black),),
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(color: AppColors.black),
+                            ),
                             onPressed: () => Navigator.pop(context),
                           ),
                           SizedBox(width: 8),
@@ -249,8 +262,11 @@ final CommonService commonService = CommonService();
                             ),
                             child: Text('Reject'),
                             onPressed: () {
-                              if (rejectionReasonController.text.trim().isEmpty) {
-                                commonService.presentToast('Please enter rejection reason');
+                              if (rejectionReasonController.text
+                                  .trim()
+                                  .isEmpty) {
+                                commonService.presentToast(
+                                    'Please enter rejection reason');
                                 return;
                               }
                               Navigator.pop(context, true);
@@ -471,314 +487,326 @@ final CommonService commonService = CommonService();
   }
 
   Widget _buildInventoryList() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 15,
-            offset: Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          InkWell(
-            onTap: () {
-              setState(() {
-                isExpanded = !isExpanded;
-              });
-            },
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.inventory_2,
-                    color: AppColors.mintGreen,
-                    size: 24,
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      'Inventory Items (${inventoryItems?.length ?? 0})',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Icon(
-                    isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: Colors.grey[600],
-                  ),
-                ],
+    return Column(
+      children: [
+
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 15,
+                offset: Offset(0, 5),
               ),
-            ),
+            ],
           ),
-          if (isExpanded) ...[
-            Divider(height: 1),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: inventoryItems?.length ?? 0,
-              itemBuilder: (context, index) {
-                final item = inventoryItems![index];
-                return _buildInventoryItem(item, index);
-              },
-            ),
-          ],
-        ],
-      ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    isExpanded = !isExpanded;
+                  });
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.inventory_2,
+                        color: AppColors.mintGreen,
+                        size: 24,
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Inventory Items (${inventoryItems?.length ?? 0})',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        isExpanded ? Icons.expand_less : Icons.expand_more,
+                        color: Colors.grey[600],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              if (isExpanded) ...[
+                Divider(height: 1),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: inventoryItems?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final item = inventoryItems![index];
+                    return _buildInventoryItem(item, index);
+                  },
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildInventoryItem(Map<String, dynamic> item, int index) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-    
-    return isTablet? Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey[200]!,
-            width: 1,
-          ),
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
+
+    return isTablet
+        ? Container(
+            padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.mintGreen.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(
-              child: Text(
-                '${index + 1}',
-                style: TextStyle(
-                  color: AppColors.mintGreen,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.grey[200]!,
+                  width: 1,
                 ),
               ),
             ),
-          ),
-          SizedBox(width: 16),
-          Expanded(
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: AppColors.mintGreen.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${index + 1}',
+                      style: TextStyle(
+                        color: AppColors.mintGreen,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item['uniqueCode'],
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Stage: ${_getStageText(item['wfStageCd'])}',
+                        style: TextStyle(
+                          color: item['wfStageCd'] == 10
+                              ? Colors.green[600]
+                              : item['wfStageCd'] == 8
+                                  ? Colors.red[600]
+                                  : Colors.grey[600],
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                item['wfStageCd'] == 7
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
+                                elevation: 0,
+                                shadowColor: Colors.greenAccent,
+                              ),
+                              icon: Icon(Icons.check,
+                                  size: 20, color: Colors.white),
+                              label: Text(
+                                "Accept",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () {
+                                acceptFood(item['skuInventorySno']);
+                              },
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
+                                elevation: 0,
+                                shadowColor: Colors.redAccent,
+                              ),
+                              icon: Icon(Icons.close,
+                                  size: 20, color: Colors.white),
+                              label: Text(
+                                "Reject",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () {
+                                rejectFood(item['skuInventorySno']);
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container()
+              ],
+            ),
+          )
+        : Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.grey[200]!,
+                  width: 1,
+                ),
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  item['uniqueCode'],
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'Stage: ${_getStageText(item['wfStageCd'])}',
-                  style: TextStyle(
-                    color: item['wfStageCd'] == 10
-                        ? Colors.green[600]
-                        : item['wfStageCd'] == 8
-                            ? Colors.red[600]
-                            : Colors.grey[600],
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          item['wfStageCd'] == 7
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                Row(
                   children: [
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
-                          elevation: 0,
-                          shadowColor: Colors.greenAccent,
-                        ),
-                        icon: Icon(Icons.check, size: 20, color: Colors.white),
-                        label: Text(
-                          "Accept",
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.mintGreen.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${index + 1}',
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                            color: AppColors.mintGreen,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
-                        onPressed: () {
-                          acceptFood(item['skuInventorySno']);
-                        },
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.red,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
-                          elevation: 0,
-                          shadowColor: Colors.redAccent,
-                        ),
-                        icon: Icon(Icons.close, size: 20, color: Colors.white),
-                        label: Text(
-                          "Reject",
+                    SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item['uniqueCode'],
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                          ),
                         ),
-                        onPressed: () {
-                          rejectFood(item['skuInventorySno']);
-                        },
-                      ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Stage: ${_getStageText(item['wfStageCd'])}',
+                          style: TextStyle(
+                            color: item['wfStageCd'] == 10
+                                ? Colors.green[600]
+                                : item['wfStageCd'] == 8
+                                    ? Colors.red[600]
+                                    : Colors.grey[600],
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
-                )
-              : Container()
-        ],
-      ),
-    ):Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey[200]!,
-            width: 1,
-          ),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppColors.mintGreen.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
                 ),
-                child: Center(
-                  child: Text(
-                    '${index + 1}',
-                    style: TextStyle(
-                      color: AppColors.mintGreen,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item['uniqueCode'],
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    'Stage: ${_getStageText(item['wfStageCd'])}',
-                    style: TextStyle(
-                      color: item['wfStageCd'] == 10
-                          ? Colors.green[600]
-                          : item['wfStageCd'] == 8
-                          ? Colors.red[600]
-                          : Colors.grey[600],
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          item['wfStageCd'] == 7
-              ? Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                    elevation: 0,
-                    shadowColor: Colors.greenAccent,
-                  ),
-                  icon: Icon(Icons.check, size: 20, color: Colors.white),
-                  label: Text(
-                    "Accept",
-                    style: TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    acceptFood(item['skuInventorySno']);
-                  },
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                    elevation: 0,
-                    shadowColor: Colors.redAccent,
-                  ),
-                  icon: Icon(Icons.close, size: 20, color: Colors.white),
-                  label: Text(
-                    "Reject",
-                    style: TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed: () {
-                    rejectFood(item['skuInventorySno']);
-                  },
-                ),
-              ),
-            ],
-          )
-              : Container()
-        ],
-      ),
-    );
+                item['wfStageCd'] == 7
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 12),
+                                elevation: 0,
+                                shadowColor: Colors.greenAccent,
+                              ),
+                              icon: Icon(Icons.check,
+                                  size: 20, color: Colors.white),
+                              label: Text(
+                                "Accept",
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () {
+                                acceptFood(item['skuInventorySno']);
+                              },
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 12),
+                                elevation: 0,
+                                shadowColor: Colors.redAccent,
+                              ),
+                              icon: Icon(Icons.close,
+                                  size: 20, color: Colors.white),
+                              label: Text(
+                                "Reject",
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () {
+                                rejectFood(item['skuInventorySno']);
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container()
+              ],
+            ),
+          );
   }
 
   Widget _buildInfoRow(String label, String value, IconData icon,
@@ -850,6 +878,12 @@ final CommonService commonService = CommonService();
         return 'Rejected';
       case 10:
         return 'Accepted';
+      case 12:
+        return 'Sku returned to Hot box';
+      case 11:
+        return 'Sku loaded in Q-box';
+      case 13:
+        return 'Outward Delivery Picked up';
       default:
         return 'Unknown Stage';
     }

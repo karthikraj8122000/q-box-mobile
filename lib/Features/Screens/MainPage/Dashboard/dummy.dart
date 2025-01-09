@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/Login/second_login.dart';
 import 'package:qr_page/Model/Data_Models/dashboard_model/dashboard_model.dart';
-import 'package:qr_page/Model/dummy_model.dart';
 import 'package:qr_page/Provider/dashboard_provider.dart';
 import 'package:qr_page/Services/toast_service.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
@@ -30,6 +29,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard>
     with SingleTickerProviderStateMixin {
+
   Animation<double>? _animation;
   late List<dynamic> qboxLists = [];
   late final qboxCount;
@@ -40,7 +40,6 @@ class _DashboardState extends State<Dashboard>
   int skuInventoryCount = 0;
   int rowCount = 0;
   int columnCount = 0;
-  String entityName = '';
   int totalCellCount = 0;
 
   late DashboardProvider _provider;
@@ -49,43 +48,6 @@ class _DashboardState extends State<Dashboard>
   List<InventoryItem> inventoryItems = [];
   bool isLoading = true;
   final _authService = AuthService();
-
-  final Map<String, dynamic> staticData = {
-    "data": {
-      "qboxCounts": [
-        {"description": "EMPTY", "skuInventorySnoCount": 1},
-      ],
-      "qboxInventory": {
-        "qboxes": [
-          {
-            "rowNo": 1,
-            "qboxId": 164,
-            "columnNo": 1,
-            "foodCode": "MAA-SWG-A2B-SIVM-20240505-93-004",
-            "foodName": "EMPTY"
-          },
-          {
-            "rowNo": 1,
-            "qboxId": 165,
-            "columnNo": 2,
-            "foodCode": null,
-            "foodName": "EMPTY"
-          },
-        ],
-        "rowCount": "2",
-        "columnCount": "2",
-        "qboxEntityName": "10 mins Adyar"
-      }
-    }
-  };
-
-  void _initializeStaticData() {
-    final inventoryData = staticData['data']['qboxInventory'];
-    qboxLists = inventoryData['qboxes'] as List<dynamic>;
-    rowCount = int.parse(inventoryData['rowCount']);
-    columnCount = int.parse(inventoryData['columnCount']);
-    entityName = inventoryData['qboxEntityName'];
-  }
 
   Future<void> loadInventoryData() async {
     if (!mounted) return;
@@ -119,8 +81,7 @@ class _DashboardState extends State<Dashboard>
       if (mounted) {
         setState(() {
           inventoryItems = decodedData
-              .map((item) =>
-              InventoryItem.fromJson(Map<String, dynamic>.from(item)))
+              .map((item) => InventoryItem.fromJson(Map<String, dynamic>.from(item)))
               .toList();
           isLoading = false;
         });
@@ -133,8 +94,7 @@ class _DashboardState extends State<Dashboard>
         });
       }
       print('Error loading inventory data: $e');
-      commonService
-          .presentToast('Failed to load inventory data: ${e.toString()}');
+      commonService.presentToast('Failed to load inventory data: ${e.toString()}');
     }
   }
 
@@ -146,7 +106,6 @@ class _DashboardState extends State<Dashboard>
   void initState() {
     super.initState();
     _loadData();
-    _initializeStaticData();
     _headerController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -225,8 +184,7 @@ class _DashboardState extends State<Dashboard>
               SizedBox(height: 16),
               _buildDetailRow('Food Name', item.foodName),
               _buildDetailRow('Qbox ID', item.qboxId.toString()),
-              _buildDetailRow(
-                  'Sku Code', item.foodCode.isNotEmpty ? item.foodCode : '--'),
+              _buildDetailRow('Sku Code', item.foodCode.isNotEmpty ? item.foodCode : '--'),
               _buildDetailRow('Created at', item.storageDate.toString()),
             ],
           ),
@@ -237,192 +195,175 @@ class _DashboardState extends State<Dashboard>
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DashboardProvider>(builder: (context, provider, child) {
-      if (provider.isLoading) {
-        return const Center(
-            child: CircularProgressIndicator(
-              color: AppColors.mintGreen,
-            ));
-      }
-      if (provider.error != null) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(provider.error!),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.mintGreen),
-                onPressed: _loadData,
-                child: Text('Retry'),
+    return Consumer<DashboardProvider>(
+        builder: (context, provider,child) {
+          if (provider.isLoading) {
+            return const Center(child: CircularProgressIndicator(color: AppColors.mintGreen,));
+          }
+          if (provider.error != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(provider.error!),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.mintGreen),
+                    onPressed: _loadData,
+                    child: Text('Retry'),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
-      }
-      if (provider.qboxLists.isNotEmpty) {
-        var firstItem =
-        provider.qboxLists.isNotEmpty ? provider.qboxLists[0] : null;
-        var secondItem =
-        provider.qboxLists.length > 1 ? provider.qboxLists[1] : null;
+            );
+          }
+          if (provider.qboxLists.isNotEmpty) {
+            var firstItem = provider.qboxLists.isNotEmpty ? provider.qboxLists[0] : null;
+            var secondItem = provider.qboxLists.length > 1 ? provider.qboxLists[1] : null;
 
-        if (firstItem is Map<String, dynamic>) {
-          foodCountData = firstItem;
-          skuInventoryCount = int.tryParse(
-              foodCountData['skuInventorySnoCount']?.toString() ?? '0') ??
-              0;
-        }
+            if (firstItem is Map<String, dynamic>) {
+              foodCountData = firstItem;
+              skuInventoryCount = int.tryParse(foodCountData['skuInventorySnoCount']?.toString() ?? '0') ?? 0;
+            }
 
-        if (secondItem is Map<String, dynamic>) {
-          inventoryData = secondItem;
-          qboxLists = inventoryData['qboxes'] as List<dynamic>? ?? [];
-          rowCount =
-              int.tryParse(inventoryData["rowCount"]?.toString() ?? '0') ?? 0;
-          columnCount =
-              int.tryParse(inventoryData["columnCount"]?.toString() ?? '1') ??
-                  1;
-        }
-      }
+            if (secondItem is Map<String, dynamic>) {
+              inventoryData = secondItem;
+              qboxLists = inventoryData['qboxes'] as List<dynamic>? ?? [];
+              rowCount = int.tryParse(inventoryData["rowCount"]?.toString() ?? '0') ?? 0;
+              columnCount = int.tryParse(inventoryData["columnCount"]?.toString() ?? '1') ?? 1;
+            }
+          }
 
-      return NetworkWrapper(
-        child: SafeArea(
-          child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: AppColors.mintGreen,
-              automaticallyImplyLeading: false,
-              title: Align(
-                  alignment: Alignment.center,
-                  child: AppText(
-                    text: inventoryData?['qboxEntityName'] ?? "Entity",
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                  )),
-              actions: [
-                // Wrap your IconButton with this code
-                IconButton(
-                  icon: const Icon(Icons.logout_sharp),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Dialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(
-                                  Icons.logout_rounded,
-                                  color: Colors.red,
-                                  size: 48,
+          return NetworkWrapper(
+            child: SafeArea(
+              child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: AppColors.mintGreen,
+                  automaticallyImplyLeading: false,
+                  title: Align(
+                      alignment: Alignment.center,
+                      child: AppText(
+                        text: inventoryData?['qboxEntityName'] ?? "Entity",
+                        fontSize: 24,fontWeight: FontWeight.w900,)),
+                  actions: [
+                    // Wrap your IconButton with this code
+                    IconButton(
+                      icon: const Icon(Icons.logout_sharp),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
-                                const SizedBox(height: 16),
-                                const Text(
-                                  'Logout',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                const Text(
-                                  'Are you sure you want to logout?',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                const SizedBox(height: 24),
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Expanded(
-                                      child: TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        style: TextButton.styleFrom(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 12),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          'Cancel',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black54,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
+                                    const Icon(
+                                      Icons.logout_rounded,
+                                      color: Colors.red,
+                                      size: 48,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    const Text(
+                                      'Logout',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
                                       ),
                                     ),
-                                    const SizedBox(width: 16),
-                                    Expanded(
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          GoRouter.of(context)
-                                              .push(LoginScreen.routeName);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.red,
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 12),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          'Logout',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      'Are you sure you want to logout?',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black87,
                                       ),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Expanded(
+                                          child: TextButton(
+                                            onPressed: () => Navigator.pop(context),
+                                            style: TextButton.styleFrom(
+                                              padding: const EdgeInsets.symmetric(vertical: 12),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'Cancel',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Expanded(
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              GoRouter.of(context).push(LoginScreen.routeName);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.red,
+                                              padding: const EdgeInsets.symmetric(vertical: 12),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(8),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'Logout',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ),
+                              ),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                )
-              ],
-            ),
-            body: RefreshIndicator(
-              onRefresh: _loadData,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    _buildCurrentTime(),
-                    _buildInventoryTable(),
-                    _buildQeuBoxStatus(),
-                    _buildHotBoxStatus(),
+                    )
                   ],
+                ),
+                body: RefreshIndicator(
+                  onRefresh: _loadData,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildCurrentTime(),
+                        _buildInventoryTable(),
+                        _buildQeuBoxStatus(),
+                        _buildHotBoxStatus(),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
-      );
-    });
+          );
+        }
+    );
   }
 
   Widget _buildDetailRow(String label, String value) {
@@ -491,25 +432,17 @@ class _DashboardState extends State<Dashboard>
       );
     }
 
-    return InventoryTableWidget(inventoryItems: inventoryItems)
-        .animate()
+    return InventoryTableWidget(inventoryItems: inventoryItems).animate()
         .fadeIn(duration: 500.ms)
         .slideX(begin: 0.2, end: 0);
   }
 
-
   Widget _buildQeuBoxStatus() {
+    final int totalCells = rowCount * columnCount;
     final screenWidth = MediaQuery.of(context).size.width;
     final padding = 16.0;
-    final qboxInventory = staticData['data']['qboxInventory'];
-    final rowCount = int.parse(qboxInventory['rowCount']);
-    final columnCount = int.parse(qboxInventory['columnCount']);
-    final entityName = qboxInventory['qboxEntityName'];
-    final qboxes = qboxInventory['qboxes'] as List<dynamic>;
-
-    final cellWidth =
-        (screenWidth - (padding * 2) - ((columnCount - 1) * 8)) / columnCount;
-    final cellHeight = cellWidth * 1.2;
+    final cellWidth = (screenWidth - (padding * 2) - ((columnCount - 1) * 8)) / columnCount;
+    final cellHeight = cellWidth * 1.2; // Maintain a good aspect ratio
     final fontSize = cellWidth * 0.12;
 
     return Column(
@@ -531,13 +464,13 @@ class _DashboardState extends State<Dashboard>
               ),
             ],
           ),
-          child: Text(
-            'QBox - Current Status ($entityName)',
+          child: const Text(
+            'QBox - Current Status',
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: AppColors.white
             ),
           ),
         ),
@@ -553,30 +486,25 @@ class _DashboardState extends State<Dashboard>
               mainAxisSpacing: 8,
               crossAxisSpacing: 8,
             ),
-            itemCount: rowCount * columnCount,
+            itemCount: totalCells,
             itemBuilder: (context, index) {
-              final qboxData = qboxes.firstWhere(
-                    (qbox) =>
-                qbox['rowNo'] == (index ~/ columnCount + 1) &&
-                    qbox['columnNo'] == (index % columnCount + 1),
-                orElse: () => {
-                  'rowNo': index ~/ columnCount + 1,
-                  'columnNo': index % columnCount + 1,
-                  'foodName': 'EMPTY',
-                  'qboxId': -1
-                },
-              );
-              final QBoxCell qbox = QBoxCell.fromMap(qboxData);
-              return _buildGridCell(qbox, cellHeight,fontSize);
+              final cell = qboxLists[index];
+              if (cell != null) {
+                QBox qbox = QBox.fromMap(cell as Map<String, dynamic>);
+                return _buildGridCell(qbox, cellHeight,fontSize);
+              }
+              return const SizedBox.shrink();
             },
           ),
         ),
         const SizedBox(height: 16),
+        _buildItemCount(),
+        const SizedBox(height: 20),
       ],
     );
   }
 
-  Widget _buildGridCell(QBoxCell qbox, double cellHeight,double fontSize) {
+  Widget _buildGridCell(QBox qbox, double cellHeight,double fontSize) {
     totalCellCount = rowCount * columnCount;
     bool isFilled = qbox.foodCode.isNotEmpty;
 
@@ -623,7 +551,10 @@ class _DashboardState extends State<Dashboard>
                       fit: BoxFit.cover,
                     ),
                   ),
-                ):AppText(text: "EMPTY", fontSize: fontSize,color: AppColors.white,)
+                )
+                    :Container(
+                  child: AppText(text: "EMPTY", fontSize: fontSize,color: AppColors.white,fontWeight: FontWeight.w900,),
+                )
               ],
             )
           ] else ...[
@@ -636,6 +567,94 @@ class _DashboardState extends State<Dashboard>
         ],
       ),
     );
+  }
+
+
+  Widget _buildItemCount() {
+    Map<String, int> foodCounts = {};
+    final int totalVisibleCells = rowCount * columnCount;
+
+    for (int i = 0; i < totalVisibleCells && i < qboxLists.length; i++) {
+      var boxData = qboxLists[i];
+      String foodName = boxData['foodName'];
+      if (foodName.isNotEmpty) {
+        foodCounts[foodName] = (foodCounts[foodName] ?? 0) + 1;
+      }
+    }
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Food Item Counts:",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.mintGreen,
+            ),
+          ),
+          SizedBox(height: 8),
+          SizedBox(
+            height: 50,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: foodCounts.length,
+              itemBuilder: (context, index) {
+                final entry = foodCounts.entries.elementAt(index);
+                return Container(
+                  margin: EdgeInsets.only(right: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        entry.key,
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                      SizedBox(width: 8),
+                      Container(
+                        padding:
+                        EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: AppColors.mintGreen,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '${entry.value}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    ).animate()
+        .fadeIn(duration: 500.ms)
+        .slideX(begin: 0.2, end: 0);
   }
 
   // Enhanced Hot Box status

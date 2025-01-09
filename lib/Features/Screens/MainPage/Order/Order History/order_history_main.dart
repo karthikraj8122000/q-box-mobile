@@ -129,28 +129,6 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
   }
 
 
-  Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.history,
-            size: 64,
-            color: Colors.grey,
-          ),
-          SizedBox(height: 16),
-          Text(
-            'No order history',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Colors.grey,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
 
   void _showFilterBottomSheet(BuildContext context, FoodStoreProvider provider) {
     showModalBottomSheet(

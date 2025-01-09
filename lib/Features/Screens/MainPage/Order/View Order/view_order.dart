@@ -8,8 +8,8 @@ import '../Common/order_card.dart';
 
 class ViewOrder extends StatefulWidget {
   static const String routeName = '/view-order';
-  const ViewOrder({super.key});
-
+  final purchaseOrder;
+  const ViewOrder({super.key,required this.purchaseOrder});
   @override
   State<ViewOrder> createState() => _ViewOrderState();
 }
@@ -66,6 +66,7 @@ class _ViewOrderState extends State<ViewOrder> {
               ),
             );
           }
+
           return SingleChildScrollView(
               child: provider.purchaseOrders.isEmpty
                   ? Center(child: NoDataFound(title: "orders"))
@@ -78,7 +79,7 @@ class _ViewOrderState extends State<ViewOrder> {
                             itemCount: provider.purchaseOrders.length,
                             itemBuilder: (context, index) {
                               return OrderCard(
-                                      order: provider.purchaseOrders[index]);
+                                      order: provider.purchaseOrders[0]);
                             },
                           ),
                         ),

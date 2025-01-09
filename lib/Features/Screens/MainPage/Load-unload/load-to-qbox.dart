@@ -50,7 +50,7 @@ class _LoadQboxState extends State<LoadQbox> {
         "uniqueCode": foodBarcode,
         "wfStageCd": 11,
         "boxCellSno": qBoxBarcode,
-        "qboxEntitySno": 22
+        "qboxEntitySno": 26
       };
 
       print('$body');
@@ -286,6 +286,7 @@ class _LoadQboxState extends State<LoadQbox> {
   }
 
   Widget _buildQuickActions() {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -298,6 +299,7 @@ class _LoadQboxState extends State<LoadQbox> {
           ),
         ),
         SizedBox(height: 16),
+        if(isTablet)
         Row(
           children: [
             Expanded(
@@ -318,7 +320,25 @@ class _LoadQboxState extends State<LoadQbox> {
               ),
             ),
           ],
-        ),
+        )
+    else
+          Column(
+            children: [
+              _buildActionCard(
+                'Compartment',
+                Icons.qr_code_scanner_rounded,
+                'Scan compartment QR',
+                Color(0xFFFEE2E2),
+              ),
+              SizedBox(height: 16),
+              _buildActionCard(
+                'Food Item',
+                Icons.fastfood_rounded,
+                'Scan food item',
+                Color(0xFFFEE2E2),
+              ),
+            ],
+          )
       ],
     ).animate().fadeIn(duration: 700.ms);
   }

@@ -26,11 +26,12 @@ class _UnloadQboxState extends State<UnloadQbox> {
   final CommonService commonService = CommonService();
   bool get isReadyToLoad => qBoxOutBarcode.isNotEmpty;
 
+
   unloadFromQBox() async {
     Map<String, dynamic> body = {
       "uniqueCode": qBoxOutBarcode,
       "wfStageCd":12,
-      "qboxEntitySno": 22
+      "qboxEntitySno": 26
     };
     try {
       var result = await apiService.post("8912", "masters","unload_sku_from_qbox_to_hotbox", body);
@@ -228,110 +229,6 @@ class _UnloadQboxState extends State<UnloadQbox> {
         ],
       ),
     ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2);
-  }
-
-  Widget _buildDispatchStats(BuildContext context, FoodStoreProvider provider) {
-    return Container(
-      padding: EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.mintGreen,
-        borderRadius: BorderRadius.circular(32),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Icon(
-                  Icons.sell_outlined,
-                  color: Colors.white,
-                  size: 32,
-                ),
-              ),
-              SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Ready for sale',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      provider.foodItems.length > 1
-                          ? '${provider.foodItems.length} Items'
-                          : '${provider.foodItems.length} Item',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 24),
-          Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildDispatchStat('Pending', '12'),
-                _buildVerticalDivider(),
-                _buildDispatchStat('In Transit', '5'),
-                _buildVerticalDivider(),
-                _buildDispatchStat('Delivered', '28'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ).animate().fadeIn(duration: 800.ms).slideY(begin: -0.2, end: 0);
-  }
-
-  Widget _buildVerticalDivider() {
-    return Container(
-      height: 40,
-      width: 1,
-      color: Colors.white.withOpacity(0.2),
-    );
-  }
-
-  Widget _buildDispatchStat(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.8),
-            fontSize: 12,
-          ),
-        ),
-      ],
-    );
   }
 
   Widget _buildScanSection(BuildContext context, FoodStoreProvider provider) {

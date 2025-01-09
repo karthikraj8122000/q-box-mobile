@@ -81,7 +81,7 @@ class FoodStoreProvider with ChangeNotifier {
 
   Future<void> getQboxes() async {
     print("Fetching Qboxes...");
-    Map<String, dynamic> params = {"qboxEntitySno": 22};
+    Map<String, dynamic> params = {"qboxEntitySno": 26};
     try {
       var result = await apiService.post(
           "8911", "masters", "get_box_cell_inventory", params);

@@ -8,12 +8,14 @@ import 'package:qr_page/Services/api_service.dart';
 import 'package:qr_page/Services/toast_service.dart';
 
 class InwardOrderDtlProvider extends ChangeNotifier {
+
   String _scanStatus = "notComplete";
   List _purchaseOrders = [];
   final ApiService _apiService = ApiService();
   final CommonService commonService = CommonService();
   bool _isLoading = true;
   String? _error;
+
 
   String get scanStatus => _scanStatus;
   List get purchaseOrders => _purchaseOrders;
@@ -65,20 +67,42 @@ class InwardOrderDtlProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getTotalItems() async {
+  Future<void> getTotalItems({String? partnerPurchaseOrderId}) async {
     const String endpoint = 'search_purchase_order';
     const String port = '8912';
     const String service = 'masters';
 
+    print("params");
     try {
       _isLoading = true;
       _error = null;
       notifyListeners();
 
-      final response = await _apiService.post(port, service, endpoint, {});
+      final Map<String, dynamic> params = {};
+      if (partnerPurchaseOrderId != null) {
+        params['partnerPurchaseOrderId'] = partnerPurchaseOrderId;
+      }
+
+      final response = await _apiService.post(port, service, endpoint,{});
       if(response != null && response['data'] != null){
-        _purchaseOrders = response['data'];
-        notifyListeners();
+        // _purchaseOrders = response['data'];
+        // notifyListeners();
+        if (partnerPurchaseOrderId != null) {
+          // If searching for specific order, find it in the response
+          final orders = response['data'] as List;
+          _purchaseOrders = orders.firstWhere(
+                (order) => order['partnerPurchaseOrderId'] == partnerPurchaseOrderId,
+            orElse: () => null,
+          );
+
+          if (_purchaseOrders.isEmpty){
+            _error = 'Order not found';
+            commonService.errorToast(_error!);
+          }
+        } else {
+          // If no specific order requested, store all orders
+          _purchaseOrders = response['data'];
+        }
       }else{
         _error = 'Failed to retrieve the data.';
         commonService.errorToast(_error!);
@@ -108,7 +132,7 @@ class InwardOrderDtlProvider extends ChangeNotifier {
 
     try {
       final response = await _apiService.post(port, service, endpoint, requestBody);
-
+print("response$response");
       if (response['data'] != null && response['data']["purchaseOrder"] != null) {
         await getTotalItems();
         _scanStatus = 'complete';

@@ -20,12 +20,13 @@ class DashboardProvider with ChangeNotifier {
       _error = null;
       notifyListeners();
 
-      Map<String, dynamic> params = {"qboxEntitySno": 22};
+      Map<String, dynamic> params = {"qboxEntitySno": 26};
       var result = await apiService.post(
           "8911", "masters", "get_box_cell_inventory", params);
 
       if (result != null && result['data'] != null) {
         _qboxList = result['data'].values.toList();
+        print('_qboxList$_qboxList');
       } else {
         _error = 'Failed to retrieve the data.';
         commonService.errorToast(_error!);
