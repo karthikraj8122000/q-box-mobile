@@ -13,7 +13,7 @@ class CommonService extends ChangeNotifier{
       gravity: gravity ?? ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
       backgroundColor: backgroundColor,
-      textColor: textColor
+      textColor: Colors.green
     );
   }
 

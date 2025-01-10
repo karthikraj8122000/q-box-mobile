@@ -41,7 +41,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
     Map<String, dynamic> body = {
       "uniqueCode": qBoxOutBarcode,
       "wfStageCd":12,
-      "qboxEntitySno": widget.qboxEntitySno
+      "qboxEntitySno": 28
     };
     try {
       var result = await apiService.post("8912", "masters","unload_sku_from_qbox_to_hotbox", body);

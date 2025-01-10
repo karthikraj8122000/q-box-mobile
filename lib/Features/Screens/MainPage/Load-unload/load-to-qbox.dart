@@ -32,7 +32,7 @@ class _LoadQboxState extends State<LoadQbox> {
   void initState() {
     super.initState();
     // WidgetsBinding.instance.addPostFrameCallback((_) {
-    print('qboxEntityss${widget.qboxEntitySno}');
+    // print('qboxEntityss${widget.qboxEntitySno}');
     // });
   }
 
@@ -62,7 +62,7 @@ class _LoadQboxState extends State<LoadQbox> {
         "uniqueCode": foodBarcode,
         "wfStageCd": 11,
         "boxCellSno": qBoxBarcode,
-        "qboxEntitySno": widget.qboxEntitySno
+        "qboxEntitySno": 28
       };
 
       print('$body');

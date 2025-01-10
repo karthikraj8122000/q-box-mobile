@@ -35,7 +35,6 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
   Widget _buildOTPFields() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Adjust the width of each OTP field based on screen width
         double fieldWidth = constraints.maxWidth * 0.12; // Adjust as needed
         double fieldMargin = constraints.maxWidth * 0.02; // Adjust as needed
 

@@ -29,7 +29,7 @@ class DashboardProvider with ChangeNotifier {
       _error = null;
       notifyListeners();
 
-      Map<String, dynamic> params = {"qboxEntitySno": 26};
+      Map<String, dynamic> params = {"qboxEntitySno": 28};
       var result = await apiService.post(
           "8911", "masters", "get_box_cell_inventory", params);
 

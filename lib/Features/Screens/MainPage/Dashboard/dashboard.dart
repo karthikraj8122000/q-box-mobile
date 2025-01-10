@@ -815,12 +815,16 @@ class _DashboardState extends State<Dashboard>
   }
 
   Widget _buildQBoxEmptyLogo() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final padding = 16.0;
+    final cellWidth = (screenWidth - (padding * 2) - ((columnCount - 1) * 8)) / columnCount;
+    final cellHeight = cellWidth * 0.5;
     return Positioned(
       left: 5,
       top: 5,
       child: Container(
-        height: 40, // Adjust size as needed
-        width: 40,  // Adjust size as needed
+        height: cellHeight * 0.4, // Adjust size as needed
+        width: cellHeight * 0.4,  // Adjust size as needed
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
@@ -834,7 +838,7 @@ class _DashboardState extends State<Dashboard>
             backgroundColor: Colors.white,
             child: Icon(
               Icons.error_outline,
-              size: 30,
+              size: cellHeight * 0.4,
               color: Colors.red.shade800,
             ),
           )
@@ -844,12 +848,16 @@ class _DashboardState extends State<Dashboard>
   }
 
   Widget _buildQBoxLogo(String imageUrl) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final padding = 16.0;
+    final cellWidth = (screenWidth - (padding * 2) - ((columnCount - 1) * 8)) / columnCount;
+    final cellHeight = cellWidth * 0.5;
     return Positioned(
       left: 5,
       top: 5,
       child: Container(
-        height: 40, // Adjust size as needed
-        width: 40,  // Adjust size as needed
+        height: cellHeight * 0.4, // Adjust size as needed
+        width: cellHeight * 0.4,  // Adjust size as needed
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(

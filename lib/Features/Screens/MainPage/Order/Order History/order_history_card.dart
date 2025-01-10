@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_page/Services/api_service.dart';
-import 'package:qr_page/Widgets/Common/app_colors.dart';
-
 
 class OrderHistoryCard extends StatefulWidget {
   const OrderHistoryCard({Key? key}) : super(key: key);
@@ -14,7 +12,8 @@ class OrderHistoryCard extends StatefulWidget {
 
 class _OrderHistoryCardState extends State<OrderHistoryCard> {
   ApiService apiService = ApiService();
-  List<dynamic> purchaseOrder = [];
+  Map<String, dynamic> purchaseOrder = {};
+  List<dynamic> orders = [];
   final Set<int> _expandedIndices = {};
 
   @override
@@ -22,48 +21,33 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
     getTotalItems();
     super.initState();
   }
-  //
-  // Future<void> getTotalItems() async {
-  //   Map<String, dynamic> params = {};
-  //   var result = await apiService.post("8911", "masters", "partner_channel_inward_delivery_history", params);
-  //   print('resultsss$result');
-  //   if (result != null && result['data'] != null) {
-  //     setState(() {
-  //       purchaseOrder = result['data'];
-  //       print(purchaseOrder);
-  //     });
-  //     print('purchaseOrder: $purchaseOrder');
-  //   } else {
-  //     print("Result or data is null.");
-  //     setState(() {
-  //       purchaseOrder = [];
-  //     });
-  //   }
-  // }
 
   Future<void> getTotalItems() async {
-    try {
-      Map<String, dynamic> params = {};
-      var result = await apiService.post("8911", "masters", "partner_channel_inward_delivery_history", params);
-      print('API Response: $result');
-
-      if (result != null && result['data'] != null) {
-        final data = result['data'];
+    Map<String, dynamic> params = {};
+    var result = await apiService.post("8911", "masters", "partner_channel_inward_delivery_history", params);
+    print('result: $result');
+    if (result != null && result is Map<String, dynamic> && result['data'] != null) {
+      if (result['data'] is List) {
+        var dataList = result['data'] as List<dynamic>;
+        print('dataList: $dataList');
         setState(() {
-          // Since the API returns a single object, wrap it in a list
-          purchaseOrder = [data];
+          orders = dataList;
+          purchaseOrder = dataList.isNotEmpty ? dataList[0] : {};
         });
-        print('Processed purchaseOrder: $purchaseOrder');
+      } else if (result['data'] is Map) {
+        var dataMap = result['data'] as Map<String, dynamic>;
+        setState(() {
+          purchaseOrder = dataMap['purchaseOrder'] ?? {};
+          orders = dataMap['purchaseOrderDtls'] ?? [];
+        });
       } else {
-        print("Result or data is null.");
-        setState(() {
-          purchaseOrder = [];
-        });
+        print('Unexpected type for result["data"]');
       }
-    } catch (e) {
-      print('Error processing data: $e');
+    } else {
+      print("Invalid response format or null data");
       setState(() {
-        purchaseOrder = [];
+        purchaseOrder = {};
+        orders = [];
       });
     }
   }
@@ -79,18 +63,19 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
 
   @override
   Widget build(BuildContext context) {
+    print('purchaseOrder$purchaseOrder');
     if (purchaseOrder.isEmpty) {
       return Center(child:Text("No Inward Order History Found"));
       // return Center(child: CircularProgressIndicator(color: AppColors.mintGreen,));
     }
 
-
     return ListView.builder(
       padding: const EdgeInsets.all(8),
-      itemCount: 1, // We only have one order in this case
+      itemCount: orders.length,
       itemBuilder: (context, index) {
-        final order = purchaseOrder[index]['purchaseOrder'];
-        final orderDetails = purchaseOrder[index]['purchaseOrderDtls'];
+        final order = orders[index];
+        final purchaseOrder = order?['purchaseOrder'] as Map<String, dynamic>? ?? {};
+        final purchaseOrderDtls = order?['purchaseOrderDtls'] as List<dynamic>? ?? [];
         final isExpanded = _expandedIndices.contains(index);
 
         return Container(
@@ -132,7 +117,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
-                                order['partnerPurchaseOrderId'],
+                                purchaseOrder['partnerPurchaseOrderId']?.toString() ?? 'N/A',
                                 style: TextStyle(
                                   color: Colors.red.shade700,
                                   fontWeight: FontWeight.bold,
@@ -149,7 +134,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Text(
-                                _getStatusFromCode(order['orderStatusCd']),
+                                _getStatusFromCode(purchaseOrder['orderStatusCd'] ?? 0),
                                 style: TextStyle(
                                   color: Colors.green.shade700,
                                   fontSize: 12,
@@ -165,7 +150,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                             Icon(Icons.restaurant, color: Colors.red.shade400),
                             const SizedBox(width: 8),
                             Text(
-                              '${order['restaurantName']}', // You might want to add this to your API response
+                              purchaseOrder['restaurantName']?.toString() ?? 'N/A',
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -182,7 +167,11 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                                 Icon(Icons.access_time, color: Colors.grey.shade600, size: 20),
                                 const SizedBox(width: 8),
                                 Text(
-                                  DateFormat('MMM dd, yyyy • hh:mm a').format(DateTime.parse(order['deliveredTime'])),
+                                  purchaseOrder['deliveredTime'] != null
+                                      ? DateFormat('MMM dd, yyyy • hh:mm a').format(
+                                      DateTime.parse(purchaseOrder['deliveredTime'].toString())
+                                  )
+                                      : 'N/A',
                                   style: TextStyle(
                                     color: Colors.grey.shade600,
                                     fontSize: 14,
@@ -213,49 +202,51 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                     ),
                     child: Column(
                       children: [
-                        ...orderDetails.map<Widget>((item) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Text(
-                                        'x${item['acceptedQuantity']}',
-                                        style: TextStyle(
-                                          color: Colors.red.shade700,
-                                          fontWeight: FontWeight.bold,
+                        ...purchaseOrderDtls.map<Widget>((item) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Text(
+                                          'x${item['acceptedQuantity']?.toString() ?? 'N/A'}',
+                                          style: TextStyle(
+                                            color: Colors.red.shade700,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Text(
-                                      item['partnerFoodCode'],
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
+                                      const SizedBox(width: 12),
+                                      Text(
+                                        item['partnerFoodCode']?.toString() ?? 'N/A',
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                '₹ ${200}', // Price is not available in the current data structure
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
+                                Text(
+                                  '₹ ${200}', // Price is not available in the current data structure
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        )).toList(),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                         const Divider(color: Colors.white),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -268,7 +259,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                               ),
                             ),
                             Text(
-                              '₹ ${orderDetails.fold(0, (sum, item) => sum + (200 * item['acceptedQuantity']))}',
+                              '₹ ${purchaseOrderDtls.fold(0, (int sum, item) => sum + (200 * ((item['acceptedQuantity'] as int?) ?? 0)))}',
                               style: TextStyle(
                                 color: Colors.red.shade700,
                                 fontSize: 18,
