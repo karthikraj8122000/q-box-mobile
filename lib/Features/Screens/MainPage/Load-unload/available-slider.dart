@@ -23,10 +23,10 @@ class _WelcomeCardState extends State<WelcomeCard> {
   void initState() {
     super.initState();
     _pageController = PageController(viewportFraction: 0.8);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<DashboardProvider>().getQboxes();
-      _startTimer();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<DashboardProvider>().getQboxes(0);
+    //   _startTimer();
+    // });
   }
 
   @override

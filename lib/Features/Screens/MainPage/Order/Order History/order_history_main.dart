@@ -21,7 +21,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateMixin {
   late TabController _tabController;
   late List<TabItem> _tabItems;
-  List purchaseOrder = [];
+  List<dynamic> purchaseOrder = [];
 
   @override
   void initState() {

@@ -14,7 +14,8 @@ import '../../../../Widgets/Common/app_colors.dart';
 import 'load_history.dart';
 
 class UnloadQbox extends StatefulWidget {
-  const UnloadQbox({super.key});
+  final int? qboxEntitySno;
+  const UnloadQbox({super.key,required this.qboxEntitySno});
 
   @override
   State<UnloadQbox> createState() => _UnloadQboxState();
@@ -26,12 +27,21 @@ class _UnloadQboxState extends State<UnloadQbox> {
   final CommonService commonService = CommonService();
   bool get isReadyToLoad => qBoxOutBarcode.isNotEmpty;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print('qboxEntityll${widget.qboxEntitySno}');
+    });
+  }
+
+
 
   unloadFromQBox() async {
     Map<String, dynamic> body = {
       "uniqueCode": qBoxOutBarcode,
       "wfStageCd":12,
-      "qboxEntitySno": 26
+      "qboxEntitySno": widget.qboxEntitySno
     };
     try {
       var result = await apiService.post("8912", "masters","unload_sku_from_qbox_to_hotbox", body);

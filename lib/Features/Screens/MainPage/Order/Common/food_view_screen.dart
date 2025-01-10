@@ -262,13 +262,13 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
                             ),
                             child: Text('Reject'),
                             onPressed: () {
-                              if (rejectionReasonController.text
-                                  .trim()
-                                  .isEmpty) {
-                                commonService.presentToast(
-                                    'Please enter rejection reason');
-                                return;
-                              }
+                              // if (rejectionReasonController.text
+                              //     .trim()
+                              //     .isEmpty) {
+                              //   commonService.presentToast(
+                              //       'Please enter rejection reason');
+                              //   return;
+                              // }
                               Navigator.pop(context, true);
                               _submitRejection(skuInventorySno);
                             },
@@ -288,17 +288,17 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
 
   Future<void> _submitRejection(int skuInventorySno) async {
     try {
-      List<String> base64Images = [];
-      for (File image in selectedImages) {
-        List<int> imageBytes = await image.readAsBytes();
-        String base64Image = base64Encode(imageBytes);
-        base64Images.add(base64Image);
-      }
+      // List<String> base64Images = [];
+      // for (File image in selectedImages) {
+      //   List<int> imageBytes = await image.readAsBytes();
+      //   String base64Image = base64Encode(imageBytes);
+      //   base64Images.add(base64Image);
+      // }
 
       final rejectionData = {
         "skuInventorySno": skuInventorySno,
-        "rejectionReason": rejectionReasonController.text,
-        "images": base64Images,
+        // "rejectionReason": rejectionReasonController.text,
+        // "images": base64Images,
       };
 
       final result = await apiService.post(

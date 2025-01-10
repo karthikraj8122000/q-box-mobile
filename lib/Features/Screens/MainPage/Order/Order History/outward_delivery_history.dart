@@ -3,7 +3,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_page/Services/api_service.dart';
 
-
 class OutwardOrderHistoryCard extends StatefulWidget {
   const OutwardOrderHistoryCard({Key? key}) : super(key: key);
 
@@ -13,28 +12,46 @@ class OutwardOrderHistoryCard extends StatefulWidget {
 
 class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
   ApiService apiService = ApiService();
-  // Map<String, dynamic> purchaseOrder = {};
-  List<dynamic> purchaseOrder=[];
+  List<dynamic> purchaseOrder = [];
   final Set<int> _expandedIndices = {};
 
   @override
   void initState() {
+    getTotalItems();
     super.initState();
-    getOutwardHistories();
   }
 
-  getOutwardHistories() async {
+  Future<void> getTotalItems() async {
     Map<String, dynamic> params = {};
     var result = await apiService.post("8911", "masters", "partner_channel_outward_delivery_history", params);
-    print('result$result');
-    if (result != null && result['data'] != null) {
+    print('result: $result');
+
+    if (result != null) {
       setState(() {
-        purchaseOrder = result['data'];
-        print('purchaseOrder$purchaseOrder');
+        if (result is List) {
+          // If result is directly a list
+          purchaseOrder = result;
+        } else if (result is Map<String, dynamic>) {
+          // If result is a map, try to extract data
+          var data = result['data'];
+          if (data is List) {
+            // If data is directly a list
+            purchaseOrder = data;
+          } else if (data is Map<String, dynamic>) {
+            // If data is a map, convert it to a list
+            purchaseOrder = [data];
+          } else {
+            // Handle unexpected data format
+            purchaseOrder = [];
+          }
+        } else {
+          // Handle unexpected result format
+          purchaseOrder = [];
+        }
       });
       print('purchaseOrder: $purchaseOrder');
     } else {
-      print("Result or data is null.");
+      print("Null response received");
       setState(() {
         purchaseOrder = [];
       });
@@ -44,16 +61,30 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
   @override
   Widget build(BuildContext context) {
     if (purchaseOrder.isEmpty) {
-      return _buildEmptyState(context);
+      return Center(child:Text("No Outward Order History Found"));
+      // return const Center(child: CircularProgressIndicator());
     }
+
 
     return ListView.builder(
       padding: const EdgeInsets.all(8),
-      itemCount: purchaseOrder.length, // Since we have only one order in the current structure
+      itemCount: purchaseOrder.length,
       itemBuilder: (context, index) {
+        // Safely cast the order data
+        final order = purchaseOrder[index] is Map ?
+        purchaseOrder[index] as Map<String, dynamic> :
+        <String, dynamic>{};
+
+        final salesOrder = order['salesOrder'] is Map ?
+        order['salesOrder'] as Map<String, dynamic> :
+        <String, dynamic>{};
+
+        final salesOrderDtls = order['salesOrderDtls'] is List ?
+        order['salesOrderDtls'] as List<dynamic> :
+        <dynamic>[];
+
         final isExpanded = _expandedIndices.contains(index);
-        final salesOrder = purchaseOrder[index]['salesOrder'];
-        final salesOrderDtls = purchaseOrder[index]['salesOrderDtls'];
+
         return Container(
           margin: const EdgeInsets.symmetric(vertical: 8),
           child: Card(
@@ -93,7 +124,7 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
-                                salesOrder['partnerSalesOrderId'] ?? 'N/A',
+                                salesOrder['partnerSalesOrderId']?.toString() ?? 'N/A',
                                 style: TextStyle(
                                   color: Colors.red.shade700,
                                   fontWeight: FontWeight.bold,
@@ -112,7 +143,9 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                                 const SizedBox(width: 8),
                                 Text(
                                   salesOrder['deliveredTime'] != null
-                                      ? DateFormat('MMM dd, yyyy').format(DateTime.parse(salesOrder['deliveredTime']))
+                                      ? DateFormat('MMM dd, yyyy').format(
+                                      DateTime.parse(salesOrder['deliveredTime'].toString())
+                                  )
                                       : 'N/A',
                                   style: TextStyle(
                                     color: Colors.grey.shade600,
@@ -145,8 +178,13 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                     child: Column(
                       children: [
                         ...salesOrderDtls.map<Widget>((item) {
+                          if (item is! Map) return const SizedBox.shrink();
+
                           final skuInventory = (item['skuInventory'] as List<dynamic>?) ?? [];
-                          final firstSku = skuInventory.isNotEmpty ? skuInventory[0] as Map<String, dynamic> : {};
+                          final firstSku = skuInventory.isNotEmpty && skuInventory[0] is Map ?
+                          skuInventory[0] as Map<String, dynamic> :
+                          <String, dynamic>{};
+
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 12),
                             child: Row(
@@ -162,7 +200,7 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                                           borderRadius: BorderRadius.circular(8),
                                         ),
                                         child: Text(
-                                          'x${item['orderQuantity'] ?? 'N/A'}',
+                                          'x${item['orderQuantity']?.toString() ?? 'N/A'}',
                                           style: TextStyle(
                                             color: Colors.red.shade700,
                                             fontWeight: FontWeight.bold,
@@ -172,7 +210,7 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                                       const SizedBox(width: 12),
                                       Expanded(
                                         child: Text(
-                                          firstSku['skuDescription'] ?? 'N/A',
+                                          firstSku['skuDescription']?.toString() ?? 'N/A',
                                           style: const TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.w500,
@@ -199,7 +237,7 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                               ),
                             ),
                             Text(
-                              salesOrder['qboxEntityName'] ?? 'N/A',
+                              salesOrder['qboxEntityName']?.toString() ?? 'N/A',
                               style: TextStyle(
                                 color: Colors.red.shade700,
                                 fontSize: 18,
@@ -248,27 +286,4 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
       },
     );
   }
-
-  Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.history,
-            size: 64,
-            color: Colors.grey,
-          ),
-          SizedBox(height: 16),
-          Text(
-            'No order history',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Colors.grey,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
-

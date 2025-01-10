@@ -8,8 +8,8 @@ import '../Common/order_card.dart';
 
 class ViewOrder extends StatefulWidget {
   static const String routeName = '/view-order';
-  final purchaseOrder;
-  const ViewOrder({super.key,required this.purchaseOrder});
+  final dynamic partnerPurchaseOrderId;
+  const ViewOrder({super.key,this.partnerPurchaseOrderId});
   @override
   State<ViewOrder> createState() => _ViewOrderState();
 }
@@ -18,8 +18,10 @@ class _ViewOrderState extends State<ViewOrder> {
   @override
   void initState() {
     super.initState();
+    print("partnerPurchaseOrderId");
+    print(widget.partnerPurchaseOrderId);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<InwardOrderDtlProvider>().getTotalItems();
+      context.read<InwardOrderDtlProvider>().getTotalItems(widget.partnerPurchaseOrderId);
     });
   }
 
@@ -28,7 +30,7 @@ class _ViewOrderState extends State<ViewOrder> {
 
     final provider =
         Provider.of<InwardOrderDtlProvider>(context, listen: false);
-    await provider.getTotalItems();
+    await provider.getTotalItems(widget.partnerPurchaseOrderId);
   }
 
   @override
@@ -67,24 +69,16 @@ class _ViewOrderState extends State<ViewOrder> {
             );
           }
 
-          return SingleChildScrollView(
-              child: provider.purchaseOrders.isEmpty
-                  ? Center(child: NoDataFound(title: "orders"))
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height,
-                          child: ListView.builder(
-                            itemCount: provider.purchaseOrders.length,
-                            itemBuilder: (context, index) {
-                              return OrderCard(
-                                      order: provider.purchaseOrders[0]);
-                            },
-                          ),
-                        ),
-                      ],
-                    ));
+          return provider.purchaseOrders.isEmpty
+              ? Center(child: NoDataFound(title: "orders"))
+              : ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: provider.purchaseOrders.length,
+                itemBuilder: (context, index) {
+                  return OrderCard(
+                          order: provider.purchaseOrders[index]);
+                },
+              );
         }),
       ),
     );

@@ -34,7 +34,11 @@
 
             <data android:mimeType="text/plain" />
         </intent>
-        <!-- Needs to be explicitly declared on Android R+ -->
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT" />
+
+            <data android:mimeType="*/*" />
+        </intent> <!-- Needs to be explicitly declared on Android R+ -->
         <package android:name="com.google.android.apps.maps" />
     </queries>
 

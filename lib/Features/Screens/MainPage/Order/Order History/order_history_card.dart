@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_page/Services/api_service.dart';
+import 'package:qr_page/Widgets/Common/app_colors.dart';
 
 
 class OrderHistoryCard extends StatefulWidget {
@@ -13,29 +14,56 @@ class OrderHistoryCard extends StatefulWidget {
 
 class _OrderHistoryCardState extends State<OrderHistoryCard> {
   ApiService apiService = ApiService();
-  Map<String, dynamic> purchaseOrder = {};
+  List<dynamic> purchaseOrder = [];
   final Set<int> _expandedIndices = {};
 
   @override
   void initState() {
+    getTotalItems();
     super.initState();
-    getHistories();
   }
+  //
+  // Future<void> getTotalItems() async {
+  //   Map<String, dynamic> params = {};
+  //   var result = await apiService.post("8911", "masters", "partner_channel_inward_delivery_history", params);
+  //   print('resultsss$result');
+  //   if (result != null && result['data'] != null) {
+  //     setState(() {
+  //       purchaseOrder = result['data'];
+  //       print(purchaseOrder);
+  //     });
+  //     print('purchaseOrder: $purchaseOrder');
+  //   } else {
+  //     print("Result or data is null.");
+  //     setState(() {
+  //       purchaseOrder = [];
+  //     });
+  //   }
+  // }
 
-  getHistories() async {
-    print("helooooo");
-    Map<String, dynamic> params = {};
-    var result = await apiService.post("8911", "masters", "partner_channel_inward_delivery_history", params);
-    print('result$result');
-    if (result != null && result['data'] != null) {
+  Future<void> getTotalItems() async {
+    try {
+      Map<String, dynamic> params = {};
+      var result = await apiService.post("8911", "masters", "partner_channel_inward_delivery_history", params);
+      print('API Response: $result');
+
+      if (result != null && result['data'] != null) {
+        final data = result['data'];
+        setState(() {
+          // Since the API returns a single object, wrap it in a list
+          purchaseOrder = [data];
+        });
+        print('Processed purchaseOrder: $purchaseOrder');
+      } else {
+        print("Result or data is null.");
+        setState(() {
+          purchaseOrder = [];
+        });
+      }
+    } catch (e) {
+      print('Error processing data: $e');
       setState(() {
-        purchaseOrder = result['data'];
-      });
-      print('purchaseOrder: $purchaseOrder');
-    } else {
-      print("Result or data is null.");
-      setState(() {
-        purchaseOrder = {};
+        purchaseOrder = [];
       });
     }
   }
@@ -43,7 +71,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
   String _getStatusFromCode(int statusCode) {
     switch (statusCode) {
       case 2:
-        return 'Received';
+        return 'Delivered';
       default:
         return 'Unknown';
     }
@@ -52,15 +80,19 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
   @override
   Widget build(BuildContext context) {
     if (purchaseOrder.isEmpty) {
-      return _buildEmptyState(context);
+      return Center(child:Text("No Inward Order History Found"));
+      // return Center(child: CircularProgressIndicator(color: AppColors.mintGreen,));
     }
+
+
     return ListView.builder(
       padding: const EdgeInsets.all(8),
-      itemCount: 1,
+      itemCount: 1, // We only have one order in this case
       itemBuilder: (context, index) {
-        final order = purchaseOrder['purchaseOrder'];
-        final orderDetails = purchaseOrder['purchaseOrderDtls'];
+        final order = purchaseOrder[index]['purchaseOrder'];
+        final orderDetails = purchaseOrder[index]['purchaseOrderDtls'];
         final isExpanded = _expandedIndices.contains(index);
+
         return Container(
           margin: const EdgeInsets.symmetric(vertical: 8),
           child: Card(
@@ -133,7 +165,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                             Icon(Icons.restaurant, color: Colors.red.shade400),
                             const SizedBox(width: 8),
                             Text(
-                              'A2B', // You might want to add this to your API response
+                              '${order['restaurantName']}', // You might want to add this to your API response
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -215,7 +247,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                                 ),
                               ),
                               Text(
-                                '₹200', // Price is not available in the current data structure
+                                '₹ ${200}', // Price is not available in the current data structure
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
@@ -236,7 +268,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                               ),
                             ),
                             Text(
-                              '₹200', // Total amount is not available in the current data structure
+                              '₹ ${orderDetails.fold(0, (sum, item) => sum + (200 * item['acceptedQuantity']))}',
                               style: TextStyle(
                                 color: Colors.red.shade700,
                                 fontSize: 18,
@@ -285,28 +317,4 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
       },
     );
   }
-
-
-  Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.history,
-            size: 64,
-            color: Colors.grey,
-          ),
-          SizedBox(height: 16),
-          Text(
-            'No order history',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Colors.grey,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
 }

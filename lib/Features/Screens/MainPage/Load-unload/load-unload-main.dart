@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/MainPage/Load-unload/unload-from-qbox.dart';
 import 'package:qr_page/Services/api_service.dart';
 import 'package:qr_page/Services/toast_service.dart';
+import 'package:qr_page/Widgets/Common/app_colors.dart';
 import 'package:qr_page/Widgets/Common/network_error.dart';
 
 import '../../../../Provider/order_qr_scanning_provider.dart';
@@ -24,6 +25,13 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
     with TickerProviderStateMixin {
   late TabController _tabController;
   late List<TabItem> _tabItems;
+  List<dynamic> _returnValue = [];
+  List<dynamic> get returnValue => _returnValue;
+  int? qboxEntitySno;
+  bool isLoading = true;
+  int? entitySno;
+
+  ApiService apiService = ApiService();
 
 
   @override
@@ -34,12 +42,38 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
       TabItem(title: 'Unload From QBox', icon: Icons.outbox),
     ];
     _tabController = TabController(length: _tabItems.length, vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeQboxEntitySno();
+    });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  Future<void> _initializeQboxEntitySno() async {
+    qboxEntitySno = await getEntity();
+    setState(() {
+      isLoading = false; // Set loading to false after initialization
+    });
+  }
+
+  Future<int?> getEntity() async {
+    Map<String, dynamic> params = {};
+    var result = await apiService.post("8912", "masters", "search_qbox_entity", params);
+    if (result != null && result['data'] != null) {
+      _returnValue = result['data'];
+      print('_returnSales$_returnValue');
+      if (_returnValue.isNotEmpty) {
+        entitySno = _returnValue[0]['qboxEntitySno'] as int?;
+        print('qboxEntitySno: $entitySno');
+        return entitySno;
+      }
+    }
+    print('No data found$qboxEntitySno');
+    return null;
   }
 
 
@@ -75,8 +109,12 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
             body: TabBarView(
               controller: _tabController,
               children: [
-                LoadQbox(),
-                UnloadQbox()
+                qboxEntitySno == null
+                    ? Center(child: CircularProgressIndicator(color: AppColors.mintGreen,)) // Show a loader until data is fetched
+                    : LoadQbox(qboxEntitySno: qboxEntitySno!),
+                qboxEntitySno == null
+                    ? Center(child: CircularProgressIndicator(color: AppColors.mintGreen)) // Show a loader until data is fetched
+                    : UnloadQbox(qboxEntitySno: qboxEntitySno!),
               ],
             ),
           ),

@@ -8,14 +8,13 @@ import 'package:qr_page/Services/api_service.dart';
 import 'package:qr_page/Services/toast_service.dart';
 
 class InwardOrderDtlProvider extends ChangeNotifier {
-
   String _scanStatus = "notComplete";
   List _purchaseOrders = [];
+  dynamic purchaseOrderId;
   final ApiService _apiService = ApiService();
   final CommonService commonService = CommonService();
   bool _isLoading = true;
   String? _error;
-
 
   String get scanStatus => _scanStatus;
   List get purchaseOrders => _purchaseOrders;
@@ -38,10 +37,16 @@ class InwardOrderDtlProvider extends ChangeNotifier {
 
       if (barcodeScanRes != '-1') {
         await handleEntry(context, barcodeScanRes);
-        GoRouter.of(context).push(ViewOrder.routeName);
-        // if (_scanStatus == 'complete') {
-        //   GoRouter.of(context).push(ViewOrder.routeName);
-        // }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ViewOrder(
+              partnerPurchaseOrderId:
+                  barcodeScanRes, // Your purchase order number
+            ),
+          ),
+        );
+        // GoRouter.of(context).push(ViewOrder.routeName);
       }
     } catch (e) {
       _showError(context, 'Error scanning QR code: $e');
@@ -52,13 +57,23 @@ class InwardOrderDtlProvider extends ChangeNotifier {
     return Future.value(digits.every((digit) => digit.isNotEmpty));
   }
 
-  Future<void> handleManualEntry(BuildContext context, List<TextEditingController> controllers) async {
+  Future<void> handleManualEntry(
+      BuildContext context, List<TextEditingController> controllers) async {
     final digits = controllers.map((c) => c.text).toList();
 
     if (await validateManualEntry(digits)) {
       final orderId = digits.join();
       await handleEntry(context, 'SWIGGY_$orderId');
-      GoRouter.of(context).push(ViewOrder.routeName);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ViewOrder(
+            partnerPurchaseOrderId:
+                "SWIGGY_$orderId", // Your purchase order number
+          ),
+        ),
+      );
+      // GoRouter.of(context).push(ViewOrder.routeName);
       // if (_scanStatus == 'complete') {
       //   GoRouter.of(context).push(ViewOrder.routeName);
       // }
@@ -67,43 +82,57 @@ class InwardOrderDtlProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> getTotalItems({String? partnerPurchaseOrderId}) async {
+  getAllOrderedItems() async {
     const String endpoint = 'search_purchase_order';
     const String port = '8912';
     const String service = 'masters';
 
-    print("params");
     try {
       _isLoading = true;
       _error = null;
       notifyListeners();
 
-      final Map<String, dynamic> params = {};
-      if (partnerPurchaseOrderId != null) {
-        params['partnerPurchaseOrderId'] = partnerPurchaseOrderId;
+      final response = await _apiService.post(port, service, endpoint, {});
+      print("responsesssss $response");
+      if (response != null && response['data'] != null) {
+        _purchaseOrders = response['data'];
+
+        notifyListeners();
+      } else {
+        _error = 'Failed to retrieve the data.';
+        commonService.errorToast(_error!);
       }
+    } catch (e) {
+      _error = 'An error occurred while retrieving the data.';
+      debugPrint('$e');
+      commonService.errorToast(_error!);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
-      final response = await _apiService.post(port, service, endpoint,{});
-      if(response != null && response['data'] != null){
-        // _purchaseOrders = response['data'];
-        // notifyListeners();
-        if (partnerPurchaseOrderId != null) {
-          // If searching for specific order, find it in the response
-          final orders = response['data'] as List;
-          _purchaseOrders = orders.firstWhere(
-                (order) => order['partnerPurchaseOrderId'] == partnerPurchaseOrderId,
-            orElse: () => null,
-          );
 
-          if (_purchaseOrders.isEmpty){
-            _error = 'Order not found';
-            commonService.errorToast(_error!);
-          }
-        } else {
-          // If no specific order requested, store all orders
-          _purchaseOrders = response['data'];
-        }
-      }else{
+  Future<dynamic> getTotalItems(String? partnerPurchaseOrderId) async {
+    const String endpoint = 'search_purchase_order';
+    const String port = '8912';
+    const String service = 'masters';
+
+    try {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+      Map<String, dynamic> params = {
+        "partnerPurchaseOrderId": partnerPurchaseOrderId
+      };
+      print("partnerPurchaseOrderIddd $params");
+      final response = await _apiService.post(port, service, endpoint, params);
+      print("responsesssss $response");
+      if (response != null && response['data'] != null) {
+        _purchaseOrders = response['data'];
+
+        notifyListeners();
+      } else {
         _error = 'Failed to retrieve the data.';
         commonService.errorToast(_error!);
       }
@@ -131,10 +160,12 @@ class InwardOrderDtlProvider extends ChangeNotifier {
     };
 
     try {
-      final response = await _apiService.post(port, service, endpoint, requestBody);
-print("response$response");
-      if (response['data'] != null && response['data']["purchaseOrder"] != null) {
-        await getTotalItems();
+      final response =
+          await _apiService.post(port, service, endpoint, requestBody);
+      print("response$response");
+      if (response['data'] != null &&
+          response['data']["purchaseOrder"] != null) {
+        await getTotalItems(requestBody['partnerPurchaseOrderId']);
         _scanStatus = 'complete';
         notifyListeners();
       }

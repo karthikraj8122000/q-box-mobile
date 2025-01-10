@@ -11,7 +11,8 @@ import '../../../../Services/toast_service.dart';
 import '../../../../Widgets/Common/app_colors.dart';
 
 class LoadQbox extends StatefulWidget {
-  const LoadQbox({super.key});
+  final int? qboxEntitySno;
+  const LoadQbox({super.key, required this.qboxEntitySno});
 
   @override
   State<LoadQbox> createState() => _LoadQboxState();
@@ -23,6 +24,17 @@ class _LoadQboxState extends State<LoadQbox> {
   final ApiService apiService = ApiService();
   final CommonService commonService = CommonService();
   bool get isReadyToLoad => qBoxBarcode.isNotEmpty && foodBarcode.isNotEmpty;
+  final List<dynamic> _returnValue = [];
+  List<dynamic> get returnValue => _returnValue;
+
+
+  @override
+  void initState() {
+    super.initState();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    print('qboxEntityss${widget.qboxEntitySno}');
+    // });
+  }
 
   Future<void> scanBarcode(String name) async {
     String barcodeScanRes;
@@ -50,7 +62,7 @@ class _LoadQboxState extends State<LoadQbox> {
         "uniqueCode": foodBarcode,
         "wfStageCd": 11,
         "boxCellSno": qBoxBarcode,
-        "qboxEntitySno": 26
+        "qboxEntitySno": widget.qboxEntitySno
       };
 
       print('$body');

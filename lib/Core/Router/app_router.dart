@@ -78,13 +78,21 @@ class AppRouter {
       //   path: ViewOrder.routeName,
       //   builder: (_, __) => const ViewOrder(),
       // ),
+  //     GoRoute(
+  //       name: ViewOrder.routeName,
+  //       path: ViewOrder.routeName,
+  //       builder: (context, state) {
+  // final purchaseOrder = state.extra;
+  // return ViewOrder(purchaseOrder:purchaseOrder);
+  // }
+  //     ),
       GoRoute(
         name: ViewOrder.routeName,
         path: ViewOrder.routeName,
         builder: (context, state) {
-  final purchaseOrder = state.extra;
-  return ViewOrder(purchaseOrder:purchaseOrder);
-  }
+
+          return ViewOrder();
+        },
       ),
       ShellRoute(
         navigatorKey: _mainMenuNavigatorKey,
