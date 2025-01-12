@@ -363,9 +363,9 @@ class _DashboardState extends State<Dashboard>
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        Padding(
+                        isTablet? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12.0,vertical: 24),
-                          child:isTablet? Row(
+                          child: Row(
                             children: [
                               Expanded(
                                 flex: 5,
@@ -387,23 +387,23 @@ class _DashboardState extends State<Dashboard>
                                 ),
                               ),
                             ],
-                          ):Column(
-                            children: [
-                              Column(
-                                children: [
-                                  _buildCurrentTime(),
-                                  _buildInventoryTable(),
-                                ],
-                              ),
-                              SizedBox(height: 5,),
-                              Column(
-                                children: [
-                                  _buildOutwardOrder(),
-                                  _buildOutwardTable(),
-                                ],
-                              ),
-                            ],
                           ),
+                        ):Column(
+                          children: [
+                            Column(
+                              children: [
+                                _buildCurrentTime(),
+                                _buildInventoryTable(),
+                              ],
+                            ),
+                            SizedBox(height: 5,),
+                            Column(
+                              children: [
+                                _buildOutwardOrder(),
+                                _buildOutwardTable(),
+                              ],
+                            ),
+                          ],
                         ),
 
                         _buildQeuBoxStatus(),

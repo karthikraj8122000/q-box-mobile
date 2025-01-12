@@ -12,8 +12,9 @@ class InventoryTableWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Container(
-      margin: EdgeInsets.all(16.0),
+      margin: EdgeInsets.all(isTablet?16.0:0.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
