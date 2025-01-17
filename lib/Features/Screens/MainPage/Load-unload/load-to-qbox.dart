@@ -62,7 +62,7 @@ class _LoadQboxState extends State<LoadQbox> {
         "uniqueCode": foodBarcode,
         "wfStageCd": 11,
         "boxCellSno": qBoxBarcode,
-        "qboxEntitySno": 22
+        "qboxEntitySno": 26
       };
 
       print('$body');
