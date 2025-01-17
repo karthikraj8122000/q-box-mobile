@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/Login/second_login.dart';
@@ -17,6 +18,11 @@ import '../../../../Services/auth_service.dart';
 import '../../../../Theme/app_theme.dart';
 import '../../../../Widgets/Custom/custom_grid.dart';
 import 'inventory_table.dart';
+
+enum ScreenLayout {
+  mobile,
+  tablet,
+}
 
 class Dashboard extends StatefulWidget {
   static const String routeName = '/dashboard';
@@ -100,14 +106,17 @@ class _DashboardState extends State<Dashboard>
     await loadInventoryData();
   }
 
+  ScreenLayout _getScreenLayout(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    if (width < 600) {
+      return ScreenLayout.mobile;
+    }
+    return ScreenLayout.tablet;
+  }
+
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   loadHotboxCount();
-    //   context.read<DashboardProvider>().getCurrentInventoryCount();
-    // });
-
     _loadData();
     _headerController = AnimationController(
       duration: const Duration(seconds: 2),
@@ -116,10 +125,7 @@ class _DashboardState extends State<Dashboard>
 
     _headerController.forward();
   }
-  //
-  // Future<void> loadHotboxCount() async {
-  //   await context.read<DashboardProvider>().getHotboxCount();
-  // }
+
 
   Future<void> _loadData() async {
     await loadInventoryData();
@@ -203,9 +209,48 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
+  final List<Map<String, dynamic>> recentOrders = [
+    {
+      'id': '#FD001',
+      'restaurentName': 'A2B',
+      'items': ['Pepperoni Pizza', 'Coca Cola'],
+      'total': 45.99,
+      'status': 'Delivered',
+      'statusColor': '#0a8c33',
+      'time': '12:30 PM',
+      'totalItems':3,
+      'imageUrl':'https://media.istockphoto.com/id/1407172002/photo/indian-spicy-mutton-biryani-with-raita-and-gulab-jamun-served-in-a-dish-side-view-on-grey.jpg?s=612x612&w=0&k=20&c=sYldtF2E_cSuYioPtcmM15arsnSs2mIgpuAKUDuuGoI='
+    },
+    {
+      'id': '#FD002',
+      'restaurentName': 'Geetham',
+      'items': ['Veggie Burger', 'French Fries'],
+      'total': 32.50,
+      'status': 'Pending',
+      'statusColor': '#FF6347',
+      'time': '1:15 PM',
+      'totalItems':3,
+      'imageUrl':'https://t3.ftcdn.net/jpg/00/36/35/20/240_F_36352011_mqoIDF2IUy1eGD3gOf6y8gkZ449PiBcK.jpg'
+    },
+    {
+      'id': '#FD003',
+      'restaurentName': 'Star Biriyani',
+      'items': ['Caesar Salad', 'Iced Tea'],
+      'total': 25.99,
+      'status': 'In Progress',
+      'statusColor': '#FFD700',
+      'time': '2:00 PM',
+      'totalItems':3,
+      'imageUrl':'https://media.istockphoto.com/id/467631905/photo/hyderabadi-biryani-a-popular-chicken-or-mutton-based-dish.jpg?s=612x612&w=0&k=20&c=8O-erNH35y5qHS8i6dbWPi5Xscb40fNBhK6t1VI8GBc='
+    },
+  ];
+
+
   @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    final screenLayout = _getScreenLayout(context);
+
     return Consumer<DashboardProvider>(
         builder: (context, provider,child) {
           if (provider.isLoading) {
@@ -245,172 +290,40 @@ class _DashboardState extends State<Dashboard>
           }
 
           return NetworkWrapper(
-            child: SafeArea(
-              child: Scaffold(
-                appBar: AppBar(
-                  backgroundColor: AppColors.mintGreen,
-                  automaticallyImplyLeading: false,
-                  title: Align(
-                      alignment: Alignment.center,
-                      child: AppText(
-                        text: inventoryData?['qboxEntityName'] ?? "Entity",
-                        fontSize: 24,fontWeight: FontWeight.w900,)),
-                  actions: [
-                    // Wrap your IconButton with this code
-                    IconButton(
-                      icon: const Icon(Icons.logout_sharp),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Container(
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(
-                                      Icons.logout_rounded,
-                                      color: Colors.red,
-                                      size: 48,
-                                    ),
-                                    const SizedBox(height: 16),
-                                    const Text(
-                                      'Logout',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+            child:Scaffold(
+              backgroundColor: Color(0xFFF5F7FA),
+              body: SafeArea(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          _buildHeader(context,screenLayout),
+                          Expanded(
+                            child: RefreshIndicator(
+                              onRefresh: () async {},
+                              child: CustomScrollView(
+                                slivers: [
+                                  SliverPadding(
+                                    padding: EdgeInsets.all(screenLayout == ScreenLayout.mobile ? 16.0 : 20.0),
+                                    sliver: SliverToBoxAdapter(
+                                      child: Column(
+                                        children: [
+                                          _buildTopCards(screenLayout),
+                                          SizedBox(height: screenLayout == ScreenLayout.mobile ? 16 : 24),
+                                          _buildMainContent(),
+                                        ],
                                       ),
                                     ),
-                                    const SizedBox(height: 8),
-                                    const Text(
-                                      'Are you sure you want to logout?',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 24),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Expanded(
-                                          child: TextButton(
-                                            onPressed: () => Navigator.pop(context),
-                                            style: TextButton.styleFrom(
-                                              padding: const EdgeInsets.symmetric(vertical: 12),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(8),
-                                              ),
-                                            ),
-                                            child: const Text(
-                                              'Cancel',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black54,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        Expanded(
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              GoRouter.of(context).push(LoginScreen.routeName);
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.red,
-                                              padding: const EdgeInsets.symmetric(vertical: 12),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(8),
-                                              ),
-                                            ),
-                                            child: const Text(
-                                              'Logout',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            );
-                          },
-                        );
-                      },
-                    )
-                  ],
-                ),
-                body: RefreshIndicator(
-                  onRefresh: _loadData,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        isTablet? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0,vertical: 24),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 5,
-                                child: Column(
-                                  children: [
-                                    _buildCurrentTime(),
-                                    _buildInventoryTable(),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(width: 5,),
-                              Expanded(
-                                flex: 3,
-                                child: Column(
-                                  children: [
-                                    _buildOutwardOrder(),
-                                    _buildOutwardTable(),
-                                  ],
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ):Column(
-                          children: [
-                            Column(
-                              children: [
-                                _buildCurrentTime(),
-                                _buildInventoryTable(),
-                              ],
-                            ),
-                            SizedBox(height: 5,),
-                            Column(
-                              children: [
-                                _buildOutwardOrder(),
-                                _buildOutwardTable(),
-                              ],
-                            ),
-                          ],
-                        ),
-
-                        _buildQeuBoxStatus(),
-                        _buildHotBoxStatus(),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -418,6 +331,697 @@ class _DashboardState extends State<Dashboard>
         }
     );
   }
+
+  Widget _buildMainContent() {
+    return Column(
+      children: [
+        _buildQBoxStatus(),
+        SizedBox(height: 16),
+        _buildIRecentOrdersSection(),
+        SizedBox(height: 16),
+        _buildInventorySection(),
+        SizedBox(height: 16),
+        _buildOrdersSection(),
+        SizedBox(height: 16),
+        _buildHotBoxStatus(),
+      ],
+    );
+  }
+  Widget _buildOrdersSection() {
+    return Container(
+      padding: EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Outward Orders',
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: 24),
+          Row(
+            children: [
+              Expanded(
+                child: _buildOrderCard('Biryani', '8', Colors.orange.shade700),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: _buildOrderCard('Sambar', '12', Colors.green),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOrderCard(String name, String count, Color color) {
+    return Card(
+      elevation: 5,
+      color: color,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white
+                    ),
+                  ),
+                  Text(
+                    'In Process',
+                    style: GoogleFonts.poppins(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Spacer(),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                count,
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIRecentOrdersSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Recent Orders',
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            TextButton.icon(
+              onPressed: () {},
+              icon: Icon(Icons.remove_red_eye_rounded,color: Colors.red,),
+              label: Text('View All',style: TextStyle(color: Colors.red),),
+            ),
+          ],
+        ),
+        // SizedBox(height: 24),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: recentOrders.map((order) => _buildRecentOrderCard(order)).toList(),
+          ),
+        )
+        // _buildInventoryTable(),
+      ],
+    );
+  }
+
+  Widget _buildRecentOrderCard(Map<String, dynamic> order) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 40, left: 8, right: 8, bottom: 8),
+          padding: EdgeInsets.all(16.0),
+          width: 280,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 6,
+                offset: Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 30), // Space for the overlapped image
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    order['id'],
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    order['time'],
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 12),
+              Row(
+                children: [
+                  Icon(Icons.restaurant, color: Colors.red,),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        order['restaurentName'],
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        "${order['totalItems']} - Items",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Text("Total: "),
+                      Text(
+                        '₹${order['total'].toStringAsFixed(2)}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Color(int.parse(order['statusColor'].replaceAll('#', '0xFF'))),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      order['status'],
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(order['imageUrl'] ?? 'https://media.istockphoto.com/id/488481490/photo/fish-biryani-with-basmati-rice-indian-food.jpg?s=612x612&w=0&k=20&c=9xEw3VOQSz9TP8yQr60L47uExyKF9kogRhQdlghlC00='), // Add imageUrl to your order map
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQBoxStatus() {
+    final int totalCells = (rowCount) * (columnCount);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final padding = 16.0;
+    final cellWidth = (screenWidth - (padding * 2) - ((columnCount - 1) * 8)) / columnCount;
+    final cellHeight = cellWidth * 1.2; // Maintain a good aspect ratio
+    final fontSize = cellWidth * 0.12;
+    final count =  columnCount;
+    return Container(
+      padding: EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'QBox Status',
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: 24),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: columnCount > 0 ? columnCount : 1,
+              childAspectRatio: cellWidth / cellHeight,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+            ),
+            itemCount: totalCells,
+            itemBuilder: (context, index) {
+              // final cell = qboxLists[index];
+              if (index < qboxLists.length && qboxLists[index] != null) {
+                QBox qbox = QBox.fromMap(qboxLists[index] as Map<String, dynamic>);
+                return _buildGridCell(qbox, cellHeight, fontSize);
+              }
+
+              return const SizedBox.shrink();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInventorySection() {
+    return Container(
+      padding: EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Current Inventory',
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              TextButton.icon(
+                onPressed: () {},
+                icon: Icon(Icons.add_rounded,color: Colors.red,),
+                label: Text('Add Item',style: TextStyle(color:Colors.red),),
+              ),
+            ],
+          ),
+          SizedBox(height: 24),
+          _buildInventoryTable(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTopCards(ScreenLayout layout) {
+    return layout == ScreenLayout.mobile
+        ? Column(
+      children: [
+        _buildStatCard(
+          'Total Orders',
+          '156',
+          Icons.shopping_bag_rounded,
+          Colors.red,
+          Colors.red.shade700,
+          [
+            _buildStatItem('Completed', '132'),
+            _buildStatItem('In Progress', '24'),
+          ],
+        ),
+        SizedBox(height: 16),
+        _buildStatCard(
+          'Total Revenue',
+          '₹45,670',
+          Icons.payments_rounded,
+          Colors.green,
+          Colors.green.shade700,
+          [
+            _buildStatItem('Cash', '₹25,430'),
+            _buildStatItem('Online', '₹20,240'),
+          ],
+        ),
+        SizedBox(height: 16),
+        _buildStatCard(
+          'Active Deliveries',
+          '8',
+          Icons.delivery_dining_rounded,
+          Colors.orange,
+          Colors.orange.shade700,
+          [
+            _buildStatItem('On Time', '7'),
+            _buildStatItem('Delayed', '1'),
+          ],
+        ),
+      ],
+    )
+        : Row(
+      children: [
+        Expanded(
+          child: _buildStatCard(
+            'Total Orders',
+            '156',
+            Icons.shopping_bag_rounded,
+            Colors.red,
+            Colors.red.shade700,
+            [
+              _buildStatItem('Completed', '132'),
+              _buildStatItem('In Progress', '24'),
+            ],
+          ),
+        ),
+        SizedBox(width: 24),
+        Expanded(
+          child: _buildStatCard(
+            'Total Revenue',
+            '₹45,670',
+            Icons.payments_rounded,
+            Colors.green,
+            Colors.green.shade700,
+            [
+              _buildStatItem('Cash', '₹25,430'),
+              _buildStatItem('Online', '₹20,240'),
+            ],
+          ),
+        ),
+        SizedBox(width: 24),
+        Expanded(
+          child: _buildStatCard(
+            'Active Deliveries',
+            '8',
+            Icons.delivery_dining_rounded,
+            Colors.orange,
+            Colors.orange.shade700,
+            [
+              _buildStatItem('On Time', '7'),
+              _buildStatItem('Delayed', '1'),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatCard(String title, String value, IconData icon, Color color, Color backgroundColor, List<Widget> stats) {
+    return Card(
+      elevation: 5,
+      color: backgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: GoogleFonts.poppins(
+                        color: Colors.grey[300],
+                        fontSize: 14,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      value,
+                      style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: stats,
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                color: Colors.white70,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(4),
+                  bottomLeft: Radius.circular(20),
+                ),
+              ),
+              child: Icon(
+                icon,
+                color: color,
+                size: 24,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatItem(String label, String value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: Colors.grey[300],
+            fontSize: 12,
+          ),
+        ),
+        Text(
+          value,
+          style: GoogleFonts.poppins(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.white
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeader(BuildContext context,ScreenLayout layout) {
+    return Container(
+      padding: EdgeInsets.all(layout == ScreenLayout.mobile ? 16 : 24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              if (layout == ScreenLayout.mobile)
+                IconButton(
+                  icon: Icon(Icons.menu),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Adyar Branch Dashboard',
+                      style: GoogleFonts.poppins(
+                        fontSize: layout == ScreenLayout.mobile ? 20 : 24,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      'Last updated: 12-01-2025 02:26 PM',
+                      style: GoogleFonts.poppins(
+                        color: Colors.grey[600],
+                        fontSize: layout == ScreenLayout.mobile ? 12 : 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.logout_sharp),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.logout_rounded,
+                                color: Colors.red,
+                                size: 48,
+                              ),
+                              const SizedBox(height: 16),
+                              const Text(
+                                'Logout',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              const Text(
+                                'Are you sure you want to logout?',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      style: TextButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Cancel',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black54,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        GoRouter.of(context).push(LoginScreen.routeName);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Logout',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              )
+            ],
+          ),
+
+        ],
+      ),
+    );
+  }
+
 
   Widget _buildDetailRow(String label, String value) {
     return Padding(
@@ -623,9 +1227,7 @@ class _DashboardState extends State<Dashboard>
       ),
     );
   }
-
-
-  // Redesigned inventory table
+  //
   // Widget _buildInventoryTable() {
   //   if (isLoading) {
   //     return const Center(child: CircularProgressIndicator());
@@ -640,94 +1242,74 @@ class _DashboardState extends State<Dashboard>
   //     );
   //   }
   //
-  //   return InventoryTableWidget().animate()
+  //   return InventoryTableWidget(inventoryItems: inventoryItems).animate()
   //       .fadeIn(duration: 500.ms)
   //       .slideX(begin: 0.2, end: 0);
   // }
+
   Widget _buildInventoryTable() {
-    if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (inventoryItems.isEmpty) {
-      return Center(
-        child: Text(
-          'No inventory items available',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
+    return Table(
+      columnWidths: {
+        0: FlexColumnWidth(3),
+        1: FlexColumnWidth(1),
+        2: FlexColumnWidth(1),
+        3: FlexColumnWidth(1),
+      },
+      children: [
+        TableRow(
+          decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
+          ),
+          children: [
+            _buildTableHeader('Item Name'),
+            _buildTableHeader('In'),
+            _buildTableHeader('Out'),
+            _buildTableHeader('Total'),
+          ],
         ),
-      );
-    }
-
-    return InventoryTableWidget(inventoryItems: inventoryItems).animate()
-        .fadeIn(duration: 500.ms)
-        .slideX(begin: 0.2, end: 0);
+        _buildTableRow('A2B South Indian Veg Meals', '1', '0', '1'),
+        _buildTableRow('Star Chicken Biryani', '2', '0', '2'),
+      ],
+    );
   }
 
-  Widget _buildQeuBoxStatus() {
-    final int totalCells = (rowCount) * (columnCount);
-    final screenWidth = MediaQuery.of(context).size.width;
-    final padding = 16.0;
-    final cellWidth = (screenWidth - (padding * 2) - ((columnCount - 1) * 8)) / columnCount;
-    final cellHeight = cellWidth * 1.2; // Maintain a good aspect ratio
-    final fontSize = cellWidth * 0.12;
-    final count =  columnCount;
-    return Column(
-      children: [
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.red.shade400, Colors.red.shade600],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 4,
-                offset: Offset(0, 2),
-              ),
-            ],
-          ),
-          child: const Text(
-            'QBox - Current Status',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: AppColors.white
-            ),
-          ),
+  Widget _buildTableHeader(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16),
+      child: Text(
+        text,
+        style: GoogleFonts.poppins(
+          fontWeight: FontWeight.w600,
+          color: Colors.grey[600],
         ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: padding),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: columnCount > 0 ? columnCount : 1,
-              childAspectRatio: cellWidth / cellHeight,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-            ),
-            itemCount: totalCells,
-            itemBuilder: (context, index) {
-              // final cell = qboxLists[index];
-              if (index < qboxLists.length && qboxLists[index] != null) {
-                QBox qbox = QBox.fromMap(qboxLists[index] as Map<String, dynamic>);
-                return _buildGridCell(qbox, cellHeight, fontSize);
-              }
+      ),
+    );
+  }
 
-              return const SizedBox.shrink();
-            },
-          ),
-        ),
-        const SizedBox(height: 16),
-        _buildItemCount(),
-        const SizedBox(height: 20),
+  TableRow _buildTableRow(String name, String inCount, String outCount, String total) {
+    return TableRow(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey[200]!)),
+      ),
+      children: [
+        _buildTableCell(name, isName: true),
+        _buildTableCell(inCount),
+        _buildTableCell(outCount),
+        _buildTableCell(total, isTotal: true),
       ],
+    );
+  }
+
+  Widget _buildTableCell(String text, {bool isName = false, bool isTotal = false}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16),
+      child: Text(
+        text,
+        style: GoogleFonts.poppins(
+          fontWeight: isName || isTotal ? FontWeight.w500 : FontWeight.normal,
+          color: isTotal ? Colors.red : null,
+        ),
+      ),
     );
   }
 
@@ -742,32 +1324,24 @@ class _DashboardState extends State<Dashboard>
           _showEmptyItemDetails(context, qbox);
         }
       },
-      child: Container(
+      child:isFilled? Container(
         decoration: BoxDecoration(
+          color: Colors.green,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: isFilled ? Colors.green:AppColors.mintGreen),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: isFilled
-                ? [Colors.green.shade300, Colors.green.shade800]
-                : [Colors.transparent,Colors.transparent],
-
+          border: Border.all(
+            color: Colors.green,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: isFilled
-                  ? Colors.green.shade300
-                  : Colors.grey.withOpacity(0.1),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            ),
-          ],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.green.shade300,
+                blurRadius: 6,
+                offset: const Offset(0, 3),
+              ),
+            ],
         ),
         child: Stack(
           children: [
-            isFilled?
-            _buildQBoxLogo(qbox.logo):_buildQBoxEmptyLogo(),
+            _buildQBoxLogo(qbox.logo),
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -776,7 +1350,7 @@ class _DashboardState extends State<Dashboard>
                   if (totalCellCount <= 25) ...[
                     Column(
                       children: [
-                        isFilled? Container(
+                       Container(
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: Colors.white, // Change to your desired outline color
@@ -794,15 +1368,58 @@ class _DashboardState extends State<Dashboard>
                             ),
                           ),
                         )
-                            :AppText(text: "EMPTY", fontSize: fontSize,color: AppColors.mintGreen,fontWeight: FontWeight.w900,)
                       ],
                     )
                   ] else ...[
                   ],
                   SizedBox(height: 5,),
-                  Text('R${qbox.rowNo}-C${qbox.columnNo}',style: TextStyle(color:isFilled?AppColors.white:AppColors.black,fontSize:fontSize),),
+                  Text('R${qbox.rowNo}-C${qbox.columnNo}',style: TextStyle(color:AppColors.white,fontSize:fontSize),),
                   SizedBox(height: 5,),
-                  Text('${qbox.qboxId}',style: TextStyle(color: isFilled?AppColors.white:AppColors.black,fontSize:fontSize,fontWeight: FontWeight.w800),),
+                  Text('${qbox.qboxId}',style: TextStyle(color: AppColors.white,fontSize:fontSize,fontWeight: FontWeight.w800),),
+                  // Text(qbox.foodCode.isNotEmpty ? qbox.foodCode : 'Empty'),
+                ],
+              ),
+            ),
+          ],
+
+        ),
+      ).animate(onPlay: (controller) => controller.repeat())
+        .shimmer(duration: 1500.ms, color: Colors.white.withOpacity(0.5))
+        .shake(hz: 2, curve: Curves.easeInOutCubic):Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Colors.grey[300]!,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color:Colors.grey.withOpacity(0.1),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+         _buildQBoxEmptyLogo(),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (totalCellCount <= 25) ...[
+                    Column(
+                      children: [
+                       Container()
+                      ],
+                    )
+                  ] else ...[
+                  ],
+                  SizedBox(height: 5,),
+                  Text('R${qbox.rowNo}-C${qbox.columnNo}',style: TextStyle(color:AppColors.black,fontSize:fontSize),),
+                  SizedBox(height: 5,),
+                  Text('${qbox.qboxId}',style: TextStyle(color: AppColors.black,fontSize:fontSize,fontWeight: FontWeight.w800),),
                   // Text(qbox.foodCode.isNotEmpty ? qbox.foodCode : 'Empty'),
                 ],
               ),
@@ -974,73 +1591,72 @@ class _DashboardState extends State<Dashboard>
   }
 
   // Enhanced Hot Box status
+
   Widget _buildHotBoxStatus() {
-    return Column(
-      children: [
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.red.shade400, Colors.red.shade600],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+    return Container(
+      padding: EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Hot Box Status',
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 4,
-                offset: Offset(0, 2),
-              ),
-            ],
           ),
-          child: Text(
-            'Hot Box - Current Status',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: AppColors.white),
-          ),
-        ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.2, end: 0),
-        Consumer<DashboardProvider>(
-          builder: (context, provider, child) {
-            if(provider.isLoading){
-              return const Center(child: CircularProgressIndicator(color: AppColors.mintGreen,));
-            }
-            if(provider.hotboxCountList.isEmpty){
-              return Center(child: Text("No Data Available..",style: TextStyle(color: AppColors.black),));
-            }
-            return Container(
-              margin: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 8,
-                    offset: Offset(0, 2),
+          SizedBox(height: 16),
+          Consumer<DashboardProvider>(
+            builder: (context, provider, child) {
+              if(provider.isLoading){
+                return const Center(child: CircularProgressIndicator(color: AppColors.mintGreen,));
+              }
+              if(provider.hotboxCountList.isEmpty){
+                return Center(
+                  child: Text(
+                    'No Data Available',
+                    style: GoogleFonts.poppins(
+                      color: Colors.grey[600],
+                      fontSize: 16,
+                    ),
                   ),
-                ],
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    for(int i=0;i<provider.hotboxCountList.length;i++)...[
-                      SizedBox(height: 12),
-                      provider.hotboxCountList[i]['skuCode']?.isNotEmpty == true ? _buildHotBoxProgressBar(provider.hotboxCountList[i]['description'],provider.hotboxCountList[i]['skuCode'] , provider.hotboxCountList[i]['hotboxCount']??0, 100):Container(),
-                    ]
-                    // _buildHotBoxProgressBar('Sambar', 28, 100),
+                );
+              }
+              return Container(
+                margin: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
                   ],
                 ),
-              ),
-            );
-          },
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      for(int i=0;i<provider.hotboxCountList.length;i++)...[
+                        SizedBox(height: 12),
+                        provider.hotboxCountList[i]['skuCode']?.isNotEmpty == true ? _buildHotBoxProgressBar(provider.hotboxCountList[i]['description'],provider.hotboxCountList[i]['skuCode'] , provider.hotboxCountList[i]['hotboxCount']??0, 100):Container(),
+                      ]
+                      // _buildHotBoxProgressBar('Sambar', 28, 100),
+                    ],
+                  ),
+                ),
+              );
+            },
 
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 
