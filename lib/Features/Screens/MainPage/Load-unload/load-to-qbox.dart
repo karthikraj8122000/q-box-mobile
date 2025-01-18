@@ -93,20 +93,21 @@ class _LoadQboxState extends State<LoadQbox> {
       body: Stack(
         children: [
           SafeArea(
-            child: Column(
-              children: [
-                _buildHeader(),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  _buildHeader(),
+                  Expanded(
+                    child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          SizedBox(height: 18),
                           _buildWelcomeCard(),
-                          SizedBox(height: 32),
+                          SizedBox(height: 18),
                           _buildQuickActions(),
-                          SizedBox(height: 32),
+                          SizedBox(height: 18),
                           buildMergedHistoryCard(
                             qBoxBarcode,
                             foodBarcode,
@@ -117,8 +118,8 @@ class _LoadQboxState extends State<LoadQbox> {
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -143,8 +144,8 @@ class _LoadQboxState extends State<LoadQbox> {
   }
 
   Widget _buildHeader() {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Container(
-      padding: EdgeInsets.all(24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -154,7 +155,7 @@ class _LoadQboxState extends State<LoadQbox> {
               Text(
                 'QBox & Food Scanner',
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: isTablet?28:18,
                   fontWeight: FontWeight.bold,
                   color: AppColors.black,
                 ),
@@ -214,6 +215,7 @@ class _LoadQboxState extends State<LoadQbox> {
   }
 
   Widget _buildWelcomeCard() {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Container(
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -247,7 +249,7 @@ class _LoadQboxState extends State<LoadQbox> {
                   'Start Scanning',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 24,
+                    fontSize: isTablet?24:18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -287,7 +289,7 @@ class _LoadQboxState extends State<LoadQbox> {
         Text(
           'Quick Actions',
           style: TextStyle(
-            fontSize: 20,
+            fontSize: isTablet?20:18,
             fontWeight: FontWeight.bold,
             color: Colors.grey[800],
           ),
@@ -296,21 +298,25 @@ class _LoadQboxState extends State<LoadQbox> {
         if(isTablet)
           Row(
             children: [
-              _buildActionCard(
-                  'Compartment Scanner',
-                  'Tap to scan',
-                  Colors.red,
-                  Colors.red,
-                  'https://media.istockphoto.com/id/1667322455/photo/self-service-post-terminal-customer-entering-a-code-and-receiving-the-parcel.jpg?s=612x612&w=0&k=20&c=pWBLg0uIwsKBV4KpL2Hv3CztzaXvoKSv5t0wEoPh9ZE=',
-                  Icons.qr_code_scanner
+              Expanded(
+                child: _buildActionCard(
+                    'Compartment Scanner',
+                    'Tap to scan',
+                    Colors.red,
+                    Colors.red,
+                    'https://media.istockphoto.com/id/1667322455/photo/self-service-post-terminal-customer-entering-a-code-and-receiving-the-parcel.jpg?s=612x612&w=0&k=20&c=pWBLg0uIwsKBV4KpL2Hv3CztzaXvoKSv5t0wEoPh9ZE=',
+                    Icons.qr_code_scanner
+                ),
               ),
-              _buildActionCard(
-                'Food Scanner',
-                'Tap to scan',
-                Colors.orange.shade900,
-                Colors.orange,
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRO5a1CcDMcFmEELC3eXq4Qu_w_UqbAshp4cg&s',
-                Icons.qr_code_scanner,
+              Expanded(
+                child: _buildActionCard(
+                  'Food Scanner',
+                  'Tap to scan',
+                  Colors.orange.shade600,
+                  Colors.orange,
+                  'https://eu-images.contentstack.com/v3/assets/blta023acee29658dfc/blt8bf49a9b70f2d4a1/659ee76ab24208040a0e07de/QR-sustainability-GettyImages-1422209464-web.jpg',
+                  Icons.qr_code_scanner,
+                ),
               ),
             ],
           )
@@ -320,17 +326,17 @@ class _LoadQboxState extends State<LoadQbox> {
               _buildActionCard(
                 'Compartment Scanner',
                 'Tap to scan',
-                Colors.red,
-                Colors.red,
+                  Colors.red,
+                  Colors.red,
                 'https://media.istockphoto.com/id/1667322455/photo/self-service-post-terminal-customer-entering-a-code-and-receiving-the-parcel.jpg?s=612x612&w=0&k=20&c=pWBLg0uIwsKBV4KpL2Hv3CztzaXvoKSv5t0wEoPh9ZE=',
                 Icons.qr_code_scanner
               ),
               _buildActionCard(
                 'Food Scanner',
                'Tap to scan',
-                Colors.orange.shade900,
-                 Colors.orange,
-               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfkd6X7eQOxA6wpfS2gUyL8GD9-JsCaVxK1Q&s',
+                Colors.green,
+                Colors.green,
+               'https://eu-images.contentstack.com/v3/assets/blta023acee29658dfc/blt8bf49a9b70f2d4a1/659ee76ab24208040a0e07de/QR-sustainability-GettyImages-1422209464-web.jpg',
                Icons.qr_code_scanner,
               ),
             ],
@@ -340,84 +346,83 @@ class _LoadQboxState extends State<LoadQbox> {
   }
 
   Widget _buildActionCard(String title, String subtitle, Color bgColor,Color subtitleColor,String imageUrl,IconData icon) {
-    return Expanded(
-      child: InkWell(
-        onTap: () => scanBarcode(title),
-        child: Container(
-          margin: const EdgeInsets.only(left: 8, bottom: 8),
-          padding: const EdgeInsets.all(16.0),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 1,
-                blurRadius: 6,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child:
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.all(Radius.circular(12)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(imageUrl),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: subtitleColor,
-                        ),
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    return InkWell(
+      onTap: () => scanBarcode(title),
+      child: Container(
+        margin: const EdgeInsets.only(left: 8, bottom: 8),
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child:
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 2),
                       ),
                     ],
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(imageUrl),
+                    ),
                   ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: Colors.white),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: isTablet?18:14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: subtitleColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(12),
               ),
-            ],
-          ),
+              child: Icon(icon, color: Colors.white),
+            ),
+          ],
         ),
       ),
     );
@@ -427,51 +432,58 @@ class _LoadQboxState extends State<LoadQbox> {
     if (containerCode.isEmpty && foodCode.isEmpty) {
       return SizedBox.shrink();
     }
-    return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 10,
-            offset: Offset(0, 4),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Scanned Result:",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
+        SizedBox(height: 8,),
+        Container(
+          margin: EdgeInsets.only(bottom: 12),
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 10,
+                offset: Offset(0, 4),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          if (containerCode.isNotEmpty)
-            _buildItemRow(
-              type: 'Compartment',
-              code: containerCode,
-              icon: containerIcon,
-              onDelete: () {
-                setState(() {
-                  qBoxBarcode = '';
-                });
-              },
-            ),
-          if (containerCode.isNotEmpty && foodCode.isNotEmpty)
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: Divider(height: 1),
-            ),
-          if (foodCode.isNotEmpty)
-            _buildItemRow(
-              type: 'Food Code',
-              code: foodCode,
-              icon: foodIcon,
-              onDelete: () {
-                setState(() {
-                  foodBarcode = '';
-                });
-              },
-            ),
-        ],
-      ),
+          child: Column(
+            children: [
+              if (containerCode.isNotEmpty)
+                _buildItemRow(
+                  type: 'Compartment',
+                  code: containerCode,
+                  icon: containerIcon,
+                  onDelete: () {
+                    setState(() {
+                      qBoxBarcode = '';
+                    });
+                  },
+                ),
+              if (containerCode.isNotEmpty && foodCode.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Divider(height: 1),
+                ),
+              if (foodCode.isNotEmpty)
+                _buildItemRow(
+                  type: 'Food Code',
+                  code: foodCode,
+                  icon: foodIcon,
+                  onDelete: () {
+                    setState(() {
+                      foodBarcode = '';
+                    });
+                  },
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -537,189 +549,5 @@ class _LoadQboxState extends State<LoadQbox> {
         ],
       ),
     ).animate().fadeIn(duration: 900.ms);
-  }
-}
-
-class ScannerOfferCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final Color color;
-  final String scannerImage;
-  final String backgroundImage;
-  final String discount;
-
-  const ScannerOfferCard({
-    Key? key,
-    required this.title,
-    required this.description,
-    required this.color,
-    required this.scannerImage,
-    required this.backgroundImage,
-    required this.discount,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 160,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            color,
-            color.withOpacity(0.8),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: color.withOpacity(0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          // Background Pattern
-          Positioned(
-            right: 0,
-            bottom: 0,
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(12),
-              ),
-              child: Image.network(
-                backgroundImage,
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
-                color: Colors.white.withOpacity(0.1),
-                colorBlendMode: BlendMode.srcATop,
-              ),
-            ),
-          ),
-
-          // Scanner Image
-          Positioned(
-            right: 12,
-            bottom: 12,
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  scannerImage,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-
-          // Content
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Discount Badge
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Text(
-                    discount,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 12),
-
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                const SizedBox(height: 8),
-
-                Text(
-                  description,
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
-                    fontSize: 16,
-                  ),
-                ),
-
-                const Spacer(),
-
-                // Scan Button
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.qr_code_scanner,
-                        size: 18,
-                        color: color,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Scan Now',
-                        style: TextStyle(
-                          color: color,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

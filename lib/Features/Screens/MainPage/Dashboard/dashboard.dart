@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/Login/second_login.dart';
 import 'package:qr_page/Model/Data_Models/dashboard_model/dashboard_model.dart';
@@ -551,37 +552,37 @@ class _DashboardState extends State<Dashboard>
         _buildIRecentOrdersSection(),
         SizedBox(height: 16),
         _buildInventorySection(),
-        SizedBox(height: 16),
-        _buildOrdersSection(),
+        // SizedBox(height: 16),
+        // _buildOrdersSection(),
         SizedBox(height: 16),
         _buildHotBoxStatus(),
       ],
     );
   }
-
-  Widget _buildOrdersSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Outward Orders',
-          style: GoogleFonts.poppins(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        SizedBox(height: 24),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: outwardOrders
-                .map((order) => _buildOutwardOrderCard(order))
-                .toList(),
-          ),
-        )
-      ],
-    );
-  }
+  //
+  // Widget _buildOrdersSection() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         'Outward Orders',
+  //         style: GoogleFonts.poppins(
+  //           fontSize: 18,
+  //           fontWeight: FontWeight.w600,
+  //         ),
+  //       ),
+  //       SizedBox(height: 24),
+  //       SingleChildScrollView(
+  //         scrollDirection: Axis.horizontal,
+  //         child: Row(
+  //           children: outwardOrders
+  //               .map((order) => _buildOutwardOrderCard(order))
+  //               .toList(),
+  //         ),
+  //       )
+  //     ],
+  //   );
+  // }
 
   Widget _buildIRecentOrdersSection() {
     return Column(
@@ -949,7 +950,7 @@ class _DashboardState extends State<Dashboard>
           style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: AppColors.lightBlack
+              color: AppColors.black
           ),
         ),
         const SizedBox(height: 16),
@@ -1317,14 +1318,14 @@ class _DashboardState extends State<Dashboard>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Adyar Branch Dashboard',
+                      inventoryData?['qboxEntityName'] ?? "Entity",
                       style: GoogleFonts.poppins(
                         fontSize: layout == ScreenLayout.mobile ? 20 : 24,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     Text(
-                      'Last updated: 12-01-2025 02:26 PM',
+                      'Last updated: ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.now())}',
                       style: GoogleFonts.poppins(
                         color: Colors.grey[600],
                         fontSize: layout == ScreenLayout.mobile ? 12 : 14,
