@@ -140,6 +140,7 @@ class _BottomNavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Expanded(
       child: InkWell(
         onTap: onTap,
@@ -175,7 +176,7 @@ class _BottomNavItem extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4),
-                AnimatedBuilder(
+                isTablet? AnimatedBuilder(
                   animation: animation,
                   builder: (context, child) {
                     return AnimatedDefaultTextStyle(
@@ -195,7 +196,7 @@ class _BottomNavItem extends StatelessWidget {
                       ),
                     );
                   },
-                ),
+                ):Container(),
               ],
             ),
           ),

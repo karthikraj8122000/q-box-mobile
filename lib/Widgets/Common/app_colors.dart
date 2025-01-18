@@ -37,8 +37,8 @@ class AppColors{
   static const Color softPink = Color(0xFFFCE4EC);     // Pink course card
   static const Color lightGray = Color(0xFFF5F5F5);
   static const Color lightBlack = Colors.black54;
-  static const Color black = Colors.black;
-  static const Color white = Colors.white70;
+  // static const Color black = Colors.black;
+  // static const Color white = Colors.white70;
   static const Color wine =  Color(0xFFA52A2A);
   // static const Color appTheme = Color(0xFFFF3131);
   // Gray course card
@@ -51,8 +51,8 @@ class AppColors{
   static const Color progressBackground = Color(0xFFEEEEEE);
   static const Color progressFill = Color(0xFF000000);
 
-  static const Color primary = Color(0xFF1A237E);  // Deep Indigo
-  static const Color secondary = Color(0xFF00796B); // Deep Teal
+  // static const Color primary = Color(0xFF1A237E);  // Deep Indigo
+  // static const Color secondary = Color(0xFF00796B); // Deep Teal
   static const Color accent = Color(0xFFFF6F00);   // Deep Orange
   static const Color surface = Color(0xFFFAFAFA);  // Light Surface
   static const Color card1 = Color(0xFF3949AB);    // Indigo
@@ -72,5 +72,13 @@ class AppColors{
     ],
   );
 
+  static const Color primary = Color(0xFF22C55E);  // Green color for active states
+  static const Color primaryLight = Color(0xFFDCFCE7); // Light green for backgrounds
+  static const Color secondary = Color(0xFFE11D48); // Red color for alerts/negative
+  static const Color secondaryLight = Color(0xFFFEE2E2); // Light red background
+  static const Color grey = Color(0xFF64748B); // Text and icons
+  static const Color greyLight = Color(0xFFF8FAFC); // Background grey
+  static const Color white = Colors.white;
+  static const Color black = Color(0xFF1E293B);
 
 }

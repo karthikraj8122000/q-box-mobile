@@ -97,10 +97,10 @@ class _LoadQboxState extends State<LoadQbox> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFF5F7FA),
       body: Stack(
         children: [
-          _buildBackground(),
+          // _buildBackground(),
           SafeArea(
             child: Column(
               children: [
