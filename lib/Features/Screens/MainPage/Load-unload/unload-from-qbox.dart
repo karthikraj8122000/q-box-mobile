@@ -73,11 +73,12 @@ class _UnloadQboxState extends State<UnloadQbox> {
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          _buildInitialScanView(context,provider),
-          // _buildScanSection(context, provider),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildInitialScanView(context,provider),
+          ],
+        ),
       ),
     );
   }
@@ -101,9 +102,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
                   SizedBox(height: 16),
                   Text(
                     'Scan QR Code',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: isTablet?18:14,fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
                   Text(
@@ -139,6 +138,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
   }
 
   Widget _buildDispatchButton(FoodStoreProvider provider, BuildContext context) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final isEnabled = qBoxOutBarcode.isNotEmpty;
     return Container(
       width: double.infinity,
@@ -157,7 +157,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
               'Confirm Unload',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: isTablet?18:14,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -168,6 +168,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
   }
 
   Widget _buildOrderDetails(FoodStoreProvider provider,String scannedResult) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Container(
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(20),
@@ -178,34 +179,15 @@ class _UnloadQboxState extends State<UnloadQbox> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+           Text(
             'Food Details',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: isTablet?24:18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
           _buildDetailRow('Qbox ID', '#1234567'),
           _buildDetailRow('Food Code', scannedResult),
           const SizedBox(height: 30),
           _buildDispatchButton(provider, context),
-          // SizedBox(
-          //   width: double.infinity,
-          //   child: ElevatedButton(
-          //     onPressed: () {
-          //       // Handle order confirmation
-          //     },
-          //     style: ElevatedButton.styleFrom(
-          //       backgroundColor:Colors.green,
-          //       padding: const EdgeInsets.symmetric(vertical: 15),
-          //       shape: RoundedRectangleBorder(
-          //         borderRadius: BorderRadius.circular(10),
-          //       ),
-          //     ),
-          //     child: const Text(
-          //       'Confirm Unload',
-          //       style: TextStyle(fontSize: 18),
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );

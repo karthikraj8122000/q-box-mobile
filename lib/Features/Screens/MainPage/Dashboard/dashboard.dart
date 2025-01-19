@@ -140,10 +140,11 @@ class _DashboardState extends State<Dashboard>
   Map<String, dynamic>? selectedItem;
 
   void _showEmptyItemDetails(BuildContext context, QBox item) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        Future.delayed(Duration(seconds: 4), () {
+        Future.delayed(Duration(seconds: 4), () async{
           Navigator.of(context).pop();
         });
         return Container(
@@ -155,7 +156,7 @@ class _DashboardState extends State<Dashboard>
               Text(
                 'Qbox ID ${item.qboxId} is empty!',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: isTablet?20:14,
                   fontWeight: FontWeight.bold,
                   color: AppTheme.appTheme,
                 ),
@@ -163,7 +164,7 @@ class _DashboardState extends State<Dashboard>
               Text(
                 'There is no food item map for qbox cell ${item.qboxId}',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: isTablet?18:14,
                   fontWeight: FontWeight.bold,
                   color: AppColors.black,
                 ),
@@ -176,31 +177,67 @@ class _DashboardState extends State<Dashboard>
   }
 
   void _showItemDetails(BuildContext context, QBox item) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     showModalBottomSheet(
       context: context,
+
       builder: (BuildContext context) {
-        return Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Item Details',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.appTheme,
+        // Future.delayed(Duration(seconds: 4), () async{
+        //   Navigator.of(context).pop();
+        // });
+        return Stack(
+          clipBehavior: Clip.none, // This allows the avatar to overflow
+          children: [
+            Container(
+              padding: EdgeInsets.all(16),
+              margin: EdgeInsets.only(top: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Item Details',
+                    style: TextStyle(
+                      fontSize: isTablet ? 20 : 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.appTheme,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  _buildDetailRow('Qbox ID', item.qboxId.toString()),
+                  _buildDetailRow('Location', item.foodName),
+                  _buildDetailRow(
+                      'Sku Code', item.foodCode.isNotEmpty ? item.foodCode : '--'),
+                  _buildDetailRow('Created at', item.storageDate.toString()),
+                ],
+              ),
+            ),
+            // Positioned CircleAvatar at the top center
+            Positioned(
+              top: -40,
+              left: 0,
+              right: 0,
+              child: CircleAvatar(
+                radius: 40,
+                backgroundColor: Colors.grey[200],
+                child: ClipOval(
+                  child: Image.network(
+                    item.logo,
+                    width: 80,  // Should be 2x the radius
+                    height: 80, // Should be 2x the radius
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(
+                        Icons.error_outline,
+                        size: 30,
+                        color: Colors.red.shade800,
+                      );
+                    },
+                  ),
                 ),
               ),
-              SizedBox(height: 16),
-              _buildDetailRow('Qbox ID', item.qboxId.toString()),
-              _buildDetailRow('Location', item.foodName),
-              _buildDetailRow(
-                  'Sku Code', item.foodCode.isNotEmpty ? item.foodCode : '--'),
-              _buildDetailRow('Created at', item.storageDate.toString()),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
@@ -971,7 +1008,6 @@ class _DashboardState extends State<Dashboard>
                 QBox qbox = QBox.fromMap(qboxLists[index] as Map<String, dynamic>);
                 return _buildGridCell(qbox, cellHeight, fontSize,index);
               }
-
               return const SizedBox.shrink();
             },
           ),
@@ -1059,7 +1095,7 @@ class _DashboardState extends State<Dashboard>
                               ),
                             ),
                           )
-                              :AppText(text: "EMPTY", fontSize: fontSize,color: AppColors.mintGreen,fontWeight: FontWeight.w900,)
+                              :Container()
                         ],
                       )
                     ] else ...[
