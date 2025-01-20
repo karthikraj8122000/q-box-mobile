@@ -31,7 +31,7 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
       TabItem(title: 'Outward Order', icon: Icons.arrow_upward),
     ];
     _tabController = TabController(length: _tabItems.length, vsync: this);
-    context.read<OrderHistoryProvider>().fetchOrders();
+    // context.read<OrderHistoryProvider>().fetchInwardOrders();
   }
 
 

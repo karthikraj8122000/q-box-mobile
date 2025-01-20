@@ -3,8 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Provider/order_history_provider.dart';
-
 import '../../../../../Widgets/Common/app_colors.dart';
+
 
 class OrderHistoryCard extends StatefulWidget {
   const OrderHistoryCard({Key? key}) : super(key: key);
@@ -14,7 +14,13 @@ class OrderHistoryCard extends StatefulWidget {
 }
 
 class _OrderHistoryCardState extends State<OrderHistoryCard> {
-
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<OrderHistoryProvider>().fetchInwardOrders();
+    });
+  }
 
   String _getStatusFromCode(int statusCode) {
     switch (statusCode) {
@@ -32,30 +38,31 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
   @override
   Widget build(BuildContext context) {
     return Consumer<OrderHistoryProvider>(
-      builder: (context, provider, child) {
-        if (provider.isLoading) {
-          return const Center(child: CircularProgressIndicator(color: AppColors.mintGreen,));
+      builder: (context, orderProvider, child) {
+        if (orderProvider.isLoading) {
+          return Center(child: CircularProgressIndicator(color: AppColors.mintGreen,));
         }
-
-        if (provider.error != null) {
-          return Center(child: Text(provider.error!));
-        }
-
-        final purchaseOrder = provider.purchaseOrder;
-        if (purchaseOrder == null) {
-          return const Center(child: Text("No Purchase Order Found"));
-        }
-
-        if (provider.inwardOrdersList.isEmpty) {
+        if (orderProvider.purchaseOrder.isEmpty) {
           return const Center(child: Text("No Inward Order History Found"));
         }
-
         return ListView.builder(
           padding: const EdgeInsets.all(8),
-          itemCount: 1, // Since we have one purchase order
+          itemCount: orderProvider.purchaseOrder.length,
           itemBuilder: (context, index) {
-            final isExpanded = provider.expandedIndices.contains(index);
-            final purchaseOrderDtls = provider.inwardOrdersList;
+            final order = orderProvider.purchaseOrder[index] is Map
+                ? orderProvider.purchaseOrder[index] as Map<String, dynamic>
+                : <String, dynamic>{};
+
+            final purchaseOrder = order['purchaseOrder'] is Map
+                ? order['purchaseOrder'] as Map<String, dynamic>
+                : <String, dynamic>{};
+
+            final purchaseOrderDtls = order['purchaseOrderDtls'] is List
+                ? order['purchaseOrderDtls'] as List<dynamic>
+                : <dynamic>[];
+
+            final isExpanded = orderProvider.expandedIndices.contains(index);
+            final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
 
             return Container(
               margin: const EdgeInsets.symmetric(vertical: 8),
@@ -71,9 +78,9 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                       onTap: () {
                         setState(() {
                           if (isExpanded) {
-                            provider.expandedIndices.remove(index);
+                            orderProvider.expandedIndices.remove(index);
                           } else {
-                            provider.expandedIndices.add(index);
+                            orderProvider.expandedIndices.add(index);
                           }
                         });
                       },
@@ -97,7 +104,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                                   ),
                                   child: Text(
                                     purchaseOrder['partnerPurchaseOrderId']
-                                            ?.toString() ??
+                                        ?.toString() ??
                                         '#123',
                                     style: TextStyle(
                                       color: Colors.red.shade700,
@@ -154,9 +161,9 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                                     Text(
                                       purchaseOrder['deliveredTime'] != null
                                           ? DateFormat('MMM dd, yyyy • hh:mm a')
-                                              .format(DateTime.parse(
-                                                  purchaseOrder['deliveredTime']
-                                                      .toString()))
+                                          .format(DateTime.parse(
+                                          purchaseOrder['deliveredTime']
+                                              .toString()))
                                           : 'N/A',
                                       style: TextStyle(
                                         color: Colors.grey.shade600,
@@ -200,7 +207,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                                     padding: const EdgeInsets.only(bottom: 12),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         Expanded(
                                           child: Row(
@@ -210,7 +217,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius:
-                                                      BorderRadius.circular(8),
+                                                  BorderRadius.circular(8),
                                                 ),
                                                 child: Text(
                                                   'x${item['acceptedQuantity']?.toString() ?? 'N/A'}',
@@ -223,7 +230,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                                               const SizedBox(width: 12),
                                               Text(
                                                 item['partnerFoodCode']
-                                                        ?.toString() ??
+                                                    ?.toString() ??
                                                     'N/A',
                                                 style: const TextStyle(
                                                   fontSize: 15,

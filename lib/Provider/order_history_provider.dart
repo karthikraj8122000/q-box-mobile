@@ -3,19 +3,60 @@ import '../Services/api_service.dart';
 
 class OrderHistoryProvider extends ChangeNotifier {
   final ApiService _apiService = ApiService();
-  List<dynamic> _inwardOrdersList = [];
   bool _isLoading = false;
   String? _error;
-  Map<String, dynamic>? _purchaseOrder;
+  List<dynamic>  _purchaseOrder = [];
   final Set<int> _expandedIndices = {};
+  List<dynamic> _salesOrder = [];
 
-  List<dynamic> get inwardOrdersList => _inwardOrdersList;
-  Map<String, dynamic>? get purchaseOrder => _purchaseOrder;
+
   bool get isLoading => _isLoading;
   String? get error => _error;
   Set<int>  get expandedIndices => _expandedIndices;
+  List<dynamic> get purchaseOrder => _purchaseOrder;
+  List<dynamic> get salesOrder => _salesOrder;
 
-  Future<void> fetchOrders() async {
+  Future<void> fetchOutwardOrderItems() async {
+    try{
+      _isLoading = true;
+      notifyListeners();
+
+      Map<String, dynamic> params = {};
+      var result = await _apiService.post(
+        "8911",
+        "masters",
+        "partner_channel_outward_delivery_history",
+        params,
+      );
+
+      if (result != null) {
+        if (result is List) {
+          _salesOrder = result;
+        } else if (result is Map<String, dynamic>) {
+          var data = result['data'];
+          if (data is List) {
+            _salesOrder = data;
+          } else if (data is Map<String, dynamic>) {
+            _salesOrder = [data];
+          } else {
+            _salesOrder = [];
+          }
+        } else {
+          _salesOrder = [];
+        }
+      } else {
+        _salesOrder = [];
+      }
+      _isLoading = false;
+      notifyListeners();
+    }catch (e) {
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchInwardOrders() async {
     try {
       _isLoading = true;
       _error = null;
@@ -29,16 +70,27 @@ class OrderHistoryProvider extends ChangeNotifier {
           params
       );
       print("resultss$result");
-
-      if (result != null && result['data'] != null) {
-        if (result['data'] is Map) {
-          var dataMap = result['data'] as Map<String, dynamic>;
-          _purchaseOrder = dataMap['purchaseOrder'] as Map<String, dynamic>?;
-          _inwardOrdersList = dataMap['purchaseOrderDtls'] as List? ?? [];
+      if (result != null) {
+        if (result is List) {
+          _purchaseOrder = result;
+        } else if (result is Map<String, dynamic>) {
+          var data = result['data'];
+          if (data is List) {
+            _purchaseOrder = data;
+          } else if (data is Map<String, dynamic>) {
+            _purchaseOrder = [data];
+          } else {
+            _purchaseOrder = [];
+          }
+        } else {
+          _purchaseOrder = [];
         }
+      } else {
+        _purchaseOrder = [];
       }
       _isLoading = false;
       notifyListeners();
+
     } catch (e) {
       _error = e.toString();
       _isLoading = false;
