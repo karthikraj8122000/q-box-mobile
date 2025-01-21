@@ -113,36 +113,6 @@ class InwardOrderDtlProvider extends ChangeNotifier {
   //     notifyListeners();
   //   }
   // }
-  //
-  // Future<void> getTotalItems() async {
-  //   var user = await _tokenService.getUser();
-  //   Map<String, dynamic> userData;
-  //   if (user is String) {
-  //     userData = jsonDecode(user);
-  //   } else if (user is Map<String, dynamic>) {
-  //     userData = user;
-  //   } else {
-  //     print('Unexpected type for user: ${user.runtimeType}');
-  //     return null;
-  //   }
-  //   const String endpoint = 'search_purchase_order';
-  //   const String port = '8912';
-  //   const String service = 'masters';
-  //   final Map<String, dynamic> data = {
-  //     'qboxEntitySno': userData['qboxEntitySno'],
-  //   };
-  //   print('data$data');
-  //   try {
-  //     final response = await _apiService.post(port, service, endpoint, data);
-  //     _scanStatus = 'complete';
-  //     _purchaseOrders = response['data'];
-  //     print('_purchaseOrders$_purchaseOrders');
-  //     notifyListeners();
-  //   } catch (error) {
-  //     throw Exception('Failed to fetch totalItems: $error');
-  //   }
-  // }
-
 
   Future<dynamic> getTotalItems(String? partnerPurchaseOrderId) async {
     var user = await _tokenService.getUser();
