@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../../../Provider/order_history_provider.dart';
+import '../../../../../Services/token_service.dart';
 import '../../../../../Widgets/Common/app_colors.dart';
 
 class OutwardOrderHistoryCard extends StatefulWidget {
@@ -13,13 +16,62 @@ class OutwardOrderHistoryCard extends StatefulWidget {
 }
 
 class _OutwardOrderHistoryCardState extends State<OutwardOrderHistoryCard> {
+  TokenService tokenService = TokenService();
   @override
-  void initState() {
+  void initState(){
     super.initState();
+    _fetchOutwardOrderData();
+  }
+
+  void _fetchOutwardOrderData() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<OrderHistoryProvider>().fetchOutwardOrderItems();
+      _loadOutwardData();
     });
   }
+
+  Future<void> _loadOutwardData() async {
+    if (!mounted) return;
+    var user = await tokenService.getUser();
+    final provider = Provider.of<OrderHistoryProvider>(context, listen: false);
+    Map<String, dynamic> userData;
+    if (user is String) {
+      userData = jsonDecode(user);
+    } else if (user is Map<String, dynamic>) {
+      userData = user;
+    } else {
+      print('Unexpected type for user: ${user.runtimeType}');
+      return;
+    }
+    final qboxEntitySno = userData['qboxEntitySno'];
+    if (qboxEntitySno != null) {
+      print("yes there!!");
+      await provider.fetchOutwardOrderItems(qboxEntitySno);
+    } else {
+      print('No qboxEntitySno found');
+    }
+  }
+  //
+  // Future<void> _loadData() async {
+  //   if (!mounted) return;
+  //   var user = await tokenService.getUser();
+  //   final provider = Provider.of<OrderHistoryProvider>(context, listen: false);
+  //   Map<String, dynamic> userData;
+  //   if (user is String) {
+  //     userData = jsonDecode(user);
+  //   } else if (user is Map<String, dynamic>) {
+  //     userData = user;
+  //   } else {
+  //     print('Unexpected type for user: ${user.runtimeType}');
+  //     return;
+  //   }
+  //   final qboxEntitySno = userData['qboxEntitySno'];
+  //   print("qboxEntitySno00001 $qboxEntitySno");
+  //   if (qboxEntitySno != null) {
+  //     await provider.fetchOutwardOrderItems(qboxEntitySno);
+  //   } else {
+  //     print('No qboxEntitySno found');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +99,7 @@ class _OutwardOrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                 ? order['salesOrderDtls'] as List<dynamic>
                 : <dynamic>[];
 
-            final isExpanded = orderProvider.expandedIndices.contains(index);
+            final isExpanded = orderProvider.expandedOutwardIndices.contains(index);
             final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
 
             return Card(
@@ -62,9 +114,9 @@ class _OutwardOrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                     onTap: (){
                       setState(() {
                         if (isExpanded) {
-                          orderProvider.expandedIndices.remove(index);
+                          orderProvider.expandedOutwardIndices.remove(index);
                         } else {
-                          orderProvider.expandedIndices.add(index);
+                          orderProvider.expandedOutwardIndices.add(index);
                         }
                       });
                     },

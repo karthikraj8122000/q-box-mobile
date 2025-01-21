@@ -10,6 +10,7 @@ import 'package:qr_page/Features/Screens/Login/second_login.dart';
 import 'package:qr_page/Model/Data_Models/dashboard_model/dashboard_model.dart';
 import 'package:qr_page/Provider/dashboard_provider.dart';
 import 'package:qr_page/Services/toast_service.dart';
+import 'package:qr_page/Services/token_service.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 import 'package:qr_page/Widgets/Common/app_text.dart';
 import 'package:qr_page/Widgets/Common/network_error.dart';
@@ -43,12 +44,11 @@ class _DashboardState extends State<Dashboard>
   int rowCount = 0;
   int columnCount = 0;
   int totalCellCount = 0;
-
   late AnimationController _headerController;
   List<InventoryItem> inventoryItems = [];
   bool isLoading = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+TokenService tokenService = TokenService();
   Future<void> loadInventoryData() async {
     if (!mounted) return;
     try {
@@ -128,7 +128,23 @@ class _DashboardState extends State<Dashboard>
     if (!mounted) return;
 
     final provider = Provider.of<DashboardProvider>(context, listen: false);
-    await provider.getQboxes();
+    var user = await tokenService.getUser();
+    Map<String, dynamic> userData;
+    if (user is String) {
+      userData = jsonDecode(user);
+    } else if (user is Map<String, dynamic>) {
+      userData = user;
+    } else {
+      print('Unexpected type for user: ${user.runtimeType}');
+      return;
+    }
+
+    final qboxEntitySno = userData['qboxEntitySno'];
+    if (qboxEntitySno != null) {
+      await provider.getQboxes(qboxEntitySno);
+    } else {
+      print('No qboxEntitySno found');
+    }
   }
 
   @override
@@ -144,8 +160,10 @@ class _DashboardState extends State<Dashboard>
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        Future.delayed(Duration(seconds: 4), () async{
-          Navigator.of(context).pop();
+        Future.delayed(Duration(seconds: 4), () async {
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
         });
         return Container(
           padding: EdgeInsets.all(16),
@@ -1023,7 +1041,7 @@ class _DashboardState extends State<Dashboard>
     totalCellCount = rowCount * columnCount;
     bool isFilled = qbox.foodCode.isNotEmpty;
     return TweenAnimationBuilder(
-      duration: Duration(milliseconds: 300 + (index * 100)),
+      duration: Duration(milliseconds: 500 + (index * 100)),
       tween: Tween<double>(begin: 0, end: 1),
       builder: (context, double value, child) {
         return Transform.scale(
@@ -1185,8 +1203,7 @@ class _DashboardState extends State<Dashboard>
   }
 
   Widget _buildTopCards(ScreenLayout layout) {
-    return layout == ScreenLayout.mobile
-        ?  MetricsDashboardCard(
+    return MetricsDashboardCard(
       totalOrders: 1234,
       totalRevenue: 45678.90,
       activeDeliveries: 56,
@@ -1196,142 +1213,9 @@ class _DashboardState extends State<Dashboard>
           // Update your values
         });
       },
-    ): Row(
-            children: [
-              Expanded(
-                child: _buildStatCard(
-                  'Total Orders',
-                  '156',
-                  Icons.shopping_bag_rounded,
-                  Colors.red,
-                  Colors.red.shade700,
-                  [
-                    _buildStatItem('Completed', '132'),
-                    _buildStatItem('In Progress', '24'),
-                  ],
-                ),
-              ),
-              SizedBox(width: 24),
-              Expanded(
-                child: _buildStatCard(
-                  'Total Revenue',
-                  '₹45,670',
-                  Icons.payments_rounded,
-                  Colors.green,
-                  Color(0xFF2ECC71),
-                  // Colors.green.shade700,
-                  [
-                    _buildStatItem('Cash', '₹25,430'),
-                    _buildStatItem('Online', '₹20,240'),
-                  ],
-                ),
-              ),
-              SizedBox(width: 24),
-              Expanded(
-                child: _buildStatCard(
-                  'Active Deliveries',
-                  '8',
-                  Icons.delivery_dining_rounded,
-                  Colors.orange,
-                  Colors.orange.shade600,
-                  [
-                    _buildStatItem('On Time', '7'),
-                    _buildStatItem('Delayed', '1'),
-                  ],
-                ),
-              ),
-            ],
-          );
-  }
-
-  Widget _buildStatCard(String title, String value, IconData icon, Color color,
-      Color backgroundColor, List<Widget> stats) {
-    return Card(
-      elevation: 5,
-      color: backgroundColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: GoogleFonts.poppins(
-                        color: Colors.grey[300],
-                        fontSize: 14,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      value,
-                      style: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: stats,
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                color: Colors.white70,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(4),
-                  bottomLeft: Radius.circular(20),
-                ),
-              ),
-              child: Icon(
-                icon,
-                color: color,
-                size: 24,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
-  Widget _buildStatItem(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.poppins(
-            color: Colors.grey[300],
-            fontSize: 12,
-          ),
-        ),
-        Text(
-          value,
-          style: GoogleFonts.poppins(
-              fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white),
-        ),
-      ],
-    );
-  }
 
   Widget _buildHeader(BuildContext context, ScreenLayout layout) {
     return Container(

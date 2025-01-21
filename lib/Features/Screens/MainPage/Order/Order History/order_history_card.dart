@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Provider/order_history_provider.dart';
+import 'package:qr_page/Services/token_service.dart';
 import '../../../../../Widgets/Common/app_colors.dart';
 
 
@@ -14,12 +17,41 @@ class OrderHistoryCard extends StatefulWidget {
 }
 
 class _OrderHistoryCardState extends State<OrderHistoryCard> {
+
+  TokenService tokenService = TokenService();
+
   @override
   void initState() {
     super.initState();
+    _fetchInwardOrderData();
+  }
+
+  void _fetchInwardOrderData() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<OrderHistoryProvider>().fetchInwardOrders();
+      _loadInwardData();
     });
+  }
+
+  Future<void> _loadInwardData() async {
+    if (!mounted) return;
+    var user = await tokenService.getUser();
+    final provider = Provider.of<OrderHistoryProvider>(context, listen: false);
+    Map<String, dynamic> userData;
+    if (user is String) {
+      userData = jsonDecode(user);
+    } else if (user is Map<String, dynamic>) {
+      userData = user;
+    } else {
+      print('Unexpected type for user: ${user.runtimeType}');
+      return;
+    }
+    final qboxEntitySno = userData['qboxEntitySno'];
+    if (qboxEntitySno != null) {
+      print("Hi there!");
+      await provider.fetchInwardOrders(qboxEntitySno);
+    } else {
+      print('No qboxEntitySno found');
+    }
   }
 
   String _getStatusFromCode(int statusCode) {
@@ -61,7 +93,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                 ? order['purchaseOrderDtls'] as List<dynamic>
                 : <dynamic>[];
 
-            final isExpanded = orderProvider.expandedIndices.contains(index);
+            final isExpanded = orderProvider.expandedInwardIndices.contains(index);
             final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
 
             return Container(
@@ -78,9 +110,9 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                       onTap: () {
                         setState(() {
                           if (isExpanded) {
-                            orderProvider.expandedIndices.remove(index);
+                            orderProvider.expandedInwardIndices.remove(index);
                           } else {
-                            orderProvider.expandedIndices.add(index);
+                            orderProvider.expandedInwardIndices.add(index);
                           }
                         });
                       },

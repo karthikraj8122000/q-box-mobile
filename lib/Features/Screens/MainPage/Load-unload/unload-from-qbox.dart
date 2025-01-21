@@ -28,15 +28,35 @@ class _UnloadQboxState extends State<UnloadQbox> {
       print('qboxEntityll${widget.qboxEntitySno}');
     });
   }
-
-
-
+  //
+  // unloadFromQBox() async {
+  //   Map<String, dynamic> body = {
+  //     "uniqueCode": qBoxOutBarcode,
+  //     "wfStageCd":12,
+  //     "qboxEntitySno": 26
+  //   };
+  //   try {
+  //     var result = await apiService.post("8912", "masters","unload_sku_from_qbox_to_hotbox", body);
+  //     if (result != null && result['data'] != null) {
+  //       print('RESULT$result');
+  //       commonService.presentToast('Food Unloaded from the qbox');
+  //       qBoxOutBarcode = '';
+  //     }else{
+  //       commonService.presentToast('Something went wrong....');
+  //     }
+  //   } catch (e) {
+  //     print('Error: $e');
+  //   }
+  //   setState(() {
+  //   });
+  // }
   unloadFromQBox() async {
     Map<String, dynamic> body = {
       "uniqueCode": qBoxOutBarcode,
       "wfStageCd":12,
-      "qboxEntitySno": 26
+      "qboxEntitySno": widget.qboxEntitySno
     };
+    print('ddddd$body');
     try {
       var result = await apiService.post("8912", "masters","unload_sku_from_qbox_to_hotbox", body);
       if (result != null && result['data'] != null) {

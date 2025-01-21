@@ -6,22 +6,25 @@ class OrderHistoryProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
   List<dynamic>  _purchaseOrder = [];
-  final Set<int> _expandedIndices = {};
+  final Set<int> _expandedInwardIndices = {};
+  final Set<int> _expandedOutwardIndices = {};
   List<dynamic> _salesOrder = [];
-
 
   bool get isLoading => _isLoading;
   String? get error => _error;
-  Set<int>  get expandedIndices => _expandedIndices;
+  Set<int>  get expandedInwardIndices => _expandedInwardIndices;
+  Set<int>  get expandedOutwardIndices => _expandedOutwardIndices;
   List<dynamic> get purchaseOrder => _purchaseOrder;
   List<dynamic> get salesOrder => _salesOrder;
 
-  Future<void> fetchOutwardOrderItems() async {
+  Future<void> fetchOutwardOrderItems(int qboxEntitySno) async {
     try{
       _isLoading = true;
       notifyListeners();
+      Map<String, dynamic> params = {
+        "qboxEntitySno":qboxEntitySno
+      };
 
-      Map<String, dynamic> params = {};
       var result = await _apiService.post(
         "8911",
         "masters",
@@ -56,13 +59,15 @@ class OrderHistoryProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchInwardOrders() async {
+  Future<void> fetchInwardOrders(int qboxEntitySno) async {
     try {
       _isLoading = true;
       _error = null;
       notifyListeners();
+      Map<String, dynamic> params = {
+        "qboxEntitySno":qboxEntitySno
+      };
 
-      Map<String, dynamic> params = {};
       var result = await _apiService.post(
           "8911",
           "masters",

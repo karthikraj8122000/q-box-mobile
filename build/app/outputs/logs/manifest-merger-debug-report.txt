@@ -78,6 +78,7 @@ INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/andr
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:1:1-55:12
 MERGED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:1:1-55:12
 MERGED from [:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:device_info] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/device_info/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:file_picker] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-17:12
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-21:12
 MERGED from [:google_maps_flutter_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/google_maps_flutter_android/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
@@ -256,6 +257,8 @@ INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/andr
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml
 MERGED from [:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:device_info] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/device_info/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:device_info] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/device_info/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:file_picker] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:file_picker] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41

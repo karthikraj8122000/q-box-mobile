@@ -34,6 +34,7 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final statusColor = widget.order['orderStatusCd'] == 2

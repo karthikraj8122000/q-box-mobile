@@ -104,6 +104,18 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "device_info",
+      "rootUri": "file:///home/swomb/.pub-cache/hosted/pub.dev/device_info-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "device_info_platform_interface",
+      "rootUri": "file:///home/swomb/.pub-cache/hosted/pub.dev/device_info_platform_interface-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "dio",
       "rootUri": "file:///home/swomb/.pub-cache/hosted/pub.dev/dio-5.7.0",
       "packageUri": "lib/",
@@ -776,7 +788,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-01-20T05:25:06.748783Z",
+  "generated": "2025-01-20T07:46:16.966192Z",
   "generator": "pub",
   "generatorVersion": "3.6.0",
   "flutterRoot": "file:///home/swomb/snap/flutter/common/flutter",

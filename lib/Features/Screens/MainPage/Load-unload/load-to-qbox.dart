@@ -53,10 +53,10 @@ class _LoadQboxState extends State<LoadQbox> {
     try {
       print('loadToQBox');
       Map<String, dynamic> body = {
-        "uniqueCode": foodBarcode,
+        "uniqueCode": foodBarcode.trim(),
         "wfStageCd": 11,
-        "boxCellSno": qBoxBarcode,
-        "qboxEntitySno": 26
+        "boxCellSno": qBoxBarcode.trim(),
+        "qboxEntitySno": widget.qboxEntitySno
       };
       print('$body');
       var result = await apiService.post("8912", "masters", "load_sku_in_qbox", body);
@@ -73,6 +73,7 @@ class _LoadQboxState extends State<LoadQbox> {
         } else if (loadingMessage == 'Invalid Loaded') {
           commonService.errorToast('Invalid loading attempt');
         } else {
+          // Handle any other unexpected messages
           commonService.presentToast('Unexpected response: $loadingMessage');
         }
       } else {
@@ -128,89 +129,72 @@ class _LoadQboxState extends State<LoadQbox> {
     );
   }
 
-  Widget _buildBackground() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFFEF2F2),
-            Colors.white,
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildHeader() {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'QBox & Food Scanner',
-                style: TextStyle(
-                  fontSize: isTablet?28:18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.black,
-                ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'QBox & Food Scanner',
+              style: TextStyle(
+                fontSize: isTablet?28:18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.black,
               ),
-              Text(
-                'Manage your inventory easily',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 14,
-                ),
+            ),
+            Text(
+              'Manage your inventory easily',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 14,
               ),
-            ],
-          ),
-          Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.red.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.notifications_outlined, color: AppColors.mintGreen),
-                  onPressed: () {
-                    GoRouter.of(context).push(NotificationHistoryScreen.routeName);
-                  },
-                ),
+            ),
+          ],
+        ),
+        Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.red.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
-              if (isReadyToLoad)
-                Positioned(
-                  right: 8,
-                  top: 8,
-                  child: Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: AppColors.mintGreen,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 2,
-                      ),
+              child: IconButton(
+                icon: Icon(Icons.notifications_outlined, color: AppColors.mintGreen),
+                onPressed: () {
+                  GoRouter.of(context).push(NotificationHistoryScreen.routeName);
+                },
+              ),
+            ),
+            if (isReadyToLoad)
+              Positioned(
+                right: 8,
+                top: 8,
+                child: Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: AppColors.mintGreen,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 2,
                     ),
                   ),
                 ),
-            ],
-          ),
-        ],
-      ),
+              ),
+          ],
+        ),
+      ],
     ).animate().fadeIn(duration: 500.ms);
   }
 
@@ -371,8 +355,8 @@ class _LoadQboxState extends State<LoadQbox> {
             Row(
               children: [
                 Container(
-                  width: 50,
-                  height: 50,
+                  width: isTablet?80:50,
+                  height: isTablet?80:50,
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     color: Colors.white,

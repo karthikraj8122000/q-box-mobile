@@ -46,7 +46,7 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
           {"purchaseOrderSno": widget.purchaseOrderSno});
       if (orderResponse['data'] != null) {
         if (orderResponse['data'].isNotEmpty) {
-          orderDetails = orderResponse['data'][0];
+          orderDetails = orderResponse['data'];
           final inventoryResponse = await apiService.post(
               '8912',
               'masters',
