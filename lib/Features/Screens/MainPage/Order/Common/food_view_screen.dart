@@ -44,21 +44,16 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
           {"purchaseOrderSno": widget.purchaseOrderSno});
 
       if (orderResponse['data'] != null && orderResponse['data'] is List) {
-        // Store all order details
         orderDetailsList = List<Map<String, dynamic>>.from(orderResponse['data']);
 
-        // Initialize expansion states
         for (var order in orderDetailsList) {
           int purchaseOrderDtlSno = order['purchaseOrderDtlSno'];
           expandedStates[purchaseOrderDtlSno] = false;
-
-          // Fetch inventory items for each order
           final inventoryResponse = await apiService.post(
               '8912',
               'masters',
               'search_sku_inventory',
               {"purchaseOrderDtlSno": purchaseOrderDtlSno});
-
           if (inventoryResponse['data'] != null) {
             inventoryItemsMap[purchaseOrderDtlSno] =
             List<Map<String, dynamic>>.from(inventoryResponse['data']);
