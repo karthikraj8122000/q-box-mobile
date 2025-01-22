@@ -16,7 +16,7 @@ class AppBottomBarRoutes {
           key: state.pageKey,
           transitionDuration: kThemeAnimationDuration,
           reverseTransitionDuration: kThemeAnimationDuration,
-          child: const Dashboard(),
+          child: Dashboard(),
           transitionsBuilder: (_, animation, __, child) {
             return FadeTransition(opacity: animation, child: child);
           },

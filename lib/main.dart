@@ -8,6 +8,7 @@ import 'package:qr_page/Provider/network_provider.dart';
 import 'package:qr_page/Provider/order_history_provider.dart';
 import 'package:qr_page/Provider/order_qr_scanning_provider.dart';
 import 'package:qr_page/Provider/qbox_delivery_provider.dart';
+import 'package:qr_page/Provider/qbox_provider.dart';
 import 'Provider/auth_provider.dart';
 
 
@@ -30,6 +31,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => InwardOrderDtlProvider()),
         ChangeNotifierProvider(create: (_) => OrderScanningProvider()),
         ChangeNotifierProvider(create: (_) => OrderHistoryProvider()),
+        ChangeNotifierProvider(create: (_) => QBoxProvider()),
+
       ],
       child:  Consumer<AuthProvider>(
         builder: (context, authProvider, _) {
