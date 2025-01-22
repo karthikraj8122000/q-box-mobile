@@ -34,6 +34,7 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final statusColor = widget.order['orderStatusCd'] == 2
@@ -120,7 +121,7 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                                     Text(
                                       'Order Details',
                                       style: TextStyle(
-                                        fontSize: 22,
+                                        fontSize: isTablet?20:18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),
@@ -169,7 +170,7 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                                   Text(
                                     '#${widget.order['partnerPurchaseOrderId']}',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: isTablet?20:14,
                                       fontWeight: FontWeight.bold,
                                       letterSpacing: 0.5,
                                     ),

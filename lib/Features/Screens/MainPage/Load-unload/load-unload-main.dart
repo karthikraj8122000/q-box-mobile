@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -6,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/MainPage/Load-unload/unload-from-qbox.dart';
 import 'package:qr_page/Services/api_service.dart';
 import 'package:qr_page/Services/toast_service.dart';
+import 'package:qr_page/Services/token_service.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 import 'package:qr_page/Widgets/Common/network_error.dart';
 
@@ -32,7 +35,7 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
   int? entitySno;
 
   ApiService apiService = ApiService();
-
+TokenService tokenService = TokenService();
 
   @override
   void initState() {
@@ -54,10 +57,25 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
   }
 
   Future<void> _initializeQboxEntitySno() async {
-    qboxEntitySno = await getEntity();
+    qboxEntitySno = await getUser();
     setState(() {
       isLoading = false; // Set loading to false after initialization
     });
+  }
+
+  Future<int?> getUser() async {
+    var user = await tokenService.getUser();
+
+    Map<String, dynamic> userData;
+    if (user is String) {
+      userData = jsonDecode(user);
+    } else if (user is Map<String, dynamic>) {
+      userData = user;
+    } else {
+      print('Unexpected type for user: ${user.runtimeType}');
+      return null;
+    }
+    return userData['qboxEntitySno'];
   }
 
   Future<int?> getEntity() async {
@@ -75,8 +93,6 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
     print('No data found$qboxEntitySno');
     return null;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +122,7 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
                 ),
               ];
             },
-            body: TabBarView(
+            body:  TabBarView(
               controller: _tabController,
               children: [
                 qboxEntitySno == null

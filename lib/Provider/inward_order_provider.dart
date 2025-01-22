@@ -1,4 +1,6 @@
 // Modified InwardOrderDtlProvider
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +8,7 @@ import 'package:qr_page/Features/Screens/MainPage/Order/Inward%20Order/qr_scanne
 import 'package:qr_page/Features/Screens/MainPage/Order/View%20Order/view_order.dart';
 import 'package:qr_page/Services/api_service.dart';
 import 'package:qr_page/Services/toast_service.dart';
+import 'package:qr_page/Services/token_service.dart';
 
 class InwardOrderDtlProvider extends ChangeNotifier {
   String _scanStatus = "notComplete";
@@ -15,7 +18,7 @@ class InwardOrderDtlProvider extends ChangeNotifier {
   final CommonService commonService = CommonService();
   bool _isLoading = true;
   String? _error;
-
+  final TokenService _tokenService = TokenService();
   String get scanStatus => _scanStatus;
   List get purchaseOrders => _purchaseOrders;
   bool get isLoading => _isLoading;
@@ -46,7 +49,6 @@ class InwardOrderDtlProvider extends ChangeNotifier {
             ),
           ),
         );
-        // GoRouter.of(context).push(ViewOrder.routeName);
       }
     } catch (e) {
       _showError(context, 'Error scanning QR code: $e');
@@ -81,39 +83,48 @@ class InwardOrderDtlProvider extends ChangeNotifier {
       _showError(context, 'Please fill all fields');
     }
   }
-
-  getAllOrderedItems() async {
-    const String endpoint = 'search_purchase_order';
-    const String port = '8912';
-    const String service = 'masters';
-
-    try {
-      _isLoading = true;
-      _error = null;
-      notifyListeners();
-
-      final response = await _apiService.post(port, service, endpoint, {});
-      print("responsesssss $response");
-      if (response != null && response['data'] != null) {
-        _purchaseOrders = response['data'];
-
-        notifyListeners();
-      } else {
-        _error = 'Failed to retrieve the data.';
-        commonService.errorToast(_error!);
-      }
-    } catch (e) {
-      _error = 'An error occurred while retrieving the data.';
-      debugPrint('$e');
-      commonService.errorToast(_error!);
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
+  //
+  // getAllOrderedItems() async {
+  //   const String endpoint = 'search_purchase_order';
+  //   const String port = '8912';
+  //   const String service = 'masters';
+  //
+  //   try {
+  //     _isLoading = true;
+  //     _error = null;
+  //     notifyListeners();
+  //
+  //     final response = await _apiService.post(port, service, endpoint, {});
+  //     print("responsesssss $response");
+  //     if (response != null && response['data'] != null) {
+  //       _purchaseOrders = response['data'];
+  //
+  //       notifyListeners();
+  //     } else {
+  //       _error = 'Failed to retrieve the data.';
+  //       commonService.errorToast(_error!);
+  //     }
+  //   } catch (e) {
+  //     _error = 'An error occurred while retrieving the data.';
+  //     debugPrint('$e');
+  //     commonService.errorToast(_error!);
+  //   } finally {
+  //     _isLoading = false;
+  //     notifyListeners();
+  //   }
+  // }
 
   Future<dynamic> getTotalItems(String? partnerPurchaseOrderId) async {
+    var user = await _tokenService.getUser();
+    Map<String, dynamic> userData;
+    if (user is String) {
+      userData = jsonDecode(user);
+    } else if (user is Map<String, dynamic>) {
+      userData = user;
+    } else {
+      print('Unexpected type for user: ${user.runtimeType}');
+      return null;
+    }
     const String endpoint = 'search_purchase_order';
     const String port = '8912';
     const String service = 'masters';
@@ -123,6 +134,7 @@ class InwardOrderDtlProvider extends ChangeNotifier {
       _error = null;
       notifyListeners();
       Map<String, dynamic> params = {
+        'qboxEntitySno': userData['qboxEntitySno'],
         "partnerPurchaseOrderId": partnerPurchaseOrderId
       };
       print("partnerPurchaseOrderIddd $params");

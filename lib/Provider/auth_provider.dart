@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_page/Core/Router/app_router.dart';
+import 'package:qr_page/Services/api_service.dart';
+
 import 'dart:convert';
 
 import '../Services/toast_service.dart';
 import '../Services/token_service.dart';
+import '../Widgets/Common/deviceInfo.dart';
+import '../Widgets/Common/time.dart';
 
 class AuthProvider extends ChangeNotifier {
   final TokenService _tokenService = TokenService();
@@ -20,6 +24,9 @@ class AuthProvider extends ChangeNotifier {
   String signupPassword = '';
   bool signupObscureText = true;
   bool _isLoggedIn = false;
+  DeviceInfo deviceInfo = DeviceInfo();
+  ApiService api = ApiService();
+  Time time = Time();
 
   bool get obsecureText => _obsecureText;
   bool get isLoggedIn => _isLoggedIn;
@@ -78,41 +85,48 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> login(BuildContext context) async {
+  Future<bool> login(String email, String password) async {
     try {
-      isLoading = true;
-      notifyListeners();
-
-      final userStr = await _tokenService.getUser();
-
-      if (userStr == null) {
-        throw 'User not found';
+      // Your login logic here
+      print('Email: $email, Password: $password');
+      Map<String, dynamic> signInConfig = {
+        "appSno": 1,
+        "pushToken": 12345,
+        'deviceId': await deviceInfo.getDeviceId(),
+        'generatedOn': await time.getLocalTime(DateTime.now())
+      };
+      Map<String, dynamic> data = {
+        "authUserName": email,
+        "password": password,
+        "signInConfig": signInConfig
+      };
+      print('data$data');
+      final result = await api.post('8914','authn','login',data);
+      print('result$result');
+      if (result != null && result['data'] != null) {
+        var loginResult = result['data'];
+        print('loginResults$loginResult');
+        // var appUserRole = loginResult['selectedRole'] ?? loginResult['role']?[0]?['roleValue'];
+        if (loginResult['isLoginSuccess'] == true) {
+          print('loginResult$loginResult');
+          loginResult['password'] = password;
+          await _tokenService.saveUser(loginResult);
+          commonService.presentToast("Login successfully!");
+          AppRouter.navigateToHomeView();
+          return true; // Login successful
+        } else {
+          print('Login failed: ${loginResult['msg'] ?? 'Unknown error'}');
+          return false; // Login failed
+        }
+      } else {
+        // Handle null result
+        print('Login failed: No data received');
+        return false; // Login failed
       }
-
-      final userData = json.decode(userStr);
-
-      if (userData['email'].toLowerCase() != email.toLowerCase()) {
-        throw 'User not found';
-      }
-
-      if (userData['password'] != password) {
-        throw 'Invalid password';
-      }
-
-      currentUser = userData['email'];
-      isAuthenticated = true;
-      await _tokenService.saveToken(currentUser);
-      isLoading = false;
-      notifyListeners();
-      commonService.presentToast("Login successfully!");
-      // GoRouter.of(context).push(.routeName);
-      AppRouter.navigateToHomeView();
-      return true;
     } catch (e) {
-      isLoading = false;
-      notifyListeners();
-      commonService.errorToast("Error: ${e.toString()}");
-      return false;
+      // Handle exceptions
+      print('Error during login: $e');
+      return false; // Login failed due to an exception
     }
   }
 

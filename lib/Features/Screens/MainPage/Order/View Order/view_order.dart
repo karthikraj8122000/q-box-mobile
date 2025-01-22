@@ -39,10 +39,15 @@ class _ViewOrderState extends State<ViewOrder> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          automaticallyImplyLeading: true,
+          // automaticallyImplyLeading: true,
           iconTheme: IconThemeData(color: AppColors.black),
           backgroundColor: Colors.transparent,
           title: Text('Inward Orders', style: TextStyle(color: Colors.black)),
+          // GoRouter.of(context).push(ViewOrder.routeName);
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Colors.black87),
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
         body: Consumer<InwardOrderDtlProvider>(
             builder: (context, provider, child) {

@@ -1,8 +1,7 @@
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_page/Services/api_service.dart';
 import 'package:qr_page/Services/toast_service.dart';
@@ -19,12 +18,11 @@ class FoodViewScreen extends StatefulWidget {
   @override
   _FoodViewScreenState createState() => _FoodViewScreenState();
 }
-
 class _FoodViewScreenState extends State<FoodViewScreen> {
   bool isLoading = true;
-  Map<String, dynamic>? orderDetails;
-  List<Map<String, dynamic>>? inventoryItems;
-  bool isExpanded = false;
+  List<Map<String, dynamic>> orderDetailsList = []; // Changed to List
+  Map<int, List<Map<String, dynamic>>> inventoryItemsMap = {}; // Map to store inventory items for each order
+  Map<int, bool> expandedStates = {}; // Track expansion state for each order
   final ApiService apiService = ApiService();
   final ImagePicker _picker = ImagePicker();
   List<File> selectedImages = [];
@@ -44,18 +42,21 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
           'masters',
           'search_purchase_order_dtl',
           {"purchaseOrderSno": widget.purchaseOrderSno});
-      if (orderResponse['data'] != null) {
-        if (orderResponse['data'].isNotEmpty) {
-          orderDetails = orderResponse['data'][0];
+
+      if (orderResponse['data'] != null && orderResponse['data'] is List) {
+        orderDetailsList = List<Map<String, dynamic>>.from(orderResponse['data']);
+
+        for (var order in orderDetailsList) {
+          int purchaseOrderDtlSno = order['purchaseOrderDtlSno'];
+          expandedStates[purchaseOrderDtlSno] = false;
           final inventoryResponse = await apiService.post(
               '8912',
               'masters',
               'search_sku_inventory',
-              {"purchaseOrderDtlSno": orderDetails!['purchaseOrderDtlSno']});
-          print("@@@@@@@@@@@@@@@$inventoryResponse");
+              {"purchaseOrderDtlSno": purchaseOrderDtlSno});
           if (inventoryResponse['data'] != null) {
-            inventoryItems =
-                List<Map<String, dynamic>>.from(inventoryResponse['data']);
+            inventoryItemsMap[purchaseOrderDtlSno] =
+            List<Map<String, dynamic>>.from(inventoryResponse['data']);
           }
         }
       }
@@ -68,26 +69,417 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
     }
   }
 
-  Future<void> acceptFood(skuInventorySno) async {
-    print(skuInventorySno);
+  // Update the build method to show multiple orders
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: Text(
+          'Food Details',
+          style: TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: isLoading
+          ? Center(child: _buildLoadingIndicator())
+          : orderDetailsList.isEmpty
+          ? Center(child: Text('No data available'))
+          : SingleChildScrollView(
+        child: Column(
+          children: orderDetailsList.map((orderDetails) {
+            int purchaseOrderDtlSno = orderDetails['purchaseOrderDtlSno'];
+            return Column(
+              children: [
+                _buildFoodDetailsCard(orderDetails),
+                SizedBox(height: 16),
+                _buildInventoryList(
+                  purchaseOrderDtlSno,
+                  inventoryItemsMap[purchaseOrderDtlSno] ?? [],
+                  expandedStates[purchaseOrderDtlSno] ?? false,
+                ),
+                SizedBox(height: 16),
+              ],
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  // Update _buildInventoryList to handle expansion state for each order
+  Widget _buildInventoryList(int purchaseOrderDtlSno, List<Map<String, dynamic>> items, bool isExpanded) {
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 15,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    expandedStates[purchaseOrderDtlSno] = !(expandedStates[purchaseOrderDtlSno] ?? false);
+                  });
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.inventory_2,
+                        color: AppColors.mintGreen,
+                        size: 24,
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Inventory Items (${items.length})',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        isExpanded ? Icons.expand_less : Icons.expand_more,
+                        color: Colors.grey[600],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              if (isExpanded) ...[
+                Divider(height: 1),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    return _buildInventoryItem(items[index], index, purchaseOrderDtlSno);
+                  },
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInventoryItem(Map<String, dynamic> item, int index, int purchaseOrderDtlSno) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
+    return isTablet
+        ? Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey[200]!,
+            width: 1,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: AppColors.mintGreen.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                '${index + 1}',
+                style: TextStyle(
+                  color: AppColors.mintGreen,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item['uniqueCode'],
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'Stage: ${_getStageText(item['wfStageCd'])}',
+                  style: TextStyle(
+                    color: item['wfStageCd'] == 10
+                        ? Colors.green[600]
+                        : item['wfStageCd'] == 8
+                        ? Colors.red[600]
+                        : Colors.grey[600],
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          item['wfStageCd'] == 7
+              ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
+                    elevation: 0,
+                    shadowColor: Colors.greenAccent,
+                  ),
+                  icon: Icon(Icons.check,
+                      size: 20, color: Colors.white),
+                  label: Text(
+                    "Accept",
+                    style: TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    acceptFood(item['skuInventorySno'], purchaseOrderDtlSno);
+                  },
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
+                    elevation: 0,
+                    shadowColor: Colors.redAccent,
+                  ),
+                  icon: Icon(Icons.close,
+                      size: 20, color: Colors.white),
+                  label: Text(
+                    "Reject",
+                    style: TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    rejectFood(item['skuInventorySno'], purchaseOrderDtlSno);
+                  },
+                ),
+              ),
+            ],
+          )
+              : Container()
+        ],
+      ),
+    )
+        : Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey[200]!,
+            width: 1,
+          ),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.mintGreen.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(
+                    '${index + 1}',
+                    style: TextStyle(
+                      color: AppColors.mintGreen,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item['uniqueCode'],
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Stage: ${_getStageText(item['wfStageCd'])}',
+                    style: TextStyle(
+                      color: item['wfStageCd'] == 10
+                          ? Colors.green[600]
+                          : item['wfStageCd'] == 8
+                          ? Colors.red[600]
+                          : Colors.grey[600],
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          item['wfStageCd'] == 7
+              ? Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(
+                    horizontal: 10, vertical: 10),
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 12),
+                    elevation: 0,
+                    shadowColor: Colors.greenAccent,
+                  ),
+                  icon: Icon(Icons.check,
+                      size: 20, color: Colors.white),
+                  label: Text(
+                    "Accept",
+                    style: TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    acceptFood(item['skuInventorySno'], purchaseOrderDtlSno);
+                  },
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(
+                    horizontal: 10, vertical: 10),
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 12),
+                    elevation: 0,
+                    shadowColor: Colors.redAccent,
+                  ),
+                  icon: Icon(Icons.close,
+                      size: 20, color: Colors.white),
+                  label: Text(
+                    "Reject",
+                    style: TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    rejectFood(item['skuInventorySno'], purchaseOrderDtlSno);
+                  },
+                ),
+              ),
+            ],
+          )
+              : Container()
+        ],
+      ),
+    );
+  }
+
+  // Future<void> acceptFood(skuInventorySno) async {
+  //   print(skuInventorySno);
+  //   try {
+  //     final result = await apiService.post('8912', 'masters', 'accept_sku',
+  //         {"skuInventorySno": skuInventorySno});
+  //     print(result);
+  //     if (result['data'] != null) {
+  //       inventoryItems = List<Map<String, dynamic>>.from(result['data']);
+  //       setState(() {});
+  //     }
+  //   } catch (e) {
+  //     print('Error fetching data: $e');
+  //   } finally {
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   }
+  // }
+  Future<void> acceptFood(int skuInventorySno, int purchaseOrderDtlSno) async {
     try {
       final result = await apiService.post('8912', 'masters', 'accept_sku',
           {"skuInventorySno": skuInventorySno});
-      print(result);
+
       if (result['data'] != null) {
-        inventoryItems = List<Map<String, dynamic>>.from(result['data']);
-        setState(() {});
+        setState(() {
+          // Update the specific inventory items list for this purchase order
+          inventoryItemsMap[purchaseOrderDtlSno] =
+          List<Map<String, dynamic>>.from(result['data']);
+        });
       }
     } catch (e) {
-      print('Error fetching data: $e');
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
+      print('Error accepting food: $e');
     }
   }
 
-  Future<void> _showRejectionDialog(int skuInventorySno) async {
+  // Future<void> rejectFood(int skuInventorySno) async {
+  //   await _showRejectionDialog(skuInventorySno);
+  // }
+  Future<void> rejectFood(int skuInventorySno, int purchaseOrderDtlSno) async {
+    await _showRejectionDialog(skuInventorySno, purchaseOrderDtlSno);
+  }
+
+  Future<void> _showRejectionDialog(int skuInventorySno, int purchaseOrderDtlSno) async {
     selectedImages.clear();
     rejectionReasonController.clear();
 
@@ -262,15 +654,9 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
                             ),
                             child: Text('Reject'),
                             onPressed: () {
-                              // if (rejectionReasonController.text
-                              //     .trim()
-                              //     .isEmpty) {
-                              //   commonService.presentToast(
-                              //       'Please enter rejection reason');
-                              //   return;
-                              // }
+
                               Navigator.pop(context, true);
-                              _submitRejection(skuInventorySno);
+                              _submitRejection(skuInventorySno, purchaseOrderDtlSno);
                             },
                           ),
                         ],
@@ -286,19 +672,10 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
     );
   }
 
-  Future<void> _submitRejection(int skuInventorySno) async {
+  Future<void> _submitRejection(int skuInventorySno, int purchaseOrderDtlSno) async {
     try {
-      // List<String> base64Images = [];
-      // for (File image in selectedImages) {
-      //   List<int> imageBytes = await image.readAsBytes();
-      //   String base64Image = base64Encode(imageBytes);
-      //   base64Images.add(base64Image);
-      // }
-
       final rejectionData = {
         "skuInventorySno": skuInventorySno,
-        // "rejectionReason": rejectionReasonController.text,
-        // "images": base64Images,
       };
 
       final result = await apiService.post(
@@ -309,8 +686,11 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
       );
 
       if (result['data'] != null) {
-        inventoryItems = List<Map<String, dynamic>>.from(result['data']);
-        setState(() {});
+        setState(() {
+          // Update the specific inventory items list for this purchase order
+          inventoryItemsMap[purchaseOrderDtlSno] =
+          List<Map<String, dynamic>>.from(result['data']);
+        });
         commonService.presentToast("Item rejected successfully");
       }
     } catch (e) {
@@ -319,44 +699,40 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
     }
   }
 
-  Future<void> rejectFood(int skuInventorySno) async {
-    await _showRejectionDialog(skuInventorySno);
-  }
+  //
+  // Future<void> _submitRejection(int skuInventorySno) async {
+  //   try {
+  //     // List<String> base64Images = [];
+  //     // for (File image in selectedImages) {
+  //     //   List<int> imageBytes = await image.readAsBytes();
+  //     //   String base64Image = base64Encode(imageBytes);
+  //     //   base64Images.add(base64Image);
+  //     // }
+  //
+  //     final rejectionData = {
+  //       "skuInventorySno": skuInventorySno,
+  //       // "rejectionReason": rejectionReasonController.text,
+  //       // "images": base64Images,
+  //     };
+  //
+  //     final result = await apiService.post(
+  //       '8912',
+  //       'masters',
+  //       'reject_sku',
+  //       rejectionData,
+  //     );
+  //
+  //     if (result['data'] != null) {
+  //       inventoryItems = List<Map<String, dynamic>>.from(result['data']);
+  //       setState(() {});
+  //       commonService.presentToast("Item rejected successfully");
+  //     }
+  //   } catch (e) {
+  //     print('Error rejecting item: $e');
+  //     commonService.presentToast('Failed to reject item. Please try again.');
+  //   }
+  // }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        title: Text(
-          'Food Details',
-          style: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black87),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: isLoading
-          ? Center(child: _buildLoadingIndicator())
-          : orderDetails == null
-              ? Center(child: Text('No data available'))
-              : SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      _buildFoodDetailsCard(),
-                      SizedBox(height: 16),
-                      _buildInventoryList(),
-                    ],
-                  ),
-                ),
-    );
-  }
 
   Widget _buildLoadingIndicator() {
     return Container(
@@ -391,7 +767,29 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
     );
   }
 
-  Widget _buildFoodDetailsCard() {
+  String _getStageText(int stageCd) {
+    // Replace with your actual stage mappings
+    switch (stageCd) {
+      case 6:
+        return "Pending";
+      case 7:
+        return 'In Progress';
+      case 8:
+        return 'Rejected';
+      case 10:
+        return 'Accepted';
+      case 12:
+        return 'Sku returned to Hot box';
+      case 11:
+        return 'Sku loaded in Q-box';
+      case 13:
+        return 'Outward Delivery Picked up';
+      default:
+        return 'Unknown Stage';
+    }
+  }
+  // Update _buildFoodDetailsCard to take orderDetails as parameter
+  Widget _buildFoodDetailsCard(Map<String, dynamic> orderDetails) {
     return Container(
       margin: EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -485,330 +883,6 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
       ),
     );
   }
-
-  Widget _buildInventoryList() {
-    return Column(
-      children: [
-
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 15,
-                offset: Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    isExpanded = !isExpanded;
-                  });
-                },
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.inventory_2,
-                        color: AppColors.mintGreen,
-                        size: 24,
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Inventory Items (${inventoryItems?.length ?? 0})',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Icon(
-                        isExpanded ? Icons.expand_less : Icons.expand_more,
-                        color: Colors.grey[600],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              if (isExpanded) ...[
-                Divider(height: 1),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: inventoryItems?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    final item = inventoryItems![index];
-                    return _buildInventoryItem(item, index);
-                  },
-                ),
-              ],
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInventoryItem(Map<String, dynamic> item, int index) {
-    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-
-    return isTablet
-        ? Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Colors.grey[200]!,
-                  width: 1,
-                ),
-              ),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.mintGreen.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: Text(
-                      '${index + 1}',
-                      style: TextStyle(
-                        color: AppColors.mintGreen,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item['uniqueCode'],
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Stage: ${_getStageText(item['wfStageCd'])}',
-                        style: TextStyle(
-                          color: item['wfStageCd'] == 10
-                              ? Colors.green[600]
-                              : item['wfStageCd'] == 8
-                                  ? Colors.red[600]
-                                  : Colors.grey[600],
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                item['wfStageCd'] == 7
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: 10),
-                            child: ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 12),
-                                elevation: 0,
-                                shadowColor: Colors.greenAccent,
-                              ),
-                              icon: Icon(Icons.check,
-                                  size: 20, color: Colors.white),
-                              label: Text(
-                                "Accept",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              onPressed: () {
-                                acceptFood(item['skuInventorySno']);
-                              },
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: 10),
-                            child: ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                backgroundColor: Colors.red,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 12),
-                                elevation: 0,
-                                shadowColor: Colors.redAccent,
-                              ),
-                              icon: Icon(Icons.close,
-                                  size: 20, color: Colors.white),
-                              label: Text(
-                                "Reject",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              onPressed: () {
-                                rejectFood(item['skuInventorySno']);
-                              },
-                            ),
-                          ),
-                        ],
-                      )
-                    : Container()
-              ],
-            ),
-          )
-        : Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Colors.grey[200]!,
-                  width: 1,
-                ),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.mintGreen.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '${index + 1}',
-                          style: TextStyle(
-                            color: AppColors.mintGreen,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item['uniqueCode'],
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          'Stage: ${_getStageText(item['wfStageCd'])}',
-                          style: TextStyle(
-                            color: item['wfStageCd'] == 10
-                                ? Colors.green[600]
-                                : item['wfStageCd'] == 8
-                                    ? Colors.red[600]
-                                    : Colors.grey[600],
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                item['wfStageCd'] == 7
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 12),
-                                elevation: 0,
-                                shadowColor: Colors.greenAccent,
-                              ),
-                              icon: Icon(Icons.check,
-                                  size: 20, color: Colors.white),
-                              label: Text(
-                                "Accept",
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
-                              ),
-                              onPressed: () {
-                                acceptFood(item['skuInventorySno']);
-                              },
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                backgroundColor: Colors.red,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 12),
-                                elevation: 0,
-                                shadowColor: Colors.redAccent,
-                              ),
-                              icon: Icon(Icons.close,
-                                  size: 20, color: Colors.white),
-                              label: Text(
-                                "Reject",
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
-                              ),
-                              onPressed: () {
-                                rejectFood(item['skuInventorySno']);
-                              },
-                            ),
-                          ),
-                        ],
-                      )
-                    : Container()
-              ],
-            ),
-          );
-  }
-
   Widget _buildInfoRow(String label, String value, IconData icon,
       {bool isHighlighted = false}) {
     return Container(
@@ -865,27 +939,5 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
         ],
       ),
     );
-  }
-
-  String _getStageText(int stageCd) {
-    // Replace with your actual stage mappings
-    switch (stageCd) {
-      case 6:
-        return "Pending";
-      case 7:
-        return 'In Progress';
-      case 8:
-        return 'Rejected';
-      case 10:
-        return 'Accepted';
-      case 12:
-        return 'Sku returned to Hot box';
-      case 11:
-        return 'Sku loaded in Q-box';
-      case 13:
-        return 'Outward Delivery Picked up';
-      default:
-        return 'Unknown Stage';
-    }
   }
 }

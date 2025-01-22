@@ -23,13 +23,13 @@ class DashboardProvider with ChangeNotifier {
   String? get error => _error;
   List<dynamic> get outwardOrderList => _outwardOrderList;
 
-  Future<void> getQboxes() async {
+  Future<void> getQboxes(int qboxEntitySno) async {
     try {
       _isLoading = true;
       _error = null;
       notifyListeners();
 
-      Map<String, dynamic> params = {"qboxEntitySno": 26};
+      Map<String, dynamic> params = {"qboxEntitySno": qboxEntitySno};
       var result = await apiService.post(
           "8911", "masters", "get_box_cell_inventory", params);
 

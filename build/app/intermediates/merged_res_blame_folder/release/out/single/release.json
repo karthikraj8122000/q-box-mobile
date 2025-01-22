@@ -161,7 +161,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-hdpi-v4_ic_barcode_flash_off.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-hdpi-v4/ic_barcode_flash_off.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-hdpi-v4/ic_barcode_flash_off.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/layout_test_toolbar_custom_background.xml.flat",
@@ -353,7 +353,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-mdpi-v4_ic_barcode_flash_off.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-mdpi-v4/ic_barcode_flash_off.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-mdpi-v4/ic_barcode_flash_off.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/layout_mtrl_alert_dialog_actions.xml.flat",
@@ -785,7 +785,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-mdpi-v4_ic_barcode_flash_on.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-mdpi-v4/ic_barcode_flash_on.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-mdpi-v4/ic_barcode_flash_on.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/color_mtrl_calendar_item_stroke_color.xml.flat",
@@ -873,7 +873,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-xxhdpi-v4_ic_barcode_flash_off.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-xxhdpi-v4/ic_barcode_flash_off.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-xxhdpi-v4/ic_barcode_flash_off.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-xxxhdpi-v4_ic_call_answer.png.flat",
@@ -941,7 +941,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-mdpi-v4_ic_switch_camera.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-mdpi-v4/ic_switch_camera.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-mdpi-v4/ic_switch_camera.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/layout_notification_template_part_chronometer.xml.flat",
@@ -989,7 +989,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-anydpi-v21_ic_barcode_flash_on.xml.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-anydpi-v21/ic_barcode_flash_on.xml"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-anydpi-v21/ic_barcode_flash_on.xml"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-hdpi-v4_ic_call_decline_low.png.flat",
@@ -1001,7 +1001,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-xhdpi-v4_ic_barcode_flash_off.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-xhdpi-v4/ic_barcode_flash_off.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-xhdpi-v4/ic_barcode_flash_off.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/color_mtrl_bottom_nav_ripple_color.xml.flat",
@@ -1049,7 +1049,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable_corner.xml.flat",
-        "source": "com.example.qr_page.app-packaged_res-63:/drawable/corner.xml"
+        "source": "com.example.qr_page.app-packaged_res-65:/drawable/corner.xml"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable_mtrl_ic_error.xml.flat",
@@ -1065,7 +1065,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/layout_toast_custom.xml.flat",
-        "source": "com.example.qr_page.app-packaged_res-63:/layout/toast_custom.xml"
+        "source": "com.example.qr_page.app-packaged_res-65:/layout/toast_custom.xml"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-v21_abc_dialog_material_background.xml.flat",
@@ -1332,10 +1332,6 @@
         "source": "com.example.qr_page.app-appcompat-1.4.2-19:/drawable-xxhdpi-v4/abc_list_selector_disabled_holo_light.9.png"
     },
     {
-        "merged": "com.example.qr_page.app-merged_res-58:/mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "com.example.qr_page.app-main-51:/mipmap-anydpi-v26/ic_launcher.xml"
-    },
-    {
         "merged": "com.example.qr_page.app-merged_res-58:/color_mtrl_fab_icon_text_color_selector.xml.flat",
         "source": "com.example.qr_page.app-material-1.3.0-34:/color/mtrl_fab_icon_text_color_selector.xml"
     },
@@ -1345,7 +1341,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-xxhdpi-v4_ic_switch_camera.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-xxhdpi-v4/ic_switch_camera.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-xxhdpi-v4/ic_switch_camera.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable_design_snackbar_background.xml.flat",
@@ -1369,7 +1365,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-xhdpi-v4_ic_switch_camera.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-xhdpi-v4/ic_switch_camera.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-xhdpi-v4/ic_switch_camera.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/color_abc_primary_text_material_light.xml.flat",
@@ -1425,7 +1421,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-anydpi-v21_ic_switch_camera.xml.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-anydpi-v21/ic_switch_camera.xml"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-anydpi-v21/ic_switch_camera.xml"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable_abc_ic_menu_overflow_material.xml.flat",
@@ -1521,7 +1517,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-anydpi-v21_ic_barcode_flash_off.xml.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-anydpi-v21/ic_barcode_flash_off.xml"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-anydpi-v21/ic_barcode_flash_off.xml"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/anim_btn_radio_to_off_mtrl_dot_group_animation.xml.flat",
@@ -1541,7 +1537,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable_toast_bg.xml.flat",
-        "source": "com.example.qr_page.app-packaged_res-63:/drawable/toast_bg.xml"
+        "source": "com.example.qr_page.app-packaged_res-65:/drawable/toast_bg.xml"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-hdpi-v4_abc_cab_background_top_mtrl_alpha.9.png.flat",
@@ -1653,7 +1649,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/layout_barcode_capture.xml.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/layout/barcode_capture.xml"
+        "source": "com.example.qr_page.app-packaged_res-62:/layout/barcode_capture.xml"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable_abc_ic_voice_search_api_material.xml.flat",
@@ -1677,7 +1673,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-hdpi-v4_ic_barcode_flash_on.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-hdpi-v4/ic_barcode_flash_on.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-hdpi-v4/ic_barcode_flash_on.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable_material_ic_menu_arrow_down_black_24dp.xml.flat",
@@ -1961,7 +1957,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/xml_flutter_image_picker_file_paths.xml.flat",
-        "source": "com.example.qr_page.app-packaged_res-65:/xml/flutter_image_picker_file_paths.xml"
+        "source": "com.example.qr_page.app-packaged_res-67:/xml/flutter_image_picker_file_paths.xml"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable_tooltip_frame_dark.xml.flat",
@@ -2029,7 +2025,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-xhdpi-v4_ic_barcode_flash_on.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-xhdpi-v4/ic_barcode_flash_on.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-xhdpi-v4/ic_barcode_flash_on.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable_abc_ic_menu_paste_mtrl_am_alpha.xml.flat",
@@ -2077,7 +2073,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-ldpi-v4_ic_barcode_flash_on.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-ldpi-v4/ic_barcode_flash_on.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-ldpi-v4/ic_barcode_flash_on.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-ldpi-v4_ic_call_answer_low.png.flat",
@@ -2201,7 +2197,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-ldpi-v4_ic_switch_camera.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-ldpi-v4/ic_switch_camera.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-ldpi-v4/ic_switch_camera.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-ldpi-v4_ic_call_decline_low.png.flat",
@@ -2413,7 +2409,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-xxxhdpi-v4_ic_switch_camera.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-xxxhdpi-v4/ic_switch_camera.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-xxxhdpi-v4/ic_switch_camera.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-hdpi-v4_abc_textfield_activated_mtrl_alpha.9.png.flat",
@@ -2421,7 +2417,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-xxxhdpi-v4_ic_barcode_flash_on.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-xxxhdpi-v4/ic_barcode_flash_on.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-xxxhdpi-v4/ic_barcode_flash_on.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/anim_abc_slide_out_bottom.xml.flat",
@@ -2561,7 +2557,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-ldpi-v4_ic_barcode_flash_off.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-ldpi-v4/ic_barcode_flash_off.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-ldpi-v4/ic_barcode_flash_off.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/color_abc_hint_foreground_material_dark.xml.flat",
@@ -2785,7 +2781,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-xxxhdpi-v4_ic_barcode_flash_off.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-xxxhdpi-v4/ic_barcode_flash_off.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-xxxhdpi-v4/ic_barcode_flash_off.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/layout_zxing_capture.xml.flat",
@@ -2837,7 +2833,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-xxhdpi-v4_ic_barcode_flash_on.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-xxhdpi-v4/ic_barcode_flash_on.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-xxhdpi-v4/ic_barcode_flash_on.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-xhdpi-v4_abc_tab_indicator_mtrl_alpha.9.png.flat",
@@ -2889,7 +2885,7 @@
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/drawable-hdpi-v4_ic_switch_camera.png.flat",
-        "source": "com.example.qr_page.app-packaged_res-60:/drawable-hdpi-v4/ic_switch_camera.png"
+        "source": "com.example.qr_page.app-packaged_res-62:/drawable-hdpi-v4/ic_switch_camera.png"
     },
     {
         "merged": "com.example.qr_page.app-merged_res-58:/interpolator_fast_out_slow_in.xml.flat",
