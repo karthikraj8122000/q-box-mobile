@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
-
-import '../../../../../Services/api_service.dart';
+import 'package:qr_page/Services/api_service.dart';
 
 class OutwardOrderHistoryCard extends StatefulWidget {
   const OutwardOrderHistoryCard({Key? key}) : super(key: key);
@@ -12,72 +11,84 @@ class OutwardOrderHistoryCard extends StatefulWidget {
 }
 
 class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
-  bool _isExpanded = false;
-  bool _isFavorite = false;
-  List purchaseOrder = [];
+  ApiService apiService = ApiService();
+  List<dynamic> purchaseOrder = [];
+  final Set<int> _expandedIndices = {};
 
   @override
   void initState() {
-    _getTotalItems();
+    getTotalItems();
     super.initState();
   }
-  Future<dynamic> _getTotalItems() async {
-    final String endpoint = 'search_purchase_order';
-    final String port = '8912'; // Replace with your port
-    final String service = 'masters'; // Replace with your service
-    try {
-      final apiService = ApiService();
-      final response = await apiService.post(port, service, endpoint, {});
-      print("inwardhistory${response}");
+
+  Future<void> getTotalItems() async {
+    Map<String, dynamic> params = {};
+    var result = await apiService.post("8911", "masters", "partner_channel_outward_delivery_history", params);
+    print('result: $result');
+
+    if (result != null) {
       setState(() {
-        purchaseOrder = response['data'];
+        if (result is List) {
+          // If result is directly a list
+          purchaseOrder = result;
+        } else if (result is Map<String, dynamic>) {
+          // If result is a map, try to extract data
+          var data = result['data'];
+          if (data is List) {
+            // If data is directly a list
+            purchaseOrder = data;
+          } else if (data is Map<String, dynamic>) {
+            // If data is a map, convert it to a list
+            purchaseOrder = [data];
+          } else {
+            // Handle unexpected data format
+            purchaseOrder = [];
+          }
+        } else {
+          // Handle unexpected result format
+          purchaseOrder = [];
+        }
       });
-      // Extract totalItems from the response
-      // return response['data'] ?? [];
-    } catch (error) {
-      throw Exception('Failed to fetch totalItems: $error');
+      print('purchaseOrder: $purchaseOrder');
+    } else {
+      print("Null response received");
+      setState(() {
+        purchaseOrder = [];
+      });
     }
-  }
-
-  // Sample order data
-  final List<Map<String, dynamic>> _orders = [
-    {
-      'items': [
-        {'name': 'Pepperoni Pizza', 'quantity': 1, 'price': 15.99},
-        {'name': 'Garlic Bread', 'quantity': 2, 'price': 4.99},
-        {'name': 'Coke', 'quantity': 2, 'price': 2.49},
-      ],
-      'orderDate': DateTime.now().subtract(const Duration(hours: 2)),
-      'status': 'Delivered'
-    },
-    {
-      'items': [
-        {'name': 'Cheese Burger', 'quantity': 2, 'price': 12.99},
-        {'name': 'French Fries', 'quantity': 1, 'price': 3.99},
-        {'name': 'Milkshake', 'quantity': 2, 'price': 4.99},
-      ],
-      'orderDate': DateTime.now().subtract(const Duration(days: 1)),
-      'status': 'Delivered'
-    },
-  ];
-
-  double _calculateTotal(List<Map<String, dynamic>> items) {
-    return items.fold(0, (sum, item) => sum + (item['quantity'] * item['price']));
   }
 
   @override
   Widget build(BuildContext context) {
+    if (purchaseOrder.isEmpty) {
+      return Center(child:Text("No Outward Order History Found"));
+      // return const Center(child: CircularProgressIndicator());
+    }
+
+
     return ListView.builder(
       padding: const EdgeInsets.all(8),
-      itemCount: _orders.length,
+      itemCount: purchaseOrder.length,
       itemBuilder: (context, index) {
-        final order = _orders[index];
-        final total = _calculateTotal(order['items']);
+        // Safely cast the order data
+        final order = purchaseOrder[index] is Map ?
+        purchaseOrder[index] as Map<String, dynamic> :
+        <String, dynamic>{};
+
+        final salesOrder = order['salesOrder'] is Map ?
+        order['salesOrder'] as Map<String, dynamic> :
+        <String, dynamic>{};
+
+        final salesOrderDtls = order['salesOrderDtls'] is List ?
+        order['salesOrderDtls'] as List<dynamic> :
+        <dynamic>[];
+
+        final isExpanded = _expandedIndices.contains(index);
 
         return Container(
           margin: const EdgeInsets.symmetric(vertical: 8),
           child: Card(
-            elevation: _isExpanded ? 8 : 4,
+            elevation: isExpanded ? 8 : 4,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
               side: BorderSide(color: Colors.red.shade100, width: 1),
@@ -87,7 +98,11 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                 InkWell(
                   onTap: () {
                     setState(() {
-                      _isExpanded = !_isExpanded;
+                      if (isExpanded) {
+                        _expandedIndices.remove(index);
+                      } else {
+                        _expandedIndices.add(index);
+                      }
                     });
                   },
                   borderRadius: BorderRadius.circular(15),
@@ -99,49 +114,25 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            // Container(
-                            //   padding: const EdgeInsets.symmetric(
-                            //     horizontal: 12,
-                            //     vertical: 6,
-                            //   ),
-                            //   decoration: BoxDecoration(
-                            //     color: Colors.red.shade50,
-                            //     borderRadius: BorderRadius.circular(20),
-                            //   ),
-                            //   child: Text(
-                            //     order['orderId'],
-                            //     style: TextStyle(
-                            //       color: Colors.red.shade700,
-                            //       fontWeight: FontWeight.bold,
-                            //     ),
-                            //   ),
-                            // ),
-                            Row(
-                              children: [
-
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.green.shade50,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Text(
-                                    order['status'],
-                                    style: TextStyle(
-                                      color: Colors.green.shade700,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.red.shade50,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                salesOrder['partnerSalesOrderId']?.toString() ?? 'N/A',
+                                style: TextStyle(
+                                  color: Colors.red.shade700,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ],
+                              ),
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 12),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,7 +142,11 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                                 Icon(Icons.access_time, color: Colors.grey.shade600, size: 20),
                                 const SizedBox(width: 8),
                                 Text(
-                                  DateFormat('MMM dd, yyyy • hh:mm a').format(order['orderDate']),
+                                  salesOrder['deliveredTime'] != null
+                                      ? DateFormat('MMM dd, yyyy').format(
+                                      DateTime.parse(salesOrder['deliveredTime'].toString())
+                                  )
+                                      : 'N/A',
                                   style: TextStyle(
                                     color: Colors.grey.shade600,
                                     fontSize: 14,
@@ -160,7 +155,7 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                               ],
                             ),
                             Icon(
-                              _isExpanded ? Icons.expand_less : Icons.expand_more,
+                              isExpanded ? Icons.expand_less : Icons.expand_more,
                               color: Colors.red.shade700,
                             ),
                           ],
@@ -169,7 +164,7 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                     ),
                   ),
                 ),
-                if (_isExpanded) ...[
+                if (isExpanded) ...[
                   const Divider(height: 1),
                   Container(
                     padding: const EdgeInsets.all(16),
@@ -182,62 +177,67 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                     ),
                     child: Column(
                       children: [
-                        ...order['items'].map<Widget>((item) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Text(
-                                        'x${item['quantity']}',
-                                        style: TextStyle(
-                                          color: Colors.red.shade700,
-                                          fontWeight: FontWeight.bold,
+                        ...salesOrderDtls.map<Widget>((item) {
+                          if (item is! Map) return const SizedBox.shrink();
+
+                          final skuInventory = (item['skuInventory'] as List<dynamic>?) ?? [];
+                          final firstSku = skuInventory.isNotEmpty && skuInventory[0] is Map ?
+                          skuInventory[0] as Map<String, dynamic> :
+                          <String, dynamic>{};
+
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        child: Text(
+                                          'x${item['orderQuantity']?.toString() ?? 'N/A'}',
+                                          style: TextStyle(
+                                            color: Colors.red.shade700,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Text(
-                                      item['name'],
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Text(
+                                          firstSku['skuDescription']?.toString() ?? 'N/A',
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                '\$${(item['quantity'] * item['price']).toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )).toList(),
+                              ],
+                            ),
+                          );
+                        }).toList(),
                         const Divider(color: Colors.white),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
-                              'Total Amount',
+                              'Entity Name',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Text(
-                              '\$${total.toStringAsFixed(2)}',
+                              salesOrder['qboxEntityName']?.toString() ?? 'N/A',
                               style: TextStyle(
                                 color: Colors.red.shade700,
                                 fontSize: 18,
@@ -252,6 +252,7 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                           children: [
                             IconButton(
                               onPressed: () {
+                                // Implement delete functionality
                               },
                               icon: const Icon(Icons.delete),
                               style: IconButton.styleFrom(
@@ -263,6 +264,7 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
                             const SizedBox(width: 12),
                             IconButton(
                               onPressed: () {
+                                // Implement share functionality
                               },
                               icon: const Icon(Icons.share),
                               style: IconButton.styleFrom(
@@ -280,7 +282,7 @@ class _OrderHistoryCardState extends State<OutwardOrderHistoryCard> {
               ],
             ),
           ),
-        ).animate().fadeIn(duration: 800.ms,delay: (50 * index).ms).slideY(begin: -0.2, end: 0);
+        ).animate().fadeIn(duration: 800.ms, delay: (50 * index).ms).slideY(begin: -0.2, end: 0);
       },
     );
   }

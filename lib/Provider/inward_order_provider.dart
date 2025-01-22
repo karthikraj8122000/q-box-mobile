@@ -1,18 +1,27 @@
+// Modified InwardOrderDtlProvider
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:go_router/go_router.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/Inward%20Order/qr_scanner_screen.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/View%20Order/view_order.dart';
 import 'package:qr_page/Services/api_service.dart';
+import 'package:qr_page/Services/toast_service.dart';
 
 class InwardOrderDtlProvider extends ChangeNotifier {
-  String _scanStatus = "complete";
+  String _scanStatus = "notComplete";
   List _purchaseOrders = [];
+  dynamic purchaseOrderId;
   final ApiService _apiService = ApiService();
+  final CommonService commonService = CommonService();
+  bool _isLoading = true;
+  String? _error;
 
-  // Getters
   String get scanStatus => _scanStatus;
   List get purchaseOrders => _purchaseOrders;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
 
-  void resetScan() {
-    _scanStatus = "notComplete";
+  void resetScan(BuildContext context) {
     _purchaseOrders = [];
     notifyListeners();
   }
@@ -27,32 +36,118 @@ class InwardOrderDtlProvider extends ChangeNotifier {
       );
 
       if (barcodeScanRes != '-1') {
-        handleEntry(context, barcodeScanRes);
+        await handleEntry(context, barcodeScanRes);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ViewOrder(
+              partnerPurchaseOrderId:
+                  barcodeScanRes, // Your purchase order number
+            ),
+          ),
+        );
+        // GoRouter.of(context).push(ViewOrder.routeName);
       }
     } catch (e) {
       _showError(context, 'Error scanning QR code: $e');
     }
   }
 
-  Future<void> getTotalItems() async {
+  Future<bool> validateManualEntry(List<String> digits) {
+    return Future.value(digits.every((digit) => digit.isNotEmpty));
+  }
+
+  Future<void> handleManualEntry(
+      BuildContext context, List<TextEditingController> controllers) async {
+    final digits = controllers.map((c) => c.text).toList();
+
+    if (await validateManualEntry(digits)) {
+      final orderId = digits.join();
+      await handleEntry(context, 'SWIGGY_$orderId');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ViewOrder(
+            partnerPurchaseOrderId:
+                "SWIGGY_$orderId", // Your purchase order number
+          ),
+        ),
+      );
+      // GoRouter.of(context).push(ViewOrder.routeName);
+      // if (_scanStatus == 'complete') {
+      //   GoRouter.of(context).push(ViewOrder.routeName);
+      // }
+    } else {
+      _showError(context, 'Please fill all fields');
+    }
+  }
+
+  getAllOrderedItems() async {
     const String endpoint = 'search_purchase_order';
     const String port = '8912';
     const String service = 'masters';
 
     try {
-      final response = await _apiService.post(port, service, endpoint, {});
-      _scanStatus = 'complete';
-      _purchaseOrders = response['data'];
+      _isLoading = true;
+      _error = null;
       notifyListeners();
-    } catch (error) {
-      throw Exception('Failed to fetch totalItems: $error');
+
+      final response = await _apiService.post(port, service, endpoint, {});
+      print("responsesssss $response");
+      if (response != null && response['data'] != null) {
+        _purchaseOrders = response['data'];
+
+        notifyListeners();
+      } else {
+        _error = 'Failed to retrieve the data.';
+        commonService.errorToast(_error!);
+      }
+    } catch (e) {
+      _error = 'An error occurred while retrieving the data.';
+      debugPrint('$e');
+      commonService.errorToast(_error!);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+
+  Future<dynamic> getTotalItems(String? partnerPurchaseOrderId) async {
+    const String endpoint = 'search_purchase_order';
+    const String port = '8912';
+    const String service = 'masters';
+
+    try {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+      Map<String, dynamic> params = {
+        "partnerPurchaseOrderId": partnerPurchaseOrderId
+      };
+      print("partnerPurchaseOrderIddd $params");
+      final response = await _apiService.post(port, service, endpoint, params);
+      print("responsesssss $response");
+      if (response != null && response['data'] != null) {
+        _purchaseOrders = response['data'];
+
+        notifyListeners();
+      } else {
+        _error = 'Failed to retrieve the data.';
+        commonService.errorToast(_error!);
+      }
+    } catch (e) {
+      _error = 'An error occurred while retrieving the data.';
+      debugPrint('$e');
+      commonService.errorToast(_error!);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
   void _showError(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    commonService.errorToast(message);
   }
 
   Future<void> handleEntry(BuildContext context, String orderId) async {
@@ -65,10 +160,12 @@ class InwardOrderDtlProvider extends ChangeNotifier {
     };
 
     try {
-      final response = await _apiService.post(port, service, endpoint, requestBody);
-
-      if (response['data'] != null && response['data']["purchaseOrder"] != null) {
-        await getTotalItems();
+      final response =
+          await _apiService.post(port, service, endpoint, requestBody);
+      print("response$response");
+      if (response['data'] != null &&
+          response['data']["purchaseOrder"] != null) {
+        await getTotalItems(requestBody['partnerPurchaseOrderId']);
         _scanStatus = 'complete';
         notifyListeners();
       }

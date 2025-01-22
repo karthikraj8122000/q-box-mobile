@@ -11,6 +11,7 @@ import 'package:qr_page/Features/Screens/MainPage/Load-unload/load_history.dart'
 import 'package:qr_page/Features/Screens/MainPage/Order/Order%20History/order_history_main.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/Inward%20Order/inward_order_main.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/Inward%20Order/qr_scanner_screen.dart';
+import 'package:qr_page/Features/Screens/MainPage/Order/View%20Order/view_order.dart';
 import 'package:qr_page/Features/Screens/Splash/animated_splash.dart';
 import 'package:qr_page/Provider/auth_provider.dart';
 
@@ -72,7 +73,27 @@ class AppRouter {
         path: NotificationHistoryScreen.routeName,
         builder: (_, __) => const NotificationHistoryScreen(),
       ),
+      // GoRoute(
+      //   name: ViewOrder.routeName,
+      //   path: ViewOrder.routeName,
+      //   builder: (_, __) => const ViewOrder(),
+      // ),
+  //     GoRoute(
+  //       name: ViewOrder.routeName,
+  //       path: ViewOrder.routeName,
+  //       builder: (context, state) {
+  // final purchaseOrder = state.extra;
+  // return ViewOrder(purchaseOrder:purchaseOrder);
+  // }
+  //     ),
+      GoRoute(
+        name: ViewOrder.routeName,
+        path: ViewOrder.routeName,
+        builder: (context, state) {
 
+          return ViewOrder();
+        },
+      ),
       ShellRoute(
         navigatorKey: _mainMenuNavigatorKey,
         builder: (_, __, child) {

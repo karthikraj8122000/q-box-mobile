@@ -31918,6 +31918,36 @@ com.journeyapps.barcodescanner.camera.DisplayConfiguration:
     public com.journeyapps.barcodescanner.Size getViewfinderSize()
 com.journeyapps.barcodescanner.camera.LegacyPreviewScalingStrategy$1
 com.journeyapps.barcodescanner.camera.LegacyPreviewScalingStrategy
+com.mr.flutter.plugin.filepicker.BuildConfig
+com.mr.flutter.plugin.filepicker.FilePickerDelegate:
+    private static final java.lang.String TAG
+com.mr.flutter.plugin.filepicker.FilePickerPlugin:
+    private static final java.lang.String CHANNEL
+    private static final java.lang.String EVENT_CHANNEL
+    private static final java.lang.String TAG
+com.mr.flutter.plugin.filepicker.FileUtils:
+    private static final java.lang.String PRIMARY_VOLUME_NAME
+    private static final java.lang.String TAG
+    public void <init>()
+    public static java.util.HashMap createFileInfoMap(java.io.File)
+    public static java.lang.String getDataColumn(android.content.Context,android.net.Uri,java.lang.String,java.lang.String[])
+    public static java.lang.String getRealPathFromURI(android.content.Context,android.net.Uri)
+    public static boolean isExternalStorageDocument(android.net.Uri)
+    public static boolean isGooglePhotosUri(android.net.Uri)
+    public static boolean isMediaDocument(android.net.Uri)
+com.mr.flutter.plugin.filepicker.R$anim
+com.mr.flutter.plugin.filepicker.R$animator
+com.mr.flutter.plugin.filepicker.R$attr
+com.mr.flutter.plugin.filepicker.R$color
+com.mr.flutter.plugin.filepicker.R$dimen
+com.mr.flutter.plugin.filepicker.R$drawable
+com.mr.flutter.plugin.filepicker.R$id
+com.mr.flutter.plugin.filepicker.R$integer
+com.mr.flutter.plugin.filepicker.R$layout
+com.mr.flutter.plugin.filepicker.R$string
+com.mr.flutter.plugin.filepicker.R$style
+com.mr.flutter.plugin.filepicker.R$styleable
+com.mr.flutter.plugin.filepicker.R
 dev.fluttercommunity.plus.connectivity.BuildConfig
 dev.fluttercommunity.plus.connectivity.Connectivity:
     static final java.lang.String CONNECTIVITY_BLUETOOTH
@@ -59924,6 +59954,35 @@ com.journeyapps.barcodescanner.camera.PreviewScalingStrategy:
     public static void <clinit>()
     public abstract java.util.List getBestPreviewOrder()
     public abstract com.journeyapps.barcodescanner.Size getBestPreviewSize()
+com.mr.flutter.plugin.filepicker.FileInfo$Builder
+com.mr.flutter.plugin.filepicker.FileInfo:
+    public static java.util.HashMap toMap()
+com.mr.flutter.plugin.filepicker.FilePickerDelegate:
+    public static synthetic java.lang.String access$000()
+    public static synthetic int access$100()
+    public static synthetic android.app.Activity access$200()
+    public static synthetic boolean access$300()
+    public static synthetic void access$400()
+    public static synthetic void access$500()
+    public static void clearPendingResult()
+    public static void finishWithAlreadyActiveError()
+    public static java.util.ArrayList getSelectedItems()
+    public static void saveFile()
+    public static void setEventHandler()
+    public final boolean setPendingMethodCallAndResult(com.mr.flutter.plugin.filepicker.FilePickerPlugin$MethodResultWrapper)
+    public static void startFileExplorer()
+    public static void startFileExplorer$1()
+com.mr.flutter.plugin.filepicker.FilePickerPlugin$LifeCycleObserver:
+    public final synthetic com.mr.flutter.plugin.filepicker.FilePickerPlugin this$0
+com.mr.flutter.plugin.filepicker.FilePickerPlugin$MethodResultWrapper:
+    public static synthetic io.flutter.plugin.common.MethodChannel$Result access$000()
+com.mr.flutter.plugin.filepicker.FilePickerPlugin:
+    public static void <clinit>()
+    public static synthetic com.mr.flutter.plugin.filepicker.FilePickerDelegate access$100()
+    public final void setup()
+    public final void tearDown()
+com.mr.flutter.plugin.filepicker.FileUtils:
+    public static java.lang.String getDirectoryPath(java.lang.Class,java.lang.Object)
 dev.fluttercommunity.plus.connectivity.Connectivity:
     public static android.net.ConnectivityManager getConnectivityManager()
     public static java.lang.String getNetworkTypeLegacy()
@@ -61796,7 +61855,7 @@ io.flutter.plugins.imagepicker.ImagePickerPlugin:
     public final void pickMedia()
     public final void pickVideos()
     public static void setCameraDevice(io.flutter.plugins.imagepicker.ImagePickerDelegate,io.flutter.plugins.imagepicker.Messages$SourceSpecification)
-    public static void setup()
+    public final void setup()
     public final void tearDown()
 io.flutter.plugins.imagepicker.ImageResizer:
     public static int calculateSampleSize()

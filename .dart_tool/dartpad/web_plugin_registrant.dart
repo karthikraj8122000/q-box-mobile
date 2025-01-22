@@ -7,6 +7,7 @@
 // ignore_for_file: type=lint
 
 import 'package:connectivity_plus/src/connectivity_plus_web.dart';
+import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:flutter_secure_storage_web/flutter_secure_storage_web.dart';
 import 'package:fluttertoast/fluttertoast_web.dart';
 import 'package:google_maps_flutter_web/google_maps_flutter_web.dart';
@@ -19,6 +20,7 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 void registerPlugins([final Registrar? pluginRegistrar]) {
   final Registrar registrar = pluginRegistrar ?? webPluginRegistrar;
   ConnectivityPlusWebPlugin.registerWith(registrar);
+  FilePickerWeb.registerWith(registrar);
   FlutterSecureStorageWeb.registerWith(registrar);
   FluttertoastWebPlugin.registerWith(registrar);
   GoogleMapsPlugin.registerWith(registrar);

@@ -14,26 +14,35 @@ import '../../../../Widgets/Common/app_colors.dart';
 import 'load_history.dart';
 
 class UnloadQbox extends StatefulWidget {
-  const UnloadQbox({super.key});
+  final int? qboxEntitySno;
+  const UnloadQbox({super.key,required this.qboxEntitySno});
 
   @override
   State<UnloadQbox> createState() => _UnloadQboxState();
 }
 
 class _UnloadQboxState extends State<UnloadQbox> {
-
   String qBoxOutBarcode = '';
   final ApiService apiService = ApiService();
   final CommonService commonService = CommonService();
   bool get isReadyToLoad => qBoxOutBarcode.isNotEmpty;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print('qboxEntityll${widget.qboxEntitySno}');
+    });
+  }
+
+
+
   unloadFromQBox() async {
     Map<String, dynamic> body = {
       "uniqueCode": qBoxOutBarcode,
       "wfStageCd":12,
-      "qboxEntitySno": 20
+      "qboxEntitySno": 26
     };
-    print('$body');
     try {
       var result = await apiService.post("8912", "masters","unload_sku_from_qbox_to_hotbox", body);
       if (result != null && result['data'] != null) {
@@ -71,7 +80,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
     return CustomScrollView(
       slivers: [
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0,vertical: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
               const SizedBox(height: 30),
@@ -79,13 +88,10 @@ class _UnloadQboxState extends State<UnloadQbox> {
               const SizedBox(height: 30),
               _buildWelcomeCard(),
               const SizedBox(height: 30),
-              // _buildDispatchStats(context, provider),
-              // const SizedBox(height: 30),
               _buildScanSection(context, provider),
             ]),
           ),
         ),
-
       ],
     );
   }
@@ -130,9 +136,11 @@ class _UnloadQboxState extends State<UnloadQbox> {
                 ],
               ),
               child: IconButton(
-                icon: Icon(Icons.notifications_outlined, color: AppColors.mintGreen),
+                icon: Icon(Icons.notifications_outlined,
+                    color: AppColors.mintGreen),
                 onPressed: () {
-                  GoRouter.of(context).push(NotificationHistoryScreen.routeName);
+                  GoRouter.of(context)
+                      .push(NotificationHistoryScreen.routeName);
                 },
               ),
             ),
@@ -164,7 +172,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.mintGreen, Colors.redAccent],
+          colors: [AppColors.mintGreen, Color(0xFFBE123C)],
         ),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
@@ -233,111 +241,6 @@ class _UnloadQboxState extends State<UnloadQbox> {
     ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2);
   }
 
-  Widget _buildDispatchStats(BuildContext context, FoodStoreProvider provider) {
-    return Container(
-      padding: EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.mintGreen,
-        borderRadius: BorderRadius.circular(32),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Icon(
-                  Icons.sell_outlined,
-                  color: Colors.white,
-                  size: 32,
-                ),
-              ),
-              SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Ready for sale',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      provider.foodItems.length > 1
-                          ? '${provider.foodItems.length} Items'
-                          : '${provider.foodItems.length} Item',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 24),
-          Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildDispatchStat('Pending', '12'),
-                _buildVerticalDivider(),
-                _buildDispatchStat('In Transit', '5'),
-                _buildVerticalDivider(),
-                _buildDispatchStat('Delivered', '28'),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ).animate().fadeIn(duration: 800.ms).slideY(begin: -0.2, end: 0);
-  }
-
-  Widget _buildVerticalDivider() {
-    return Container(
-      height: 40,
-      width: 1,
-      color: Colors.white.withOpacity(0.2),
-    );
-  }
-
-  Widget _buildDispatchStat(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.8),
-            fontSize: 12,
-          ),
-        ),
-      ],
-    );
-  }
-
-
   Widget _buildScanSection(BuildContext context, FoodStoreProvider provider) {
     return Container(
       decoration: BoxDecoration(
@@ -356,7 +259,6 @@ class _UnloadQboxState extends State<UnloadQbox> {
         borderRadius: BorderRadius.circular(32),
         child: InkWell(
           onTap: () => scanBarcode(),
-
           borderRadius: BorderRadius.circular(24),
           child: Padding(
             padding: EdgeInsets.all(24),
@@ -402,7 +304,9 @@ class _UnloadQboxState extends State<UnloadQbox> {
                     ),
                     Container(
                       padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(color: AppColors.lightBlack,borderRadius: BorderRadius.all(Radius.circular(50))),
+                      decoration: BoxDecoration(
+                          color: AppColors.mintGreen.withOpacity(0.5),
+                          borderRadius: BorderRadius.all(Radius.circular(50))),
                       child: Icon(
                         Icons.arrow_forward_ios,
                         color: AppColors.white,
@@ -411,7 +315,6 @@ class _UnloadQboxState extends State<UnloadQbox> {
                     ),
                   ],
                 ),
-
                 if (qBoxOutBarcode.isNotEmpty && qBoxOutBarcode != '-1') ...[
                   SizedBox(height: 24),
                   Container(
@@ -466,8 +369,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
     ).animate().fadeIn(duration: 600.ms).slideY(begin: 0.2, end: 0);
   }
 
-  Widget _buildDispatchButton(
-      FoodStoreProvider provider, BuildContext context) {
+  Widget _buildDispatchButton(FoodStoreProvider provider, BuildContext context) {
     final isEnabled = qBoxOutBarcode.isNotEmpty;
     return Container(
       width: double.infinity,
@@ -477,29 +379,28 @@ class _UnloadQboxState extends State<UnloadQbox> {
         gradient: LinearGradient(
           colors: isEnabled
               ? [
-            AppColors.darkMintGreen,
-            AppColors.mintGreen.withOpacity(0.8),
-          ]
+                  AppColors.darkMintGreen,
+                  AppColors.mintGreen.withOpacity(0.8),
+                ]
               : [
-            Colors.grey[300]!,
-            Colors.grey[400]!,
-          ],
+                  Colors.grey[300]!,
+                  Colors.grey[400]!,
+                ],
         ),
         boxShadow: isEnabled
             ? [
-          BoxShadow(
-            color: AppColors.mintGreen.withOpacity(0.3),
-            blurRadius: 20,
-            offset: Offset(0, 10),
-          ),
-        ]
+                BoxShadow(
+                  color: AppColors.mintGreen.withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: Offset(0, 10),
+                ),
+              ]
             : [],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: isEnabled ? () =>  unloadFromQBox() : null,
-          // onTap: () => provider.dispatchFoodItem(context),
+          onTap: isEnabled ? () => unloadFromQBox() : null,
           borderRadius: BorderRadius.circular(16),
           child: Center(
             child: Row(

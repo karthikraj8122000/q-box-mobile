@@ -82,6 +82,7 @@ INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/andr
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:1:1-55:12
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:1:1-55:12
 MERGED from [:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/release/AndroidManifest.xml:2:1-11:12
+MERGED from [:file_picker] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:2:1-17:12
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/release/AndroidManifest.xml:2:1-21:12
 MERGED from [:google_maps_flutter_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/google_maps_flutter_android/intermediates/merged_manifest/release/AndroidManifest.xml:2:1-9:12
 MERGED from [:image_picker_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/image_picker_android/intermediates/merged_manifest/release/AndroidManifest.xml:2:1-36:12
@@ -150,10 +151,10 @@ MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /home/swomb/.
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /home/swomb/.gradle/caches/transforms-3/33ef35995b702fa2ce58061f7f056e37/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/swomb/.gradle/caches/transforms-3/d6caa907970c3eea4d6ca63e16c0d524/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/swomb/.gradle/caches/transforms-3/b4450efa31acf296eabb928b9d0a01ec/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/swomb/.gradle/caches/transforms-3/e02671d1a799d6fa543c9d31230546b8/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/db3682c06da87260386d5382fa5971ab/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:17:1-35:12
 MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/swomb/.gradle/caches/transforms-3/4ba731784292344a2f9390f2abbd4085/transformed/jetified-savedstate-ktx-1.2.1/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.savedstate:savedstate:1.2.1] /home/swomb/.gradle/caches/transforms-3/2e2dd1b08b4f946a08d235458e1e95a0/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/swomb/.gradle/caches/transforms-3/e02671d1a799d6fa543c9d31230546b8/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/swomb/.gradle/caches/transforms-3/3d81738e1256bd86d05c15fc5853ab4c/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.core:core-ktx:1.13.1] /home/swomb/.gradle/caches/transforms-3/91eeb8db388cea1dd8d60564acbe3822/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.customview:customview:1.1.0] /home/swomb/.gradle/caches/transforms-3/21f7cc2e8bfa3db29c07cb48b62a8dbd/transformed/customview-1.1.0/AndroidManifest.xml:17:1-24:12
@@ -237,6 +238,8 @@ ADDED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android
 		ADDED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:11:22-74
 queries
 ADDED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml:49:5-54:15
+MERGED from [:file_picker] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:9:5-15:15
+MERGED from [:file_picker] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:9:5-15:15
 MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/dac0275cb57a1a05fc18292ed38ded4f/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:30:5-34:15
 MERGED from [com.google.android.gms:play-services-maps:18.2.0] /home/swomb/.gradle/caches/transforms-3/dac0275cb57a1a05fc18292ed38ded4f/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:30:5-34:15
 intent#action:name:android.intent.action.PROCESS_TEXT+data:mimeType:text/plain
@@ -255,6 +258,8 @@ INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/andr
 INJECTED from /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android/app/src/main/AndroidManifest.xml
 MERGED from [:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/release/AndroidManifest.xml:5:5-7:41
 MERGED from [:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:file_picker] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:file_picker] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/release/AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/release/AndroidManifest.xml:5:5-7:41
 MERGED from [:google_maps_flutter_android] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/google_maps_flutter_android/intermediates/merged_manifest/release/AndroidManifest.xml:5:5-7:41
@@ -391,14 +396,14 @@ MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/swomb/.grad
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /home/swomb/.gradle/caches/transforms-3/d6caa907970c3eea4d6ca63e16c0d524/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/swomb/.gradle/caches/transforms-3/b4450efa31acf296eabb928b9d0a01ec/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /home/swomb/.gradle/caches/transforms-3/b4450efa31acf296eabb928b9d0a01ec/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/swomb/.gradle/caches/transforms-3/e02671d1a799d6fa543c9d31230546b8/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/swomb/.gradle/caches/transforms-3/e02671d1a799d6fa543c9d31230546b8/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/db3682c06da87260386d5382fa5971ab/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
 MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /home/swomb/.gradle/caches/transforms-3/db3682c06da87260386d5382fa5971ab/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
 MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/swomb/.gradle/caches/transforms-3/4ba731784292344a2f9390f2abbd4085/transformed/jetified-savedstate-ktx-1.2.1/AndroidManifest.xml:20:5-44
 MERGED from [androidx.savedstate:savedstate-ktx:1.2.1] /home/swomb/.gradle/caches/transforms-3/4ba731784292344a2f9390f2abbd4085/transformed/jetified-savedstate-ktx-1.2.1/AndroidManifest.xml:20:5-44
 MERGED from [androidx.savedstate:savedstate:1.2.1] /home/swomb/.gradle/caches/transforms-3/2e2dd1b08b4f946a08d235458e1e95a0/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
 MERGED from [androidx.savedstate:savedstate:1.2.1] /home/swomb/.gradle/caches/transforms-3/2e2dd1b08b4f946a08d235458e1e95a0/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/swomb/.gradle/caches/transforms-3/e02671d1a799d6fa543c9d31230546b8/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /home/swomb/.gradle/caches/transforms-3/e02671d1a799d6fa543c9d31230546b8/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/swomb/.gradle/caches/transforms-3/3d81738e1256bd86d05c15fc5853ab4c/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /home/swomb/.gradle/caches/transforms-3/3d81738e1256bd86d05c15fc5853ab4c/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.core:core-ktx:1.13.1] /home/swomb/.gradle/caches/transforms-3/91eeb8db388cea1dd8d60564acbe3822/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:5:5-44
@@ -523,6 +528,12 @@ MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] /home/swo
 MERGED from [com.google.android.datatransport:transport-runtime:2.2.6] /home/swomb/.gradle/caches/transforms-3/11418489432a401df1d502d061ef05fb/transformed/jetified-transport-runtime-2.2.6/AndroidManifest.xml:22:5-79
 	android:name
 		ADDED from [:connectivity_plus] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/connectivity_plus/intermediates/merged_manifest/release/AndroidManifest.xml:9:22-76
+intent#action:name:android.intent.action.GET_CONTENT+data:mimeType:*/*
+ADDED from [:file_picker] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:10:9-14:18
+action#android.intent.action.GET_CONTENT
+ADDED from [:file_picker] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:11:13-72
+	android:name
+		ADDED from [:file_picker] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/intermediates/merged_manifest/release/AndroidManifest.xml:11:21-69
 uses-permission#android.permission.FLASHLIGHT
 ADDED from [:flutter_barcode_scanner] /home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/flutter_barcode_scanner/intermediates/merged_manifest/release/AndroidManifest.xml:13:5-69
 	android:name

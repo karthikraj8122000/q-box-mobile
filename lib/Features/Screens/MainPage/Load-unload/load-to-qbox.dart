@@ -11,7 +11,8 @@ import '../../../../Services/toast_service.dart';
 import '../../../../Widgets/Common/app_colors.dart';
 
 class LoadQbox extends StatefulWidget {
-  const LoadQbox({super.key});
+  final int? qboxEntitySno;
+  const LoadQbox({super.key, required this.qboxEntitySno});
 
   @override
   State<LoadQbox> createState() => _LoadQboxState();
@@ -23,6 +24,17 @@ class _LoadQboxState extends State<LoadQbox> {
   final ApiService apiService = ApiService();
   final CommonService commonService = CommonService();
   bool get isReadyToLoad => qBoxBarcode.isNotEmpty && foodBarcode.isNotEmpty;
+  final List<dynamic> _returnValue = [];
+  List<dynamic> get returnValue => _returnValue;
+
+
+  @override
+  void initState() {
+    super.initState();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    // print('qboxEntityss${widget.qboxEntitySno}');
+    // });
+  }
 
   Future<void> scanBarcode(String name) async {
     String barcodeScanRes;
@@ -50,7 +62,7 @@ class _LoadQboxState extends State<LoadQbox> {
         "uniqueCode": foodBarcode,
         "wfStageCd": 11,
         "boxCellSno": qBoxBarcode,
-        "qboxEntitySno": 20
+        "qboxEntitySno": 26
       };
 
       print('$body');
@@ -81,71 +93,14 @@ class _LoadQboxState extends State<LoadQbox> {
     setState(() {
     });
   }
-  //
-  // loadToQBox() async {
-  //
-  //   try {
-  //     print('loadToQBox');
-  //     Map<String, dynamic> body = {
-  //       "uniqueCode": foodBarcode,
-  //       "wfStageCd":11,
-  //       "boxCellSno":qBoxBarcode,
-  //       "qboxEntitySno": 20
-  //     };
-  //
-  //     print('$body');
-  //     var result = await apiService.post("8912", "masters","load_sku_in_qbox", body);
-  //     if (result != null && result['data'] != null) {
-  //       print('RESULT$result');
-  //       qBoxBarcode = '';
-  //       foodBarcode = '';
-  //       commonService.presentToast('Food Loaded inside the qbox');
-  //     }
-  //   } catch (e) {
-  //     print('Error: $e');
-  //   }
-  //   setState(() {
-  //
-  //   });
-  // }
-  // Future<void> loadToQBox() async {
-  //   debugPrint("storeFoodItem called");
-  //   if(qBoxBarcode.isNotEmpty && foodBarcode.isNotEmpty){
-  //     Map<String, dynamic> body = {
-  //       "uniqueCode": foodBarcode,
-  //       "wfStageCd": 11,
-  //       "boxCellSno": qBoxBarcode,
-  //       "qboxEntitySno": 20
-  //     };
-  //     try {
-  //       var result = await apiService.post("8912", "masters", "load_sku_in_qbox", body);
-  //       if (result != null && result['data'] != null) {
-  //         qBoxBarcode = '';
-  //         foodBarcode = '';
-  //         commonService.presentToast('Food Loaded inside the qbox no $qBoxBarcode');
-  //       }
-  //       else {
-  //         commonService
-  //             .errorToast('Failed to store the food item. Please try again.');
-  //       }
-  //     } catch (e) {
-  //       commonService
-  //           .presentToast('An error occurred while storing the food item.');
-  //     }
-  //     setState(() {});
-  //   }
-  //   else{
-  //     commonService.presentToast('Please provide valid QBox ID and Food Item.');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFF5F7FA),
       body: Stack(
         children: [
-          _buildBackground(),
+          // _buildBackground(),
           SafeArea(
             child: Column(
               children: [
@@ -343,6 +298,7 @@ class _LoadQboxState extends State<LoadQbox> {
   }
 
   Widget _buildQuickActions() {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -355,6 +311,7 @@ class _LoadQboxState extends State<LoadQbox> {
           ),
         ),
         SizedBox(height: 16),
+        if(isTablet)
         Row(
           children: [
             Expanded(
@@ -375,7 +332,25 @@ class _LoadQboxState extends State<LoadQbox> {
               ),
             ),
           ],
-        ),
+        )
+    else
+          Column(
+            children: [
+              _buildActionCard(
+                'Compartment',
+                Icons.qr_code_scanner_rounded,
+                'Scan compartment QR',
+                Color(0xFFFEE2E2),
+              ),
+              SizedBox(height: 16),
+              _buildActionCard(
+                'Food Item',
+                Icons.fastfood_rounded,
+                'Scan food item',
+                Color(0xFFFEE2E2),
+              ),
+            ],
+          )
       ],
     ).animate().fadeIn(duration: 700.ms);
   }
@@ -390,9 +365,31 @@ class _LoadQboxState extends State<LoadQbox> {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.red.withOpacity(0.1)),
         ),
-        child: Column(
+        child:
+        Row(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Column(
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[800],
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
             Container(
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -401,23 +398,7 @@ class _LoadQboxState extends State<LoadQbox> {
               ),
               child: Icon(icon, color: AppColors.mintGreen, size: 24),
             ),
-            SizedBox(height: 12),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
-              ),
-            ),
-            SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
-            ),
+
           ],
         ),
       ),
@@ -463,7 +444,7 @@ class _LoadQboxState extends State<LoadQbox> {
             ),
           if (foodCode.isNotEmpty)
             _buildItemRow(
-              type: 'Food',
+              type: 'Food Code',
               code: foodCode,
               icon: foodIcon,
               onDelete: () {
@@ -538,5 +519,4 @@ class _LoadQboxState extends State<LoadQbox> {
       ),
     ).animate().fadeIn(duration: 900.ms);
   }
-
 }

@@ -81,7 +81,7 @@ class FoodStoreProvider with ChangeNotifier {
 
   Future<void> getQboxes() async {
     print("Fetching Qboxes...");
-    Map<String, dynamic> params = {"qboxEntitySno": 20};
+    Map<String, dynamic> params = {"qboxEntitySno": 26};
     try {
       var result = await apiService.post(
           "8911", "masters", "get_box_cell_inventory", params);
@@ -211,9 +211,7 @@ class FoodStoreProvider with ChangeNotifier {
       // Return scan result only if confirmed, otherwise return null
       return confirmed == true ? scanResult : null;
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error scanning: $e')),
-      );
+      commonService.presentToast('Error scanning: $e');
       return null;
     }
   }

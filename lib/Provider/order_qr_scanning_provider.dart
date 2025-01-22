@@ -167,7 +167,10 @@ class OrderScanningProvider extends ChangeNotifier {
   }
 
   Future<void> get(String orderId) async {
-    Map<String, dynamic> params = {"partnerPurchaseOrderId": orderId.isNotEmpty ? orderId : _scanSalesBarcode};
+    // Map<String, dynamic> params = {"partnerPurchaseOrderId": orderId.isNotEmpty ? orderId : _scanSalesBarcode};
+    Map<String, dynamic> params = {
+      "partnerPurchaseOrderId": (orderId.isNotEmpty ? orderId : _scanSalesBarcode).trim()
+    };
     print("Calling API with params: $params");
     var result = await apiService.post(
         "8912", "masters", "partner_channel_inward_delivery", params);

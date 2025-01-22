@@ -49,19 +49,26 @@ class QBoxSettings {
   }
 }
 
+
 class QBox {
   final String foodName;
   final int qboxId;
   final String foodCode;
   final String foodImage;
+  final int rowNo;
+  final int columnNo;
   DateTime? storageDate;
+  final String logo;
 
   QBox({
     required this.foodName,
     required this.qboxId,
     required this.foodCode,
     required this.foodImage,
+    required this.rowNo,
+    required this.columnNo,
     this.storageDate,
+    required this.logo
   });
 
   factory QBox.fromMap(Map<String, dynamic> map) {
@@ -70,7 +77,10 @@ class QBox {
       qboxId: map['qboxId'] ?? 0,
       foodCode: map['foodCode'] ?? '',
       foodImage: map['foodImage'] ?? '',
+      rowNo: map['rowNo'] ?? 0,
+      columnNo: map['columnNo'] ?? 0,
       storageDate: DateTime.parse(map['storageDate'] ?? "2024-12-29"),
+      logo:map['logo'] ?? ''
     );
   }
 }
