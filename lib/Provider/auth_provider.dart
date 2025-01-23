@@ -87,7 +87,6 @@ class AuthProvider extends ChangeNotifier {
 
   Future<bool> login(String email, String password) async {
     try {
-      // Your login logic here
       print('Email: $email, Password: $password');
       Map<String, dynamic> signInConfig = {
         "appSno": 1,
@@ -115,17 +114,15 @@ class AuthProvider extends ChangeNotifier {
           AppRouter.navigateToHomeView();
           return true; // Login successful
         } else {
-          print('Login failed: ${loginResult['msg'] ?? 'Unknown error'}');
+          commonService.errorToast("${loginResult['msg'] ?? 'Unknown error'}");
           return false; // Login failed
         }
       } else {
-        // Handle null result
-        print('Login failed: No data received');
+        commonService.errorToast("Login failed: No data received");
         return false; // Login failed
       }
     } catch (e) {
-      // Handle exceptions
-      print('Error during login: $e');
+      commonService.errorToast("Error during login: $e");
       return false; // Login failed due to an exception
     }
   }

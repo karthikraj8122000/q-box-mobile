@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../../../Provider/order_history_provider.dart';
 import '../../../../../Services/token_service.dart';
 import '../../../../../Widgets/Common/app_colors.dart';
+import '../../../../../Widgets/Common/no-data-found.dart';
 
 class OutwardOrderHistoryCard extends StatefulWidget {
   const OutwardOrderHistoryCard({Key? key}) : super(key: key);
@@ -81,7 +82,7 @@ class _OutwardOrderHistoryCardState extends State<OutwardOrderHistoryCard> {
           return Center(child: CircularProgressIndicator(color: AppColors.mintGreen,));
         }
         if (orderProvider.salesOrder.isEmpty) {
-          return const Center(child: Text("No Outward Order History Found"));
+          return NoDataFound(title: "outward order histories");
         }
         return ListView.builder(
           padding: const EdgeInsets.all(8),

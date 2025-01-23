@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_page/Provider/order_history_provider.dart';
 import 'package:qr_page/Services/token_service.dart';
 import '../../../../../Widgets/Common/app_colors.dart';
+import '../../../../../Widgets/Common/no-data-found.dart';
 
 
 class OrderHistoryCard extends StatefulWidget {
@@ -75,8 +76,9 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
           return Center(child: CircularProgressIndicator(color: AppColors.mintGreen,));
         }
         if (orderProvider.purchaseOrder.isEmpty) {
-          return const Center(child: Text("No Inward Order History Found"));
+          return NoDataFound(title: "inward order histories");
         }
+
         return ListView.builder(
           padding: const EdgeInsets.all(8),
           itemCount: orderProvider.purchaseOrder.length,

@@ -17,14 +17,15 @@ class DashboardProvider with ChangeNotifier {
 
   List<dynamic> get qboxLists => _qboxList;
   List<dynamic> get hotboxCountList => _hotboxCountList;
-  List<dynamic> get currentInventoryCountlist => _currentInventoryCountlist;
+  List<dynamic> get currentInventoryCountList => _currentInventoryCountlist;
   bool get isLoading => _isLoading;
   String? get error => _error;
   List<dynamic> get outwardOrderList => _outwardOrderList;
   Map<String, dynamic> qboxInventory = {};
   List<dynamic> qboxCounts = [];
-  int columnCount = 10; // Default value, update based on your needs
-  int rowCount = 10;
+  List<dynamic> qBoxNumber = [];
+  int columnCount = 5; // Default value, update based on your needs
+  int rowCount = 5;
   String qboxEntityName = "";
 
   List<List<Map<String, dynamic>>> _qboxList = [];
@@ -97,8 +98,12 @@ class DashboardProvider with ChangeNotifier {
       if (result != null && result['isSuccess'] == true) {
         qboxInventory = result['data']['qboxInventory'] ?? {};
         qboxCounts = result['data']['qboxCounts'] ?? [];
-        qboxEntityName = result['data']['qboxInventory']['qboxEntityName']??"Entity";
+        qBoxNumber = result['data']['qboxInventory']['qBoxNumber'] ?? [];
+        qboxEntityName =
+            result['data']['qboxInventory']['qboxEntityName'] ?? "Entity";
         Map<int, List<Map<String, dynamic>>> groupedQboxes = {};
+
+        print("qBoxNumberssss$qBoxNumber");
         for (var qbox in qboxInventory['qboxes'] ?? []) {
           int entityInfraSno = qbox['EntityInfraSno'] ?? 0;
           if (!groupedQboxes.containsKey(entityInfraSno)) {
@@ -107,13 +112,6 @@ class DashboardProvider with ChangeNotifier {
           groupedQboxes[entityInfraSno]!.add(qbox);
         }
         _qboxList = groupedQboxes.values.toList();
-        // Update row and column counts
-        if (qboxInventory['qBoxCount'] != null &&
-            qboxInventory['qBoxCount'].isNotEmpty) {
-          rowCount = qboxInventory['qBoxCount'][0]['rowCount'] ?? 10;
-          columnCount = qboxInventory['qBoxCount'][0]['columnCount'] ?? 10;
-        }
-
         notifyListeners();
       } else {
         _error = 'Failed to retrieve the data.';
@@ -128,5 +126,64 @@ class DashboardProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-}
 
+  Future<dynamic> getCurrentInventoryCount() async {
+    try {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+
+      Map<String, dynamic> params = {
+        "qboxEntitySno": 26,
+        "transactionDate": "2025-01-10"
+      };
+      var result = await apiService.post(
+          "8911", "masters", "get_sku_dashboard_counts", params);
+      print("get_sku_dashboard_counts$result");
+      if (result != null && result['data'] != null) {
+        _currentInventoryCountlist = result['data'];
+        print('_currentInventoryCountlist$_currentInventoryCountlist');
+      } else {
+        _error = 'Failed to retrieve the data.';
+        commonService.errorToast(_error!);
+      }
+    } catch (e) {
+      _error = 'An error occurred while retrieving the data.';
+      debugPrint('$e');
+      commonService.errorToast(_error!);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getHotboxCount() async {
+    try {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+
+      Map<String, dynamic> params = {
+        "qboxEntitySno": 26,
+        "transactionDate": "2025-01-10"
+      };
+      var result =
+          await apiService.post("8911", "masters", "get_hotbox_count", params);
+
+      if (result != null && result['data'] != null) {
+        _hotboxCountList = result['data']['hotbox_counts'];
+        print('_hotboxCountlist$_hotboxCountList');
+      } else {
+        _error = 'Failed to retrieve the data.';
+        commonService.errorToast(_error!);
+      }
+    } catch (e) {
+      _error = 'An error occurred while retrieving the data.';
+      debugPrint('$e');
+      commonService.errorToast(_error!);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+}
