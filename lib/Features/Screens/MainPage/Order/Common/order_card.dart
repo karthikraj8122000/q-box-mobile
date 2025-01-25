@@ -34,11 +34,11 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-    final statusColor = widget.order['orderStatusCd'] == 2
-        ? Color(0xFF4CAF50)
-        : Color(0xFFFFA726);
+    final statusColor =widget.order['orderStatusCd'] == 36? Color(0xFFFFA726): widget.order['orderStatusCd'] == 37
+        ? Color(0xFF4CAF50) :widget.order['orderStatusCd'] == 43?Colors.red:Colors.red;
 
     return ScaleTransition(
       scale: _scaleAnimation,
@@ -120,7 +120,7 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                                     Text(
                                       'Order Details',
                                       style: TextStyle(
-                                        fontSize: 22,
+                                        fontSize: isTablet?20:18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),
@@ -169,7 +169,7 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
                                   Text(
                                     '#${widget.order['partnerPurchaseOrderId']}',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: isTablet?20:14,
                                       fontWeight: FontWeight.bold,
                                       letterSpacing: 0.5,
                                     ),
@@ -238,6 +238,7 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
   }
 
   Widget _buildStatusBadge(Color statusColor) {
+    print("status:${widget.order['orderStatusCd']}");
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
@@ -336,10 +337,12 @@ class _OrderCardState extends State<OrderCard> with SingleTickerProviderStateMix
 
   String _getOrderStatus(int statusCd) {
     switch (statusCd) {
-      case 1:
+      case 36:
         return 'Pending';
-      case 2:
+      case 37:
         return 'Completed';
+      case 43:
+        return 'Partially Rejected';
       default:
         return 'Unknown';
     }

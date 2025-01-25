@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
+import 'package:qr_page/Widgets/Common/no-data-found.dart';
 import '../../../../../Provider/inward_order_provider.dart';
 import '../../../../../Widgets/Common/divider_text.dart';
 import '../Common/order_card.dart';
@@ -182,10 +183,10 @@ class _OrderQRScannerScreenState extends State<OrderQRScannerScreen> {
   }
 
   void onScanComplete(String scannedOrderId) {
-    GoRouter.of(context).push(
-      ViewOrder.routeName,
-      extra: scannedOrderId,
-    );
+      GoRouter.of(context).push(
+        ViewOrder.routeName,
+        extra: scannedOrderId,
+      );
   }
 
   @override

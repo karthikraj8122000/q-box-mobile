@@ -32647,6 +32647,23 @@ io.flutter.plugin.platform.VirtualDisplayController:
 io.flutter.plugin.text.ProcessTextPlugin:
     private static final java.lang.String TAG
     public void destroy()
+io.flutter.plugins.deviceinfo.BuildConfig
+io.flutter.plugins.deviceinfo.DeviceInfoPlugin:
+    static final java.lang.String TAG
+    public static void registerWith(io.flutter.plugin.common.PluginRegistry$Registrar)
+io.flutter.plugins.deviceinfo.R$anim
+io.flutter.plugins.deviceinfo.R$animator
+io.flutter.plugins.deviceinfo.R$attr
+io.flutter.plugins.deviceinfo.R$color
+io.flutter.plugins.deviceinfo.R$dimen
+io.flutter.plugins.deviceinfo.R$drawable
+io.flutter.plugins.deviceinfo.R$id
+io.flutter.plugins.deviceinfo.R$integer
+io.flutter.plugins.deviceinfo.R$layout
+io.flutter.plugins.deviceinfo.R$string
+io.flutter.plugins.deviceinfo.R$style
+io.flutter.plugins.deviceinfo.R$styleable
+io.flutter.plugins.deviceinfo.R
 io.flutter.plugins.flutter_plugin_android_lifecycle.BuildConfig
 io.flutter.plugins.flutter_plugin_android_lifecycle.R$anim
 io.flutter.plugins.flutter_plugin_android_lifecycle.R$animator
@@ -60812,7 +60829,6 @@ io.flutter.plugin.common.JSONMethodCodec:
     public static java.lang.Object unwrapNull()
 io.flutter.plugin.common.MethodCall
 io.flutter.plugin.common.MethodChannel:
-    public final io.flutter.plugin.common.BinaryMessenger$TaskQueue taskQueue
     public static synthetic io.flutter.plugin.common.MethodCodec access$000()
     public static synthetic java.lang.String access$100()
     public static void invokeMethod()
@@ -61046,6 +61062,13 @@ io.flutter.plugin.platform.VirtualDisplayController:
 io.flutter.plugin.text.ProcessTextPlugin:
     public final io.flutter.embedding.engine.systemchannels.ProcessTextChannel processTextChannel
     public static void cacheResolveInfos()
+io.flutter.plugins.deviceinfo.DeviceInfoPlugin:
+    public static void setupMethodChannel()
+    public static void tearDownChannel()
+io.flutter.plugins.deviceinfo.MethodCallHandlerImpl:
+    public static java.lang.String getAndroidId()
+    public static java.lang.String[] getSystemFeatures()
+    public static boolean isEmulator()
 io.flutter.plugins.googlemaps.CircleBuilder:
     public static com.google.android.gms.maps.model.CircleOptions build()
     public final boolean consumeTapEvents()

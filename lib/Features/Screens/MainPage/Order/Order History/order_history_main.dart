@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_page/Provider/order_history_provider.dart';
 import 'package:qr_page/Theme/app_theme.dart';
 import 'package:qr_page/Widgets/Common/network_error.dart';
 import '../../../../../Provider/food_store_provider.dart';
@@ -21,7 +22,6 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateMixin {
   late TabController _tabController;
   late List<TabItem> _tabItems;
-  List<dynamic> purchaseOrder = [];
 
   @override
   void initState() {
@@ -31,6 +31,7 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
       TabItem(title: 'Outward Order', icon: Icons.arrow_upward),
     ];
     _tabController = TabController(length: _tabItems.length, vsync: this);
+    // context.read<OrderHistoryProvider>().fetchInwardOrders();
   }
 
 
@@ -67,9 +68,8 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    InwardOrdersList(),
-                    // _buildBody(context, provider),
-                    OutwardOrdersList(),
+                    OrderHistoryCard(),
+                    OutwardOrderHistoryCard(),
                   ],
                 ),
               ),
@@ -78,14 +78,6 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
         ),
       ),
     );
-  }
-
-  Widget InwardOrdersList(){
-    return OrderHistoryCard();
-  }
-
-  Widget OutwardOrdersList(){
-    return OutwardOrderHistoryCard();
   }
 
   Widget _buildTabBar() {

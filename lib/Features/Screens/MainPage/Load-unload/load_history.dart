@@ -37,6 +37,10 @@ class _NotificationHistoryScreenState extends State<NotificationHistoryScreen> {
         backgroundColor: AppColors.mintGreen,
         iconTheme: IconThemeData(color: AppColors.white),
         title:Text('Load History'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Stack(
         children: [

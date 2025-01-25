@@ -9,7 +9,7 @@ import '../Common/order_card.dart';
 class ViewOrder extends StatefulWidget {
   static const String routeName = '/view-order';
   final dynamic partnerPurchaseOrderId;
-  const ViewOrder({super.key,this.partnerPurchaseOrderId});
+  const ViewOrder({super.key, this.partnerPurchaseOrderId});
   @override
   State<ViewOrder> createState() => _ViewOrderState();
 }
@@ -21,17 +21,12 @@ class _ViewOrderState extends State<ViewOrder> {
     print("partnerPurchaseOrderId");
     print(widget.partnerPurchaseOrderId);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<InwardOrderDtlProvider>().getTotalItems(widget.partnerPurchaseOrderId);
+      context
+          .read<InwardOrderDtlProvider>()
+          .getTotalItems(widget.partnerPurchaseOrderId);
     });
   }
 
-  Future<void> _loadData() async {
-    if (!mounted) return;
-
-    final provider =
-        Provider.of<InwardOrderDtlProvider>(context, listen: false);
-    await provider.getTotalItems(widget.partnerPurchaseOrderId);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +34,15 @@ class _ViewOrderState extends State<ViewOrder> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          automaticallyImplyLeading: true,
+          // automaticallyImplyLeading: true,
           iconTheme: IconThemeData(color: AppColors.black),
           backgroundColor: Colors.transparent,
           title: Text('Inward Orders', style: TextStyle(color: Colors.black)),
+          // GoRouter.of(context).push(ViewOrder.routeName);
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Colors.black87),
+            onPressed: () => Navigator.pop(context),
+          ),
         ),
         body: Consumer<InwardOrderDtlProvider>(
             builder: (context, provider, child) {
@@ -52,33 +52,17 @@ class _ViewOrderState extends State<ViewOrder> {
               color: AppColors.mintGreen,
             ));
           }
-          if (provider.error != null) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(provider.error!),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.mintGreen),
-                    onPressed: _loadData,
-                    child: Text('Retry'),
-                  ),
-                ],
-              ),
-            );
+          if (provider.purchaseOrders.isEmpty) {
+            return NoDataFound(title: "orders");
           }
 
-          return provider.purchaseOrders.isEmpty
-              ? Center(child: NoDataFound(title: "orders"))
-              : ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: provider.purchaseOrders.length,
-                itemBuilder: (context, index) {
-                  return OrderCard(
-                          order: provider.purchaseOrders[index]);
-                },
-              );
+          return ListView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: provider.purchaseOrders.length,
+            itemBuilder: (context, index) {
+              return OrderCard(order: provider.purchaseOrders[index]);
+            },
+          );
         }),
       ),
     );

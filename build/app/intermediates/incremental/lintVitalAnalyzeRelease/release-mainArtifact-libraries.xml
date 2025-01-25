@@ -17,6 +17,19 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
+      name="/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android@@:device_info::release"
+      jars="/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/device_info/.transforms/651f6e6c4871518224ce4bb812ae9f11/transformed/out/jars/classes.jar:/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/device_info/.transforms/651f6e6c4871518224ce4bb812ae9f11/transformed/out/jars/libs/R.jar"
+      resolved="io.flutter.plugins.deviceinfo:device_info:unspecified"
+      folder="/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/device_info/.transforms/651f6e6c4871518224ce4bb812ae9f11/transformed/out"
+      manifest="AndroidManifest.xml"
+      resFolder="res"
+      assetsFolder="assets"
+      lintJar="lint.jar"
+      publicResources="public.txt"
+      symbolFile="R.txt"
+      externalAnnotations="annotations.zip"
+      proguardRules="proguard.txt"/>
+  <library
       name="/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/android@@:file_picker::release"
       jars="/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/.transforms/02bd277fdeda48a1f47ee9b23a8cb3e8/transformed/out/jars/classes.jar:/home/swomb/Documents/Projects/git projects/Qbox/q-box-mobile/build/file_picker/.transforms/02bd277fdeda48a1f47ee9b23a8cb3e8/transformed/out/jars/libs/R.jar"
       resolved="com.mr.flutter.plugin.filepicker:file_picker:unspecified"
