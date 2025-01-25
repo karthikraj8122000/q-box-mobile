@@ -142,11 +142,7 @@ class InwardOrderDtlProvider extends ChangeNotifier {
       print("responsesssss $response");
       if (response != null && response['data'] != null) {
         _purchaseOrders = response['data'];
-
         notifyListeners();
-      } else {
-        _error = 'Failed to retrieve the data.';
-        commonService.errorToast(_error!);
       }
     } catch (e) {
       _error = 'An error occurred while retrieving the data.';
