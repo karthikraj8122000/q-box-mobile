@@ -9,12 +9,14 @@ import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/Login/second_login.dart';
 import 'package:qr_page/Features/Screens/MainPage/Dashboard/qbox_grid_widget.dart';
 import 'package:qr_page/Model/Data_Models/dashboard_model/dashboard_model.dart';
+import 'package:qr_page/Provider/auth_provider.dart';
 import 'package:qr_page/Provider/dashboard_provider.dart';
 import 'package:qr_page/Services/toast_service.dart';
 import 'package:qr_page/Services/token_service.dart';
 import 'package:qr_page/Widgets/Common/app_colors.dart';
 import 'package:qr_page/Widgets/Common/app_text.dart';
 import 'package:qr_page/Widgets/Common/network_error.dart';
+import 'package:qr_page/Widgets/Custom/hotbox_status_table.dart';
 import '../../../../Theme/app_theme.dart';
 import '../../../../Widgets/Common/dashboard_header_card.dart';
 
@@ -119,10 +121,9 @@ class _DashboardState extends State<Dashboard>
       Provider.of<DashboardProvider>(context, listen: false)
           .getCurrentInventoryCount();
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DashboardProvider>(context, listen: false)
-          .getHotboxCount();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   Provider.of<DashboardProvider>(context, listen: false).getHotboxCount();
+    // });
     _headerController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -152,6 +153,7 @@ class _DashboardState extends State<Dashboard>
     final qboxEntitySno = userData['qboxEntitySno'] ?? [];
     if (qboxEntitySno != null) {
       await provider.getQboxes(qboxEntitySno);
+      await provider.getHotboxCount(qboxEntitySno);
     } else {
       print('No qboxEntitySno found');
     }
@@ -235,7 +237,7 @@ class _DashboardState extends State<Dashboard>
                   _buildDetailRow('Location', item['foodName']),
                   _buildDetailRow('Sku Code',
                       item['foodCode'].isNotEmpty ? item['foodCode'] : '--'),
-                  _buildDetailRow('Created at', item['storageDate'].toString()),
+                  // _buildDetailRow('Created at', item['storageDate'].toString()),
                 ],
               ),
             ),
@@ -570,29 +572,36 @@ class _DashboardState extends State<Dashboard>
                       ),
                     ),
                     const SizedBox(width: 16),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          GoRouter.of(context).push(LoginScreen.routeName);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                    Consumer<AuthProvider>(builder: (
+                      context,
+                      provider,
+                      _,
+                    ) {
+                      return Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            provider.logout();
+                            GoRouter.of(context).push(LoginScreen.routeName);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text(
+                            'Logout',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                        child: const Text(
-                          'Logout',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
+                      );
+                    })
                   ],
                 ),
               ],
@@ -611,16 +620,29 @@ class _DashboardState extends State<Dashboard>
         _buildIRecentOrdersSection(),
         SizedBox(height: 16),
         _buildInventorySection(),
-        // SizedBox(height: 16),
-        // _buildOrdersSection(),
         SizedBox(height: 16),
-        _buildHotBoxStatus(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Hot Box - Current Status (Over All)',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: 16),
+            _buildHotBoxStatus(provider),
+          ],
+        ),
       ],
     );
   }
 
   Widget _buildQboxStatus(BuildContext context, DashboardProvider provider) {
     final groupedQboxes = provider.groupedQboxLists;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -633,142 +655,73 @@ class _DashboardState extends State<Dashboard>
           ),
         ),
         SizedBox(height: 16),
-        for (var i = 0; i < groupedQboxes.length; i++)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-             i>1? Text(
-                'QBox: ${i + 1}',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.black,
-                ),
-              ):SizedBox(),
-              SizedBox(height: 8),
-              Builder(builder: (context) {
-                int entityInfraSno = groupedQboxes[i].isNotEmpty
-                    ? groupedQboxes[i][0]['EntityInfraSno']
-                    : 0;
-                var qBoxNumberEntry = provider.qBoxNumber.firstWhere(
-                      (entry) => entry['entityInfraSno'] == entityInfraSno,
-                  orElse: () => {
-                    'columnCount': '10',
-                    'rowCount': '10'
-                  }, // default fallback
-                );
-                int columnCount =
-                    int.tryParse(qBoxNumberEntry['columnCount'] ?? '10') ?? 10;
-
-                return LayoutBuilder(
-                  builder: (context, constraints) {
-                    final cellWidth = (constraints.maxWidth - ((columnCount - 1) * 8)) / columnCount;
-                    final cellHeight = cellWidth * 1.2;
-                    final fontSize = cellWidth * 0.12;
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: columnCount > 0 ? columnCount : 1,
-                        childAspectRatio: cellWidth > 0 && cellHeight > 0
-                            ? cellWidth / cellHeight
-                            : 1.0, // Fallback to 1.0 if calculations fail
-                        mainAxisSpacing: 8,
-                        crossAxisSpacing: 8,
-                      ),
-                      itemCount: groupedQboxes[i].length,
-                      itemBuilder: (context, index) {
-                        return _buildGridCell(
-                          context,
-                          groupedQboxes[i][index],
-                          cellHeight, // Use calculated cell height
-                          fontSize, // Fixed font size
-                          index,
-                        );
-                      },
-                    );
-                  },
-                );
-              }),
-              SizedBox(height: 16),
-            ],
+        for (var i = 0; i < groupedQboxes.length; i++) ...[
+          Builder(
+            builder: (context) {
+              int entityInfraSno = groupedQboxes[i].isNotEmpty
+                  ? groupedQboxes[i][0]['EntityInfraSno']
+                  : 0;
+              var qBoxNumberEntry = provider.qBoxNumber.firstWhere(
+                (entry) => entry['entityInfraSno'] == entityInfraSno,
+                orElse: () =>
+                    {'columnCount': '10', 'rowCount': '10'}, // default fallback
+              );
+              int rowCount =
+                  int.tryParse(qBoxNumberEntry['rowCount'] ?? '10') ?? 10;
+              int columnCount =
+                  int.tryParse(qBoxNumberEntry['columnCount'] ?? '10') ?? 10;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'QBox: ($columnCount x $rowCount)',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final cellWidth =
+                          (constraints.maxWidth - ((columnCount - 1) * 8)) /
+                              columnCount;
+                      final cellHeight = cellWidth * 1.2;
+                      final fontSize = cellWidth * 0.12;
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: columnCount > 0 ? columnCount : 1,
+                          childAspectRatio: cellWidth > 0 && cellHeight > 0
+                              ? cellWidth / cellHeight
+                              : 1.0, // Fallback to 1.0 if calculations fail
+                          mainAxisSpacing: 8,
+                          crossAxisSpacing: 8,
+                        ),
+                        itemCount: groupedQboxes[i].length,
+                        itemBuilder: (context, index) {
+                          return _buildGridCell(
+                            context,
+                            groupedQboxes[i][index],
+                            cellHeight, // Use calculated cell height
+                            fontSize, // Fixed font size
+                            index,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  SizedBox(height: 16),
+                ],
+              );
+            },
           ),
+        ]
       ],
     );
   }
-
-  // Widget _buildQboxStatus(BuildContext context, DashboardProvider provider) {
-  //   final groupedQboxes = provider.groupedQboxLists;
-  //   final screenWidth = MediaQuery.of(context).size.width;
-  //   final padding = 16.0;
-  //   final cellWidth =
-  //       (screenWidth - (padding * 2) - ((columnCount - 1) * 8)) / columnCount;
-  //   final cellHeight = cellWidth * 1.2;
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(
-  //         'QBox - Current Status',
-  //         style: TextStyle(
-  //           fontSize: 18,
-  //           fontWeight: FontWeight.w500,
-  //           color: Colors.black,
-  //         ),
-  //       ),
-  //       SizedBox(height: 16),
-  //       for (var i = 0; i < groupedQboxes.length; i++)
-  //         Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(
-  //               'QBox: ${i + 1}',
-  //               style: TextStyle(
-  //                 fontSize: 16,
-  //                 fontWeight: FontWeight.w900,
-  //                 color: AppColors.black,
-  //               ),
-  //             ),
-  //             SizedBox(height: 8),
-  //             Builder(builder: (context) {
-  //               int entityInfraSno = groupedQboxes[i].isNotEmpty
-  //                   ? groupedQboxes[i][0]['EntityInfraSno']
-  //                   : 0;
-  //               var qBoxNumberEntry = provider.qBoxNumber.firstWhere(
-  //                 (entry) => entry['entityInfraSno'] == entityInfraSno,
-  //                 orElse: () => {
-  //                   'columnCount': '10',
-  //                   'rowCount': '10'
-  //                 }, // default fallback
-  //               );
-  //               int columnCount =
-  //                   int.tryParse(qBoxNumberEntry['columnCount'] ?? '10') ?? 10;
-  //               return GridView.builder(
-  //                 shrinkWrap: true,
-  //                 physics: NeverScrollableScrollPhysics(),
-  //                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-  //                   crossAxisCount: columnCount > 0 ? columnCount : 1,
-  //                   childAspectRatio: cellWidth / cellHeight,
-  //                   mainAxisSpacing: 8,
-  //                   crossAxisSpacing: 8,
-  //                 ),
-  //                 itemCount: groupedQboxes[i].length,
-  //                 itemBuilder: (context, index) {
-  //                   return _buildGridCell(
-  //                     context,
-  //                     groupedQboxes[i][index],
-  //                     100, // Fixed cell height
-  //                     12, // Fixed font size
-  //                     index,
-  //                   );
-  //                 },
-  //               );
-  //             }),
-  //             SizedBox(height: 16),
-  //           ],
-  //         ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildIRecentOrdersSection() {
     return Column(
@@ -806,184 +759,6 @@ class _DashboardState extends State<Dashboard>
         // _buildInventoryTable(),
       ],
     );
-  }
-
-  Widget _buildOutwardOrderCard(Map<String, dynamic> outwardOrder) {
-    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-    return isTablet
-        ? Container(
-            margin: EdgeInsets.only(left: 8, bottom: 8),
-            padding: EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 1,
-                  blurRadius: 6,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(outwardOrder['imageUrl'] ??
-                              'https://media.istockphoto.com/id/488481490/photo/fish-biryani-with-basmati-rice-indian-food.jpg?s=612x612&w=0&k=20&c=9xEw3VOQSz9TP8yQr60L47uExyKF9kogRhQdlghlC00='), // Add imageUrl to your order map
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          outwardOrder['itemName'],
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Text(
-                          outwardOrder['status'],
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: outwardOrder['status'] == 'Delivered'
-                                  ? Colors.green
-                                  : Colors.red),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: outwardOrder['status'] == 'Delivered'
-                        ? Colors.green
-                        : Colors.red,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        outwardOrder['count'],
-                        style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        "Items",
-                        style: TextStyle(color: Colors.white70),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
-        : Container(
-            margin: EdgeInsets.only(left: 8, bottom: 8),
-            padding: EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 1,
-                  blurRadius: 6,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                Container(
-                  width: 100,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(outwardOrder['imageUrl'] ??
-                          'https://media.istockphoto.com/id/488481490/photo/fish-biryani-with-basmati-rice-indian-food.jpg?s=612x612&w=0&k=20&c=9xEw3VOQSz9TP8yQr60L47uExyKF9kogRhQdlghlC00='), // Add imageUrl to your order map
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      outwardOrder['itemName'],
-                      style: TextStyle(
-                        fontSize: isTablet ? 18 : 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 2,
-                    ),
-                    Text(
-                      "(x${outwardOrder['count']})",
-                      style: GoogleFonts.poppins(
-                        fontSize: isTablet ? 20 : 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-                Text(
-                  outwardOrder['status'],
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: outwardOrder['status'] == 'Delivered'
-                          ? Colors.green
-                          : Colors.red),
-                ),
-              ],
-            ),
-          );
   }
 
   Widget _buildRecentOrderCard(Map<String, dynamic> order) {
@@ -1144,14 +919,10 @@ class _DashboardState extends State<Dashboard>
       },
       child: Container(
         decoration: BoxDecoration(
-          color: isFilled
-              ? Color(0xFF2ECC71)
-              : Colors.white,
+          color: isFilled ? Color(0xFF2ECC71) : Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isFilled
-                ? Color(0xFF27AE60)
-                : Colors.grey[300]!,
+            color: isFilled ? Color(0xFF27AE60) : Colors.grey[300]!,
             width: 1.5,
           ),
           boxShadow: [
@@ -1177,8 +948,10 @@ class _DashboardState extends State<Dashboard>
                     width: cellHeight * 0.3,
                     height: cellHeight * 0.3,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) =>
-                        Icon(Icons.image_not_supported, size: 24, color: Colors.grey),
+                    errorBuilder: (context, error, stackTrace) => Icon(
+                        Icons.image_not_supported,
+                        size: 24,
+                        color: Colors.grey),
                   ),
                 ),
               ),
@@ -1187,9 +960,11 @@ class _DashboardState extends State<Dashboard>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (!isFilled)
-                    Icon(Icons.remove_circle_outline, color: Colors.red[700], size: fontSize * 1.6),
+                    Icon(Icons.remove_circle_outline,
+                        color: Colors.red[700], size: fontSize * 1.6),
                   if (isFilled)
-                    Icon(Icons.check_circle, color: Colors.white, size: fontSize * 1.6),
+                    Icon(Icons.check_circle,
+                        color: Colors.white, size: fontSize * 1.6),
                   SizedBox(height: 6),
                   Text(
                     'R${qbox['rowNo']}-C${qbox['columnNo']}',
@@ -1203,7 +978,9 @@ class _DashboardState extends State<Dashboard>
                   Text(
                     '${qbox['qboxId']}',
                     style: TextStyle(
-                      color: isFilled ? Colors.white.withOpacity(0.8) : Colors.grey[700],
+                      color: isFilled
+                          ? Colors.white.withOpacity(0.8)
+                          : Colors.grey[700],
                       fontSize: fontSize * 0.9,
                       fontWeight: FontWeight.w600,
                     ),
@@ -1275,7 +1052,7 @@ class _DashboardState extends State<Dashboard>
   Widget _buildTopCards(ScreenLayout layout) {
     return MetricsDashboardCard(
       totalOrders: 1234,
-      totalRevenue: 45678.90,
+      // totalRevenue: 45678.90,
       activeDeliveries: 56,
       onRefresh: () {
         setState(() {
@@ -1579,83 +1356,140 @@ class _DashboardState extends State<Dashboard>
     ).animate().fadeIn(duration: 500.ms).slideX(begin: 0.2, end: 0);
   }
 
-  Widget _buildHotBoxStatus() {
-    return Container(
-      padding: EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Hot Box Status',
-            style: GoogleFonts.poppins(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
+  Widget _buildHotBoxStatus(DashboardProvider provider) {
+    return Consumer<DashboardProvider>(builder: (context, provider, child) {
+      if (provider.isLoading) {
+        return Center(
+          child: CircularProgressIndicator(
+            color: AppColors.mintGreen,
           ),
-          SizedBox(height: 16),
-          Consumer<DashboardProvider>(
-            builder: (context, provider, child) {
-              if (provider.isLoading) {
-                return const Center(
-                    child: CircularProgressIndicator(
-                  color: AppColors.mintGreen,
-                ));
-              }
-              if (provider.hotboxCountList.isEmpty) {
-                return Center(
-                  child: Text(
-                    'No Data Available',
-                    style: GoogleFonts.poppins(
-                      color: Colors.grey[600],
-                      fontSize: 14,
+        );
+      }
+      if (provider.hotboxCountList.isEmpty) {
+        return Center(
+          child: Text("No food items in hotbox"),
+        );
+      }
+      final List<Map<String, dynamic>> flattenedData = [];
+      for (var hotel in provider.hotboxCountList) {
+        for (var sku in hotel['skuList']) {
+          flattenedData.add({
+            'restaurantName': hotel['restaurantName'],
+            'skuCode': sku['skuCode'],
+            'description': sku['description'],
+            'hotBoxCount': sku['hotBoxCount']
+          });
+        }
+      }
+
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                child: DataTable(
+                  columnSpacing: 20,
+                  headingRowColor: MaterialStateColor.resolveWith(
+                      (states) => Colors.red.shade100),
+                  border: TableBorder.all(color: Colors.red.shade200, width: 1),
+                  columns: [
+                    DataColumn(
+                      label: Text(
+                        'Restaurant',
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                        softWrap: true,
+                      ),
                     ),
-                  ),
-                );
-              }
-              return Container(
-                margin: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 8,
-                      offset: Offset(0, 2),
+                    DataColumn(
+                      label: Text(
+                        'SKU',
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                        softWrap: true,
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Description',
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                        softWrap: true,
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'In Hot Box Count',
+                        style: TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                        softWrap: true,
+                      ),
                     ),
                   ],
+                  rows: flattenedData
+                      .map((item) => DataRow(cells: [
+                            DataCell(
+                              ConstrainedBox(
+                                constraints: BoxConstraints(maxWidth: 200),
+                                child: Text(
+                                  item['restaurantName'] ?? '--',
+                                  style: TextStyle(color: Colors.black87),
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              ConstrainedBox(
+                                constraints: BoxConstraints(maxWidth: 70),
+                                child: Text(
+                                  item['skuCode'] ?? '--',
+                                  style: TextStyle(color: Colors.black87),
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              ConstrainedBox(
+                                constraints: BoxConstraints(maxWidth: 200),
+                                child: Text(
+                                  item['description'] ?? '--',
+                                  style: TextStyle(color: Colors.black87),
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                    color: Colors.green.shade100,
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                        color: Colors.green.shade300,
+                                        width: 1)),
+                                child: Text(item['hotBoxCount'].toString(),
+                                    style: TextStyle(
+                                        color: Colors.green.shade800,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ),
+                          ]))
+                      .toList(),
                 ),
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      for (int i = 0;
-                          i < provider.hotboxCountList.length;
-                          i++) ...[
-                        SizedBox(height: 12),
-                        provider.hotboxCountList[i]['skuCode']?.isNotEmpty ==
-                                true
-                            ? _buildHotBoxProgressBar(
-                                provider.hotboxCountList[i]['description'],
-                                provider.hotboxCountList[i]['skuCode'],
-                                provider.hotboxCountList[i]['hotboxCount'] ?? 0,
-                                100)
-                            : Container(),
-                      ]
-                      // _buildHotBoxProgressBar('Sambar', 28, 100),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
+              ),
+            ),
+          );
+        },
+      );
+    });
   }
 
   Widget _buildHotBoxProgressBar(

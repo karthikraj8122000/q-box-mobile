@@ -146,25 +146,25 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.green.shade50,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Text(
-                                    _getStatusFromCode(
-                                        purchaseOrder['orderStatusCd'] ?? 0),
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
+                                // Container(
+                                //   padding: const EdgeInsets.symmetric(
+                                //     horizontal: 10,
+                                //     vertical: 4,
+                                //   ),
+                                //   decoration: BoxDecoration(
+                                //     color: Colors.green.shade50,
+                                //     borderRadius: BorderRadius.circular(15),
+                                //   ),
+                                //   child: Text(
+                                //     _getStatusFromCode(
+                                //         purchaseOrder['orderStatusCd'] ?? 0),
+                                //     style: TextStyle(
+                                //       color: Colors.green,
+                                //       fontSize: 12,
+                                //       fontWeight: FontWeight.w500,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                             const SizedBox(height: 16),

@@ -818,7 +818,7 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
             child: Row(
               children: [
                 Icon(
-                  Icons.restaurant_menu,
+                  Icons.fastfood_outlined,
                   color: Colors.white,
                   size: 24,
                 ),
@@ -835,13 +835,7 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      // Text(
-                      //   'Code: ${orderDetails!['partnerFoodCode']}',
-                      //   style: TextStyle(
-                      //     color: Colors.white.withOpacity(0.9),
-                      //     fontSize: 14,
-                      //   ),
-                      // ),
+
                     ],
                   ),
                 ),
@@ -857,12 +851,12 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
                   '${orderDetails!['orderQuantity']} items',
                   Icons.shopping_cart,
                 ),
-                SizedBox(height: 16),
-                _buildInfoRow(
-                  'Price per SKU',
-                  '₹${orderDetails!['skuPrice']}',
-                  Icons.payments,
-                ),
+                // SizedBox(height: 16),
+                // _buildInfoRow(
+                //   'Price per SKU',
+                //   '₹${orderDetails!['skuPrice']}',
+                //   Icons.payments,
+                // ),
                 SizedBox(height: 16),
                 _buildInfoRow(
                   'Accepted Quantity',

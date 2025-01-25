@@ -203,11 +203,22 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                   elevation: 0,
                                   label: "Sign In",
                                   color:AppColors.buttonBgColor,
-                                  onPressed: () {
-                                    final username = _emailController.text.trim();
-                                    final password = _passwordController.text.trim();
-                                    Provider.of<AuthProvider>(context, listen: false)
-                                        .login(username, password);
+                                  onPressed: () async{
+                                    // final username = _emailController.text.trim();
+                                    // final password = _passwordController.text.trim();
+                                    // Provider.of<AuthProvider>(context, listen: false)
+                                    //     .login(username, password);
+                                    if (_formKey.currentState!.validate()) {
+                                      final username = _emailController.text.trim();
+                                      final password = _passwordController.text.trim();
+                                      final success = await Provider.of<AuthProvider>(context, listen: false)
+                                          .login(username, password);
+                                      if (!success) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(content: Text('Login failed. Please try again.')),
+                                        );
+                                      }
+                                    }
                                   },
                                 ),
                               ),

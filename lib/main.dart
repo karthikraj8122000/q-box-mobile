@@ -32,7 +32,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OrderScanningProvider()),
         ChangeNotifierProvider(create: (_) => OrderHistoryProvider()),
         ChangeNotifierProvider(create: (_) => QBoxProvider()),
-
       ],
       child:  Consumer<AuthProvider>(
         builder: (context, authProvider, _) {

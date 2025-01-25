@@ -32,51 +32,6 @@ class DashboardProvider with ChangeNotifier {
 
   List<List<Map<String, dynamic>>> get groupedQboxLists => _qboxList;
 
-  //
-  // Future<void> getQboxes(int qboxEntitySno) async {
-  //   try {
-  //     _isLoading = true;
-  //     _error = null;
-  //     notifyListeners();
-  //
-  //     Map<String, dynamic> params = {"qboxEntitySno": qboxEntitySno};
-  //     print("params: $params");
-  //
-  //     var result = await apiService.post(
-  //       "8911",
-  //       "masters",
-  //       "get_box_cell_inventory_v2",
-  //       params,
-  //     );
-  //
-  //     print("result: $result");
-  //
-  //     if (result != null && result['isSuccess'] == true) {
-  //       qboxInventory = result['data']['qboxInventory'] ?? {};
-  //       qboxCounts = result['data']['qboxCounts'] ?? [];
-  //
-  //       // Update row and column counts if available in the data
-  //       if (qboxInventory['qBoxCount'] != null &&
-  //           qboxInventory['qBoxCount'].isNotEmpty) {
-  //         rowCount = qboxInventory['qBoxCount'][0]['rowCount'] ?? 10;
-  //         columnCount = qboxInventory['qBoxCount'][0]['columnCount'] ?? 10;
-  //       }
-  //
-  //       notifyListeners();
-  //     } else {
-  //       _error = 'Failed to retrieve the data.';
-  //       commonService.errorToast(_error!);
-  //     }
-  //   } catch (e) {
-  //     print("Error in getQboxes: $e");
-  //     _error = 'An error occurred while retrieving the data.';
-  //     commonService.errorToast(_error!);
-  //   } finally {
-  //     _isLoading = false;
-  //     notifyListeners();
-  //   }
-  // }
-
   Future<dynamic> getQboxes(int qboxEntitySno) async {
     try {
       _isLoading = true;
@@ -112,6 +67,7 @@ class DashboardProvider with ChangeNotifier {
           groupedQboxes[entityInfraSno]!.add(qbox);
         }
         _qboxList = groupedQboxes.values.toList();
+
         notifyListeners();
       } else {
         _error = 'Failed to retrieve the data.';
@@ -157,21 +113,21 @@ class DashboardProvider with ChangeNotifier {
     }
   }
 
-  Future<void> getHotboxCount() async {
+  Future<void> getHotboxCount(int qboxEntitySno) async {
     try {
       _isLoading = true;
       _error = null;
       notifyListeners();
 
       Map<String, dynamic> params = {
-        "qboxEntitySno": 26,
+        "qboxEntitySno": qboxEntitySno,
         "transactionDate": "2025-01-10"
       };
       var result =
-          await apiService.post("8911", "masters", "get_hotbox_count", params);
-
+          await apiService.post("8911", "masters", "get_hotbox_count_v2", params);
+      print("my result:$result");
       if (result != null && result['data'] != null) {
-        _hotboxCountList = result['data']['hotbox_counts'];
+        _hotboxCountList = result['data']['hotboxCounts'];
         print('_hotboxCountlist$_hotboxCountList');
       } else {
         _error = 'Failed to retrieve the data.';
