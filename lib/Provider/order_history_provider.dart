@@ -66,7 +66,7 @@ class OrderHistoryProvider extends ChangeNotifier {
       notifyListeners();
 
       Map<String, dynamic> params = {
-        "qboxEntitySno":26
+        "qboxEntitySno":qboxEntitySno
       };
 
       var result = await _apiService.post(
