@@ -56,6 +56,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Consumer<OrderHistoryProvider>(
       builder: (context, provider, child) {
 
@@ -75,11 +76,19 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
               var purchaseOrder = order['purchaseOrder'];
               var purchaseOrderDetails = order['purchaseOrderDtls'];
 
-              return Card(
-                elevation: 4,
+              return Container(
                 margin: EdgeInsets.symmetric(vertical: 8),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 1,
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
                 ),
                 child: ExpansionTile(
                   initiallyExpanded: true,
@@ -102,19 +111,57 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                       separatorBuilder: (context, index) => Divider(height: 1),
                       itemBuilder: (context, detailIndex) {
                         var orderDetail = purchaseOrderDetails[detailIndex];
-                        return ListTile(
-                          title: Text(
-                            '${orderDetail['partnerFoodCode']}',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          trailing: Wrap(
+                        return Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              AppTwoText(firstText: "Qty: ", secondText: '${orderDetail['orderQuantity']}', fontSize: 14, firstColor: AppColors.lightBlack, secondColor: AppColors.black),
-                              SizedBox(width: 12,),
-                              AppTwoText(firstText: "Accepted: ", secondText: '${orderDetail['acceptedQuantity']}', fontSize: 14, firstColor: AppColors.lightBlack, secondColor: AppColors.black),
+                              // Title Container with flexible size
+                              Flexible(
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4), // Optional padding
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.shade50,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    '${orderDetail['partnerFoodCode']}',
+                                    style: TextStyle(
+                                      fontSize: isTablet ? 16 : 14,
+                                      color: Colors.green.shade700,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis, // Ensures text doesn't overflow
+                                  ),
+                                ),
+                              ),
+
+                              // Trailing section
+                              Wrap(
+                                spacing: 12, // Adds spacing between trailing items
+                                children: [
+                                  AppTwoText(
+                                    firstText: "Qty: ",
+                                    secondText: '${orderDetail['orderQuantity']}',
+                                    fontSize: 14,
+                                    firstColor: AppColors.lightBlack,
+                                    secondColor: AppColors.black,
+                                  ),
+                                  AppTwoText(
+                                    firstText: "Accepted: ",
+                                    secondText: '${orderDetail['acceptedQuantity']}',
+                                    fontSize: 14,
+                                    firstColor: AppColors.lightBlack,
+                                    secondColor: AppColors.black,
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         );
+
                       },
                     ),
                   ],

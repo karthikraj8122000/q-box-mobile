@@ -88,62 +88,68 @@ class _MetricsDashboardCardState extends State<MetricsDashboardCard>
   @override
   Widget build(BuildContext context) {
 
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 6,
+            offset: Offset(0, 3),
+          ),
+        ],
       ),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Business Metrics',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Business Metrics',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                IconButton(
-                  icon: const Icon(Icons.refresh),
-                  onPressed: () {
-                    widget.onRefresh();
-                    _startAnimations();
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildMetricColumn(
-                  'Total Orders',
-                  _ordersAnimation,
-                  Icons.shopping_bag_rounded,
-                  Colors.red,
-                      (value) => value.toInt().toString(),
-                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                onPressed: () {
+                  widget.onRefresh();
+                  _startAnimations();
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildMetricColumn(
+                'Total Orders',
+                _ordersAnimation,
+                Icons.shopping_bag_rounded,
+                Colors.red,
+                    (value) => value.toInt().toString(),
+              ),
 
-                Container(
-                  height: 100,
-                  width: 1,
-                  color: Colors.grey.withOpacity(0.3),
-                ),
-                _buildMetricColumn(
-                  'Active Deliveries',
-                  _deliveriesAnimation,
-                  Icons.delivery_dining_rounded,
-                  Colors.orange,
-                      (value) => value.toInt().toString(),
-                ),
-              ],
-            ),
-          ],
-        ),
+              Container(
+                height: 100,
+                width: 1,
+                color: Colors.grey.withOpacity(0.3),
+              ),
+              _buildMetricColumn(
+                'Active Deliveries',
+                _deliveriesAnimation,
+                Icons.delivery_dining_rounded,
+                Colors.orange,
+                    (value) => value.toInt().toString(),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -208,7 +214,7 @@ class _MetricsDashboardCardState extends State<MetricsDashboardCard>
           child: Icon(
             icon,
             color: color,
-            size: 50,
+            size: 30,
           ),
         ),
         const SizedBox(height: 12),

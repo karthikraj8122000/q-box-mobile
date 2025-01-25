@@ -87,7 +87,6 @@ class _OutwardOrderHistoryCardState extends State<OutwardOrderHistoryCard> {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView.builder(
-            padding: const EdgeInsets.all(8),
             itemCount: orderProvider.salesOrder.length,
             itemBuilder: (context, index) {
               final order = orderProvider.salesOrder[index] is Map
@@ -105,11 +104,19 @@ class _OutwardOrderHistoryCardState extends State<OutwardOrderHistoryCard> {
               final isExpanded = orderProvider.expandedOutwardIndices.contains(index);
               final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
 
-              return Card(
-                elevation: isExpanded ? 8 : 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  side: BorderSide(color: Colors.red.shade100, width: 1),
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 1,
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
                 ),
                 child: Column(
                   children: [
