@@ -211,13 +211,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                     if (_formKey.currentState!.validate()) {
                                       final username = _emailController.text.trim();
                                       final password = _passwordController.text.trim();
-                                      final success = await Provider.of<AuthProvider>(context, listen: false)
+                                      await Provider.of<AuthProvider>(context, listen: false)
                                           .login(username, password);
-                                      if (!success) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text('Login failed. Please try again.')),
-                                        );
-                                      }
                                     }
                                   },
                                 ),

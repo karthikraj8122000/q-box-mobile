@@ -77,7 +77,7 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
 
               return Card(
                 elevation: 4,
-                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                margin: EdgeInsets.symmetric(vertical: 8),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),

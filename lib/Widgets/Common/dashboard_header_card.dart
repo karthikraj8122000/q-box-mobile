@@ -59,14 +59,6 @@ class _MetricsDashboardCardState extends State<MetricsDashboardCard>
       curve: Curves.easeOutCubic,
     ));
 
-    // _revenueAnimation = Tween<double>(
-    //   begin: 0,
-    //   end: widget.totalRevenue,
-    // ).animate(CurvedAnimation(
-    //   parent: _revenueController,
-    //   curve: Curves.easeOutCubic,
-    // ));
-
     _deliveriesAnimation = Tween<double>(
       begin: 0,
       end: widget.activeDeliveries.toDouble(),
@@ -135,18 +127,7 @@ class _MetricsDashboardCardState extends State<MetricsDashboardCard>
                   Colors.red,
                       (value) => value.toInt().toString(),
                 ),
-                // Container(
-                //   height: 100,
-                //   width: 1,
-                //   color: Colors.grey.withOpacity(0.3),
-                // ),
-                // _buildMetricColumn(
-                //   'Total Revenue',
-                //   _revenueAnimation,
-                //   Icons.payments_rounded,
-                //   Colors.green,
-                //       (value) => '\$${value.toStringAsFixed(2)}',
-                // ),
+
                 Container(
                   height: 100,
                   width: 1,
@@ -175,7 +156,7 @@ class _MetricsDashboardCardState extends State<MetricsDashboardCard>
       String Function(double) formatValue,
       ) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-    return Row(
+    return isTablet?Row(
       children: [
         Container(
           padding: const EdgeInsets.all(12),
@@ -214,6 +195,43 @@ class _MetricsDashboardCardState extends State<MetricsDashboardCard>
               },
             ),
           ],
+        ),
+      ],
+    ):Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(
+            icon,
+            color: color,
+            size: 50,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.grey,
+          ),
+        ),
+        const SizedBox(height: 8),
+        AnimatedBuilder(
+          animation: animation,
+          builder: (context, child) {
+            return Text(
+              formatValue(animation.value),
+              style: TextStyle(
+                fontSize: isTablet?24:14,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            );
+          },
         ),
       ],
     );
