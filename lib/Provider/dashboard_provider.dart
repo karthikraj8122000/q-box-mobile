@@ -1,13 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../Services/api_service.dart';
 import '../Services/toast_service.dart';
+import '../Services/token_service.dart';
 
 class DashboardProvider with ChangeNotifier {
   final ApiService apiService = ApiService();
   final CommonService commonService = CommonService();
-  // List<dynamic> _qboxList = [];
   List<dynamic> _hotboxCountList = [];
   List<dynamic> _currentInventoryCountlist = [];
+  final TokenService _tokenService = TokenService();
   bool _isLoading = true;
   String? _error;
   final List<dynamic> _outwardOrderList = [
@@ -29,8 +32,59 @@ class DashboardProvider with ChangeNotifier {
   String qboxEntityName = "";
 
   List<List<Map<String, dynamic>>> _qboxList = [];
-
   List<List<Map<String, dynamic>>> get groupedQboxLists => _qboxList;
+
+  Future<void> initialize() async {
+    try {
+      final user = await _tokenService.getUser();
+      if (user != null) {
+        Map<String, dynamic> userData;
+        if (user is String) {
+          userData = jsonDecode(user);
+        } else if (user is Map<String, dynamic>) {
+          userData = user;
+        } else {
+          throw Exception('Invalid user data format');
+        }
+
+        final qboxEntitySno = userData['qboxEntitySno'];
+        if (qboxEntitySno != null) {
+          await getQboxes(qboxEntitySno);
+          await getCurrentInventoryCount(qboxEntitySno);
+          await getHotboxCount(qboxEntitySno);
+        }
+      }
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> refreshData() async {
+    _error = null;
+    final user = await _tokenService.getUser();
+    if (user != null) {
+      Map<String, dynamic> userData;
+      if (user is String) {
+        userData = jsonDecode(user);
+      } else if (user is Map<String, dynamic>) {
+        userData = user;
+      } else {
+        throw Exception('Invalid user data format');
+      }
+
+      final qboxEntitySno = userData['qboxEntitySno'];
+      if (qboxEntitySno != null) {
+        await Future.wait([
+          getQboxes(qboxEntitySno),
+          getCurrentInventoryCount(qboxEntitySno),
+          getHotboxCount(qboxEntitySno),
+        ]);
+      }
+    }
+  }
 
   Future<dynamic> getQboxes(int qboxEntitySno) async {
     try {

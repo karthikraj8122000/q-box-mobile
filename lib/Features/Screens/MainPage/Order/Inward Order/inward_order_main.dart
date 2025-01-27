@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/Inward%20Order/qr_scanner_screen.dart';
-import 'package:qr_page/Widgets/Common/network_error.dart';
+import 'package:qr_page/Utils/network_error.dart';
 import '../../../../../Provider/order_qr_scanning_provider.dart';
 import '../../../../../Widgets/Custom/custom_modern_tabbar.dart';
 

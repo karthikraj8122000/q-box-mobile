@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:math' as math;
 import 'package:badges/badges.dart' as b;
-import 'package:qr_page/Widgets/Common/app_colors.dart';
+import 'package:qr_page/Widgets/Custom/app_colors.dart';
 
 class AppBottomBar extends StatefulWidget {
    AppBottomBar({

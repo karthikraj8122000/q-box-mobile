@@ -3,12 +3,10 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_page/Provider/order_history_provider.dart';
-import 'package:qr_page/Theme/app_theme.dart';
-import 'package:qr_page/Widgets/Common/network_error.dart';
-import '../../../../../Provider/food_store_provider.dart';
+import 'package:qr_page/Widgets/Custom/app_colors.dart';
+import 'package:qr_page/Utils/network_error.dart';
 import '../../../../../Widgets/Custom/custom_modern_tabbar.dart';
 import 'outward_delivery_history.dart';
-import '../Common/order_card.dart';
 import 'order_history_card.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -43,7 +41,7 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<FoodStoreProvider>(context);
+    final provider = Provider.of<OrderHistoryProvider>(context);
 
     return NetworkWrapper(
       child: SafeArea(
@@ -122,7 +120,7 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
 
 
 
-  void _showFilterBottomSheet(BuildContext context, FoodStoreProvider provider) {
+  void _showFilterBottomSheet(BuildContext context, OrderHistoryProvider provider) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -138,7 +136,7 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.appTheme,
+                      color: AppColors.mintGreen,
                     ),
                   ),
                   SizedBox(height: 16),
@@ -176,7 +174,7 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
                             provider.toggleSortOrder();
                           });
                         },
-                        activeColor: AppTheme.appTheme,
+                        activeColor: AppColors.mintGreen,
                       ),
                     ],
                   ),
@@ -191,7 +189,7 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
                           : '${DateFormat('MMM dd, yyyy').format(provider.startDate!)} - ${DateFormat('MMM dd, yyyy').format(provider.endDate!)}',
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.appTheme,
+                      backgroundColor: AppColors.mintGreen,
                       foregroundColor: Colors.white,
                     ),
                   ),
@@ -217,7 +215,7 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
     );
   }
 
-  Future<void> _selectDateRange(BuildContext context, FoodStoreProvider provider) async {
+  Future<void> _selectDateRange(BuildContext context, OrderHistoryProvider provider) async {
     final DateTimeRange? picked = await showDateRangePicker(
       context: context,
       firstDate: DateTime(2000),

@@ -7,8 +7,8 @@ import 'dart:convert';
 
 import '../Services/toast_service.dart';
 import '../Services/token_service.dart';
-import '../Widgets/Common/deviceInfo.dart';
-import '../Widgets/Common/time.dart';
+import '../Utils/deviceInfo.dart';
+import '../Utils/time.dart';
 
 class AuthProvider extends ChangeNotifier {
   final TokenService _tokenService = TokenService();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_page/Features/Screens/Login/second_login.dart';
-import 'package:qr_page/Widgets/Common/app_colors.dart';
+import 'package:qr_page/Widgets/Custom/app_colors.dart';
 import 'dart:async';
 
 import '../../../Core/Router/app_router.dart';

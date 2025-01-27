@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../../../Provider/order_history_provider.dart';
 import '../../../../../Services/token_service.dart';
-import '../../../../../Widgets/Common/app_colors.dart';
+import '../../../../../Widgets/Custom/app_colors.dart';
 import '../../../../../Widgets/Common/no-data-found.dart';
 
 class OutwardOrderHistoryCard extends StatefulWidget {

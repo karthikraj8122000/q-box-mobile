@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_page/Features/Screens/MainPage/Order/Common/food_view_screen.dart';
-import 'package:qr_page/Widgets/Common/app_colors.dart';
+import 'package:qr_page/Widgets/Custom/app_colors.dart';
 
 class OrderCard extends StatefulWidget {
   final Map<String, dynamic> order;

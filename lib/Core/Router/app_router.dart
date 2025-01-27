@@ -14,11 +14,9 @@ import 'package:qr_page/Features/Screens/MainPage/Order/Inward%20Order/qr_scanne
 import 'package:qr_page/Features/Screens/MainPage/Order/View%20Order/view_order.dart';
 import 'package:qr_page/Features/Screens/Splash/animated_splash.dart';
 import 'package:qr_page/Provider/auth_provider.dart';
-
 import '../../Features/Screens/MainPage/Customer Delivery/Common/delivery_status.dart';
 import '../../Features/Screens/MainPage/Customer Delivery/Common/scan_qbox_unload.dart';
-import '../../Features/Screens/MainPage/Dashboard/see_all_qbox_foods.dart';
-import '../../Widgets/Common/app_nav_bar.dart';
+import '../../Widgets/Custom/app_nav_bar.dart';
 
 class AppRouter {
   static final GlobalKey<NavigatorState> _routerKey = GlobalKey<NavigatorState>(debugLabel: 'root');
@@ -43,13 +41,6 @@ class AppRouter {
         path: LoginScreen.routeName,
         builder: (_, __) => LoginScreen(),
       ),
-
-      GoRoute(
-        name: SeeAllQboxFoods.routeName,
-        path: SeeAllQboxFoods.routeName,
-        builder: (_, __) => const SeeAllQboxFoods(),
-      ),
-
       GoRoute(
         name: ScanQBoxScreen.routeName,
         path: ScanQBoxScreen.routeName,
@@ -73,19 +64,6 @@ class AppRouter {
         path: NotificationHistoryScreen.routeName,
         builder: (_, __) => const NotificationHistoryScreen(),
       ),
-      // GoRoute(
-      //   name: ViewOrder.routeName,
-      //   path: ViewOrder.routeName,
-      //   builder: (_, __) => const ViewOrder(),
-      // ),
-  //     GoRoute(
-  //       name: ViewOrder.routeName,
-  //       path: ViewOrder.routeName,
-  //       builder: (context, state) {
-  // final purchaseOrder = state.extra;
-  // return ViewOrder(purchaseOrder:purchaseOrder);
-  // }
-  //     ),
       GoRoute(
         name: ViewOrder.routeName,
         path: ViewOrder.routeName,

@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Provider/order_history_provider.dart';
 import 'package:qr_page/Services/token_service.dart';
-import 'package:qr_page/Widgets/Common/rich_text.dart';
-import '../../../../../Widgets/Common/app_colors.dart';
+import 'package:qr_page/Widgets/Custom/rich_text.dart';
+import '../../../../../Widgets/Custom/app_colors.dart';
 import '../../../../../Widgets/Common/no-data-found.dart';
 
 class OrderHistoryCard extends StatefulWidget {

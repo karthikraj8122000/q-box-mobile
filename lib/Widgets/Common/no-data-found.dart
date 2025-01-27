@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qr_page/Widgets/Common/app_colors.dart';
-import 'app_text.dart';
+import 'package:qr_page/Widgets/Custom/app_colors.dart';
+import '../Custom/app_text.dart';
 
 class NoDataFound extends StatelessWidget {
 final String title;

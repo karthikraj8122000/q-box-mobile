@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:qr_page/Features/Screens/MainPage/Load-unload/load_history.dart';
 import '../../../../Services/api_service.dart';
 import '../../../../Services/toast_service.dart';
-import '../../../../Widgets/Common/app_colors.dart';
+import '../../../../Widgets/Custom/app_colors.dart';
 
 class LoadQbox extends StatefulWidget {
   final int? qboxEntitySno;
