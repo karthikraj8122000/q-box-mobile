@@ -117,13 +117,6 @@ class _DashboardState extends State<Dashboard>
   void initState() {
     super.initState();
     _loadData();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<DashboardProvider>(context, listen: false)
-          .getCurrentInventoryCount();
-    });
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   Provider.of<DashboardProvider>(context, listen: false).getHotboxCount();
-    // });
     _headerController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -153,6 +146,7 @@ class _DashboardState extends State<Dashboard>
     final qboxEntitySno = userData['qboxEntitySno'] ?? [];
     if (qboxEntitySno != null) {
       await provider.getQboxes(qboxEntitySno);
+      await provider.getCurrentInventoryCount(qboxEntitySno);
       await provider.getHotboxCount(qboxEntitySno);
     } else {
       print('No qboxEntitySno found');

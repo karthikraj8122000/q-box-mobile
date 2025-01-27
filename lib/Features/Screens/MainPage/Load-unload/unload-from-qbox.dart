@@ -24,9 +24,6 @@ class _UnloadQboxState extends State<UnloadQbox> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      print('qboxEntityll${widget.qboxEntitySno}');
-    });
   }
   //
   // unloadFromQBox() async {
@@ -51,14 +48,17 @@ class _UnloadQboxState extends State<UnloadQbox> {
   //   });
   // }
   unloadFromQBox() async {
+    print("heloo");
     Map<String, dynamic> body = {
       "uniqueCode": qBoxOutBarcode,
       "wfStageCd":12,
       "qboxEntitySno": widget.qboxEntitySno
     };
-    print('ddddd$body');
+    print("body$body");
+    // print('ddddd$body');
     try {
       var result = await apiService.post("8912", "masters","unload_sku_from_qbox_to_hotbox", body);
+      print("resultssss$result");
       if (result != null && result['data'] != null) {
         print('RESULT$result');
         commonService.presentToast('Food Unloaded from the qbox');
@@ -204,7 +204,6 @@ class _UnloadQboxState extends State<UnloadQbox> {
             style: TextStyle(fontSize: isTablet?24:18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
-          _buildDetailRow('Qbox ID', '#1234567'),
           _buildDetailRow('Food Code', scannedResult),
           const SizedBox(height: 30),
           _buildDispatchButton(provider, context),

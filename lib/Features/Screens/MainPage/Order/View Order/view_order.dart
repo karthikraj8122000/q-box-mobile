@@ -52,6 +52,8 @@ class _ViewOrderState extends State<ViewOrder> {
               color: AppColors.mintGreen,
             ));
           }
+
+              // || provider.purchaseOrders[]
           if (provider.purchaseOrders.isEmpty) {
             return NoDataFound(title: "orders");
           }

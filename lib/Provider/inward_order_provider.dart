@@ -142,6 +142,7 @@ class InwardOrderDtlProvider extends ChangeNotifier {
       print("responsesssss $response");
       if (response != null && response['data'] != null) {
         _purchaseOrders = response['data'];
+        print("purchaseOrderssss$_purchaseOrders");
         notifyListeners();
       }
     } catch (e) {

@@ -83,15 +83,15 @@ class DashboardProvider with ChangeNotifier {
     }
   }
 
-  Future<dynamic> getCurrentInventoryCount() async {
+  Future<dynamic> getCurrentInventoryCount(int qboxEntitySno) async {
     try {
       _isLoading = true;
       _error = null;
       notifyListeners();
 
       Map<String, dynamic> params = {
-        "qboxEntitySno": 26,
-        "transactionDate": "2025-01-10"
+        "qboxEntitySno": qboxEntitySno,
+        "transactionDate": "2025-01-27"
       };
       var result = await apiService.post(
           "8911", "masters", "get_sku_dashboard_counts", params);
@@ -121,7 +121,7 @@ class DashboardProvider with ChangeNotifier {
 
       Map<String, dynamic> params = {
         "qboxEntitySno": qboxEntitySno,
-        "transactionDate": "2025-01-10"
+        "transactionDate": "2025-01-27"
       };
       var result =
           await apiService.post("8911", "masters", "get_hotbox_count_v2", params);
