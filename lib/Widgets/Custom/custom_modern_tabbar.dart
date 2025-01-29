@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Common/app_colors.dart';
+import 'app_colors.dart';
 
 class TabItem {
   final String title;

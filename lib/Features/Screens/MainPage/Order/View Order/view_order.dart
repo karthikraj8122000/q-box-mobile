@@ -3,7 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_page/Widgets/Common/no-data-found.dart';
 import '../../../../../Provider/inward_order_provider.dart';
-import '../../../../../Widgets/Common/app_colors.dart';
+import '../../../../../Widgets/Custom/app_colors.dart';
 import '../Common/order_card.dart';
 
 class ViewOrder extends StatefulWidget {
@@ -26,7 +26,6 @@ class _ViewOrderState extends State<ViewOrder> {
           .getTotalItems(widget.partnerPurchaseOrderId);
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,6 @@ class _ViewOrderState extends State<ViewOrder> {
               color: AppColors.mintGreen,
             ));
           }
-
               // || provider.purchaseOrders[]
           if (provider.purchaseOrders.isEmpty) {
             return NoDataFound(title: "orders");

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'app_colors.dart';
+import '../Custom/app_colors.dart';
 
 class RejectionDialog extends StatefulWidget {
   final Function(String reason, List<String> photos) onSubmit;

@@ -51,12 +51,11 @@ class TokenService {
     return localStorage.getItem(citiesKey);  // Returns cities
   }
 
-  saveFeaturedCompanies(featuredcompanies) {
-    localStorage.deleteItem(featuredCompaniesKey);  // Removes old featured companies
-    localStorage.setItem(featuredCompaniesKey, featuredcompanies);  // Sets new companies
+  Future<void> saveQboxEntitySno(int qboxEntitySno) async {
+    await localStorage.setItem('selectedQboxEntitySno', qboxEntitySno);
   }
 
-  getFeaturedCompanies() {
-    return localStorage.getItem(featuredCompaniesKey);  // Returns featured companies
+  Future<int?> getQboxEntitySno() async {
+    return await localStorage.getItem('selectedQboxEntitySno');
   }
 }

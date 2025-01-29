@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_page/Widgets/Common/app_colors.dart';
+import 'package:qr_page/Widgets/Custom/app_colors.dart';
 
 import '../../../../../Model/Data_Models/qbox_delivery_model/qbox_delivery_model.dart';
 import '../../../../../Provider/qbox_delivery_provider.dart';

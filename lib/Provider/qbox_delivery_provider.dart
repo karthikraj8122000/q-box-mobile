@@ -6,7 +6,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../Model/Data_Models/qbox_delivery_model/qbox_delivery_model.dart';
 
 class DeliveryProvider extends ChangeNotifier {
-  // QBox Scanning State
   List<QBoxItem> _scannedItems = [];
   String _lastScannedCode = '';
 

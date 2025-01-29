@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:qr_page/Widgets/Common/app_colors.dart';
+import 'package:qr_page/Widgets/Custom/app_colors.dart';
 
 class CommonService extends ChangeNotifier{
 

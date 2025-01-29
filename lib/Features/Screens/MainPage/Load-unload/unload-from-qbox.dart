@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:provider/provider.dart';
-import '../../../../Provider/food_store_provider.dart';
 import '../../../../Services/api_service.dart';
 import '../../../../Services/toast_service.dart';
-import '../../../../Widgets/Common/app_colors.dart';
+import '../../../../Services/token_service.dart';
+import '../../../../Widgets/Custom/app_colors.dart';
 
 class UnloadQbox extends StatefulWidget {
-  final int? qboxEntitySno;
-  const UnloadQbox({super.key,required this.qboxEntitySno});
+  const UnloadQbox({super.key});
 
   @override
   State<UnloadQbox> createState() => _UnloadQboxState();
@@ -21,10 +20,21 @@ class _UnloadQboxState extends State<UnloadQbox> {
   final CommonService commonService = CommonService();
   bool get isReadyToLoad => qBoxOutBarcode.isNotEmpty;
 
+  TokenService tokenService = TokenService();
+  int? entitySno;
+
   @override
   void initState() {
     super.initState();
+    getEntitySno();
+
   }
+
+  getEntitySno() async {
+    entitySno = await tokenService.getQboxEntitySno();
+    print("unload$entitySno");
+  }
+
   //
   // unloadFromQBox() async {
   //   Map<String, dynamic> body = {
@@ -52,7 +62,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
     Map<String, dynamic> body = {
       "uniqueCode": qBoxOutBarcode,
       "wfStageCd":12,
-      "qboxEntitySno": widget.qboxEntitySno
+      "qboxEntitySno": entitySno
     };
     print("body$body");
     // print('ddddd$body');
@@ -89,21 +99,19 @@ class _UnloadQboxState extends State<UnloadQbox> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<FoodStoreProvider>(context);
-
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
-            _buildInitialScanView(context,provider),
+            _buildInitialScanView(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInitialScanView(BuildContext context, FoodStoreProvider provider) {
+  Widget _buildInitialScanView(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Column(
       children: [
@@ -151,13 +159,13 @@ class _UnloadQboxState extends State<UnloadQbox> {
         ),
         if (qBoxOutBarcode.isNotEmpty && qBoxOutBarcode != '-1') ...[
           SizedBox(height: 24),
-          _buildOrderDetails(provider,qBoxOutBarcode),
+          _buildOrderDetails(qBoxOutBarcode),
         ],
       ],
     );
   }
 
-  Widget _buildDispatchButton(FoodStoreProvider provider, BuildContext context) {
+  Widget _buildDispatchButton(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final isEnabled = qBoxOutBarcode.isNotEmpty;
     return Container(
@@ -187,7 +195,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
     );
   }
 
-  Widget _buildOrderDetails(FoodStoreProvider provider,String scannedResult) {
+  Widget _buildOrderDetails(String scannedResult) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Container(
       padding: const EdgeInsets.all(20),
@@ -206,7 +214,7 @@ class _UnloadQboxState extends State<UnloadQbox> {
           const SizedBox(height: 20),
           _buildDetailRow('Food Code', scannedResult),
           const SizedBox(height: 30),
-          _buildDispatchButton(provider, context),
+          _buildDispatchButton(context),
         ],
       ),
     );

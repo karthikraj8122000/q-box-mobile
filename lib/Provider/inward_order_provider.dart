@@ -83,58 +83,19 @@ class InwardOrderDtlProvider extends ChangeNotifier {
       _showError(context, 'Please fill all fields');
     }
   }
-  //
-  // getAllOrderedItems() async {
-  //   const String endpoint = 'search_purchase_order';
-  //   const String port = '8912';
-  //   const String service = 'masters';
-  //
-  //   try {
-  //     _isLoading = true;
-  //     _error = null;
-  //     notifyListeners();
-  //
-  //     final response = await _apiService.post(port, service, endpoint, {});
-  //     print("responsesssss $response");
-  //     if (response != null && response['data'] != null) {
-  //       _purchaseOrders = response['data'];
-  //
-  //       notifyListeners();
-  //     } else {
-  //       _error = 'Failed to retrieve the data.';
-  //       commonService.errorToast(_error!);
-  //     }
-  //   } catch (e) {
-  //     _error = 'An error occurred while retrieving the data.';
-  //     debugPrint('$e');
-  //     commonService.errorToast(_error!);
-  //   } finally {
-  //     _isLoading = false;
-  //     notifyListeners();
-  //   }
-  // }
 
   Future<dynamic> getTotalItems(String? partnerPurchaseOrderId) async {
-    var user = await _tokenService.getUser();
-    Map<String, dynamic> userData;
-    if (user is String) {
-      userData = jsonDecode(user);
-    } else if (user is Map<String, dynamic>) {
-      userData = user;
-    } else {
-      print('Unexpected type for user: ${user.runtimeType}');
-      return null;
-    }
+    var entitySno = await _tokenService.getQboxEntitySno();
+    print("receiveOrderSno$entitySno");
     const String endpoint = 'search_purchase_order';
     const String port = '8912';
     const String service = 'masters';
-
     try {
       _isLoading = true;
       _error = null;
       notifyListeners();
       Map<String, dynamic> params = {
-        'qboxEntitySno': userData['qboxEntitySno'],
+        'qboxEntitySno': entitySno,
         "partnerPurchaseOrderId": partnerPurchaseOrderId
       };
       print("partnerPurchaseOrderIddd $params");
