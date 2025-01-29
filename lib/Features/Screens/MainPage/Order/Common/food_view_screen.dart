@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:qr_page/Services/api_service.dart';
 import 'package:qr_page/Services/toast_service.dart';
-import 'package:qr_page/Widgets/Common/app_colors.dart';
+import 'package:qr_page/Widgets/Custom/app_colors.dart';
 
 class FoodViewScreen extends StatefulWidget {
   final int purchaseOrderSno;

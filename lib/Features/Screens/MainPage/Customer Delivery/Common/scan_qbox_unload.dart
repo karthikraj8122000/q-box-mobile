@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../Provider/qbox_delivery_provider.dart';
-import '../../../../../Widgets/Common/app_colors.dart';
+import '../../../../../Widgets/Custom/app_colors.dart';
 
 class ScanQBoxScreen extends StatelessWidget {
   static const String routeName = '/scan-delivery';

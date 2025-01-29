@@ -6,11 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:qr_page/Features/Screens/MainPage/Load-unload/load_history.dart';
 import '../../../../Services/api_service.dart';
 import '../../../../Services/toast_service.dart';
-import '../../../../Widgets/Common/app_colors.dart';
+import '../../../../Services/token_service.dart';
+import '../../../../Widgets/Custom/app_colors.dart';
 
 class LoadQbox extends StatefulWidget {
-  final int? qboxEntitySno;
-  const LoadQbox({super.key, required this.qboxEntitySno});
+  const LoadQbox({super.key});
 
   @override
   State<LoadQbox> createState() => _LoadQboxState();
@@ -25,9 +25,20 @@ class _LoadQboxState extends State<LoadQbox> {
   final List<dynamic> _returnValue = [];
   List<dynamic> get returnValue => _returnValue;
 
+
+  TokenService tokenService = TokenService();
+  int? entitySno;
+
   @override
   void initState() {
+
     super.initState();
+    getEntitySno();
+  }
+
+  getEntitySno() async {
+    entitySno = await tokenService.getQboxEntitySno();
+    print("load$entitySno");
   }
 
   Future<void> scanBarcode(String name) async {
@@ -56,7 +67,7 @@ class _LoadQboxState extends State<LoadQbox> {
         "uniqueCode": foodBarcode.trim(),
         "wfStageCd": 11,
         "boxCellSno": qBoxBarcode.trim(),
-        "qboxEntitySno": widget.qboxEntitySno
+        "qboxEntitySno": entitySno
       };
       print('$body');
       var result = await apiService.post("8912", "masters", "load_sku_in_qbox", body);

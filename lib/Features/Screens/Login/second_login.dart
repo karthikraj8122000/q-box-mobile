@@ -3,11 +3,13 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_page/Widgets/Common/app_colors.dart';
+import 'package:qr_page/Core/Router/app_router.dart';
+import 'package:qr_page/Widgets/Custom/app_colors.dart';
 
 import '../../../Provider/auth_provider.dart';
-import '../../../Widgets/Common/app_button.dart';
+import '../../../Widgets/Custom/app_button.dart';
 import '../ForgetPassword/forget_password.dart';
+import '../MainPage/Dashboard/dashboard.dart';
 import '../Signup/signup.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -204,26 +206,36 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                   label: "Sign In",
                                   color:AppColors.buttonBgColor,
                                   onPressed: () async{
-                                    // final username = _emailController.text.trim();
-                                    // final password = _passwordController.text.trim();
-                                    // Provider.of<AuthProvider>(context, listen: false)
-                                    //     .login(username, password);
                                     if (_formKey.currentState!.validate()) {
                                       final username = _emailController.text.trim();
                                       final password = _passwordController.text.trim();
-                                      final success = await Provider.of<AuthProvider>(context, listen: false)
+                                     await Provider.of<AuthProvider>(context, listen: false)
                                           .login(username, password);
-                                      if (!success) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text('Login failed. Please try again.')),
-                                        );
-                                      }
+                                      _emailController.clear();
+                                      _passwordController.clear();
                                     }
+                                    // if (_formKey.currentState!.validate()) {
+                                    //   final username = _emailController.text.trim();
+                                    //   final password = _passwordController.text.trim();
+                                    //   final success = await Provider.of<AuthProvider>(context, listen: false)
+                                    //       .login(username, password);
+                                    //   if (success) {
+                                    //     // Navigate to Dashboard and force refresh
+                                    //     Navigator.pushReplacement(
+                                    //       context,
+                                    //       MaterialPageRoute(
+                                    //         builder: (context) => Dashboard(forceRefresh: true),
+                                    //       ),
+                                    //     );
+                                    //   } else {
+                                    //     ScaffoldMessenger.of(context).showSnackBar(
+                                    //       SnackBar(content: Text('Login failed. Please try again.')),
+                                    //     );
+                                    //   }
+                                    // }
                                   },
                                 ),
                               ),
-                              // const SizedBox(height: 24),
-                              // Sign Up Link
                               Center(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -274,10 +286,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                   ),
                                 ],
                               ),
-
                               const SizedBox(height: 24),
-
-                              // Social Login Buttons
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

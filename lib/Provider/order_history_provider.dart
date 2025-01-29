@@ -5,25 +5,56 @@ class OrderHistoryProvider extends ChangeNotifier {
   final ApiService _apiService = ApiService();
   bool _isLoading = false;
   String? _error;
-  List<dynamic>  _purchaseOrder = [];
+  List<dynamic> _purchaseOrder = [];
   final Set<int> _expandedInwardIndices = {};
   final Set<int> _expandedOutwardIndices = {};
   List<dynamic> _salesOrder = [];
+  String _sortBy = 'Date';
+  final List<String> sortOptions = ['Date', 'Food Item Name', 'Qbox ID'];
+  bool _isAscending = false;
+  DateTime? _startDate;
+  DateTime? _endDate;
 
+  DateTime? get startDate => _startDate;
+  DateTime? get endDate => _endDate;
+  bool get isAscending => _isAscending;
+  String get sortBy => _sortBy;
   bool get isLoading => _isLoading;
   String? get error => _error;
-  Set<int>  get expandedInwardIndices => _expandedInwardIndices;
-  Set<int>  get expandedOutwardIndices => _expandedOutwardIndices;
+  Set<int> get expandedInwardIndices => _expandedInwardIndices;
+  Set<int> get expandedOutwardIndices => _expandedOutwardIndices;
   List<dynamic> get purchaseOrder => _purchaseOrder;
   List<dynamic> get salesOrder => _salesOrder;
 
+  void setSortBy(String value) {
+    _sortBy = value;
+    notifyListeners();
+  }
+
+  void toggleSortOrder() {
+    _isAscending = !_isAscending;
+    notifyListeners();
+  }
+
+  void resetFilters() {
+    _sortBy = 'Date';
+    _isAscending = false;
+    _startDate = null;
+    _endDate = null;
+    notifyListeners();
+  }
+
+  void setDateRange(DateTime? start, DateTime? end) {
+    _startDate = start;
+    _endDate = end;
+    notifyListeners();
+  }
+
   Future<void> fetchOutwardOrderItems(int qboxEntitySno) async {
-    try{
+    try {
       _isLoading = true;
       notifyListeners();
-      Map<String, dynamic> params = {
-        "qboxEntitySno":qboxEntitySno
-      };
+      Map<String, dynamic> params = {"qboxEntitySno": qboxEntitySno};
 
       var result = await _apiService.post(
         "8911",
@@ -52,31 +83,27 @@ class OrderHistoryProvider extends ChangeNotifier {
       }
       _isLoading = false;
       notifyListeners();
-    }catch (e) {
+    } catch (e) {
       _error = e.toString();
       _isLoading = false;
       notifyListeners();
     }
   }
 
-  Future<void> fetchInwardOrders(int qboxEntitySno) async {
+  Future<dynamic> fetchInwardOrders(int qboxEntitySno) async {
     try {
       _isLoading = true;
       _error = null;
       notifyListeners();
 
-      Map<String, dynamic> params = {
-        "qboxEntitySno":26
-      };
+      Map<String, dynamic> params = {"qboxEntitySno": qboxEntitySno};
 
       var result = await _apiService.post(
-          "8911",
-          "masters",
-          "partner_channel_inward_delivery_history",
-          params
-      );
+          "8911", "masters", "partner_channel_inward_delivery_history", params);
 
-      if (result != null && result['data'] != null && result['data']['myOrders'] != null) {
+      if (result != null &&
+          result['data'] != null &&
+          result['data']['myOrders'] != null) {
         print("inwardOrderResult:${result['data']}");
         _purchaseOrder = result['data']['myOrders'];
         print("inwardOrder:$_purchaseOrder");
