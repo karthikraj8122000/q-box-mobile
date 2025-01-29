@@ -30,7 +30,6 @@ class _LoadOrUnloadState extends State<LoadOrUnload>
   late List<TabItem> _tabItems;
   List<dynamic> _returnValue = [];
   List<dynamic> get returnValue => _returnValue;
-  int? qboxEntitySno;
   bool isLoading = true;
   int? entitySno;
 
@@ -45,9 +44,6 @@ TokenService tokenService = TokenService();
       TabItem(title: 'Unload From QBox', icon: Icons.outbox),
     ];
     _tabController = TabController(length: _tabItems.length, vsync: this);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeQboxEntitySno();
-    });
   }
 
   @override
@@ -56,47 +52,8 @@ TokenService tokenService = TokenService();
     super.dispose();
   }
 
-  Future<void> _initializeQboxEntitySno() async {
-    qboxEntitySno = await getUser();
-    setState(() {
-      isLoading = false; // Set loading to false after initialization
-    });
-  }
-
-  Future<int?> getUser() async {
-    var user = await tokenService.getUser();
-
-    Map<String, dynamic> userData;
-    if (user is String) {
-      userData = jsonDecode(user);
-    } else if (user is Map<String, dynamic>) {
-      userData = user;
-    } else {
-      print('Unexpected type for user: ${user.runtimeType}');
-      return null;
-    }
-    return userData['qboxEntitySno'];
-  }
-
-  Future<int?> getEntity() async {
-    Map<String, dynamic> params = {};
-    var result = await apiService.post("8912", "masters", "search_qbox_entity", params);
-    if (result != null && result['data'] != null) {
-      _returnValue = result['data'];
-      print('_returnSales$_returnValue');
-      if (_returnValue.isNotEmpty) {
-        entitySno = _returnValue[0]['qboxEntitySno'] as int?;
-        print('qboxEntitySno: $entitySno');
-        return entitySno;
-      }
-    }
-    print('No data found$qboxEntitySno');
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return NetworkWrapper(
       child: Consumer<OrderScanningProvider>(
         builder: (context, provider, child) => Scaffold(
@@ -125,12 +82,8 @@ TokenService tokenService = TokenService();
             body:  TabBarView(
               controller: _tabController,
               children: [
-                qboxEntitySno == null
-                    ? Center(child: CircularProgressIndicator(color: AppColors.mintGreen,)) // Show a loader until data is fetched
-                    : LoadQbox(qboxEntitySno: qboxEntitySno!),
-                qboxEntitySno == null
-                    ? Center(child: CircularProgressIndicator(color: AppColors.mintGreen)) // Show a loader until data is fetched
-                    : UnloadQbox(qboxEntitySno: qboxEntitySno!),
+                LoadQbox(),
+               UnloadQbox(),
               ],
             ),
           ),

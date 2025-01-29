@@ -10,7 +10,7 @@ import '../../../../../Widgets/Custom/app_colors.dart';
 import '../../../../../Widgets/Common/no-data-found.dart';
 
 class OrderHistoryCard extends StatefulWidget {
-  const OrderHistoryCard({Key? key}) : super(key: key);
+  const OrderHistoryCard({super.key});
 
   @override
   State<OrderHistoryCard> createState() => _OrderHistoryCardState();
@@ -19,36 +19,21 @@ class OrderHistoryCard extends StatefulWidget {
 class _OrderHistoryCardState extends State<OrderHistoryCard> {
 
   TokenService tokenService = TokenService();
+  int? entitySno;
 
   @override
-  void initState() {
+   void initState() {
+    getEntitySno();
     super.initState();
-    _fetchInwardOrderData();
   }
 
-  void _fetchInwardOrderData() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadInwardData();
-    });
-  }
-
-  Future<void> _loadInwardData() async {
-    if (!mounted) return;
-    var user = await tokenService.getUser();
+  getEntitySno() async {
+    entitySno = await tokenService.getQboxEntitySno();
+    print("inwardSno$entitySno");
     final provider = Provider.of<OrderHistoryProvider>(context, listen: false);
-    Map<String, dynamic> userData;
-    if (user is String) {
-      userData = jsonDecode(user);
-    } else if (user is Map<String, dynamic>) {
-      userData = user;
-    } else {
-      print('Unexpected type for user: ${user.runtimeType}');
-      return;
-    }
-    final qboxEntitySno = userData['qboxEntitySno'];
-    if (qboxEntitySno != null) {
+    if (entitySno != null) {
       print("Hi there!");
-      await provider.fetchInwardOrders(qboxEntitySno);
+      await provider.fetchInwardOrders(entitySno!);
     } else {
       print('No qboxEntitySno found');
     }
@@ -137,7 +122,6 @@ class _OrderHistoryCardState extends State<OrderHistoryCard> {
                                   ),
                                 ),
                               ),
-
                               // Trailing section
                               Wrap(
                                 spacing: 12, // Adds spacing between trailing items

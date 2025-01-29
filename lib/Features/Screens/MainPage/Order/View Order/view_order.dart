@@ -27,7 +27,6 @@ class _ViewOrderState extends State<ViewOrder> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -52,7 +51,6 @@ class _ViewOrderState extends State<ViewOrder> {
               color: AppColors.mintGreen,
             ));
           }
-
               // || provider.purchaseOrders[]
           if (provider.purchaseOrders.isEmpty) {
             return NoDataFound(title: "orders");

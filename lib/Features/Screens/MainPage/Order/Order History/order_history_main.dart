@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:qr_page/Provider/order_history_provider.dart';
 import 'package:qr_page/Widgets/Custom/app_colors.dart';
 import 'package:qr_page/Utils/network_error.dart';
+import '../../../../../Services/token_service.dart';
 import '../../../../../Widgets/Custom/custom_modern_tabbar.dart';
 import 'outward_delivery_history.dart';
 import 'order_history_card.dart';
@@ -20,6 +21,8 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateMixin {
   late TabController _tabController;
   late List<TabItem> _tabItems;
+  TokenService tokenService = TokenService();
+  int? entitySno;
 
   @override
   void initState() {
@@ -31,7 +34,6 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
     _tabController = TabController(length: _tabItems.length, vsync: this);
     // context.read<OrderHistoryProvider>().fetchInwardOrders();
   }
-
 
   @override
   void dispose() {

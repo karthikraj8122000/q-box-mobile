@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import '../Model/Data_Models/dashboard_entity_model.dart';
 import '../Services/api_service.dart';
 import '../Services/toast_service.dart';
 import '../Services/token_service.dart';
@@ -34,6 +35,21 @@ class DashboardProvider with ChangeNotifier {
   List<List<Map<String, dynamic>>> _qboxList = [];
   List<List<Map<String, dynamic>>> get groupedQboxLists => _qboxList;
 
+  List<QboxEntity> _qboxEntities = [];
+  QboxEntity? _selectedQboxEntity;
+
+  List<QboxEntity> get qboxEntities => _qboxEntities;
+  QboxEntity? get selectedQboxEntity => _selectedQboxEntity;
+
+  Future<void> setSelectedQboxEntity(QboxEntity entity) async {
+    _selectedQboxEntity = entity;
+    await _tokenService.saveQboxEntitySno(entity.qboxEntitySno);
+    await getQboxes(entity.qboxEntitySno);
+    await getCurrentInventoryCount(entity.qboxEntitySno);
+    await getHotboxCount(entity.qboxEntitySno);
+    notifyListeners();
+  }
+
   Future<void> initialize() async {
     try {
       final user = await _tokenService.getUser();
@@ -47,12 +63,25 @@ class DashboardProvider with ChangeNotifier {
           throw Exception('Invalid user data format');
         }
 
-        final qboxEntitySno = userData['qboxEntitySno'];
-        if (qboxEntitySno != null) {
-          await getQboxes(qboxEntitySno);
-          await getCurrentInventoryCount(qboxEntitySno);
-          await getHotboxCount(qboxEntitySno);
+        final qboxEntityDetails = userData['qboxEntityDetails'] as List<dynamic>;
+        _qboxEntities = qboxEntityDetails.map((entity) => QboxEntity.fromJson(entity)).toList();
+        int? savedQboxEntitySno = await _tokenService.getQboxEntitySno();
+        print('SavedQboxEntitySno: $savedQboxEntitySno');
+        if (savedQboxEntitySno != null) {
+          _selectedQboxEntity = _qboxEntities.firstWhere(
+                (entity) => entity.qboxEntitySno == savedQboxEntitySno,
+            orElse: () => _qboxEntities.first,
+          );
+        } else if (_qboxEntities.isNotEmpty) {
+          _selectedQboxEntity = _qboxEntities.first;
         }
+
+        if (_selectedQboxEntity != null) {
+          await getQboxes(_selectedQboxEntity!.qboxEntitySno);
+          await getCurrentInventoryCount(_selectedQboxEntity!.qboxEntitySno);
+          await getHotboxCount(_selectedQboxEntity!.qboxEntitySno);
+        }
+
       }
     } catch (e) {
       _error = e.toString();
@@ -63,26 +92,14 @@ class DashboardProvider with ChangeNotifier {
   }
 
   Future<void> refreshData() async {
-    _error = null;
-    final user = await _tokenService.getUser();
-    if (user != null) {
-      Map<String, dynamic> userData;
-      if (user is String) {
-        userData = jsonDecode(user);
-      } else if (user is Map<String, dynamic>) {
-        userData = user;
-      } else {
-        throw Exception('Invalid user data format');
-      }
-
-      final qboxEntitySno = userData['qboxEntitySno'];
-      if (qboxEntitySno != null) {
-        await Future.wait([
-          getQboxes(qboxEntitySno),
-          getCurrentInventoryCount(qboxEntitySno),
-          getHotboxCount(qboxEntitySno),
-        ]);
-      }
+    var entitySno = await _tokenService.getQboxEntitySno();
+    print("entitySno$entitySno");
+    if (entitySno != null) {
+      await Future.wait([
+        getQboxes(entitySno),
+        getCurrentInventoryCount(entitySno),
+        getHotboxCount(entitySno),
+      ]);
     }
   }
 
@@ -101,9 +118,7 @@ class DashboardProvider with ChangeNotifier {
         "get_box_cell_inventory_v2",
         params,
       );
-
       print("resultsssss: $result");
-
       if (result != null && result['isSuccess'] == true) {
         qboxInventory = result['data']['qboxInventory'] ?? {};
         qboxCounts = result['data']['qboxCounts'] ?? [];
@@ -111,7 +126,6 @@ class DashboardProvider with ChangeNotifier {
         qboxEntityName =
             result['data']['qboxInventory']['qboxEntityName'] ?? "Entity";
         Map<int, List<Map<String, dynamic>>> groupedQboxes = {};
-
         print("qBoxNumberssss$qBoxNumber");
         for (var qbox in qboxInventory['qboxes'] ?? []) {
           int entityInfraSno = qbox['EntityInfraSno'] ?? 0;
@@ -121,11 +135,8 @@ class DashboardProvider with ChangeNotifier {
           groupedQboxes[entityInfraSno]!.add(qbox);
         }
         _qboxList = groupedQboxes.values.toList();
-
         notifyListeners();
       } else {
-        _error = 'Failed to retrieve the data.';
-        commonService.errorToast(_error!);
       }
     } catch (e) {
       print("Error in getQboxes: $e");
@@ -145,7 +156,7 @@ class DashboardProvider with ChangeNotifier {
 
       Map<String, dynamic> params = {
         "qboxEntitySno": qboxEntitySno,
-        "transactionDate": "2025-01-27"
+        "transactionDate": "2025-01-10"
       };
       var result = await apiService.post(
           "8911", "masters", "get_sku_dashboard_counts", params);
@@ -154,8 +165,7 @@ class DashboardProvider with ChangeNotifier {
         _currentInventoryCountlist = result['data'];
         print('_currentInventoryCountlist$_currentInventoryCountlist');
       } else {
-        _error = 'Failed to retrieve the data.';
-        commonService.errorToast(_error!);
+
       }
     } catch (e) {
       _error = 'An error occurred while retrieving the data.';
@@ -184,8 +194,7 @@ class DashboardProvider with ChangeNotifier {
         _hotboxCountList = result['data']['hotboxCounts'];
         print('_hotboxCountlist$_hotboxCountList');
       } else {
-        _error = 'Failed to retrieve the data.';
-        commonService.errorToast(_error!);
+
       }
     } catch (e) {
       _error = 'An error occurred while retrieving the data.';

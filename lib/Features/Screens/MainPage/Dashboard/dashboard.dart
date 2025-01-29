@@ -10,6 +10,7 @@ import 'package:qr_page/Provider/dashboard_provider.dart';
 import 'package:qr_page/Services/toast_service.dart';
 import 'package:qr_page/Widgets/Custom/app_colors.dart';
 import 'package:qr_page/Utils/network_error.dart';
+import '../../../../Model/Data_Models/dashboard_entity_model.dart';
 import '../../../../Widgets/Common/dashboard_header_card.dart';
 
 enum ScreenLayout {
@@ -120,153 +121,142 @@ class _DashboardState extends State<Dashboard>
   @override
   Widget build(BuildContext context) {
     final screenLayout = _getScreenLayout(context);
-    return Consumer<DashboardProvider>(builder: (context, provider, child) {
-      if (provider.isLoading) {
-        return const Center(
-            child: CircularProgressIndicator(
-          color: AppColors.mintGreen,
-        ));
-      }
-      if (provider.error != null) {
-        return Center(
+    return Scaffold(
+      key: _scaffoldKey,
+      endDrawer: Drawer(
+        child: Container(
+          color: Colors.white,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(provider.error!),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.mintGreen),
-                onPressed: () => provider.refreshData(),
-                child: Text('Retry'),
+              Container(
+                padding: EdgeInsets.only(top: 50, bottom: 20),
+                child: Column(
+                  children: [
+                    // Profile Image
+                    SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: ClipOval(
+                        child: Image.network(
+                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqkUYrITWyI8OhPNDHoCDUjGjhg8w10_HRqg&s', // Replace with your image URL
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    // Phone Number
+                    Text(
+                      '+1 234 567 8900',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    // Email
+                    Text(
+                      'user@example.com',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              // Menu Items
+              ListTile(
+                leading: Icon(Icons.settings, color: Colors.grey[700]),
+                title: Text(
+                  'Settings',
+                  style: TextStyle(fontSize: 16),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  // Add your settings navigation logic here
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: Icon(Icons.logout, color: Colors.red),
+                title: Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.red,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _handleLogout();
+                },
+              ),
+              Expanded(child: Container()), // Pushes the logout to the bottom
             ],
           ),
-        );
-      }
-
-      return NetworkWrapper(
-        child: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: Color(0xFFF5F7FA),
-          body: SafeArea(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
+        ),
+      ),
+      body: FutureBuilder(
+        future: Provider.of<DashboardProvider>(context, listen: false).initialize(),
+        builder: (context,snapshot){
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator( color: AppColors.mintGreen,));
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }else{
+            return Consumer<DashboardProvider>(builder: (context, provider, child) {
+              if (provider.isLoading) {
+                return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.mintGreen,
+                    ));
+              }
+              return NetworkWrapper(
+                  child: Row(
                     children: [
-                      _buildHeader(context, screenLayout),
                       Expanded(
-                        child: RefreshIndicator(
-                          color: Colors.red,
-                          onRefresh: () => provider.refreshData(),
-                          child: CustomScrollView(
-                            slivers: [
-                              SliverPadding(
-                                padding: EdgeInsets.all(
-                                    screenLayout == ScreenLayout.mobile
-                                        ? 16.0
-                                        : 20.0),
-                                sliver: SliverToBoxAdapter(
-                                  child: Column(
-                                    children: [
-                                      _buildTopCards(screenLayout,provider),
-                                      SizedBox(
-                                          height: screenLayout ==
-                                                  ScreenLayout.mobile
-                                              ? 16
-                                              : 24),
-                                      _buildMainContent(context, provider),
-                                    ],
-                                  ),
+                        child: Column(
+                          children: [
+                            _buildHeader(context, screenLayout),
+                            Expanded(
+                              child: RefreshIndicator(
+                                color: Colors.red,
+                                onRefresh: () => provider.refreshData(),
+                                child: CustomScrollView(
+                                  slivers: [
+                                    SliverPadding(
+                                      padding: EdgeInsets.all(
+                                          screenLayout == ScreenLayout.mobile
+                                              ? 16.0
+                                              : 20.0),
+                                      sliver: SliverToBoxAdapter(
+                                        child: Column(
+                                          children: [
+                                            _buildTopCards(screenLayout, provider),
+                                            SizedBox(
+                                                height:
+                                                screenLayout == ScreenLayout.mobile
+                                                    ? 16
+                                                    : 24),
+                                            _buildMainContent(context, provider),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          endDrawer: Drawer(
-            child: Container(
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(top: 50, bottom: 20),
-                    child: Column(
-                      children: [
-                        // Profile Image
-                        SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: ClipOval(
-                            child: Image.network(
-                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqkUYrITWyI8OhPNDHoCDUjGjhg8w10_HRqg&s', // Replace with your image URL
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 16),
-                        // Phone Number
-                        Text(
-                          '+1 234 567 8900',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        // Email
-                        Text(
-                          'user@example.com',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Menu Items
-                  ListTile(
-                    leading: Icon(Icons.settings, color: Colors.grey[700]),
-                    title: Text(
-                      'Settings',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Add your settings navigation logic here
-                    },
-                  ),
-                  Divider(),
-                  ListTile(
-                    leading: Icon(Icons.logout, color: Colors.red),
-                    title: Text(
-                      'Logout',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.red,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      _handleLogout();
-                    },
-                  ),
-                  Expanded(
-                      child: Container()), // Pushes the logout to the bottom
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    });
+                  ));
+            });
+          }
+        }
+      ),
+    );
   }
 
   void _handleLogout() async {
@@ -756,7 +746,6 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
-
   Widget _buildInventorySection() {
     return Container(
       padding: EdgeInsets.all(24),
@@ -780,12 +769,11 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
-  Widget _buildTopCards(ScreenLayout layout,DashboardProvider provider) {
+  Widget _buildTopCards(ScreenLayout layout, DashboardProvider provider) {
     return MetricsDashboardCard(
-      totalOrders: 1234,
-      activeDeliveries: 56,
-      onRefresh:  () => provider.refreshData()
-    );
+        totalOrders: 1234,
+        activeDeliveries: 56,
+        onRefresh: () => provider.refreshData());
   }
 
   Widget _buildHeader(BuildContext context, ScreenLayout layout) {
@@ -808,12 +796,31 @@ class _DashboardState extends State<Dashboard>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      context.read<DashboardProvider>().qboxEntityName,
-                      style: GoogleFonts.poppins(
-                        fontSize: layout == ScreenLayout.mobile ? 20 : 24,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    Consumer<DashboardProvider>(
+                      builder: (context, provider, child) {
+                        return DropdownButton<QboxEntity>(
+                          value: provider.selectedQboxEntity,
+                          items: provider.qboxEntities.map((QboxEntity entity) {
+                            return DropdownMenuItem<QboxEntity>(
+                              value: entity,
+                              child: Text(
+                                entity.qboxEntityName,
+                                style: GoogleFonts.poppins(
+                                  fontSize:
+                                      layout == ScreenLayout.mobile ? 20 : 24,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (QboxEntity? newValue) {
+                            if (newValue != null) {
+                              provider.setSelectedQboxEntity(newValue);
+                            }
+                          },
+                          hint: Text('Select Qbox Entity'),
+                        );
+                      },
                     ),
                     Text(
                       'Last updated: ${DateFormat('dd-MM-yyyy hh:mm a').format(DateTime.now())}',
@@ -1091,6 +1098,7 @@ class _DashboardState extends State<Dashboard>
       );
     });
   }
+
   void _showEmptyItemDetails(BuildContext context, Map<String, dynamic> item) {
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     showModalBottomSheet(

@@ -9,7 +9,6 @@ class AuthService {
     required String password,
     required String fullName,
   }) async {
-    // Hash password in production
     final userData = {
       'email': email.toLowerCase(),
       'password': password,
@@ -31,7 +30,4 @@ class AuthService {
     return userData['password'] == password;
   }
 
-  Future<void> logout() async {
-    await _storage.deleteAll();
-  }
 }

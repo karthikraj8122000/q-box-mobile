@@ -13,7 +13,6 @@ import '../Utils/time.dart';
 class AuthProvider extends ChangeNotifier {
   final TokenService _tokenService = TokenService();
   CommonService commonService = CommonService();
-  bool isLoading = false;
   bool isAuthenticated = false;
   String? currentUser;
   String email = '';
@@ -27,7 +26,11 @@ class AuthProvider extends ChangeNotifier {
   DeviceInfo deviceInfo = DeviceInfo();
   ApiService api = ApiService();
   Time time = Time();
+  bool _isLoading = false;
+  String? _error;
 
+  bool get isLoading => _isLoading;
+  String? get error => _error;
   bool get obsecureText => _obsecureText;
   bool get isLoggedIn => _isLoggedIn;
 
@@ -60,7 +63,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<bool> signup(BuildContext context) async {
     try {
-      isLoading = true;
+      _isLoading = true;
       notifyListeners();
 
       final userData = {
@@ -72,12 +75,12 @@ class AuthProvider extends ChangeNotifier {
 
       await _tokenService.saveUser(json.encode(userData));
 
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
       commonService.presentToast("Account created successfully!");
       return true;
     } catch (e) {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
       print('$e');
       commonService.errorToast("Error: ${e.toString()}");
@@ -85,9 +88,13 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+
   Future<bool> login(String email, String password) async {
     try {
-      print('Email: $email, Password: $password');
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+
       Map<String, dynamic> signInConfig = {
         "appSno": 1,
         "pushToken": 12345,
@@ -99,20 +106,17 @@ class AuthProvider extends ChangeNotifier {
         "password": password,
         "signInConfig": signInConfig
       };
-      print('data$data');
       final result = await api.post('8914','authn','login',data);
-      print('result$result');
       if (result != null && result['data'] != null) {
         var loginResult = result['data'];
-        print('loginResults$loginResult');
-        // var appUserRole = loginResult['selectedRole'] ?? loginResult['role']?[0]?['roleValue'];
         if (loginResult['isLoginSuccess'] == true) {
-          print('loginResult$loginResult');
           loginResult['password'] = password;
           await _tokenService.saveUser(loginResult);
+          _isLoading = false;
+          notifyListeners();
           commonService.presentToast("Login successfully!");
           AppRouter.navigateToHomeView();
-          return true; // Login successful
+          return true;
         } else {
           commonService.errorToast("${loginResult['msg'] ?? 'Unknown error'}");
           return false; // Login failed
@@ -124,17 +128,20 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       commonService.errorToast("Error during login: $e");
       return false; // Login failed due to an exception
+    }finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
   Future<void> logout() async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     await _tokenService.signOut();
     isAuthenticated = false;
     currentUser = null;
-    isLoading = false;
+    _isLoading = false;
     notifyListeners();
   }
 

@@ -90,7 +90,7 @@ class OrderHistoryProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchInwardOrders(int qboxEntitySno) async {
+  Future<dynamic> fetchInwardOrders(int qboxEntitySno) async {
     try {
       _isLoading = true;
       _error = null;
