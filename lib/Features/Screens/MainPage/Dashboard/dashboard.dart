@@ -10,6 +10,7 @@ import 'package:qr_page/Features/Screens/Login/second_login.dart';
 import 'package:qr_page/Provider/auth_provider.dart';
 import 'package:qr_page/Provider/dashboard_provider.dart';
 import 'package:qr_page/Services/toast_service.dart';
+import 'package:qr_page/Services/token_service.dart';
 import 'package:qr_page/Widgets/Custom/app_colors.dart';
 import 'package:qr_page/Utils/network_error.dart';
 import '../../../../Model/Data_Models/dashboard_entity_model.dart';
@@ -34,6 +35,9 @@ class _DashboardState extends State<Dashboard>
   late AnimationController _headerController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<InventoryItem> inventoryItems = [];
+  final TokenService _tokenService = TokenService();
+  List<QboxEntity> qboxEntities = [];
+  int? savedQboxEntitySno;
 
   ScreenLayout _getScreenLayout(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -46,6 +50,7 @@ class _DashboardState extends State<Dashboard>
   @override
   void initState() {
     super.initState();
+    getCurrentSno();
     _headerController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -54,6 +59,11 @@ class _DashboardState extends State<Dashboard>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<DashboardProvider>().initialize();
     });
+  }
+
+  getCurrentSno() async {
+    savedQboxEntitySno = await _tokenService.getQboxEntitySno();
+    print("latest$savedQboxEntitySno");
   }
 
   @override
@@ -162,58 +172,66 @@ class _DashboardState extends State<Dashboard>
         ),
       ),
       body: FutureBuilder(
-        future: Provider.of<DashboardProvider>(context, listen: false).initialize(),
-        builder: (context,snapshot){
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator( color: AppColors.mintGreen,));
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }else{
-            return Consumer<DashboardProvider>(builder: (context, provider, child) {
-              if (provider.isLoading) {
-                return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.mintGreen,
-                    ));
-              }
+          future: Provider.of<DashboardProvider>(context, listen: false)
+              .initialize(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                  child: CircularProgressIndicator(
+                color: AppColors.mintGreen,
+              ));
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              return Consumer<DashboardProvider>(
+                  builder: (context, provider, child) {
+                if (provider.isLoading) {
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    color: AppColors.mintGreen,
+                  ));
+                }
 
-              final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-              return NetworkWrapper(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            _buildHeader(context, screenLayout),
-                            Expanded(
-                              child: RefreshIndicator(
-                                color: Colors.red,
-                                onRefresh: () => provider.refreshData(),
-                                child: CustomScrollView(
-                                  slivers: [
-                                    SliverPadding(
-                                      padding: EdgeInsets.all(
-                                          screenLayout == ScreenLayout.mobile
-                                              ? 16.0
-                                              : 20.0),
-                                      sliver: SliverToBoxAdapter(
-                                        child: Column(
-                                          children: [
-                                            isTablet? Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 12.0,),
-                                              child: Row(
+                final isTablet =
+                    MediaQuery.of(context).size.shortestSide >= 600;
+                return NetworkWrapper(
+                    child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          _buildHeader(context, screenLayout),
+                          Expanded(
+                            child: RefreshIndicator(
+                              color: Colors.red,
+                              onRefresh: () => provider.refreshData(),
+                              child: CustomScrollView(
+                                slivers: [
+                                  SliverPadding(
+                                    padding: EdgeInsets.all(
+                                        screenLayout == ScreenLayout.mobile
+                                            ? 16.0
+                                            : 20.0),
+                                    sliver: SliverToBoxAdapter(
+                                      child: Column(
+                                        children: [
+                                          isTablet
+                                              ? Row(
                                                 children: [
                                                   Expanded(
                                                     flex: 5,
                                                     child: Container(
-                                                      decoration: BoxDecoration(
+                                                      decoration:
+                                                          BoxDecoration(
                                                         color: Colors.white,
                                                         // borderRadius: BorderRadius.circular(12),
                                                         boxShadow: [
                                                           BoxShadow(
-                                                            color: Colors.black12,
+                                                            color: Colors
+                                                                .black12,
                                                             blurRadius: 8,
-                                                            offset: Offset(0, 2),
+                                                            offset: Offset(
+                                                                0, 2),
                                                           ),
                                                         ],
                                                       ),
@@ -225,72 +243,79 @@ class _DashboardState extends State<Dashboard>
                                                       ),
                                                     ),
                                                   ),
-                                                  SizedBox(width: 5,),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
                                                   Expanded(
                                                     flex: 3,
                                                     child: Column(
                                                       children: [
                                                         _buildOutwardOrder(),
-                                                        _buildOutwardTable(provider),
+                                                        _buildOutwardTable(
+                                                            provider),
                                                       ],
                                                     ),
                                                   ),
                                                 ],
-                                              ),
-                                            ):Column(
-                                              children: [
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    // borderRadius: BorderRadius.circular(12),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.black12,
-                                                        blurRadius: 8,
-                                                        offset: Offset(0, 2),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  child: Column(
-                                                    children: [
-                                                      _buildCurrentTime(),
-                                                      _buildInventoryTable(),
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(height: 5,),
-                                                Column(
+                                              )
+                                              : Column(
                                                   children: [
-                                                    _buildOutwardOrder(),
-                                                    _buildOutwardTable(provider),
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        // borderRadius: BorderRadius.circular(12),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color:
+                                                                Colors.black12,
+                                                            blurRadius: 8,
+                                                            offset:
+                                                                Offset(0, 2),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      child: Column(
+                                                        children: [
+                                                          _buildCurrentTime(),
+                                                          _buildInventoryTable(),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Column(
+                                                      children: [
+                                                        _buildOutwardOrder(),
+                                                        _buildOutwardTable(
+                                                            provider),
+                                                      ],
+                                                    ),
                                                   ],
                                                 ),
-                                              ],
-                                            ),
-                                            // _buildTopCards(screenLayout, provider),
-                                            SizedBox(
-                                                height:
-                                                screenLayout == ScreenLayout.mobile
-                                                    ? 16
-                                                    : 24),
-                                            _buildMainContent(context, provider),
-                                          ],
-                                        ),
+                                          // _buildTopCards(screenLayout, provider),
+                                          SizedBox(
+                                              height: screenLayout ==
+                                                      ScreenLayout.mobile
+                                                  ? 16
+                                                  : 24),
+                                          _buildMainContent(context, provider),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ));
-            });
-          }
-        }
-      ),
+                    ),
+                  ],
+                ));
+              });
+            }
+          }),
     );
   }
 
@@ -327,7 +352,7 @@ class _DashboardState extends State<Dashboard>
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-    // borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight:  Radius.circular(12)),
+        // borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight:  Radius.circular(12)),
         gradient: LinearGradient(
           colors: [Colors.red.shade400, Colors.red.shade600],
           begin: Alignment.topLeft,
@@ -351,7 +376,6 @@ class _DashboardState extends State<Dashboard>
   }
 
   Widget _buildOutwardTable(DashboardProvider provider) {
-
     if (provider.outwardOrderList.isEmpty) {
       return Center(
         child: Text(
@@ -360,11 +384,10 @@ class _DashboardState extends State<Dashboard>
         ),
       );
     }
-
     return outwardTableWidget();
   }
 
-  Widget outwardTableWidget(){
+  Widget outwardTableWidget() {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -378,7 +401,7 @@ class _DashboardState extends State<Dashboard>
       ),
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount:2,
+        itemCount: 2,
         itemBuilder: (context, index) {
           final provider = Provider.of<DashboardProvider>(context);
           final item = provider.outwardOrderList[index];
@@ -389,7 +412,6 @@ class _DashboardState extends State<Dashboard>
               border: Border(
                 bottom: BorderSide(color: Colors.grey.shade200),
               ),
-
             ),
             child: Row(
               children: [
@@ -398,16 +420,25 @@ class _DashboardState extends State<Dashboard>
                   child: Text(
                     "${item['name']}",
                     style: TextStyle(
-                      color: Colors.green,
+                      color: Colors.orange,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    "${item['count']}",
-                    textAlign: TextAlign.center,
-                  ),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                      color: Colors.green.shade100,
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                          color: Colors.green.shade300,
+                          width: 1)),
+                  child: Text( "${item['count']}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.green.shade800,
+                          fontWeight: FontWeight.bold)),
                 ),
               ],
             ),
@@ -718,7 +749,6 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
-
   // Widget _buildTopCards(ScreenLayout layout, DashboardProvider provider) {
   //   return MetricsDashboardCard(
   //       totalOrders: 1234,
@@ -839,7 +869,6 @@ class _DashboardState extends State<Dashboard>
       }
       return Container(
         padding: EdgeInsets.all(12),
-
         child: Table(
           columnWidths: {
             0: FlexColumnWidth(3),
@@ -926,8 +955,12 @@ class _DashboardState extends State<Dashboard>
         );
       }
       if (provider.hotboxCountList.isEmpty) {
-        return Center(
-          child: Text("No food items in hotbox"),
+        return Container(
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(color: Colors.red.shade100,border: Border.all(color: Colors.red.shade200),borderRadius: BorderRadius.all(Radius.circular(12))),
+          child: Center(
+            child: Text("No food items in hotbox"),
+          ),
         );
       }
       final List<Map<String, dynamic>> flattenedData = [];

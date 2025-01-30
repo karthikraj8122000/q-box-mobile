@@ -18,7 +18,6 @@ class DashboardProvider with ChangeNotifier {
     {"name": "Biriyani", "count": 8},
     {"name": "Sambar", "count": 12},
   ];
-
   List<dynamic> get qboxLists => _qboxList;
   List<dynamic> get hotboxCountList => _hotboxCountList;
   List<dynamic> get currentInventoryCountList => _currentInventoryCountlist;
@@ -31,13 +30,10 @@ class DashboardProvider with ChangeNotifier {
   int columnCount = 5; // Default value, update based on your needs
   int rowCount = 5;
   String qboxEntityName = "";
-
   List<List<Map<String, dynamic>>> _qboxList = [];
   List<List<Map<String, dynamic>>> get groupedQboxLists => _qboxList;
-
   List<QboxEntity> _qboxEntities = [];
   QboxEntity? _selectedQboxEntity;
-
   List<QboxEntity> get qboxEntities => _qboxEntities;
   QboxEntity? get selectedQboxEntity => _selectedQboxEntity;
 
@@ -62,26 +58,28 @@ class DashboardProvider with ChangeNotifier {
         } else {
           throw Exception('Invalid user data format');
         }
-
         final qboxEntityDetails = userData['qboxEntityDetails'] as List<dynamic>;
         _qboxEntities = qboxEntityDetails.map((entity) => QboxEntity.fromJson(entity)).toList();
         int? savedQboxEntitySno = await _tokenService.getQboxEntitySno();
-        print('SavedQboxEntitySno: $savedQboxEntitySno');
         if (savedQboxEntitySno != null) {
+          print("Using saved QboxEntitySno");
+          print('SavedQboxEntitySno: $savedQboxEntitySno');
           _selectedQboxEntity = _qboxEntities.firstWhere(
                 (entity) => entity.qboxEntitySno == savedQboxEntitySno,
             orElse: () => _qboxEntities.first,
           );
         } else if (_qboxEntities.isNotEmpty) {
+          print("No saved QboxEntitySno, using first entity");
           _selectedQboxEntity = _qboxEntities.first;
+          savedQboxEntitySno = _selectedQboxEntity!.qboxEntitySno;
+          print("currentsavedQboxEntitySno:$savedQboxEntitySno");
+          await _tokenService.saveQboxEntitySno(savedQboxEntitySno);
         }
-
-        if (_selectedQboxEntity != null) {
+        if (_selectedQboxEntity != null){
           await getQboxes(_selectedQboxEntity!.qboxEntitySno);
           await getCurrentInventoryCount(_selectedQboxEntity!.qboxEntitySno);
           await getHotboxCount(_selectedQboxEntity!.qboxEntitySno);
         }
-
       }
     } catch (e) {
       _error = e.toString();
@@ -165,7 +163,6 @@ class DashboardProvider with ChangeNotifier {
         _currentInventoryCountlist = result['data'];
         print('_currentInventoryCountlist$_currentInventoryCountlist');
       } else {
-
       }
     } catch (e) {
       _error = 'An error occurred while retrieving the data.';
@@ -185,7 +182,7 @@ class DashboardProvider with ChangeNotifier {
 
       Map<String, dynamic> params = {
         "qboxEntitySno": qboxEntitySno,
-        "transactionDate": "2025-01-27"
+        "transactionDate": "2025-01-10"
       };
       var result =
           await apiService.post("8911", "masters", "get_hotbox_count_v2", params);

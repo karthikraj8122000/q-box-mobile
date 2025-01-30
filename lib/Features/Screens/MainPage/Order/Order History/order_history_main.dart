@@ -22,7 +22,6 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
   late TabController _tabController;
   late List<TabItem> _tabItems;
   TokenService tokenService = TokenService();
-  int? entitySno;
 
   @override
   void initState() {
