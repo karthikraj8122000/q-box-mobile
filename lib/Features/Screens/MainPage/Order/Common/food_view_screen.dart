@@ -7,6 +7,8 @@ import 'package:qr_page/Services/api_service.dart';
 import 'package:qr_page/Services/toast_service.dart';
 import 'package:qr_page/Widgets/Custom/app_colors.dart';
 
+import '../../../../../Services/socketService.dart';
+
 class FoodViewScreen extends StatefulWidget {
   final int purchaseOrderSno;
 
@@ -28,6 +30,7 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
   List<File> selectedImages = [];
   TextEditingController rejectionReasonController = TextEditingController();
   final CommonService commonService = CommonService();
+  List<Map<String, dynamic>>? inventoryItems;
 
   @override
   void initState() {
@@ -437,24 +440,6 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
     );
   }
 
-  // Future<void> acceptFood(skuInventorySno) async {
-  //   print(skuInventorySno);
-  //   try {
-  //     final result = await apiService.post('8912', 'masters', 'accept_sku',
-  //         {"skuInventorySno": skuInventorySno});
-  //     print(result);
-  //     if (result['data'] != null) {
-  //       inventoryItems = List<Map<String, dynamic>>.from(result['data']);
-  //       setState(() {});
-  //     }
-  //   } catch (e) {
-  //     print('Error fetching data: $e');
-  //   } finally {
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   }
-  // }
   Future<void> acceptFood(int skuInventorySno, int purchaseOrderDtlSno) async {
     try {
       final result = await apiService.post('8912', 'masters', 'accept_sku',
@@ -462,7 +447,6 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
 
       if (result['data'] != null) {
         setState(() {
-          // Update the specific inventory items list for this purchase order
           inventoryItemsMap[purchaseOrderDtlSno] =
           List<Map<String, dynamic>>.from(result['data']);
         });
@@ -472,9 +456,6 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
     }
   }
 
-  // Future<void> rejectFood(int skuInventorySno) async {
-  //   await _showRejectionDialog(skuInventorySno);
-  // }
   Future<void> rejectFood(int skuInventorySno, int purchaseOrderDtlSno) async {
     await _showRejectionDialog(skuInventorySno, purchaseOrderDtlSno);
   }
@@ -653,11 +634,16 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
                               foregroundColor: Colors.white,
                             ),
                             child: Text('Reject'),
-                            onPressed: () {
-
-                              Navigator.pop(context, true);
-                              _submitRejection(skuInventorySno, purchaseOrderDtlSno);
+                            onPressed: () async {
+                              if (rejectionReasonController.text.trim().isEmpty) {
+                                commonService.errorToast('Please enter rejection reason');
+                                return;
+                              }
+                              final String rejectionReason = rejectionReasonController.text.trim();
+                              Navigator.pop(context);
+                              await _submitRejection(skuInventorySno, rejectionReason, selectedImages,purchaseOrderDtlSno);
                             },
+
                           ),
                         ],
                       ),
@@ -672,12 +658,42 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
     );
   }
 
-  Future<void> _submitRejection(int skuInventorySno, int purchaseOrderDtlSno) async {
+  Future<void> _submitRejection(int skuInventorySno, String reason, List<File> images, int purchaseOrderDtlSno) async {
     try {
-      final rejectionData = {
+      print('Preparing to submit rejection...');
+      final SocketService webSocketService = SocketService();
+
+      Map<String, dynamic> additionalData = {
         "skuInventorySno": skuInventorySno,
+        "rejectionReason": reason,
+        "purchaseOrderSno":widget.purchaseOrderSno
+      };
+print("additionalData$additionalData");
+      List<FileUpload> uploadedFiles = await webSocketService.send(
+        additionalData: additionalData,
+        files: images,
+      );
+
+      print('uploadedFiles: $uploadedFiles');
+
+      List<Map<String, dynamic>> imageData = uploadedFiles.map((file) => file.toJson()).toList();
+
+      Map<String, dynamic> profileMediaObj = {
+        "mediaSno": null,
+        "containerName": "rejectImage",
+        "deleteMediaList": [],
+        "mediaList": imageData,
       };
 
+      final rejectionData = {
+        "skuInventorySno": skuInventorySno,
+        "rejectionReason": reason,
+        "purchaseOrderSno":widget.purchaseOrderSno
+      };
+      if (imageData.isNotEmpty) {
+        rejectionData['images'] = profileMediaObj;
+      }
+      print('Rejection data prepared: $rejectionData');
       final result = await apiService.post(
         '8912',
         'masters',
@@ -687,52 +703,19 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
 
       if (result['data'] != null) {
         setState(() {
-          // Update the specific inventory items list for this purchase order
+          // inventoryItems = List<Map<String, dynamic>>.from(result['data']);
           inventoryItemsMap[purchaseOrderDtlSno] =
           List<Map<String, dynamic>>.from(result['data']);
         });
-        commonService.presentToast("Item rejected successfully");
+        print('inventoryItems$inventoryItems');
+        commonService.presentToast('Item rejected successfully');
       }
+
     } catch (e) {
-      print('Error rejecting item: $e');
-      commonService.presentToast('Failed to reject item. Please try again.');
+      print('Error in submitting rejection: $e');
+      commonService.presentToast('Failed to reject item: ${e.toString()}');
     }
   }
-
-  //
-  // Future<void> _submitRejection(int skuInventorySno) async {
-  //   try {
-  //     // List<String> base64Images = [];
-  //     // for (File image in selectedImages) {
-  //     //   List<int> imageBytes = await image.readAsBytes();
-  //     //   String base64Image = base64Encode(imageBytes);
-  //     //   base64Images.add(base64Image);
-  //     // }
-  //
-  //     final rejectionData = {
-  //       "skuInventorySno": skuInventorySno,
-  //       // "rejectionReason": rejectionReasonController.text,
-  //       // "images": base64Images,
-  //     };
-  //
-  //     final result = await apiService.post(
-  //       '8912',
-  //       'masters',
-  //       'reject_sku',
-  //       rejectionData,
-  //     );
-  //
-  //     if (result['data'] != null) {
-  //       inventoryItems = List<Map<String, dynamic>>.from(result['data']);
-  //       setState(() {});
-  //       commonService.presentToast("Item rejected successfully");
-  //     }
-  //   } catch (e) {
-  //     print('Error rejecting item: $e');
-  //     commonService.presentToast('Failed to reject item. Please try again.');
-  //   }
-  // }
-
 
   Widget _buildLoadingIndicator() {
     return Container(
@@ -768,7 +751,6 @@ class _FoodViewScreenState extends State<FoodViewScreen> {
   }
 
   String _getStageText(int stageCd) {
-    // Replace with your actual stage mappings
     switch (stageCd) {
       case 6:
         return "Pending";

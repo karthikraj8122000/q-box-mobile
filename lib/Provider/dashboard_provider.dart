@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../Model/Data_Models/dashboard_entity_model.dart';
 import '../Services/api_service.dart';
 import '../Services/toast_service.dart';
@@ -11,6 +12,7 @@ class DashboardProvider with ChangeNotifier {
   final CommonService commonService = CommonService();
   List<dynamic> _hotboxCountList = [];
   List<dynamic> _currentInventoryCountlist = [];
+  List<dynamic> _outwardOrderProcessingCountlist = [];
   final TokenService _tokenService = TokenService();
   bool _isLoading = true;
   String? _error;
@@ -20,7 +22,8 @@ class DashboardProvider with ChangeNotifier {
   ];
   List<dynamic> get qboxLists => _qboxList;
   List<dynamic> get hotboxCountList => _hotboxCountList;
-  List<dynamic> get currentInventoryCountList => _currentInventoryCountlist;
+  List<dynamic> get currentInventoryCountlist => _currentInventoryCountlist;
+  List<dynamic> get outwardOrderProcessingCountlist => _outwardOrderProcessingCountlist;
   bool get isLoading => _isLoading;
   String? get error => _error;
   List<dynamic> get outwardOrderList => _outwardOrderList;
@@ -36,6 +39,59 @@ class DashboardProvider with ChangeNotifier {
   QboxEntity? _selectedQboxEntity;
   List<QboxEntity> get qboxEntities => _qboxEntities;
   QboxEntity? get selectedQboxEntity => _selectedQboxEntity;
+  String _sortBy = 'Date';
+  DateTime? _startDate;
+  DateTime? _endDate;
+
+  DateTime? get startDate => _startDate;
+  DateTime? get endDate => _endDate;
+  DateTime? _selectedDate;
+  DateTime? get selectedDate => _selectedDate;
+
+  String get sortBy => _sortBy;
+  final List<String> sortOptions = ['Date', 'Food Item Name', 'Qbox ID'];
+  String currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  int _currentPage = 1;
+  int _itemsPerPage = 2;
+  int get currentPage => _currentPage;
+  int get itemsPerPage => _itemsPerPage;
+  int get totalPages => (_currentInventoryCountlist.length / _itemsPerPage).ceil();
+
+  void setSortBy(String value) {
+    _sortBy = value;
+    notifyListeners();
+  }
+
+  void nextPage() {
+    if (_currentPage < totalPages) {
+      _currentPage++;
+      notifyListeners();
+    }
+  }
+
+  void previousPage() {
+    if (_currentPage > 1) {
+      _currentPage--;
+      notifyListeners();
+    }
+  }
+
+  void setDateRange(DateTime? start, DateTime? end) {
+    _startDate = start;
+    _endDate = end;
+    notifyListeners();
+  }
+
+  void setSelectedDate(DateTime date) {
+    _selectedDate = date;
+    notifyListeners();
+  }
+
+  // Reset filters (clears the selected date)
+  void resetFilters() {
+    _selectedDate = null;
+    notifyListeners();
+  }
 
   Future<void> setSelectedQboxEntity(QboxEntity entity) async {
     _selectedQboxEntity = entity;
@@ -79,6 +135,7 @@ class DashboardProvider with ChangeNotifier {
           await getQboxes(_selectedQboxEntity!.qboxEntitySno);
           await getCurrentInventoryCount(_selectedQboxEntity!.qboxEntitySno);
           await getHotboxCount(_selectedQboxEntity!.qboxEntitySno);
+          await getOutwardDeliveryCount(_selectedQboxEntity!.qboxEntitySno);
         }
       }
     } catch (e) {
@@ -97,6 +154,7 @@ class DashboardProvider with ChangeNotifier {
         getQboxes(entitySno),
         getCurrentInventoryCount(entitySno),
         getHotboxCount(entitySno),
+        getOutwardDeliveryCount(entitySno),
       ]);
     }
   }
@@ -146,6 +204,12 @@ class DashboardProvider with ChangeNotifier {
     }
   }
 
+  void setCurrentInventoryCountList(List<Map<String, dynamic>> list) {
+    _currentInventoryCountlist = list;
+    _currentPage = 1;
+    notifyListeners();
+  }
+
   Future<dynamic> getCurrentInventoryCount(int qboxEntitySno) async {
     try {
       _isLoading = true;
@@ -154,14 +218,44 @@ class DashboardProvider with ChangeNotifier {
 
       Map<String, dynamic> params = {
         "qboxEntitySno": qboxEntitySno,
-        "transactionDate": "2025-01-10"
+        "transactionDate": currentDate
       };
       var result = await apiService.post(
           "8911", "masters", "get_sku_dashboard_counts", params);
       print("get_sku_dashboard_counts$result");
       if (result != null && result['data'] != null) {
-        _currentInventoryCountlist = result['data'];
+        _currentInventoryCountlist = result['data'] ?? [];
         print('_currentInventoryCountlist$_currentInventoryCountlist');
+      } else {
+      }
+    } catch (e) {
+      _error = 'An error occurred while retrieving the data.';
+      debugPrint('$e');
+      commonService.errorToast(_error!);
+      setCurrentInventoryCountList([]);
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<dynamic> getOutwardDeliveryCount(int qboxEntitySno) async {
+    try {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
+
+      Map<String, dynamic> params = {
+        "qboxEntitySno": qboxEntitySno,
+        "orderedTime": currentDate
+      };
+      print("parama$params");
+      var result = await apiService.post(
+          "8911", "masters", "get_unallocated_food_orders", params);
+      print("get_unallocated_food_orders${result['data']}");
+      if (result != null && result['data'] != null) {
+        _outwardOrderProcessingCountlist = result['data'] ?? [];
+        print('outwardOrderProcessingCountlist$_outwardOrderProcessingCountlist');
       } else {
       }
     } catch (e) {
@@ -182,7 +276,7 @@ class DashboardProvider with ChangeNotifier {
 
       Map<String, dynamic> params = {
         "qboxEntitySno": qboxEntitySno,
-        "transactionDate": "2025-01-10"
+        "transactionDate": currentDate
       };
       var result =
           await apiService.post("8911", "masters", "get_hotbox_count_v2", params);

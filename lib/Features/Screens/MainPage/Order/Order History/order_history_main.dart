@@ -119,8 +119,6 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
     });
   }
 
-
-
   void _showFilterBottomSheet(BuildContext context, OrderHistoryProvider provider) {
     showModalBottomSheet(
       context: context,

@@ -82,7 +82,8 @@ class _LoadQboxState extends State<LoadQbox> {
         } else if (loadingMessage == 'this box is already Loaded') {
           commonService.errorToast('This box is already loaded');
         } else if (loadingMessage == 'Invalid Loaded') {
-          commonService.errorToast('Invalid loading attempt');
+          // Invalid loading attempt
+          commonService.errorToast('This food is already loaded in qbox cell');
         } else {
           // Handle any other unexpected messages
           commonService.presentToast('Unexpected response: $loadingMessage');
