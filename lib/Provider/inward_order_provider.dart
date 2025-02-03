@@ -71,14 +71,10 @@ class InwardOrderDtlProvider extends ChangeNotifier {
         MaterialPageRoute(
           builder: (context) => ViewOrder(
             partnerPurchaseOrderId:
-                "SWIGGY_$orderId", // Your purchase order number
+                "SWIGGY_$orderId",
           ),
         ),
       );
-      // GoRouter.of(context).push(ViewOrder.routeName);
-      // if (_scanStatus == 'complete') {
-      //   GoRouter.of(context).push(ViewOrder.routeName);
-      // }
     } else {
       _showError(context, 'Please fill all fields');
     }
@@ -87,6 +83,7 @@ class InwardOrderDtlProvider extends ChangeNotifier {
   Future<dynamic> getTotalItems(String? partnerPurchaseOrderId) async {
     var entitySno = await _tokenService.getQboxEntitySno();
     print("receiveOrderSno$entitySno");
+    print("gotoorders$entitySno");
     const String endpoint = 'search_purchase_order';
     const String port = '8912';
     const String service = 'masters';

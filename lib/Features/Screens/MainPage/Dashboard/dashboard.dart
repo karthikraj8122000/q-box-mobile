@@ -936,8 +936,8 @@ class _DashboardState extends State<Dashboard>
                       ...paginatedItems
                           .map((item) => _buildTableRow(
                         item['skuCode'] ?? '--',
-                        item['orderedCount']?.toString() ?? '0',
-                        item['deliveredCount']?.toString() ?? '0',
+                        item['totalCount']?.toString() ?? '0',
+                        item['soldCount']?.toString() ?? '0',
                         item['inStockCount']?.toString() ?? '0',
                         item['totalCount']?.toString() ?? '0',
                       )).toList()
@@ -1200,7 +1200,7 @@ class _DashboardState extends State<Dashboard>
                 ),
               ),
               Text(
-                'There is no food item map for qbox cell ${item['qboxId']}',
+                'There is no food item map for this compartment',
                 style: TextStyle(
                   fontSize: isTablet ? 18 : 14,
                   fontWeight: FontWeight.bold,
