@@ -22,7 +22,6 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
   late TabController _tabController;
   late List<TabItem> _tabItems;
   TokenService tokenService = TokenService();
-  int? entitySno;
 
   @override
   void initState() {
@@ -119,8 +118,6 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
               .slideY(begin: 0.2, end: 0);
     });
   }
-
-
 
   void _showFilterBottomSheet(BuildContext context, OrderHistoryProvider provider) {
     showModalBottomSheet(

@@ -18,13 +18,13 @@ class _ViewOrderState extends State<ViewOrder> {
   @override
   void initState() {
     super.initState();
-    print("partnerPurchaseOrderId");
-    print(widget.partnerPurchaseOrderId);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context
           .read<InwardOrderDtlProvider>()
           .getTotalItems(widget.partnerPurchaseOrderId);
     });
+
+
   }
 
   @override
@@ -55,12 +55,11 @@ class _ViewOrderState extends State<ViewOrder> {
           if (provider.purchaseOrders.isEmpty) {
             return NoDataFound(title: "orders");
           }
-
-          return ListView.builder(
+          return  ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: provider.purchaseOrders.length,
             itemBuilder: (context, index) {
-              return OrderCard(order: provider.purchaseOrders[index]);
+              return provider.purchaseOrders[index]['orderStatusCd']==36?null:OrderCard(order: provider.purchaseOrders[index]);
             },
           );
         }),
